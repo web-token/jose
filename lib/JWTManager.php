@@ -32,6 +32,7 @@ abstract class JWTManager
 
     /**
      * {@inheritdoc}
+     * @param string $input
      */
     public function load($input, array &$headers = array())
     {
@@ -323,6 +324,9 @@ abstract class JWTManager
     /**** CONVERSION ****/
     /********************/
 
+    /**
+     * @param boolean $compact
+     */
     public function signAndConvert($compact, $input, array $operation_keys)
     {
         if (is_array($input)) {
@@ -377,7 +381,10 @@ abstract class JWTManager
         ));
     }
 
-    public function encryptAndConvert($compact, $input, array $operation_keys, array $protected_header = array(), array $unprotected_header = array(), JWKInterface $sender_key = null)
+    /**
+ * @param boolean $compact
+ */
+public function encryptAndConvert($compact, $input, array $operation_keys, array $protected_header = array(), array $unprotected_header = array(), JWKInterface $sender_key = null)
     {
         if ($compact === false) {
             throw new \Exception("JSON Serialized representation is not supported");
