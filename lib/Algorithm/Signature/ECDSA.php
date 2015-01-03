@@ -73,6 +73,10 @@ abstract class ECDSA implements SignatureInterface
 
     abstract protected function getCurve();
     abstract protected function getGenerator();
+
+    /**
+     * @return string
+     */
     abstract protected function getHashAlgorithm();
     abstract protected function getSignaturePartLength();
 
@@ -94,7 +98,10 @@ abstract class ECDSA implements SignatureInterface
         return $value[1];
     }
 
-    protected function convertDecToHex($value)
+    /**
+ * @return string
+ */
+protected function convertDecToHex($value)
     {
         $adapter = EccFactory::getAdapter();
 

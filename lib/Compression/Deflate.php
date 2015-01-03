@@ -12,6 +12,9 @@ class Deflate implements CompressionInterface
 {
     protected $compression_level = -1;
 
+    /**
+     * @param integer $level
+     */
     public function setCompressionLevel($level)
     {
         if (!is_numeric($level) || $level < -1 || $level > 9) {
