@@ -11,9 +11,6 @@
 
 namespace SpomkyLabs\Test;
 
-use Jose\JSONSerializationModes;
-use SpomkyLabs\Jose\Util\Converter;
-
 /**
  * @group CheckerManager
  */
@@ -27,12 +24,12 @@ class CheckerManagerTest extends TestCase
     {
         $jwt = $this->getJWTManager()->createJWT();
         $jwt->setPayload([
-            'exp'=>time()+10000,
-            'iss'=>'foo',
-            'sub'=>'SUB2',
-            'aud'=>'My service',
-            'iat'=>time()-10000,
-            'nbf'=>time()-10000
+            'exp' => time() + 10000,
+            'iss' => 'foo',
+            'sub' => 'SUB2',
+            'aud' => 'My service',
+            'iat' => time() - 10000,
+            'nbf' => time() - 10000,
         ]);
 
         $this->getCheckerManager()->checkJWT($jwt);
@@ -46,12 +43,12 @@ class CheckerManagerTest extends TestCase
     {
         $jwt = $this->getJWTManager()->createJWT();
         $jwt->setPayload([
-            'exp'=>time()+10000,
-            'iss'=>'ISS1',
-            'sub'=>'SUB2',
-            'aud'=>'foo',
-            'iat'=>time()-10000,
-            'nbf'=>time()-10000
+            'exp' => time() + 10000,
+            'iss' => 'ISS1',
+            'sub' => 'SUB2',
+            'aud' => 'foo',
+            'iat' => time() - 10000,
+            'nbf' => time() - 10000,
         ]);
 
         $this->getCheckerManager()->checkJWT($jwt);
@@ -65,12 +62,12 @@ class CheckerManagerTest extends TestCase
     {
         $jwt = $this->getJWTManager()->createJWT();
         $jwt->setPayload([
-            'exp'=>time()-10000,
-            'iss'=>'ISS1',
-            'sub'=>'SUB2',
-            'aud'=>'My service',
-            'iat'=>time()-10000,
-            'nbf'=>time()-10000
+            'exp' => time() - 10000,
+            'iss' => 'ISS1',
+            'sub' => 'SUB2',
+            'aud' => 'My service',
+            'iat' => time() - 10000,
+            'nbf' => time() - 10000,
         ]);
 
         $this->getCheckerManager()->checkJWT($jwt);
@@ -84,12 +81,12 @@ class CheckerManagerTest extends TestCase
     {
         $jwt = $this->getJWTManager()->createJWT();
         $jwt->setPayload([
-            'exp'=>time()+10000,
-            'iss'=>'ISS1',
-            'sub'=>'SUB2',
-            'aud'=>'My service',
-            'iat'=>time()+10000,
-            'nbf'=>time()-10000
+            'exp' => time() + 10000,
+            'iss' => 'ISS1',
+            'sub' => 'SUB2',
+            'aud' => 'My service',
+            'iat' => time() + 10000,
+            'nbf' => time() - 10000,
         ]);
 
         $this->getCheckerManager()->checkJWT($jwt);
@@ -103,12 +100,12 @@ class CheckerManagerTest extends TestCase
     {
         $jwt = $this->getJWTManager()->createJWT();
         $jwt->setPayload([
-            'exp'=>time()+10000,
-            'iss'=>'ISS1',
-            'sub'=>'SUB2',
-            'aud'=>'My service',
-            'iat'=>time()-10000,
-            'nbf'=>time()+10000
+            'exp' => time() + 10000,
+            'iss' => 'ISS1',
+            'sub' => 'SUB2',
+            'aud' => 'My service',
+            'iat' => time() - 10000,
+            'nbf' => time() + 10000,
         ]);
 
         $this->getCheckerManager()->checkJWT($jwt);
@@ -122,12 +119,12 @@ class CheckerManagerTest extends TestCase
     {
         $jwt = $this->getJWTManager()->createJWT();
         $jwt->setPayload([
-            'exp'=>time()+10000,
-            'iss'=>'ISS1',
-            'sub'=>'foo',
-            'aud'=>'My service',
-            'iat'=>time()-10000,
-            'nbf'=>time()-10000
+            'exp' => time() + 10000,
+            'iss' => 'ISS1',
+            'sub' => 'foo',
+            'aud' => 'My service',
+            'iat' => time() - 10000,
+            'nbf' => time() - 10000,
         ]);
 
         $this->getCheckerManager()->checkJWT($jwt);
@@ -137,12 +134,12 @@ class CheckerManagerTest extends TestCase
     {
         $jwt = $this->getJWTManager()->createJWT();
         $jwt->setPayload([
-                'exp'=>time()+10000,
-                'iss'=>'ISS1',
-                'sub'=>'SUB2',
-                'aud'=>'My service',
-                'iat'=>time()-10000,
-                'nbf'=>time()-10000
+                'exp' => time() + 10000,
+                'iss' => 'ISS1',
+                'sub' => 'SUB2',
+                'aud' => 'My service',
+                'iat' => time() - 10000,
+                'nbf' => time() - 10000,
             ]);
 
         $this->getCheckerManager()->checkJWT($jwt);
