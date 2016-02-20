@@ -28,32 +28,32 @@ class ConcatKDFTest extends \PHPUnit_Framework_TestCase
     public function testConcatKDF()
     {
         $alice_key = new JWK([
-            "kty" => "EC",
-            "crv" => "P-256",
-            "x" => "gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0",
-            "y" => "SLW_xSffzlPWrHEVI30DHM_4egVwt3NQqeUD7nMFpps",
-            "d" => "0_NxaRPUMQoAJt50Gz8YiTr8gRTwyEaCumd-MToTmIo",
+            'kty' => 'EC',
+            'crv' => 'P-256',
+            'x'   => 'gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0',
+            'y'   => 'SLW_xSffzlPWrHEVI30DHM_4egVwt3NQqeUD7nMFpps',
+            'd'   => '0_NxaRPUMQoAJt50Gz8YiTr8gRTwyEaCumd-MToTmIo',
         ]);
         $bob_key = new JWK([
-            "kty" => "EC",
-            "crv" => "P-256",
-            "x" => "weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ",
-            "y" => "e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck",
-            "d" => "VEmDZpDXXK8p8N0Cndsxs924q6nS1RXFASRl6BfUqdw",
+            'kty' => 'EC',
+            'crv' => 'P-256',
+            'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
+            'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
+            'd'   => 'VEmDZpDXXK8p8N0Cndsxs924q6nS1RXFASRl6BfUqdw',
         ]);
 
         $expected_ephemeral_key = ['epk' => [
-            "kty" => "EC",
-            "crv" => "P-256",
-            "x" => "gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0",
-            "y" => "SLW_xSffzlPWrHEVI30DHM_4egVwt3NQqeUD7nMFpps",
+            'kty' => 'EC',
+            'crv' => 'P-256',
+            'x'   => 'gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0',
+            'y'   => 'SLW_xSffzlPWrHEVI30DHM_4egVwt3NQqeUD7nMFpps',
         ]];
 
         $complete_header = [
-            "alg" => "ECDH-ES",
-            "enc" => "A128GCM",
-            "apu" => "QWxpY2U",
-            "apv" => "Qm9i",
+            'alg' => 'ECDH-ES',
+            'enc' => 'A128GCM',
+            'apu' => 'QWxpY2U',
+            'apv' => 'Qm9i',
         ];
 
         $additional_header = [];
@@ -81,7 +81,6 @@ class ConcatKDFTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected_kdf, Base64Url::encode($agreement_key));
         $this->assertEquals($expected_kdf, Base64Url::encode($kdf));
         $this->assertEquals($expected_ephemeral_key, $additional_header);
-
     }
 
     /**

@@ -32,18 +32,18 @@ class A128KWAndA128GCMEncryptionWithCompressionTest extends \PHPUnit_Framework_T
         $expected_payload = "You can trust us to stick with you through thick and thin\xe2\x80\x93to the bitter end. And you can trust us to keep any secret of yours\xe2\x80\x93closer than you keep it yourself. But you cannot trust us to let you face trouble alone, and go off without a word. We are your friends, Frodo.";
 
         $private_key = new JWK([
-            "kty" => "oct",
-            "kid" => "81b20965-8332-43d9-a468-82160ad91ac8",
-            "use" => "enc",
-            "alg" => "A128KW",
-            "k" => "GZy6sIZ6wl9NJOKB-jnmVQ",
+            'kty' => 'oct',
+            'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
+            'use' => 'enc',
+            'alg' => 'A128KW',
+            'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]);
 
         $protected_headers = [
-            "alg" => "A128KW",
-            "kid" => "81b20965-8332-43d9-a468-82160ad91ac8",
-            "enc" => "A128GCM",
-            "zip" => "DEF",
+            'alg' => 'A128KW',
+            'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
+            'enc' => 'A128GCM',
+            'zip' => 'DEF',
         ];
 
         $expected_compact_json = 'eyJhbGciOiJBMTI4S1ciLCJraWQiOiI4MWIyMDk2NS04MzMyLTQzZDktYTQ2OC04MjE2MGFkOTFhYzgiLCJlbmMiOiJBMTI4R0NNIiwiemlwIjoiREVGIn0.5vUT2WOtQxKWcekM_IzVQwkGgzlFDwPi.p9pUq6XHY0jfEZIl.HbDtOsdai1oYziSx25KEeTxmwnh8L8jKMFNc1k3zmMI6VB8hry57tDZ61jXyezSPt0fdLVfe6Jf5y5-JaCap_JQBcb5opbmT60uWGml8blyiMQmOn9J--XhhlYg0m-BHaqfDO5iTOWxPxFMUedx7WCy8mxgDHj0aBMG6152PsM-w5E_o2B3jDbrYBKhpYA7qi3AyijnCJ7BP9rr3U8kxExCpG3mK420TjOw.VILuUwuIxaLVmh5X-T7kmA';
@@ -73,7 +73,6 @@ class A128KWAndA128GCMEncryptionWithCompressionTest extends \PHPUnit_Framework_T
         $this->assertEquals($expected_encrypted_key, Base64Url::encode($loaded_compact_json->getRecipient(0)->getEncryptedKey()));
         $this->assertEquals($expected_tag, Base64Url::encode($loaded_compact_json->getTag()));
 
-
         $this->assertEquals($expected_ciphertext, Base64Url::encode($loaded_flattened_json->getCiphertext()));
         $this->assertEquals($protected_headers, $loaded_flattened_json->getSharedProtectedHeaders());
         $this->assertEquals($expected_cek, Base64Url::encode($loaded_flattened_json->getContentEncryptionKey()));
@@ -81,14 +80,12 @@ class A128KWAndA128GCMEncryptionWithCompressionTest extends \PHPUnit_Framework_T
         $this->assertEquals($expected_encrypted_key, Base64Url::encode($loaded_flattened_json->getRecipient(0)->getEncryptedKey()));
         $this->assertEquals($expected_tag, Base64Url::encode($loaded_flattened_json->getTag()));
 
-
         $this->assertEquals($expected_ciphertext, Base64Url::encode($loaded_json->getCiphertext()));
         $this->assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());
         $this->assertEquals($expected_cek, Base64Url::encode($loaded_json->getContentEncryptionKey()));
         $this->assertEquals($expected_iv, Base64Url::encode($loaded_json->getIV()));
         $this->assertEquals($expected_encrypted_key, Base64Url::encode($loaded_json->getRecipient(0)->getEncryptedKey()));
         $this->assertEquals($expected_tag, Base64Url::encode($loaded_json->getTag()));
-
 
         $this->assertEquals($expected_payload, $loaded_compact_json->getPayload());
         $this->assertEquals($expected_payload, $loaded_flattened_json->getPayload());
