@@ -259,7 +259,7 @@ final class GCM
     {
         $Y = [];
         $Y[0] = StringUtil::addPadding('', 16, "\0");
-        $num_blocks = (int)(StringUtil::getStringLength($X) / 16);
+        $num_blocks = (int) (StringUtil::getStringLength($X) / 16);
         for ($i = 1; $i <= $num_blocks; $i++) {
             $Y[$i] = self::getProduct(self::getBitXor($Y[$i - 1], StringUtil::getSubString($X, ($i - 1) * 16, 16)), $H);
         }
@@ -285,7 +285,7 @@ final class GCM
         $iv = str_repeat(chr(0), 16);  // initialize to 16 byte string of "0"s
         mcrypt_generic_init($cipher, $K, $iv);
 
-        $n = (int)ceil(self::getLength($X) / 128);
+        $n = (int) ceil(self::getLength($X) / 128);
         $CB = [];
         $Y = [];
         $CB[1] = $ICB;
