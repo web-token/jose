@@ -15,7 +15,7 @@ use Assert\Assertion;
 use Jose\Algorithm\SignatureAlgorithmInterface;
 use Jose\KeyConverter\RSAKey;
 use Jose\Object\JWKInterface;
-use phpseclib\Crypt\RSA as PHPSecLibRSA;
+use Jose\Util\RSA as JoseRSA;
 
 /**
  * Class RSA.
@@ -53,7 +53,7 @@ abstract class RSA implements SignatureAlgorithmInterface
 
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
             $rsa = $this->getRsaObject();
-            $rsa->loadKey($pem, PHPSecLibRSA::PRIVATE_FORMAT_PKCS1);
+            $rsa->loadKey($pem, JoseRSA::PRIVATE_FORMAT_PKCS1);
 
             return $rsa->verify($input, $signature);
         } else {
@@ -73,7 +73,7 @@ abstract class RSA implements SignatureAlgorithmInterface
 
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
             $rsa = $this->getRsaObject();
-            $rsa->loadKey($pem, PHPSecLibRSA::PRIVATE_FORMAT_PKCS1);
+            $rsa->loadKey($pem, JoseRSA::PRIVATE_FORMAT_PKCS1);
             $result = $rsa->sign($input);
             Assertion::string($result, 'An error occurred during the creation of the signature');
 
@@ -95,15 +95,15 @@ abstract class RSA implements SignatureAlgorithmInterface
     }
 
     /**
-     * @return \phpseclib\Crypt\RSA
+     * @return \Jose\Util\RSA
      */
     private function getRsaObject()
     {
-        $rsa = new PHPSecLibRSA();
+        $rsa = new JoseRSA();
         $rsa->setHash($this->getAlgorithm());
         $rsa->setMGFHash($this->getAlgorithm());
         $rsa->setSaltLength(0);
-        $rsa->setSignatureMode(PHPSecLibRSA::SIGNATURE_PSS);
+        $rsa->setSignatureMode(JoseRSA::SIGNATURE_PSS);
 
         return $rsa;
     }

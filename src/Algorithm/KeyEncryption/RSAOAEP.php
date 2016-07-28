@@ -11,8 +11,6 @@
 
 namespace Jose\Algorithm\KeyEncryption;
 
-use phpseclib\Crypt\RSA as PHPSecLibRSA;
-
 /**
  * Class RSAOAEP.
  */
@@ -23,7 +21,7 @@ final class RSAOAEP extends RSA
      */
     protected function getEncryptionMode()
     {
-        return PHPSecLibRSA::ENCRYPTION_OAEP;
+        return self::ENCRYPTION_OAEP;
     }
 
     /**

@@ -14,13 +14,23 @@ namespace Jose\Algorithm\KeyEncryption;
 use Assert\Assertion;
 use Jose\KeyConverter\RSAKey;
 use Jose\Object\JWKInterface;
-use phpseclib\Crypt\RSA as PHPSecLibRSA;
+use Jose\Util\RSA as JoseRSA;
 
 /**
  * Class RSA.
  */
 abstract class RSA implements KeyEncryptionInterface
 {
+    /**
+     * Optimal Asymmetric Encryption Padding (OAEP).
+     */
+    const ENCRYPTION_OAEP = 1;
+
+    /**
+     * Use PKCS#1 padding.
+     */
+    const ENCRYPTION_PKCS1 = 2;
+
     /**
      * {@inheritdoc}
      */
@@ -29,13 +39,21 @@ abstract class RSA implements KeyEncryptionInterface
         $this->checkKey($key);
 
         $pem = RSAKey::toPublic(new RSAKey($key))->toPEM();
-        $rsa = $this->getRsaObject();
-        $rsa->loadKey($pem, PHPSecLibRSA::PRIVATE_FORMAT_PKCS1);
 
-        $encrypted = $rsa->encrypt($cek);
-        Assertion::string($encrypted, 'Unable to encrypt the data.');
+        if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
+            $rsa = $this->getRsaObject();
+            $rsa->loadKey($pem, JoseRSA::PRIVATE_FORMAT_PKCS1);
 
-        return $encrypted;
+            $encrypted = $rsa->encrypt($cek);
+            Assertion::string($encrypted, 'Unable to encrypt the data.');
+
+            return $encrypted;
+        } else {
+            $res = openssl_public_encrypt($cek, $encrypted, $pem, OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
+            Assertion::true($res, 'Unable to encrypt the data.');
+
+            return $encrypted;
+        }
     }
 
     /**
@@ -47,13 +65,20 @@ abstract class RSA implements KeyEncryptionInterface
         Assertion::true($key->has('d'), 'The key is not a private key');
 
         $pem = (new RSAKey($key))->toPEM();
-        $rsa = $this->getRsaObject();
-        $rsa->loadKey($pem, PHPSecLibRSA::PRIVATE_FORMAT_PKCS1);
+        if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
+            $rsa = $this->getRsaObject();
+            $rsa->loadKey($pem, JoseRSA::PRIVATE_FORMAT_PKCS1);
 
-        $decrypted = $rsa->decrypt($encrypted_key);
-        Assertion::string($decrypted, 'Unable to decrypt the data.');
+            $decrypted = $rsa->decrypt($encrypted_key);
+            Assertion::string($decrypted, 'Unable to decrypt the data11.');
 
-        return $decrypted;
+            return $decrypted;
+        } else {
+            $res = openssl_private_decrypt($encrypted_key, $decrypted, $pem, OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
+            Assertion::true($res, 'Unable to decrypt the data22.');
+
+            return $decrypted;
+        }
     }
 
     /**
@@ -69,13 +94,10 @@ abstract class RSA implements KeyEncryptionInterface
      */
     private function getRsaObject()
     {
-        $rsa = new PHPSecLibRSA();
-        $encryption_mode = $this->getEncryptionMode();
-        $rsa->setEncryptionMode($encryption_mode);
-        if (PHPSecLibRSA::ENCRYPTION_OAEP === $encryption_mode) {
-            $rsa->setHash($this->getHashAlgorithm());
-            $rsa->setMGFHash($this->getHashAlgorithm());
-        }
+        $rsa = new JoseRSA();
+        $rsa->setEncryptionMode(JoseRSA::ENCRYPTION_OAEP);
+        $rsa->setHash($this->getHashAlgorithm());
+        $rsa->setMGFHash($this->getHashAlgorithm());
 
         return $rsa;
     }

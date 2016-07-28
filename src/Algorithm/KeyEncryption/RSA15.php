@@ -11,8 +11,6 @@
 
 namespace Jose\Algorithm\KeyEncryption;
 
-use phpseclib\Crypt\RSA as PHPSecLibRSA;
-
 /**
  * Class RSA15.
  */
@@ -23,7 +21,7 @@ final class RSA15 extends RSA
      */
     protected function getEncryptionMode()
     {
-        return PHPSecLibRSA::ENCRYPTION_PKCS1;
+        return self::ENCRYPTION_PKCS1;
     }
 
     /**

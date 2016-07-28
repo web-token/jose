@@ -30,7 +30,6 @@
         "spomky-labs/base64url": "^1.0",
         "spomky-labs/aes-key-wrap": "^2.0",
         "spomky-labs/php-aes-gcm": "^1.0",
-        "phpseclib/phpseclib": "^2.0",
         "beberlei/assert": "^2.0",
         "symfony/polyfill-mbstring": "^1.1",
         "symfony/polyfill-php70": "^1.1",
