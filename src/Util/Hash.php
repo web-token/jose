@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2016 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Util;
 
 use Assert\Assertion;
@@ -7,14 +16,14 @@ use Assert\Assertion;
 class Hash
 {
     /**
-     * Hash Parameter
+     * Hash Parameter.
      *
      * @var int
      */
     private $hash;
 
     /**
-     * Key
+     * Key.
      *
      * @var null| string
      */
@@ -33,7 +42,7 @@ class Hash
     }
 
     /**
-     * Sets the key for HMACs
+     * Sets the key for HMACs.
      *
      * Keys can be of any length.
      *
@@ -61,6 +70,7 @@ class Hash
      * Compute the HMAC.
      *
      * @param string $text
+     *
      * @return string
      */
     public function hash($text)

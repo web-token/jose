@@ -23,12 +23,12 @@ use Jose\Util\RSA as JoseRSA;
 abstract class RSA implements SignatureAlgorithmInterface
 {
     /**
-     * Probabilistic Signature Scheme
+     * Probabilistic Signature Scheme.
      */
     const SIGNATURE_PSS = 1;
 
     /**
-     * Use the PKCS#1
+     * Use the PKCS#1.
      */
     const SIGNATURE_PKCS1 = 2;
 

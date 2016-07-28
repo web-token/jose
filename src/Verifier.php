@@ -102,7 +102,6 @@ final class Verifier implements VerifierInterface
         $encoded_protected_headers = $signature->getEncodedProtectedHeaders();
         if (!$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64')) {
             if (null !== $jws->getEncodedPayload($signature)) {
-
                 return sprintf('%s.%s', $encoded_protected_headers, $jws->getEncodedPayload($signature));
             }
 
