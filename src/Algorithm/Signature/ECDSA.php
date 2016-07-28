@@ -123,7 +123,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
      * @param string                    $R
      * @param string                    $S
      *
-     * @return boolean
+     * @return bool
      */
     private function verifyOpenSSLSignature(JWKInterface $key, $data, $R, $S)
     {
@@ -144,7 +144,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
      * @param string                    $R
      * @param string                    $S
      *
-     * @return boolean
+     * @return bool
      */
     private function verifyPHPECCSignature(JWKInterface $key, $data, $R, $S)
     {

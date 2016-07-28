@@ -38,7 +38,8 @@ final class Decrypter implements DecrypterInterface
      * @param string[]|\Jose\Algorithm\ContentEncryptionAlgorithmInterface[] $content_encryption_algorithms
      * @param string[]|\Jose\Compression\CompressionInterface[]              $compression_methods
      */
-    public function __construct(array $key_encryption_algorithms, array $content_encryption_algorithms, array $compression_methods) {
+    public function __construct(array $key_encryption_algorithms, array $content_encryption_algorithms, array $compression_methods)
+    {
         $this->setKeyEncryptionAlgorithms($key_encryption_algorithms);
         $this->setContentEncryptionAlgorithms($content_encryption_algorithms);
         $this->setCompressionMethods($compression_methods);

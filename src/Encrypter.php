@@ -195,7 +195,7 @@ final class Encrypter implements EncrypterInterface
      */
     private function getEncryptedKeyFromKeyEncryptionAlgorithm(array $complete_headers, $cek, Algorithm\KeyEncryption\KeyEncryptionInterface $key_encryption_algorithm, Object\JWKInterface $recipient_key, array &$additional_headers)
     {
-        return $key_encryption_algorithm->encryptKey($recipient_key,  $cek, $complete_headers, $additional_headers);
+        return $key_encryption_algorithm->encryptKey($recipient_key, $cek, $complete_headers, $additional_headers);
     }
 
     /**

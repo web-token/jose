@@ -26,7 +26,7 @@ class StorableJWKTest extends \PHPUnit_Framework_TestCase
             sys_get_temp_dir().'/JWK.key',
             [
                 'kty'   => 'EC',
-                'crv' => 'P-256',
+                'crv'   => 'P-256',
             ]
         );
 
@@ -45,7 +45,7 @@ class StorableJWKTest extends \PHPUnit_Framework_TestCase
             sys_get_temp_dir().'/JWK.key',
             [
                 'kty'   => 'EC',
-                'crv' => 'P-256',
+                'crv'   => 'P-256',
             ]
         );
         $this->assertEquals($all, $jwk->getAll());
@@ -56,7 +56,7 @@ class StorableJWKTest extends \PHPUnit_Framework_TestCase
             sys_get_temp_dir().'/JWK.key',
             [
                 'kty'   => 'EC',
-                'crv' => 'P-256',
+                'crv'   => 'P-256',
             ]
         );
         $this->assertNotEquals($all, $jwk->getAll());

@@ -31,10 +31,10 @@ class JWTCreatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($jwt_creator->isEncryptionSupportEnabled());
 
         $payload = 'Hello World!';
-        $signature_key = \Jose\Factory\JWKFactory::createKey(['kty'=>'oct', 'use'=>'sig', 'size'=>512]);
-        $encryption_key = \Jose\Factory\JWKFactory::createKey(['kty'=>'oct', 'use'=>'enc', 'size'=>256]);
+        $signature_key = \Jose\Factory\JWKFactory::createKey(['kty' => 'oct', 'use' => 'sig', 'size' => 512]);
+        $encryption_key = \Jose\Factory\JWKFactory::createKey(['kty' => 'oct', 'use' => 'enc', 'size' => 256]);
 
-        $jwt = $jwt_creator->signAndEncrypt($payload, ['alg'=>'HS256'], $signature_key, ['alg'=>'A256GCMKW', 'enc'=>'A128GCM'], $encryption_key);
+        $jwt = $jwt_creator->signAndEncrypt($payload, ['alg' => 'HS256'], $signature_key, ['alg' => 'A256GCMKW', 'enc' => 'A128GCM'], $encryption_key);
         $this->assertEquals(5, count(explode('.', $jwt)));
     }
 }

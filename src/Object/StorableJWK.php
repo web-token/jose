@@ -16,7 +16,7 @@ use Base64Url\Base64Url;
 use Jose\Factory\JWKFactory;
 
 /**
- * Class StorableJWK
+ * Class StorableJWK.
  */
 final class StorableJWK implements StorableJWKInterface
 {

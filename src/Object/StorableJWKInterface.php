@@ -12,7 +12,7 @@
 namespace Jose\Object;
 
 /**
- * Interface StorableJWKInterface
+ * Interface StorableJWKInterface.
  */
 interface StorableJWKInterface extends JWKInterface
 {
