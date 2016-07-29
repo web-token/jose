@@ -13,6 +13,7 @@ namespace Jose\Algorithm\KeyEncryption;
 
 use Assert\Assertion;
 use Jose\KeyConverter\RSAKey;
+use Jose\Object\JWK;
 use Jose\Object\JWKInterface;
 use Jose\Util\RSA as JoseRSA;
 
@@ -38,17 +39,18 @@ abstract class RSA implements KeyEncryptionInterface
     {
         $this->checkKey($key);
 
-        $pem = RSAKey::toPublic(new RSAKey($key))->toPEM();
 
         if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
+            $pub = new JWK(RSAKey::toPublic(new RSAKey($key))->toArray());
             $rsa = $this->getRsaObject();
-            $rsa->loadKey($pem, JoseRSA::PRIVATE_FORMAT_PKCS1);
+            $rsa->loadKey($pub);
 
             $encrypted = $rsa->encrypt($cek);
             Assertion::string($encrypted, 'Unable to encrypt the data.');
 
             return $encrypted;
         } else {
+            $pem = RSAKey::toPublic(new RSAKey($key))->toPEM();
             $res = openssl_public_encrypt($cek, $encrypted, $pem, OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
             Assertion::true($res, 'Unable to encrypt the data.');
 
@@ -64,18 +66,18 @@ abstract class RSA implements KeyEncryptionInterface
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The key is not a private key');
 
-        $pem = (new RSAKey($key))->toPEM();
         if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
             $rsa = $this->getRsaObject();
-            $rsa->loadKey($pem, JoseRSA::PRIVATE_FORMAT_PKCS1);
+            $rsa->loadKey($key);
 
             $decrypted = $rsa->decrypt($encrypted_key);
-            Assertion::string($decrypted, 'Unable to decrypt the data.');
+            Assertion::string($decrypted, 'Unable to decrypt the data11.');
 
             return $decrypted;
         } else {
+            $pem = (new RSAKey($key))->toPEM();
             $res = openssl_private_decrypt($encrypted_key, $decrypted, $pem, OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
-            Assertion::true($res, 'Unable to decrypt the data.');
+            Assertion::true($res, 'Unable to decrypt the data22.');
 
             return $decrypted;
         }

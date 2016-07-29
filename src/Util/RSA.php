@@ -11,7 +11,8 @@
 
 namespace Jose\Util;
 
-use Assert\Assertion;
+use Base64Url\Base64Url;
+use Jose\Object\JWKInterface;
 
 final class RSA
 {
@@ -118,23 +119,23 @@ final class RSA
     /**
      * Primes for Chinese Remainder Theorem (ie. p and q).
      *
-     * @var array
+     * @var \Jose\Util\BigInteger[]
      */
-    private $primes = [];
+    private $primes;
 
     /**
      * Exponents for Chinese Remainder Theorem (ie. dP and dQ).
      *
-     * @var array
+     * @var \Jose\Util\BigInteger[]
      */
-    private $exponents = [];
+    private $exponents;
 
     /**
      * Coefficients for Chinese Remainder Theorem (ie. qInv).
      *
-     * @var array
+     * @var \Jose\Util\BigInteger[]
      */
-    private $coefficients = [];
+    private $coefficients;
 
     /**
      * Hash function.
@@ -177,179 +178,40 @@ final class RSA
     }
 
     /**
-     * Break a public or private key down into its constituant components.
-     *
-     * @param string $key
-     * @param int    $type
-     *
-     * @return array
-     */
-    private function _parseKey($key, $type)
-    {
-        Assertion::string($key);
-
-        $decoded = $this->_extractBER($key);
-
-        if ($decoded !== false) {
-            $key = $decoded;
-        }
-
-        $components = [];
-
-        if (ord($this->_string_shift($key)) != self::ASN1_SEQUENCE) {
-            return false;
-        }
-        if ($this->_decodeLength($key) != strlen($key)) {
-            return false;
-        }
-
-        $tag = ord($this->_string_shift($key));
-
-        if ($tag == self::ASN1_INTEGER && substr($key, 0, 3) == "\x01\x00\x30") {
-            $this->_string_shift($key, 3);
-            $tag = self::ASN1_SEQUENCE;
-        }
-
-        if ($tag == self::ASN1_SEQUENCE) {
-            $temp = $this->_string_shift($key, $this->_decodeLength($key));
-            if (ord($this->_string_shift($temp)) != self::ASN1_OBJECT) {
-                return false;
-            }
-            $length = $this->_decodeLength($temp);
-            switch ($this->_string_shift($temp, $length)) {
-                case "\x2a\x86\x48\x86\xf7\x0d\x01\x01\x01": // rsaEncryption
-                    break;
-            }
-            $tag = ord($this->_string_shift($key)); // skip over the BIT STRING / OCTET STRING tag
-            $this->_decodeLength($key); // skip over the BIT STRING / OCTET STRING length
-            if ($tag == self::ASN1_BITSTRING) {
-                $this->_string_shift($key);
-            }
-            if (ord($this->_string_shift($key)) != self::ASN1_SEQUENCE) {
-                return false;
-            }
-            if ($this->_decodeLength($key) != strlen($key)) {
-                return false;
-            }
-            $tag = ord($this->_string_shift($key));
-        }
-        if ($tag != self::ASN1_INTEGER) {
-            return false;
-        }
-
-        $length = $this->_decodeLength($key);
-        $temp = $this->_string_shift($key, $length);
-        if (strlen($temp) != 1 || ord($temp) > 2) {
-            $components['modulus'] = BigInteger::createFromBinaryString($temp);
-            $this->_string_shift($key); // skip over self::ASN1_INTEGER
-            $length = $this->_decodeLength($key);
-            $components[$type == self::PUBLIC_FORMAT_PKCS1 ? 'publicExponent' : 'privateExponent'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
-
-            return $components;
-        }
-        if (ord($this->_string_shift($key)) != self::ASN1_INTEGER) {
-            return false;
-        }
-        $length = $this->_decodeLength($key);
-        $components['modulus'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
-        $this->_string_shift($key);
-        $length = $this->_decodeLength($key);
-        $components['publicExponent'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
-        $this->_string_shift($key);
-        $length = $this->_decodeLength($key);
-        $components['privateExponent'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
-        $this->_string_shift($key);
-        $length = $this->_decodeLength($key);
-        $components['primes'] = [1 => BigInteger::createFromBinaryString($this->_string_shift($key, $length))];
-        $this->_string_shift($key);
-        $length = $this->_decodeLength($key);
-        $components['primes'][] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
-        $this->_string_shift($key);
-        $length = $this->_decodeLength($key);
-        $components['exponents'] = [1 => BigInteger::createFromBinaryString($this->_string_shift($key, $length))];
-        $this->_string_shift($key);
-        $length = $this->_decodeLength($key);
-        $components['exponents'][] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
-        $this->_string_shift($key);
-        $length = $this->_decodeLength($key);
-        $components['coefficients'] = [2 => BigInteger::createFromBinaryString($this->_string_shift($key, $length))];
-
-        return $components;
-    }
-
-    /**
      * Loads a public or private key.
      *
-     * @param string $key
-     * @param bool   $type optional
-     *
-     * @return bool
+     * @param \Jose\Object\JWKInterface $key
      */
-    public function loadKey($key, $type = false)
+    public function loadKey(JWKInterface $key)
     {
-        $components = $this->_parseKey($key, $type);
+        $this->modulus = BigInteger::createFromBinaryString(Base64Url::decode($key->get('n')));
+        $this->k = strlen($this->modulus->toBytes());
 
-        if ($components === false) {
-            return false;
+        if ($key->has('d')) {
+            $this->exponent = BigInteger::createFromBinaryString(Base64Url::decode($key->get('d')));
+            $this->publicExponent = BigInteger::createFromBinaryString(Base64Url::decode($key->get('e')));
+        } else {
+            $this->exponent = BigInteger::createFromBinaryString(Base64Url::decode($key->get('e')));
         }
 
-        $this->modulus = $components['modulus'];
-        $this->k = strlen($this->modulus->toBytes());
-        $this->exponent = isset($components['privateExponent']) ? $components['privateExponent'] : $components['publicExponent'];
-        if (isset($components['primes'])) {
-            $this->primes = $components['primes'];
-            $this->exponents = $components['exponents'];
-            $this->coefficients = $components['coefficients'];
-            $this->publicExponent = $components['publicExponent'];
+        if ($key->has('p') && $key->has('q')) {
+            $this->primes = [
+                BigInteger::createFromBinaryString(Base64Url::decode($key->get('p'))),
+                BigInteger::createFromBinaryString(Base64Url::decode($key->get('q'))),
+            ];
         } else {
             $this->primes = [];
-            $this->exponents = [];
+        }
+
+        if ($key->has('dp') && $key->has('dq') && $key->has('qi')) {
+            $this->coefficients = [
+                BigInteger::createFromBinaryString(Base64Url::decode($key->get('dp'))),
+                BigInteger::createFromBinaryString(Base64Url::decode($key->get('dq'))),
+                BigInteger::createFromBinaryString(Base64Url::decode($key->get('qi'))),
+            ];
+        } else {
             $this->coefficients = [];
-            $this->publicExponent = false;
         }
-
-        switch (true) {
-            case strpos($key, '-BEGIN PUBLIC KEY-') !== false:
-            case strpos($key, '-BEGIN RSA PUBLIC KEY-') !== false:
-                $this->setPublicKey();
-        }
-
-        return true;
-    }
-
-    /**
-     * DER-decode the length.
-     *
-     * @param string $string
-     *
-     * @return int
-     */
-    private function _decodeLength(&$string)
-    {
-        $length = ord($this->_string_shift($string));
-        if ($length & 0x80) { // definite length, long form
-            $length &= 0x7F;
-            $temp = $this->_string_shift($string, $length);
-            list(, $length) = unpack('N', substr(str_pad($temp, 4, chr(0), STR_PAD_LEFT), -4));
-        }
-
-        return $length;
-    }
-
-    /**
-     * String Shift.
-     *
-     * @param string $string
-     * @param int    $index
-     *
-     * @return string
-     */
-    private function _string_shift(&$string, $index = 1)
-    {
-        $substr = substr($string, 0, $index);
-        $string = substr($string, $index);
-
-        return $substr;
     }
 
     /**
@@ -932,38 +794,5 @@ final class RSA
         }
 
         return $this->_rsassa_pss_verify($message, $signature);
-    }
-
-    /**
-     * Extract raw BER from Base64 encoding.
-     *
-     * @param string $str
-     *
-     * @return string
-     */
-    private function _extractBER($str)
-    {
-        $temp = preg_replace('#.*?^-+[^-]+-+[\r\n ]*$#ms', '', $str, 1);
-        // remove the -----BEGIN CERTIFICATE----- and -----END CERTIFICATE----- stuff
-        $temp = preg_replace('#-+[^-]+-+#', '', $temp);
-        // remove new lines
-        $temp = str_replace(["\r", "\n", ' '], '', $temp);
-        $temp = preg_match('#^[a-zA-Z\d/+]*={0,2}$#', $temp) ? base64_decode($temp) : false;
-
-        return $temp != false ? $temp : $str;
-    }
-
-    /**
-     * Defines the public key.
-     *
-     * @return bool
-     */
-    private function setPublicKey()
-    {
-        if (!empty($this->modulus)) {
-            $this->publicExponent = $this->exponent;
-
-            return true;
-        }
     }
 }
