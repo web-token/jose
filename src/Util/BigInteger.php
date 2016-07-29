@@ -147,7 +147,7 @@ final class BigInteger
         $temp = new static();
         $temp->value = gmp_add($this->value, $y->value);
 
-        return $this->_normalize($temp);
+        return $temp;
     }
 
     /**
@@ -175,7 +175,7 @@ final class BigInteger
         $temp = new static();
         $temp->value = gmp_sub($this->value, $y->value);
 
-        return $this->_normalize($temp);
+        return $temp;
     }
 
     /**
@@ -202,7 +202,7 @@ final class BigInteger
         $temp = new static();
         $temp->value = gmp_mul($this->value, $x->value);
 
-        return $this->_normalize($temp);
+        return $temp;
     }
 
     /**
@@ -242,7 +242,7 @@ final class BigInteger
             $remainder->value = gmp_add($remainder->value, gmp_abs($y->value));
         }
 
-        return [$this->_normalize($quotient), $this->_normalize($remainder)];
+        return [$quotient, $remainder];
     }
 
     /**
@@ -297,13 +297,13 @@ final class BigInteger
                 return false;
             }
 
-            return $this->_normalize($temp->modPow($e, $n));
+            return $temp->modPow($e, $n);
         }
 
             $temp = new static();
             $temp->value = gmp_powm($this->value, $e->value, $n->value);
 
-            return $this->_normalize($temp);
+            return $temp;
     }
 
     /**
@@ -338,7 +338,7 @@ final class BigInteger
         $temp = new static();
         $temp->value = gmp_invert($this->value, $n->value);
 
-        return ($temp->value === false) ? false : $this->_normalize($temp);
+        return $temp->value === false ? false : $temp;
     }
 
     /**
@@ -399,7 +399,7 @@ final class BigInteger
 
         $temp->value = gmp_mul($this->value, gmp_pow($two, $shift));
 
-        return $this->_normalize($temp);
+        return $temp;
     }
 
     /**
@@ -435,7 +435,7 @@ final class BigInteger
         $compare = $max->compare($min);
 
         if (!$compare) {
-            return $this->_normalize($min);
+            return $min;
         } elseif ($compare < 0) {
             // if $min is bigger then $max, swap $min and $max
             $temp = $max;
@@ -485,18 +485,5 @@ final class BigInteger
 
         return $random->add($min);
     }
-
-    /**
-     * Normalize.
-     *
-     * Removes leading zeros and truncates (if necessary) to maintain the appropriate precision
-     *
-     * @param \Jose\Util\BigInteger $result
-     *
-     * @return \Jose\Util\BigInteger
-     */
-    private function _normalize($result)
-    {
-        return $result;
-    }
+    
 }
