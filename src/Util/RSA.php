@@ -151,7 +151,7 @@ final class RSA
     /**
      * Modulus length.
      *
-     * @var \Jose\Util\BigInteger
+     * @var int
      */
     private $k;
 
@@ -1295,104 +1295,6 @@ final class RSA
     }
 
     /**
-     * RSAES-PKCS1-V1_5-ENCRYPT.
-     *
-     * @param string $m
-     *
-     * @return string
-     */
-    private function _rsaes_pkcs1_v1_5_encrypt($m)
-    {
-        $mLen = strlen($m);
-
-        // Length checking
-
-        if ($mLen > $this->k - 11) {
-            user_error('Message too long');
-
-            return false;
-        }
-
-        // EME-PKCS1-v1_5 encoding
-
-        $psLen = $this->k - $mLen - 3;
-        $ps = '';
-        while (strlen($ps) != $psLen) {
-            $temp = random_bytes($psLen - strlen($ps));
-            $temp = str_replace("\x00", '', $temp);
-            $ps .= $temp;
-        }
-        $type = 2;
-        // see the comments of _rsaes_pkcs1_v1_5_decrypt() to understand why this is being done
-        if (defined('CRYPT_RSA_PKCS15_COMPAT') && (!isset($this->publicExponent) || $this->exponent !== $this->publicExponent)) {
-            $type = 1;
-            // "The padding string PS shall consist of k-3-||D|| octets. ... for block type 01, they shall have value FF"
-            $ps = str_repeat("\xFF", $psLen);
-        }
-        $em = chr(0).chr($type).$ps.chr(0).$m;
-
-        // RSA encryption
-        $m = $this->_os2ip($em);
-        $c = $this->_rsaep($m);
-        $c = $this->_i2osp($c, $this->k);
-
-        // Output the ciphertext C
-
-        return $c;
-    }
-
-    /**
-     * RSAES-PKCS1-V1_5-DECRYPT.
-     *
-     * @param string $c
-     *
-     * @return string
-     */
-    private function _rsaes_pkcs1_v1_5_decrypt($c)
-    {
-        // Length checking
-
-        if (strlen($c) != $this->k) { // or if k < 11
-            user_error('Decryption error');
-
-            return false;
-        }
-
-        // RSA decryption
-
-        $c = $this->_os2ip($c);
-        $m = $this->_rsadp($c);
-
-        if ($m === false) {
-            user_error('Decryption error');
-
-            return false;
-        }
-        $em = $this->_i2osp($m, $this->k);
-
-        // EME-PKCS1-v1_5 decoding
-
-        if (ord($em[0]) != 0 || ord($em[1]) > 2) {
-            user_error('Decryption error');
-
-            return false;
-        }
-
-        $ps = substr($em, 2, strpos($em, chr(0), 2) - 2);
-        $m = substr($em, strlen($ps) + 3);
-
-        if (strlen($ps) < 8) {
-            user_error('Decryption error');
-
-            return false;
-        }
-
-        // Output M
-
-        return $m;
-    }
-
-    /**
      * EMSA-PSS-ENCODE.
      *
      * @param string $m
@@ -1540,132 +1442,6 @@ final class RSA
     }
 
     /**
-     * EMSA-PKCS1-V1_5-ENCODE.
-     *
-     * @param string $m
-     * @param int    $emLen
-     *
-     * @return string
-     */
-    private function _emsa_pkcs1_v1_5_encode($m, $emLen)
-    {
-        $h = $this->hash->hash($m);
-        if ($h === false) {
-            return false;
-        }
-
-        // see http://tools.ietf.org/html/rfc3447#page-43
-        switch ($this->hashName) {
-            case 'md2':
-                $t = pack('H*', '3020300c06082a864886f70d020205000410');
-                break;
-            case 'md5':
-                $t = pack('H*', '3020300c06082a864886f70d020505000410');
-                break;
-            case 'sha1':
-                $t = pack('H*', '3021300906052b0e03021a05000414');
-                break;
-            case 'sha256':
-                $t = pack('H*', '3031300d060960864801650304020105000420');
-                break;
-            case 'sha384':
-                $t = pack('H*', '3041300d060960864801650304020205000430');
-                break;
-            case 'sha512':
-                $t = pack('H*', '3051300d060960864801650304020305000440');
-        }
-        $t .= $h;
-        $tLen = strlen($t);
-
-        if ($emLen < $tLen + 11) {
-            user_error('Intended encoded message length too short');
-
-            return false;
-        }
-
-        $ps = str_repeat(chr(0xFF), $emLen - $tLen - 3);
-
-        $em = "\0\1$ps\0$t";
-
-        return $em;
-    }
-
-    /**
-     * RSASSA-PKCS1-V1_5-SIGN.
-     *
-     * @param string $m
-     *
-     * @return string
-     */
-    private function _rsassa_pkcs1_v1_5_sign($m)
-    {
-        // EMSA-PKCS1-v1_5 encoding
-
-        $em = $this->_emsa_pkcs1_v1_5_encode($m, $this->k);
-        if ($em === false) {
-            user_error('RSA modulus too short');
-
-            return false;
-        }
-
-        // RSA signature
-
-        $m = $this->_os2ip($em);
-        $s = $this->_rsasp1($m);
-        $s = $this->_i2osp($s, $this->k);
-
-        // Output the signature S
-
-        return $s;
-    }
-
-    /**
-     * RSASSA-PKCS1-V1_5-VERIFY.
-     *
-     * @param string $m
-     *
-     * @return string
-     */
-    private function _rsassa_pkcs1_v1_5_verify($m, $s)
-    {
-        // Length checking
-
-        if (strlen($s) != $this->k) {
-            user_error('Invalid signature');
-
-            return false;
-        }
-
-        // RSA verification
-
-        $s = $this->_os2ip($s);
-        $m2 = $this->_rsavp1($s);
-        if ($m2 === false) {
-            user_error('Invalid signature');
-
-            return false;
-        }
-        $em = $this->_i2osp($m2, $this->k);
-        if ($em === false) {
-            user_error('Invalid signature');
-
-            return false;
-        }
-
-        // EMSA-PKCS1-v1_5 encoding
-
-        $em2 = $this->_emsa_pkcs1_v1_5_encode($m, $this->k);
-        if ($em2 === false) {
-            user_error('RSA modulus too short');
-
-            return false;
-        }
-
-        // Compare
-        return $this->_equals($em, $em2);
-    }
-
-    /**
      * Set Encryption Mode.
      *
      * Valid values include self::ENCRYPTION_OAEP and self::ENCRYPTION_PKCS1.
@@ -1704,35 +1480,18 @@ final class RSA
      */
     public function encrypt($plaintext)
     {
-        switch ($this->encryptionMode) {
-            case self::ENCRYPTION_PKCS1:
-                $length = $this->k - 11;
-                if ($length <= 0) {
-                    return false;
-                }
-
-                $plaintext = str_split($plaintext, $length);
-                $ciphertext = '';
-                foreach ($plaintext as $m) {
-                    $ciphertext .= $this->_rsaes_pkcs1_v1_5_encrypt($m);
-                }
-
-                return $ciphertext;
-            case self::ENCRYPTION_OAEP:
-            default:
-                $length = $this->k - 2 * $this->hLen - 2;
-                if ($length <= 0) {
-                    return false;
-                }
-
-                $plaintext = str_split($plaintext, $length);
-                $ciphertext = '';
-                foreach ($plaintext as $m) {
-                    $ciphertext .= $this->_rsaes_oaep_encrypt($m);
-                }
-
-                return $ciphertext;
+        $length = $this->k - 2 * $this->hLen - 2;
+        if ($length <= 0) {
+            return false;
         }
+
+        $plaintext = str_split($plaintext, $length);
+        $ciphertext = '';
+        foreach ($plaintext as $m) {
+            $ciphertext .= $this->_rsaes_oaep_encrypt($m);
+        }
+
+        return $ciphertext;
     }
 
     /**
@@ -1753,17 +1512,8 @@ final class RSA
 
         $plaintext = '';
 
-        switch ($this->encryptionMode) {
-            case self::ENCRYPTION_PKCS1:
-                $decrypt = '_rsaes_pkcs1_v1_5_decrypt';
-                break;
-            case self::ENCRYPTION_OAEP:
-            default:
-                $decrypt = '_rsaes_oaep_decrypt';
-        }
-
         foreach ($ciphertext as $c) {
-            $temp = $this->$decrypt($c);
+            $temp = $this->_rsaes_oaep_decrypt($c);
             if ($temp === false) {
                 return false;
             }
@@ -1786,13 +1536,8 @@ final class RSA
             return false;
         }
 
-        switch ($this->signatureMode) {
-            case self::SIGNATURE_PKCS1:
-                return $this->_rsassa_pkcs1_v1_5_sign($message);
-            case self::SIGNATURE_PSS:
-            default:
-                return $this->_rsassa_pss_sign($message);
-        }
+
+        return $this->_rsassa_pss_sign($message);
     }
 
     /**
@@ -1809,13 +1554,7 @@ final class RSA
             return false;
         }
 
-        switch ($this->signatureMode) {
-            case self::SIGNATURE_PKCS1:
-                return $this->_rsassa_pkcs1_v1_5_verify($message, $signature);
-            case self::SIGNATURE_PSS:
-            default:
-                return $this->_rsassa_pss_verify($message, $signature);
-        }
+        return $this->_rsassa_pss_verify($message, $signature);
     }
 
     /**
@@ -1840,54 +1579,16 @@ final class RSA
     /**
      * Defines the public key.
      *
-     * @param string $key  optional
-     * @param int    $type optional
+     * @param string $key optional
      *
      * @return bool
      */
-    private function setPublicKey($key = false, $type = false)
+    private function setPublicKey($key = false)
     {
-        // if a public key has already been loaded return false
-        if (!empty($this->publicExponent)) {
-            return false;
-        }
-
         if ($key === false && !empty($this->modulus)) {
             $this->publicExponent = $this->exponent;
 
             return true;
         }
-
-        if ($type === false) {
-            $types = [
-                self::PUBLIC_FORMAT_RAW,
-                self::PUBLIC_FORMAT_PKCS1,
-                self::PUBLIC_FORMAT_XML,
-                self::PUBLIC_FORMAT_OPENSSH,
-            ];
-            foreach ($types as $type) {
-                $components = $this->_parseKey($key, $type);
-                if ($components !== false) {
-                    break;
-                }
-            }
-        } else {
-            $components = $this->_parseKey($key, $type);
-        }
-
-        if ($components === false) {
-            return false;
-        }
-
-        if (empty($this->modulus) || !$this->modulus->equals($components['modulus'])) {
-            $this->modulus = $components['modulus'];
-            $this->exponent = $this->publicExponent = $components['publicExponent'];
-
-            return true;
-        }
-
-        $this->publicExponent = $components['publicExponent'];
-
-        return true;
     }
 }
