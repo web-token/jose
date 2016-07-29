@@ -174,7 +174,6 @@ final class RSA
     {
         $x = $x->toBytes();
         if (strlen($x) > $xLen) {
-
             return false;
         }
 
@@ -297,7 +296,6 @@ final class RSA
     private function _rsaep($m)
     {
         if ($m->compare($this->zero) < 0 || $m->compare($this->modulus) > 0) {
-
             return false;
         }
 
@@ -314,7 +312,6 @@ final class RSA
     private function _rsadp($c)
     {
         if ($c->compare($this->zero) < 0 || $c->compare($this->modulus) > 0) {
-
             return false;
         }
 
@@ -331,7 +328,6 @@ final class RSA
     private function _rsasp1($m)
     {
         if ($m->compare($this->zero) < 0 || $m->compare($this->modulus) > 0) {
-
             return false;
         }
 
@@ -348,7 +344,6 @@ final class RSA
     private function _rsavp1($s)
     {
         if ($s->compare($this->zero) < 0 || $s->compare($this->modulus) > 0) {
-
             return false;
         }
 
@@ -395,7 +390,6 @@ final class RSA
         // be output.
 
         if ($mLen > $this->k - 2 * $this->hash->getLength() - 2) {
-
             return false;
         }
 
@@ -438,7 +432,6 @@ final class RSA
         // be output.
 
         if (strlen($c) != $this->k || $this->k < 2 * $this->hash->getLength() + 2) {
-
             return false;
         }
 
@@ -447,7 +440,6 @@ final class RSA
         $c = $this->convertOctetStringToInteger($c);
         $m = $this->_rsadp($c);
         if ($m === false) {
-
             return false;
         }
         $em = $this->convertIntegerToOctetString($m, $this->k);
@@ -464,12 +456,10 @@ final class RSA
         $lHash2 = substr($db, 0, $this->hash->getLength());
         $m = substr($db, $this->hash->getLength());
         if ($lHash != $lHash2) {
-
             return false;
         }
         $m = ltrim($m, chr(0));
         if (ord($m[0]) != 1) {
-
             return false;
         }
 
@@ -496,7 +486,6 @@ final class RSA
 
         $mHash = $this->hash->hash($m);
         if ($emLen < $this->hash->getLength() + $sLen + 2) {
-
             return false;
         }
 
@@ -596,7 +585,6 @@ final class RSA
         // Length checking
 
         if (strlen($s) != $this->k) {
-
             return false;
         }
 
@@ -607,12 +595,10 @@ final class RSA
         $s2 = $this->convertOctetStringToInteger($s);
         $m2 = $this->_rsavp1($s2);
         if ($m2 === false) {
-
             return false;
         }
         $em = $this->convertIntegerToOctetString($m2, $modBits >> 3);
         if ($em === false) {
-
             return false;
         }
 

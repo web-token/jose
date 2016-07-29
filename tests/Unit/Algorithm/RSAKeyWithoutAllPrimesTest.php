@@ -13,8 +13,8 @@ use Jose\Factory\JWEFactory;
 use Jose\Factory\JWKFactory;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
-use Jose\Object\JWSInterface;
 use Jose\Object\JWEInterface;
+use Jose\Object\JWSInterface;
 
 /**
  * Class RSASignatureTest.

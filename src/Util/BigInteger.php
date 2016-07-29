@@ -30,12 +30,12 @@ final class BigInteger
      */
     private function __construct($value = 0, $base = 10)
     {
-        if($value instanceof \GMP) {
+        if ($value instanceof \GMP) {
             $this->value = $value;
-            
+
             return;
         }
-        
+
         $this->value = gmp_init(0);
 
         // '0' counts as empty() but when the base is 256 '0' is equal to ord('0') or 48
@@ -97,7 +97,6 @@ final class BigInteger
      * Converts a BigInteger to a byte string (eg. base-256).
      *
      * @return string
-     *
      */
     public function toBytes()
     {
@@ -118,7 +117,6 @@ final class BigInteger
      * @param \Jose\Util\BigInteger $y
      *
      * @return \Jose\Util\BigInteger
-     *
      */
     public function add(BigInteger $y)
     {
@@ -133,7 +131,6 @@ final class BigInteger
      * @param \Jose\Util\BigInteger $y
      *
      * @return \Jose\Util\BigInteger
-     *
      */
     public function subtract(BigInteger $y)
     {
@@ -162,7 +159,6 @@ final class BigInteger
      * @param \Jose\Util\BigInteger $y
      *
      * @return \Jose\Util\BigInteger[]
-     *
      */
     public function divide(BigInteger $y)
     {
@@ -209,7 +205,6 @@ final class BigInteger
      * @param \Jose\Util\BigInteger $n
      *
      * @return \Jose\Util\BigInteger|bool
-     *
      */
     public function modInverse(BigInteger $n)
     {
@@ -236,7 +231,6 @@ final class BigInteger
      * @param \Jose\Util\BigInteger $y
      *
      * @return int < 0 if $this is less than $y; > 0 if $this is greater than $y, and 0 if they are equal.
-     *
      */
     public function compare(BigInteger $y)
     {
@@ -249,7 +243,6 @@ final class BigInteger
      * @param int $shift
      *
      * @return \Jose\Util\BigInteger
-     *
      */
     public function bitwise_leftShift($shift)
     {
@@ -316,5 +309,4 @@ final class BigInteger
 
         return $random->add($min);
     }
-    
 }
