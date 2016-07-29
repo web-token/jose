@@ -88,7 +88,7 @@ class BigInteger
     /**
      * Holds the BigInteger's value.
      *
-     * @var array
+     * @var resource
      */
     private $value;
 
@@ -126,15 +126,9 @@ class BigInteger
      *
      * @param $x base-10 number or base-$base number if $base set.
      * @param int $base
-     *
-     * @return \Jose\Util\BigInteger
      */
     public function __construct($x = 0, $base = 10)
     {
-        if (extension_loaded('openssl') && !defined('MATH_BIGINTEGER_OPENSSL_DISABLE') && !defined('MATH_BIGINTEGER_OPENSSL_ENABLED')) {
-            define('MATH_BIGINTEGER_OPENSSL_ENABLED', true);
-        }
-
         switch (true) {
             case is_resource($x) && get_resource_type($x) == 'GMP integer':
                 // PHP 5.6 switched GMP from using resources to objects
@@ -572,7 +566,7 @@ class BigInteger
      *
      * Byte length is equal to $length. Uses \phpseclib\Crypt\Random if it's loaded and mt_rand if it's not.
      *
-     * @param int $length
+     * @param int $size
      *
      * @return \Jose\Util\BigInteger
      */
@@ -590,8 +584,8 @@ class BigInteger
      * BigInteger::random($min, $max)
      * BigInteger::random($max, $min)
      *
-     * @param \Jose\Util\eger $arg1
-     * @param \Jose\Util\eger $arg2
+     * @param \Jose\Util\BigInteger $min
+     * @param \Jose\Util\BigInteger $max
      *
      * @return \Jose\Util\BigInteger
      */
@@ -632,7 +626,7 @@ class BigInteger
             http://crypto.stackexchange.com/questions/5708/creating-a-small-number-from-a-cryptographically-secure-random-string
         */
         $random_max = new static(chr(1).str_repeat("\0", $size), 256);
-        $random = static::_random_number_helper($size);
+        $random = self::_random_number_helper($size);
 
         list($max_multiple) = $random_max->divide($max);
         $max_multiple = $max_multiple->multiply($max);
