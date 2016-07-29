@@ -295,7 +295,7 @@ class BigInteger
      * ?>
      * </code>
      *
-     * @param \Jose\Util\Integer $y
+     * @param \Jose\Util\BigInteger $y
      *
      * @return \Jose\Util\BigInteger
      *
@@ -323,7 +323,7 @@ class BigInteger
      * ?>
      * </code>
      *
-     * @param \Jose\Util\Integer $y
+     * @param \Jose\Util\BigInteger $y
      *
      * @return \Jose\Util\BigInteger
      *
@@ -351,7 +351,7 @@ class BigInteger
      * ?>
      * </code>
      *
-     * @param \Jose\Util\Integer $x
+     * @param \Jose\Util\BigInteger $x
      *
      * @return \Jose\Util\BigInteger
      */
@@ -385,9 +385,9 @@ class BigInteger
      * ?>
      * </code>
      *
-     * @param \Jose\Util\Integer $y
+     * @param \Jose\Util\BigInteger $y
      *
-     * @return array
+     * @return @return \Jose\Util\BigInteger[]
      *
      */
     public function divide(BigInteger $y)
@@ -420,8 +420,8 @@ class BigInteger
      * ?>
      * </code>
      *
-     * @param \Jose\Util\Integer $e
-     * @param \Jose\Util\Integer $n
+     * @param \Jose\Util\BigInteger $e
+     * @param \Jose\Util\BigInteger $n
      *
      * @return \Jose\Util\BigInteger
      *
@@ -487,9 +487,9 @@ class BigInteger
      * ?>
      * </code>
      *
-     * @param \Jose\Util\Integer $n
+     * @param \Jose\Util\BigInteger $n
      *
-     * @return \Jose\Util\eger|false
+     * @return \Jose\Util\BigInteger|bool
      *
      */
     public function modInverse(BigInteger $n)
@@ -526,7 +526,7 @@ class BigInteger
      *
      * Note how the same comparison operator is used.  If you want to test for equality, use $x->equals($y).
      *
-     * @param \Jose\Util\Integer $y
+     * @param \Jose\Util\BigInteger $y
      *
      * @return int < 0 if $this is less than $y; > 0 if $this is greater than $y, and 0 if they are equal.
      *
@@ -650,7 +650,7 @@ class BigInteger
      *
      * Removes leading zeros and truncates (if necessary) to maintain the appropriate precision
      *
-     * @param \Jose\Util\BigInteger
+     * @param \Jose\Util\BigInteger $result
      *
      * @return \Jose\Util\BigInteger
      */
