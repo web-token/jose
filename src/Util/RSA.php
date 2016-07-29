@@ -41,13 +41,6 @@ final class RSA
      */
     const ENCRYPTION_PKCS1 = 2;
 
-    /**
-     * Do not use any padding.
-     *
-     * Although this method is not recommended it can none-the-less sometimes be useful if you're trying to decrypt some legacy
-     * stuff, if you're trying to diagnose why an encrypted message isn't decrypting, etc.
-     */
-    const ENCRYPTION_NONE = 3;
     /**#@-*/
 
     /**#@+
@@ -274,7 +267,7 @@ final class RSA
     /**
      * Hash function.
      *
-     * @var \phpseclib\Crypt\Hash
+     * @var \Jose\Util\Hash
      */
     private $hash;
 
@@ -295,7 +288,7 @@ final class RSA
     /**
      * Hash function for the Mask Generation Function.
      *
-     * @var \phpseclib\Crypt\Hash
+     * @var \Jose\Util\Hash
      */
     private $mgfHash;
 
@@ -383,8 +376,6 @@ final class RSA
      * If you want to make use of the openssl extension, you'll need to set the mode manually, yourself.  The reason
      * \phpseclib\Crypt\RSA doesn't do it is because OpenSSL doesn't fail gracefully.  openssl_pkey_new(), in particular, requires
      * openssl.cnf be present somewhere and, unfortunately, the only real way to find out is too late.
-     *
-     * @return \phpseclib\Crypt\RSA
      */
     public function __construct()
     {
@@ -1035,32 +1026,6 @@ final class RSA
     }
 
     /**
-     * Generates the smallest and largest numbers requiring $bits bits.
-     *
-     * @param int $bits
-     *
-     * @return array
-     */
-    private function _generateMinMax($bits)
-    {
-        $bytes = $bits >> 3;
-        $min = str_repeat(chr(0), $bytes);
-        $max = str_repeat(chr(0xFF), $bytes);
-        $msb = $bits & 7;
-        if ($msb) {
-            $min = chr(1 << ($msb - 1)).$min;
-            $max = chr((1 << $msb) - 1).$max;
-        } else {
-            $min[0] = chr(0x80);
-        }
-
-        return [
-            'min' => new BigInteger($min, 256),
-            'max' => new BigInteger($max, 256),
-        ];
-    }
-
-    /**
      * DER-decode the length.
      *
      * DER supports lengths up to (2**8)**127, however, we'll only support lengths up to (2**8)**4.  See
@@ -1080,27 +1045,6 @@ final class RSA
         }
 
         return $length;
-    }
-
-    /**
-     * DER-encode the length.
-     *
-     * DER supports lengths up to (2**8)**127, however, we'll only support lengths up to (2**8)**4.  See
-     * {@link http://itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf#p=13 X.690 paragraph 8.1.3} for more information.
-     *
-     * @param int $length
-     *
-     * @return string
-     */
-    private function _encodeLength($length)
-    {
-        if ($length <= 0x7F) {
-            return chr($length);
-        }
-
-        $temp = ltrim(pack('N', $length), chr(0));
-
-        return pack('Ca*', 0x80 | strlen($temp), $temp);
     }
 
     /**
@@ -1592,23 +1536,6 @@ final class RSA
     }
 
     /**
-     * Raw Encryption / Decryption.
-     *
-     * Doesn't use padding and is not recommended.
-     *
-     * @param string $m
-     *
-     * @return string
-     */
-    private function _raw_encrypt($m)
-    {
-        $temp = $this->_os2ip($m);
-        $temp = $this->_rsaep($temp);
-
-        return  $this->_i2osp($temp, $this->k);
-    }
-
-    /**
      * RSAES-PKCS1-V1_5-ENCRYPT.
      *
      * See {@link http://tools.ietf.org/html/rfc3447#section-7.2.1 RFC3447#section-7.2.1}.
@@ -2046,14 +1973,6 @@ final class RSA
     public function encrypt($plaintext)
     {
         switch ($this->encryptionMode) {
-            case self::ENCRYPTION_NONE:
-                $plaintext = str_split($plaintext, $this->k);
-                $ciphertext = '';
-                foreach ($plaintext as $m) {
-                    $ciphertext .= $this->_raw_encrypt($m);
-                }
-
-                return $ciphertext;
             case self::ENCRYPTION_PKCS1:
                 $length = $this->k - 11;
                 if ($length <= 0) {
@@ -2067,7 +1986,7 @@ final class RSA
                 }
 
                 return $ciphertext;
-            //case self::ENCRYPTION_OAEP:
+            case self::ENCRYPTION_OAEP:
             default:
                 $length = $this->k - 2 * $this->hLen - 2;
                 if ($length <= 0) {
@@ -2105,13 +2024,10 @@ final class RSA
         $plaintext = '';
 
         switch ($this->encryptionMode) {
-            case self::ENCRYPTION_NONE:
-                $decrypt = '_raw_encrypt';
-                break;
             case self::ENCRYPTION_PKCS1:
                 $decrypt = '_rsaes_pkcs1_v1_5_decrypt';
                 break;
-            //case self::ENCRYPTION_OAEP:
+            case self::ENCRYPTION_OAEP:
             default:
                 $decrypt = '_rsaes_oaep_decrypt';
         }
@@ -2145,7 +2061,7 @@ final class RSA
         switch ($this->signatureMode) {
             case self::SIGNATURE_PKCS1:
                 return $this->_rsassa_pkcs1_v1_5_sign($message);
-            //case self::SIGNATURE_PSS:
+            case self::SIGNATURE_PSS:
             default:
                 return $this->_rsassa_pss_sign($message);
         }
@@ -2170,7 +2086,7 @@ final class RSA
         switch ($this->signatureMode) {
             case self::SIGNATURE_PKCS1:
                 return $this->_rsassa_pkcs1_v1_5_verify($message, $signature);
-            //case self::SIGNATURE_PSS:
+            case self::SIGNATURE_PSS:
             default:
                 return $this->_rsassa_pss_verify($message, $signature);
         }
@@ -2268,43 +2184,6 @@ final class RSA
         }
 
         $this->publicExponent = $components['publicExponent'];
-
-        return true;
-    }
-
-    /**
-     * Defines the private key.
-     *
-     * If phpseclib guessed a private key was a public key and loaded it as such it might be desirable to force
-     * phpseclib to treat the key as a private key. This function will do that.
-     *
-     * Do note that when a new key is loaded the index will be cleared.
-     *
-     * Returns true on success, false on failure
-     *
-     * @see self::getPublicKey()
-     *
-     * @param string $key  optional
-     * @param int    $type optional
-     *
-     * @return bool
-     */
-    private function setPrivateKey($key = false, $type = false)
-    {
-        if ($key === false && !empty($this->publicExponent)) {
-            $this->publicExponent = false;
-
-            return true;
-        }
-
-        $rsa = new self();
-        if (!$rsa->loadKey($key, $type)) {
-            return false;
-        }
-        $rsa->publicExponent = false;
-
-        // don't overwrite the old key if the new key is invalid
-        $this->loadKey($rsa);
 
         return true;
     }

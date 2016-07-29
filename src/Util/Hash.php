@@ -23,13 +23,6 @@ class Hash
     private $hash;
 
     /**
-     * Key.
-     *
-     * @var null| string
-     */
-    private $key;
-
-    /**
      * Default Constructor.
      *
      * @param string $hash
@@ -39,19 +32,6 @@ class Hash
         Assertion::string($hash);
         Assertion::inArray($hash, hash_algos());
         $this->hash = $hash;
-    }
-
-    /**
-     * Sets the key for HMACs.
-     *
-     * Keys can be of any length.
-     *
-     * @param string $key
-     */
-    public function setKey($key)
-    {
-        Assertion::string($key);
-        $this->key = $key;
     }
 
     /**
@@ -75,10 +55,6 @@ class Hash
      */
     public function hash($text)
     {
-        if (null !== $this->key) {
-            return mhash($this->hash, $text, $this->key);
-        }
-
         return hash($this->hash, $text, true);
     }
 }
