@@ -22,7 +22,7 @@ before_script:
 script:
     - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
-after_success:
+after_script:
     - vendor/bin/coveralls --no-interaction
     - php ./examples/Encrypt1.php
     - php ./examples/Encrypt2.php
