@@ -77,22 +77,6 @@ final class RSA
      * PKCS#1 formatted public key (raw).
      */
     const PUBLIC_FORMAT_PKCS1 = 4;
-    const PUBLIC_FORMAT_PKCS1_RAW = 4;
-
-    /**
-     * XML formatted public key.
-     */
-    const PUBLIC_FORMAT_XML = 5;
-
-    /**
-     * OpenSSH formatted public key.
-     */
-    const PUBLIC_FORMAT_OPENSSH = 6;
-
-    /**
-     * PKCS#1 formatted public key (encapsulated).
-     */
-    const PUBLIC_FORMAT_PKCS8 = 7;
 
     /**
      * Precomputed Zero.
@@ -200,81 +184,10 @@ final class RSA
     private $publicExponent = false;
 
     /**
-     * Current String.
-     *
-     * @var mixed
-     */
-    private $current;
-
-    /**
-     * OpenSSL configuration file name.
-     *
-     * @var mixed
-     */
-    private $configFile;
-
-    /**
-     * Public key comment field.
-     *
-     * @var string
-     */
-    private $comment = 'phpseclib-generated-key';
-
-    /**
      * RSA constructor.
      */
     public function __construct()
     {
-        $this->configFile = dirname(__FILE__).'/../openssl.cnf';
-
-        if (!defined('CRYPT_RSA_MODE')) {
-            switch (true) {
-                // Math/BigInteger's openssl requirements are a little less stringent than Crypt/RSA's. in particular,
-                // Math/BigInteger doesn't require an openssl.cfg file whereas Crypt/RSA does. so if Math/BigInteger
-                // can't use OpenSSL it can be pretty trivially assumed, then, that Crypt/RSA can't either.
-                case defined('MATH_BIGINTEGER_OPENSSL_DISABLE'):
-                    define('CRYPT_RSA_MODE', self::MODE_INTERNAL);
-                    break;
-                case extension_loaded('openssl') && file_exists($this->configFile):
-                    // some versions of XAMPP have mismatched versions of OpenSSL which causes it not to work
-                    ob_start();
-                    @phpinfo();
-                    $content = ob_get_contents();
-                    ob_end_clean();
-
-                    preg_match_all('#OpenSSL (Header|Library) Version(.*)#im', $content, $matches);
-
-                    $versions = [];
-                    if (!empty($matches[1])) {
-                        for ($i = 0; $i < count($matches[1]); $i++) {
-                            $fullVersion = trim(str_replace('=>', '', strip_tags($matches[2][$i])));
-
-                            // Remove letter part in OpenSSL version
-                            if (!preg_match('/(\d+\.\d+\.\d+)/i', $fullVersion, $m)) {
-                                $versions[$matches[1][$i]] = $fullVersion;
-                            } else {
-                                $versions[$matches[1][$i]] = $m[0];
-                            }
-                        }
-                    }
-
-                    // it doesn't appear that OpenSSL versions were reported upon until PHP 5.3+
-                    switch (true) {
-                        case !isset($versions['Header']):
-                        case !isset($versions['Library']):
-                        case $versions['Header'] == $versions['Library']:
-                            define('CRYPT_RSA_MODE', self::MODE_OPENSSL);
-                            break;
-                        default:
-                            define('CRYPT_RSA_MODE', self::MODE_INTERNAL);
-                            define('MATH_BIGINTEGER_OPENSSL_DISABLE', true);
-                    }
-                    break;
-                default:
-                    define('CRYPT_RSA_MODE', self::MODE_INTERNAL);
-            }
-        }
-
         $this->zero = BigInteger::createFromDecimalString('0');
         $this->one = BigInteger::createFromDecimalString('1');
 
@@ -395,22 +308,6 @@ final class RSA
     }
 
     /**
-     * Data Handler.
-     *
-     * Called by xml_set_character_data_handler()
-     *
-     * @param resource $parser
-     * @param string   $data
-     */
-    public function _data_handler($parser, $data)
-    {
-        if (!isset($this->current) || is_object($this->current)) {
-            return;
-        }
-        $this->current .= trim($data);
-    }
-
-    /**
      * Loads a public or private key.
      *
      * @param string $key
@@ -426,9 +323,6 @@ final class RSA
             return false;
         }
 
-        if (isset($components['comment']) && $components['comment'] !== false) {
-            $this->comment = $components['comment'];
-        }
         $this->modulus = $components['modulus'];
         $this->k = strlen($this->modulus->toBytes());
         $this->exponent = isset($components['privateExponent']) ? $components['privateExponent'] : $components['publicExponent'];
@@ -562,7 +456,6 @@ final class RSA
     {
         $x = $x->toBytes();
         if (strlen($x) > $xLen) {
-            user_error('Integer too large');
 
             return false;
         }
@@ -597,61 +490,37 @@ final class RSA
 
         $num_primes = count($this->primes);
 
-        if (defined('CRYPT_RSA_DISABLE_BLINDING')) {
-            $m_i = [
-                1 => $x->modPow($this->exponents[1], $this->primes[1]),
-                2 => $x->modPow($this->exponents[2], $this->primes[2]),
-            ];
-            $h = $m_i[1]->subtract($m_i[2]);
-            $h = $h->multiply($this->coefficients[2]);
-            list(, $h) = $h->divide($this->primes[1]);
-            $m = $m_i[2]->add($h->multiply($this->primes[2]));
-
-            $r = $this->primes[1];
-            for ($i = 3; $i <= $num_primes; $i++) {
-                $m_i = $x->modPow($this->exponents[$i], $this->primes[$i]);
-
-                $r = $r->multiply($this->primes[$i - 1]);
-
-                $h = $m_i->subtract($m);
-                $h = $h->multiply($this->coefficients[$i]);
-                list(, $h) = $h->divide($this->primes[$i]);
-
-                $m = $m->add($r->multiply($h));
+        $smallest = $this->primes[1];
+        for ($i = 2; $i <= $num_primes; $i++) {
+            if ($smallest->compare($this->primes[$i]) > 0) {
+                $smallest = $this->primes[$i];
             }
-        } else {
-            $smallest = $this->primes[1];
-            for ($i = 2; $i <= $num_primes; $i++) {
-                if ($smallest->compare($this->primes[$i]) > 0) {
-                    $smallest = $this->primes[$i];
-                }
-            }
+        }
 
-            $one = BigInteger::createFromDecimalString('1');
+        $one = BigInteger::createFromDecimalString('1');
 
-            $r = $one->random($one, $smallest->subtract($one));
+        $r = $one->random($one, $smallest->subtract($one));
 
-            $m_i = [
-                1 => $this->_blind($x, $r, 1),
-                2 => $this->_blind($x, $r, 2),
-            ];
-            $h = $m_i[1]->subtract($m_i[2]);
-            $h = $h->multiply($this->coefficients[2]);
-            list(, $h) = $h->divide($this->primes[1]);
-            $m = $m_i[2]->add($h->multiply($this->primes[2]));
+        $m_i = [
+            1 => $this->_blind($x, $r, 1),
+            2 => $this->_blind($x, $r, 2),
+        ];
+        $h = $m_i[1]->subtract($m_i[2]);
+        $h = $h->multiply($this->coefficients[2]);
+        list(, $h) = $h->divide($this->primes[1]);
+        $m = $m_i[2]->add($h->multiply($this->primes[2]));
 
-            $r = $this->primes[1];
-            for ($i = 3; $i <= $num_primes; $i++) {
-                $m_i = $this->_blind($x, $r, $i);
+        $r = $this->primes[1];
+        for ($i = 3; $i <= $num_primes; $i++) {
+            $m_i = $this->_blind($x, $r, $i);
 
-                $r = $r->multiply($this->primes[$i - 1]);
+            $r = $r->multiply($this->primes[$i - 1]);
 
-                $h = $m_i->subtract($m);
-                $h = $h->multiply($this->coefficients[$i]);
-                list(, $h) = $h->divide($this->primes[$i]);
+            $h = $m_i->subtract($m);
+            $h = $h->multiply($this->coefficients[$i]);
+            list(, $h) = $h->divide($this->primes[$i]);
 
-                $m = $m->add($r->multiply($h));
-            }
+            $m = $m->add($r->multiply($h));
         }
 
         return $m;
@@ -710,7 +579,6 @@ final class RSA
     private function _rsaep($m)
     {
         if ($m->compare($this->zero) < 0 || $m->compare($this->modulus) > 0) {
-            user_error('Message representative out of range');
 
             return false;
         }
@@ -728,7 +596,6 @@ final class RSA
     private function _rsadp($c)
     {
         if ($c->compare($this->zero) < 0 || $c->compare($this->modulus) > 0) {
-            user_error('Ciphertext representative out of range');
 
             return false;
         }
@@ -746,7 +613,6 @@ final class RSA
     private function _rsasp1($m)
     {
         if ($m->compare($this->zero) < 0 || $m->compare($this->modulus) > 0) {
-            user_error('Message representative out of range');
 
             return false;
         }
@@ -764,7 +630,6 @@ final class RSA
     private function _rsavp1($s)
     {
         if ($s->compare($this->zero) < 0 || $s->compare($this->modulus) > 0) {
-            user_error('Signature representative out of range');
 
             return false;
         }
@@ -812,7 +677,6 @@ final class RSA
         // be output.
 
         if ($mLen > $this->k - 2 * $this->hLen - 2) {
-            user_error('Message too long');
 
             return false;
         }
@@ -856,7 +720,6 @@ final class RSA
         // be output.
 
         if (strlen($c) != $this->k || $this->k < 2 * $this->hLen + 2) {
-            user_error('Decryption error');
 
             return false;
         }
@@ -866,7 +729,6 @@ final class RSA
         $c = $this->_os2ip($c);
         $m = $this->_rsadp($c);
         if ($m === false) {
-            user_error('Decryption error');
 
             return false;
         }
@@ -885,13 +747,11 @@ final class RSA
         $lHash2 = substr($db, 0, $this->hLen);
         $m = substr($db, $this->hLen);
         if ($lHash != $lHash2) {
-            user_error('Decryption error');
 
             return false;
         }
         $m = ltrim($m, chr(0));
         if (ord($m[0]) != 1) {
-            user_error('Decryption error');
 
             return false;
         }
@@ -919,7 +779,6 @@ final class RSA
 
         $mHash = $this->hash->hash($m);
         if ($emLen < $this->hLen + $sLen + 2) {
-            user_error('Encoding error');
 
             return false;
         }
@@ -1020,7 +879,6 @@ final class RSA
         // Length checking
 
         if (strlen($s) != $this->k) {
-            user_error('Invalid signature');
 
             return false;
         }
@@ -1032,13 +890,11 @@ final class RSA
         $s2 = $this->_os2ip($s);
         $m2 = $this->_rsavp1($s2);
         if ($m2 === false) {
-            user_error('Invalid signature');
 
             return false;
         }
         $em = $this->_i2osp($m2, $modBits >> 3);
         if ($em === false) {
-            user_error('Invalid signature');
 
             return false;
         }
