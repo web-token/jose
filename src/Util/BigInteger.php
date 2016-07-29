@@ -28,17 +28,7 @@ final class BigInteger
     private $is_negative = false;
 
     /**
-     * Precision.
-     */
-    private $precision = -1;
-
-    /**
-     * Precision Bitmask.
-     */
-    private $bitmask = false;
-
-    /**
-     * Converts base-2, base-10, base-16, and binary strings (base-256) to BigIntegers.
+     * Converts base-10 and binary strings (base-256) to BigIntegers.
      *
      * If the second parameter - $base - is negative, then it will be assumed that the number's are encoded using
      * two's compliment.  The sole exception to this is -10, which is treated the same as 10 is.
@@ -87,30 +77,6 @@ final class BigInteger
                     $this->value = $temp->value;
                 }
                 break;
-            case 16:
-            case -16:
-                if ($base > 0 && $x[0] == '-') {
-                    $this->is_negative = true;
-                    $x = substr($x, 1);
-                }
-
-                $x = preg_replace('#^(?:0x)?([A-Fa-f0-9]*).*#', '$1', $x);
-
-                $is_negative = false;
-                if ($base < 0 && hexdec($x[0]) >= 8) {
-                    $this->is_negative = $is_negative = true;
-                    $x = bin2hex(~hex2bin($x));
-                }
-
-            $temp = $this->is_negative ? '-0x'.$x : '0x'.$x;
-            $this->value = gmp_init($temp);
-            $this->is_negative = false;
-
-                if ($is_negative) {
-                    $temp = $this->add(new static('-1'));
-                    $this->value = $temp->value;
-                }
-                break;
             case 10:
             case -10:
                 // (?<!^)(?:-).*: find any -'s that aren't at the beginning and then any characters that follow that
@@ -120,34 +86,6 @@ final class BigInteger
 
                 $this->value = gmp_init($x);
                 break;
-            case 2: // base-2 support originally implemented by Lluis Pamies - thanks!
-            case -2:
-                if ($base > 0 && $x[0] == '-') {
-                    $this->is_negative = true;
-                    $x = substr($x, 1);
-                }
-
-                $x = preg_replace('#^([01]*).*#', '$1', $x);
-                $x = str_pad($x, strlen($x) + (3 * strlen($x)) % 4, 0, STR_PAD_LEFT);
-
-                $str = '0x';
-                while (strlen($x)) {
-                    $part = substr($x, 0, 4);
-                    $str .= dechex(bindec($part));
-                    $x = substr($x, 4);
-                }
-
-                if ($this->is_negative) {
-                    $str = '-'.$str;
-                }
-
-                $temp = new static($str, 8 * $base); // ie. either -16 or +16
-                $this->value = $temp->value;
-                $this->is_negative = $temp->is_negative;
-
-                break;
-            default:
-                // base not supported, so we'll let $this == 0
         }
     }
 
@@ -171,39 +109,17 @@ final class BigInteger
      * @return string
      *
      */
-    public function toBytes($twos_compliment = false)
+    public function toBytes()
     {
-        if ($twos_compliment) {
-            $comparison = $this->compare(new static());
-            if ($comparison == 0) {
-                return $this->precision > 0 ? str_repeat(chr(0), ($this->precision + 1) >> 3) : '';
-            }
-
-            $temp = $comparison < 0 ? $this->add(new static(1)) : $this;
-            $bytes = $temp->toBytes();
-
-            if (empty($bytes)) { // eg. if the number we're trying to convert is -1
-                $bytes = chr(0);
-            }
-
-            if (ord($bytes[0]) & 0x80) {
-                $bytes = chr(0).$bytes;
-            }
-
-            return $comparison < 0 ? ~$bytes : $bytes;
-        }
-
-        if (gmp_cmp($this->value, gmp_init(0)) == 0) {
-            return $this->precision > 0 ? str_repeat(chr(0), ($this->precision + 1) >> 3) : '';
+        if (gmp_cmp($this->value, gmp_init(0)) === 0) {
+            return '';
         }
 
         $temp = gmp_strval(gmp_abs($this->value), 16);
         $temp = (strlen($temp) & 1) ? '0'.$temp : $temp;
         $temp = hex2bin($temp);
 
-        return $this->precision > 0 ?
-            substr(str_pad($temp, $this->precision >> 3, chr(0), STR_PAD_LEFT), -($this->precision >> 3)) :
-            ltrim($temp, chr(0));
+        return ltrim($temp, chr(0));
     }
 
     /**
@@ -371,7 +287,7 @@ final class BigInteger
      */
     public function modPow(BigInteger $e, BigInteger $n)
     {
-        $n = $this->bitmask !== false && $this->bitmask->compare($n) < 0 ? $this->bitmask : $n->abs();
+        $n = $n->abs();
 
         if ($e->compare(new static()) < 0) {
             $e = $e->abs();
@@ -581,13 +497,6 @@ final class BigInteger
      */
     private function _normalize($result)
     {
-        $result->precision = $this->precision;
-        $result->bitmask = $this->bitmask;
-
-        if ($this->bitmask !== false) {
-            $result->value = gmp_and($result->value, $result->bitmask->value);
-        }
-
         return $result;
     }
 }
