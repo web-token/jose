@@ -103,7 +103,6 @@ abstract class RSA implements SignatureAlgorithmInterface
         $rsa->setHash($this->getAlgorithm());
         $rsa->setMGFHash($this->getAlgorithm());
         $rsa->setSaltLength(0);
-        $rsa->setSignatureMode(JoseRSA::SIGNATURE_PSS);
 
         return $rsa;
     }

@@ -14,25 +14,6 @@ namespace Jose\Util;
 final class RSA
 {
     /**
-     * Optimal Asymmetric Encryption Padding (OAEP).
-     */
-    const ENCRYPTION_OAEP = 1;
-
-    /**
-     * PKCS#1 padding.
-     */
-    const ENCRYPTION_PKCS1 = 2;
-
-    /**
-     * Probabilistic Signature Scheme for signing.
-     */
-    const SIGNATURE_PSS = 1;
-    /**
-     * PKCS#1 scheme.
-     */
-    const SIGNATURE_PKCS1 = 2;
-
-    /**
      * ASN1 Integer.
      */
     const ASN1_INTEGER = 2;
@@ -128,20 +109,6 @@ final class RSA
     private $one;
 
     /**
-     * Private Key Format.
-     *
-     * @var int
-     */
-    private $privateKeyFormat = self::PRIVATE_FORMAT_PKCS1;
-
-    /**
-     * Public Key Format.
-     *
-     * @var int
-     */
-    private $publicKeyFormat = self::PUBLIC_FORMAT_PKCS8;
-
-    /**
      * Modulus (ie. n).
      *
      * @var \Jose\Util\BigInteger
@@ -226,39 +193,11 @@ final class RSA
     private $mgfHLen;
 
     /**
-     * Encryption mode.
-     *
-     * @var int
-     */
-    private $encryptionMode = self::ENCRYPTION_OAEP;
-
-    /**
-     * Signature mode.
-     *
-     * @var int
-     */
-    private $signatureMode = self::SIGNATURE_PSS;
-
-    /**
      * Public Exponent.
      *
      * @var mixed
      */
     private $publicExponent = false;
-
-    /**
-     * Password.
-     *
-     * @var string
-     */
-    private $password = false;
-
-    /**
-     * Components.
-     *
-     * @var array
-     */
-    private $components = [];
 
     /**
      * Current String.
@@ -481,70 +420,7 @@ final class RSA
      */
     public function loadKey($key, $type = false)
     {
-        if ($key instanceof self) {
-            $this->privateKeyFormat = $key->privateKeyFormat;
-            $this->publicKeyFormat = $key->publicKeyFormat;
-            $this->k = $key->k;
-            $this->hLen = $key->hLen;
-            $this->sLen = $key->sLen;
-            $this->mgfHLen = $key->mgfHLen;
-            $this->encryptionMode = $key->encryptionMode;
-            $this->signatureMode = $key->signatureMode;
-            $this->password = $key->password;
-            $this->configFile = $key->configFile;
-            $this->comment = $key->comment;
-
-            if (is_object($key->hash)) {
-                $this->hash = new Hash($key->hash->getHash());
-            }
-            if (is_object($key->mgfHash)) {
-                $this->mgfHash = new Hash($key->mgfHash->getHash());
-            }
-
-            if (is_object($key->modulus)) {
-                $this->modulus = $key->modulus->copy();
-            }
-            if (is_object($key->exponent)) {
-                $this->exponent = $key->exponent->copy();
-            }
-            if (is_object($key->publicExponent)) {
-                $this->publicExponent = $key->publicExponent->copy();
-            }
-
-            $this->primes = [];
-            $this->exponents = [];
-            $this->coefficients = [];
-
-            foreach ($this->primes as $prime) {
-                $this->primes[] = $prime->copy();
-            }
-            foreach ($this->exponents as $exponent) {
-                $this->exponents[] = $exponent->copy();
-            }
-            foreach ($this->coefficients as $coefficient) {
-                $this->coefficients[] = $coefficient->copy();
-            }
-
-            return true;
-        }
-
-        if ($type === false) {
-            $types = [
-                self::PUBLIC_FORMAT_RAW,
-                self::PRIVATE_FORMAT_PKCS1,
-                self::PRIVATE_FORMAT_XML,
-                self::PRIVATE_FORMAT_PUTTY,
-                self::PUBLIC_FORMAT_OPENSSH,
-            ];
-            foreach ($types as $type) {
-                $components = $this->_parseKey($key, $type);
-                if ($components !== false) {
-                    break;
-                }
-            }
-        } else {
-            $components = $this->_parseKey($key, $type);
-        }
+        $components = $this->_parseKey($key, $type);
 
         if ($components === false) {
             return false;
@@ -568,17 +444,10 @@ final class RSA
             $this->publicExponent = false;
         }
 
-        switch ($type) {
-            case self::PUBLIC_FORMAT_OPENSSH:
-            case self::PUBLIC_FORMAT_RAW:
+        switch (true) {
+            case strpos($key, '-BEGIN PUBLIC KEY-') !== false:
+            case strpos($key, '-BEGIN RSA PUBLIC KEY-') !== false:
                 $this->setPublicKey();
-                break;
-            case self::PRIVATE_FORMAT_PKCS1:
-                switch (true) {
-                    case strpos($key, '-BEGIN PUBLIC KEY-') !== false:
-                    case strpos($key, '-BEGIN RSA PUBLIC KEY-') !== false:
-                        $this->setPublicKey();
-                }
         }
 
         return true;
@@ -1180,30 +1049,6 @@ final class RSA
     }
 
     /**
-     * Set Encryption Mode.
-     *
-     * Valid values include self::ENCRYPTION_OAEP and self::ENCRYPTION_PKCS1.
-     *
-     * @param int $mode
-     */
-    public function setEncryptionMode($mode)
-    {
-        $this->encryptionMode = $mode;
-    }
-
-    /**
-     * Set Signature Mode.
-     *
-     * Valid values include self::SIGNATURE_PSS and self::SIGNATURE_PKCS1
-     *
-     * @param int $mode
-     */
-    public function setSignatureMode($mode)
-    {
-        $this->signatureMode = $mode;
-    }
-
-    /**
      * Encryption.
      *
      * Both self::ENCRYPTION_OAEP and self::ENCRYPTION_PKCS1 both place limits on how long $plaintext can be.
@@ -1317,13 +1162,11 @@ final class RSA
     /**
      * Defines the public key.
      *
-     * @param string $key optional
-     *
      * @return bool
      */
-    private function setPublicKey($key = false)
+    private function setPublicKey()
     {
-        if ($key === false && !empty($this->modulus)) {
+        if (!empty($this->modulus)) {
             $this->publicExponent = $this->exponent;
 
             return true;

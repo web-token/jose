@@ -90,12 +90,11 @@ abstract class RSA implements KeyEncryptionInterface
     }
 
     /**
-     * @return \phpseclib\Crypt\RSA
+     * @return \Jose\Util\RSA
      */
     private function getRsaObject()
     {
         $rsa = new JoseRSA();
-        $rsa->setEncryptionMode(JoseRSA::ENCRYPTION_OAEP);
         $rsa->setHash($this->getHashAlgorithm());
         $rsa->setMGFHash($this->getHashAlgorithm());
 
