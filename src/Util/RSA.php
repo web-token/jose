@@ -17,71 +17,6 @@ use Jose\Object\JWKInterface;
 final class RSA
 {
     /**
-     * ASN1 Integer.
-     */
-    const ASN1_INTEGER = 2;
-
-    /**
-     * ASN1 Bit String.
-     */
-    const ASN1_BITSTRING = 3;
-
-    /**
-     * ASN1 Octet String.
-     */
-    const ASN1_OCTETSTRING = 4;
-
-    /**
-     * ASN1 Object Identifier.
-     */
-    const ASN1_OBJECT = 6;
-
-    /**
-     * ASN1 Sequence (with the constucted bit set).
-     */
-    const ASN1_SEQUENCE = 48;
-
-    /**
-     * To use the pure-PHP implementation.
-     */
-    const MODE_INTERNAL = 1;
-
-    /**
-     * To use the OpenSSL library.
-     */
-    const MODE_OPENSSL = 2;
-
-    /**
-     * PKCS#1 formatted private key.
-     */
-    const PRIVATE_FORMAT_PKCS1 = 0;
-
-    /**
-     * PuTTY formatted private key.
-     */
-    const PRIVATE_FORMAT_PUTTY = 1;
-
-    /**
-     * XML formatted private key.
-     */
-    const PRIVATE_FORMAT_XML = 2;
-
-    /**
-     * PKCS#8 formatted private key.
-     */
-    const PRIVATE_FORMAT_PKCS8 = 8;
-
-    /**
-     * Raw public key.
-     */
-    const PUBLIC_FORMAT_RAW = 3;
-
-    /**
-     * PKCS#1 formatted public key (raw).
-     */
-    const PUBLIC_FORMAT_PKCS1 = 4;
-
-    /**
      * Precomputed Zero.
      *
      * @var \Jose\Util\BigInteger
@@ -143,13 +78,6 @@ final class RSA
      * @var \Jose\Util\Hash
      */
     private $hash;
-
-    /**
-     * Length of salt.
-     *
-     * @var int
-     */
-    private $sLen;
 
     /**
      * Hash function for the Mask Generation Function.
@@ -235,16 +163,6 @@ final class RSA
     }
 
     /**
-     * Determines the salt length.
-     *
-     * @param int $sLen
-     */
-    public function setSaltLength($sLen)
-    {
-        $this->sLen = $sLen;
-    }
-
-    /**
      * Integer-to-Octet-String primitive.
      *
      * @param \Jose\Util\BigInteger $x
@@ -252,7 +170,7 @@ final class RSA
      *
      * @return string
      */
-    private function _i2osp($x, $xLen)
+    private function convertIntegerToOctetString($x, $xLen)
     {
         $x = $x->toBytes();
         if (strlen($x) > $xLen) {
@@ -270,7 +188,7 @@ final class RSA
      *
      * @return \Jose\Util\BigInteger
      */
-    private function _os2ip($x)
+    private function convertOctetStringToInteger($x)
     {
         return BigInteger::createFromBinaryString($x);
     }
@@ -374,7 +292,7 @@ final class RSA
      *
      * @param \Jose\Util\BigInteger $m
      *
-     * @return \Jose\Util\BigInteger
+     * @return \Jose\Util\BigInteger|false
      */
     private function _rsaep($m)
     {
@@ -391,7 +309,7 @@ final class RSA
      *
      * @param \Jose\Util\BigInteger $c
      *
-     * @return \Jose\Util\BigInteger
+     * @return \Jose\Util\BigInteger|false
      */
     private function _rsadp($c)
     {
@@ -408,7 +326,7 @@ final class RSA
      *
      * @param \Jose\Util\BigInteger $m
      *
-     * @return \Jose\Util\BigInteger
+     * @return \Jose\Util\BigInteger|false
      */
     private function _rsasp1($m)
     {
@@ -425,7 +343,7 @@ final class RSA
      *
      * @param \Jose\Util\BigInteger $s
      *
-     * @return \Jose\Util\BigInteger
+     * @return \Jose\Util\BigInteger|false
      */
     private function _rsavp1($s)
     {
@@ -495,9 +413,9 @@ final class RSA
 
         // RSA encryption
 
-        $m = $this->_os2ip($em);
+        $m = $this->convertOctetStringToInteger($em);
         $c = $this->_rsaep($m);
-        $c = $this->_i2osp($c, $this->k);
+        $c = $this->convertIntegerToOctetString($c, $this->k);
 
         // Output the ciphertext C
 
@@ -526,18 +444,17 @@ final class RSA
 
         // RSA decryption
 
-        $c = $this->_os2ip($c);
+        $c = $this->convertOctetStringToInteger($c);
         $m = $this->_rsadp($c);
         if ($m === false) {
 
             return false;
         }
-        $em = $this->_i2osp($m, $this->k);
+        $em = $this->convertIntegerToOctetString($m, $this->k);
 
         // EME-OAEP decoding
 
         $lHash = $this->hash->hash($l);
-        $y = ord($em[0]);
         $maskedSeed = substr($em, 1, $this->hash->getLength());
         $maskedDB = substr($em, $this->hash->getLength() + 1);
         $seedMask = $this->_mgf1($maskedDB, $this->hash->getLength());
@@ -575,7 +492,7 @@ final class RSA
         // be output.
 
         $emLen = ($emBits + 1) >> 3; // ie. ceil($emBits / 8)
-        $sLen = $this->sLen ? $this->sLen : $this->hash->getLength();
+        $sLen = $this->hash->getLength();
 
         $mHash = $this->hash->hash($m);
         if ($emLen < $this->hash->getLength() + $sLen + 2) {
@@ -611,7 +528,7 @@ final class RSA
         // be output.
 
         $emLen = ($emBits + 1) >> 3; // ie. ceil($emBits / 8);
-        $sLen = $this->sLen ? $this->sLen : $this->hash->getLength();
+        $sLen = $this->hash->getLength();
 
         $mHash = $this->hash->hash($m);
         if ($emLen < $this->hash->getLength() + $sLen + 2) {
@@ -657,9 +574,9 @@ final class RSA
 
         // RSA signature
 
-        $m = $this->_os2ip($em);
+        $m = $this->convertOctetStringToInteger($em);
         $s = $this->_rsasp1($m);
-        $s = $this->_i2osp($s, $this->k);
+        $s = $this->convertIntegerToOctetString($s, $this->k);
 
         // Output the signature S
 
@@ -687,13 +604,13 @@ final class RSA
 
         $modBits = 8 * $this->k;
 
-        $s2 = $this->_os2ip($s);
+        $s2 = $this->convertOctetStringToInteger($s);
         $m2 = $this->_rsavp1($s2);
         if ($m2 === false) {
 
             return false;
         }
-        $em = $this->_i2osp($m2, $modBits >> 3);
+        $em = $this->convertIntegerToOctetString($m2, $modBits >> 3);
         if ($em === false) {
 
             return false;
