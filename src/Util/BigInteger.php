@@ -11,18 +11,8 @@
 
 namespace Jose\Util;
 
-class BigInteger
+final class BigInteger
 {
-    const MONTGOMERY = 0;
-
-    const BARRETT = 1;
-
-    const POWEROF2 = 2;
-
-    const CLASSIC = 3;
-
-    const NONE = 4;
-
     /**#@+
      * Array constants
      *
@@ -41,48 +31,27 @@ class BigInteger
     /**#@-*/
 
     /**#@+
-     */
-    /**
-     * Cache constants.
-     *
-     * $cache[self::VARIABLE] tells us whether or not the cached data is still valid.
-     */
-    const VARIABLE = 0;
-    /**
-     * $cache[self::DATA] contains the cached data.
-     */
-    const DATA = 1;
-    /**#@-*/
-
-    /**
-     * Karatsuba Cutoff.
-     *
-     * At what point do we switch between Karatsuba multiplication and schoolbook long multiplication?
-     */
-    const KARATSUBA_CUTOFF = 25;
-
-    /**#@+
      * Static properties used by the pure-PHP implementation.
      *
      * @see __construct()
      */
-    protected static $base;
-    protected static $baseFull;
-    protected static $maxDigit;
-    protected static $msb;
+    private static $base;
+    private static $baseFull;
+    private static $maxDigit;
+    private static $msb;
 
     /**
      * $max10 in greatest $max10Len satisfying
      * $max10 = 10**$max10Len <= 2**$base.
      */
-    protected static $max10;
+    private static $max10;
 
     /**
      * $max10Len in greatest $max10Len satisfying
      * $max10 = 10**$max10Len <= 2**$base.
      */
-    protected static $max10Len;
-    protected static $maxDigit2;
+    private static $max10Len;
+    private static $maxDigit2;
     /**#@-*/
 
     /**
