@@ -13,47 +13,6 @@ namespace Jose\Util;
 
 final class BigInteger
 {
-    /**#@+
-     * Array constants
-     *
-     * Rather than create a thousands and thousands of new BigInteger objects in repeated function calls to add() and
-     * multiply() or whatever, we'll just work directly on arrays, taking them in as parameters and returning them.
-     *
-     */
-    /**
-     * $result[self::VALUE] contains the value.
-     */
-    const VALUE = 0;
-    /**
-     * $result[self::SIGN] contains the sign.
-     */
-    const SIGN = 1;
-    /**#@-*/
-
-    /**#@+
-     * Static properties used by the pure-PHP implementation.
-     *
-     * @see __construct()
-     */
-    private static $base;
-    private static $baseFull;
-    private static $maxDigit;
-    private static $msb;
-
-    /**
-     * $max10 in greatest $max10Len satisfying
-     * $max10 = 10**$max10Len <= 2**$base.
-     */
-    private static $max10;
-
-    /**
-     * $max10Len in greatest $max10Len satisfying
-     * $max10 = 10**$max10Len <= 2**$base.
-     */
-    private static $max10Len;
-    private static $maxDigit2;
-    /**#@-*/
-
     /**
      * Holds the BigInteger's value.
      *
@@ -98,14 +57,12 @@ final class BigInteger
      */
     public function __construct($x = 0, $base = 10)
     {
-        switch (true) {
-            case is_resource($x) && get_resource_type($x) == 'GMP integer':
-                // PHP 5.6 switched GMP from using resources to objects
-            case $x instanceof \GMP:
-                $this->value = $x;
-
-                return;
+        if(is_resource($x) && get_resource_type($x) == 'GMP integer') {
+            $this->value = $x;
+            
+            return;
         }
+        
         $this->value = gmp_init(0);
 
         // '0' counts as empty() but when the base is 256 '0' is equal to ord('0') or 48
@@ -353,10 +310,9 @@ final class BigInteger
      *    echo $remainder->toString(); // outputs 10
      * ?>
      * </code>
-     *
      * @param \Jose\Util\BigInteger $y
      *
-     * @return @return \Jose\Util\BigInteger[]
+     * @return \Jose\Util\BigInteger[]
      *
      */
     public function divide(BigInteger $y)
