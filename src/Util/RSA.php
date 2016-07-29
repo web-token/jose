@@ -429,8 +429,8 @@ final class RSA
             }
         }
 
-        $this->zero = new BigInteger();
-        $this->one = new BigInteger(1);
+        $this->zero = BigInteger::createFromDecimalString('0');
+        $this->one = BigInteger::createFromDecimalString('1');
 
         $this->hash = new Hash('sha1');
         $this->hLen = 20;
@@ -651,10 +651,10 @@ final class RSA
                 $length = $this->_decodeLength($key);
                 $temp = $this->_string_shift($key, $length);
                 if (strlen($temp) != 1 || ord($temp) > 2) {
-                    $components['modulus'] = new BigInteger($temp, 256);
+                    $components['modulus'] = BigInteger::createFromBinaryString($temp);
                     $this->_string_shift($key); // skip over self::ASN1_INTEGER
                     $length = $this->_decodeLength($key);
-                    $components[$type == self::PUBLIC_FORMAT_PKCS1 ? 'publicExponent' : 'privateExponent'] = new BigInteger($this->_string_shift($key, $length), 256);
+                    $components[$type == self::PUBLIC_FORMAT_PKCS1 ? 'publicExponent' : 'privateExponent'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
 
                     return $components;
                 }
@@ -662,28 +662,28 @@ final class RSA
                     return false;
                 }
                 $length = $this->_decodeLength($key);
-                $components['modulus'] = new BigInteger($this->_string_shift($key, $length), 256);
+                $components['modulus'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
                 $this->_string_shift($key);
                 $length = $this->_decodeLength($key);
-                $components['publicExponent'] = new BigInteger($this->_string_shift($key, $length), 256);
+                $components['publicExponent'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
                 $this->_string_shift($key);
                 $length = $this->_decodeLength($key);
-                $components['privateExponent'] = new BigInteger($this->_string_shift($key, $length), 256);
+                $components['privateExponent'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
                 $this->_string_shift($key);
                 $length = $this->_decodeLength($key);
-                $components['primes'] = [1 => new BigInteger($this->_string_shift($key, $length), 256)];
+                $components['primes'] = [1 => BigInteger::createFromBinaryString($this->_string_shift($key, $length))];
                 $this->_string_shift($key);
                 $length = $this->_decodeLength($key);
-                $components['primes'][] = new BigInteger($this->_string_shift($key, $length), 256);
+                $components['primes'][] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
                 $this->_string_shift($key);
                 $length = $this->_decodeLength($key);
-                $components['exponents'] = [1 => new BigInteger($this->_string_shift($key, $length), 256)];
+                $components['exponents'] = [1 => BigInteger::createFromBinaryString($this->_string_shift($key, $length))];
                 $this->_string_shift($key);
                 $length = $this->_decodeLength($key);
-                $components['exponents'][] = new BigInteger($this->_string_shift($key, $length), 256);
+                $components['exponents'][] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
                 $this->_string_shift($key);
                 $length = $this->_decodeLength($key);
-                $components['coefficients'] = [2 => new BigInteger($this->_string_shift($key, $length), 256)];
+                $components['coefficients'] = [2 => BigInteger::createFromBinaryString($this->_string_shift($key, $length))];
 
                 if (!empty($key)) {
                     if (ord($this->_string_shift($key)) != self::ASN1_SEQUENCE) {
@@ -697,13 +697,13 @@ final class RSA
                         $this->_decodeLength($key);
                         $key = substr($key, 1);
                         $length = $this->_decodeLength($key);
-                        $components['primes'][] = new BigInteger($this->_string_shift($key, $length), 256);
+                        $components['primes'][] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
                         $this->_string_shift($key);
                         $length = $this->_decodeLength($key);
-                        $components['exponents'][] = new BigInteger($this->_string_shift($key, $length), 256);
+                        $components['exponents'][] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
                         $this->_string_shift($key);
                         $length = $this->_decodeLength($key);
-                        $components['coefficients'][] = new BigInteger($this->_string_shift($key, $length), 256);
+                        $components['coefficients'][] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
                     }
                 }
 
@@ -724,19 +724,19 @@ final class RSA
                     return false;
                 }
                 extract(unpack('Nlength', $this->_string_shift($key, 4)));
-                $publicExponent = new BigInteger($this->_string_shift($key, $length), -256);
+                $publicExponent = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
                 if (strlen($key) <= 4) {
                     return false;
                 }
                 extract(unpack('Nlength', $this->_string_shift($key, 4)));
-                $modulus = new BigInteger($this->_string_shift($key, $length), -256);
+                $modulus = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
 
                 if ($cleanup && strlen($key)) {
                     if (strlen($key) <= 4) {
                         return false;
                     }
                     extract(unpack('Nlength', $this->_string_shift($key, 4)));
-                    $realModulus = new BigInteger($this->_string_shift($key, $length), -256);
+                    $realModulus = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
 
                     return strlen($key) ? false : [
                         'modulus'        => $realModulus,
@@ -781,9 +781,9 @@ final class RSA
                 $public = base64_decode(implode('', array_map('trim', array_slice($key, 4, $publicLength))));
                 $public = substr($public, 11);
                 extract(unpack('Nlength', $this->_string_shift($public, 4)));
-                $components['publicExponent'] = new BigInteger($this->_string_shift($public, $length), -256);
+                $components['publicExponent'] = BigInteger::createFromBinaryString($this->_string_shift($public, $length));
                 extract(unpack('Nlength', $this->_string_shift($public, 4)));
-                $components['modulus'] = new BigInteger($this->_string_shift($public, $length), -256);
+                $components['modulus'] = BigInteger::createFromBinaryString($this->_string_shift($public, $length));
 
                 $privateLength = trim(preg_replace('#Private-Lines: (\d+)#', '$1', $key[$publicLength + 4]));
                 $private = base64_decode(implode('', array_map('trim', array_slice($key, $publicLength + 5, $privateLength))));
@@ -813,17 +813,17 @@ final class RSA
                 if (strlen($private) < $length) {
                     return false;
                 }
-                $components['privateExponent'] = new BigInteger($this->_string_shift($private, $length), -256);
+                $components['privateExponent'] = BigInteger::createFromBinaryString($this->_string_shift($private, $length), true);
                 extract(unpack('Nlength', $this->_string_shift($private, 4)));
                 if (strlen($private) < $length) {
                     return false;
                 }
-                $components['primes'] = [1 => new BigInteger($this->_string_shift($private, $length), -256)];
+                $components['primes'] = [1 => BigInteger::createFromBinaryString($this->_string_shift($private, $length), true)];
                 extract(unpack('Nlength', $this->_string_shift($private, 4)));
                 if (strlen($private) < $length) {
                     return false;
                 }
-                $components['primes'][] = new BigInteger($this->_string_shift($private, $length), -256);
+                $components['primes'][] = BigInteger::createFromBinaryString($this->_string_shift($private, $length), true);
 
                 $temp = $components['primes'][1]->subtract($this->one);
                 $components['exponents'] = [1 => $components['publicExponent']->modInverse($temp)];
@@ -834,7 +834,7 @@ final class RSA
                 if (strlen($private) < $length) {
                     return false;
                 }
-                $components['coefficients'] = [2 => new BigInteger($this->_string_shift($private, $length), -256)];
+                $components['coefficients'] = [2 => BigInteger::createFromBinaryString($this->_string_shift($private, $length), true)];
 
                 return $components;
         }
@@ -882,16 +882,11 @@ final class RSA
 
     /**
      * Stop Element Handler.
-     *
-     * Called by xml_set_element_handler()
-     *
-     * @param resource $parser
-     * @param string   $name
      */
-    private function _stop_element_handler($parser, $name)
+    private function _stop_element_handler()
     {
         if (isset($this->current)) {
-            $this->current = new BigInteger(base64_decode($this->current), 256);
+            $this->current = BigInteger::createFromBinaryString(base64_decode($this->current));
             unset($this->current);
         }
     }
@@ -1171,7 +1166,7 @@ final class RSA
      */
     private function _os2ip($x)
     {
-        return new BigInteger($x, 256);
+        return BigInteger::createFromBinaryString($x);
     }
 
     /**
@@ -1221,7 +1216,7 @@ final class RSA
                 }
             }
 
-            $one = new BigInteger(1);
+            $one = BigInteger::createFromDecimalString('1');
 
             $r = $one->random($one, $smallest->subtract($one));
 

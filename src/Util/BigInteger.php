@@ -11,6 +11,8 @@
 
 namespace Jose\Util;
 
+use Assert\Assertion;
+
 final class BigInteger
 {
     /**
@@ -19,13 +21,6 @@ final class BigInteger
      * @var resource
      */
     private $value;
-
-    /**
-     * Holds the BigInteger's magnitude.
-     *
-     * @var bool
-     */
-    private $is_negative = false;
 
     /**
      * Converts base-10 and binary strings (base-256) to BigIntegers.
@@ -42,13 +37,13 @@ final class BigInteger
      * ?>
      * </code>
      *
-     * @param $x base-10 number or base-$base number if $base set.
-     * @param int $base
+     * @param mixed $value    base-10 number or base-$base number if $base set.
+     * @param int   $base
      */
-    public function __construct($x = 0, $base = 10)
+    private function __construct($value = 0, $base = 10)
     {
-        if(is_resource($x) && get_resource_type($x) == 'GMP integer') {
-            $this->value = $x;
+        if($value instanceof \GMP) {
+            $this->value = $value;
             
             return;
         }
@@ -57,36 +52,57 @@ final class BigInteger
 
         // '0' counts as empty() but when the base is 256 '0' is equal to ord('0') or 48
         // '0' is the only value like this per http://php.net/empty
-        if (empty($x) && (abs($base) != 256 || $x !== '0')) {
+        if (empty($value) && (abs($base) != 256 || $value !== '0')) {
             return;
         }
 
-        switch ($base) {
-            case -256:
-                if (ord($x[0]) & 0x80) {
-                    $x = ~$x;
-                    $this->is_negative = true;
-                }
-            case 256:
-                $sign = $this->is_negative ? '-' : '';
-                $this->value = gmp_init($sign.'0x'.bin2hex($x));
-
-                if ($this->is_negative) {
-                    $this->is_negative = false;
-                    $temp = $this->add(new static('-1'));
-                    $this->value = $temp->value;
-                }
-                break;
-            case 10:
-            case -10:
-                // (?<!^)(?:-).*: find any -'s that aren't at the beginning and then any characters that follow that
-                // (?<=^|-)0*: find any 0's that are preceded by the start of the string or by a - (ie. octals)
-                // [^-0-9].*: find any non-numeric characters and then any characters that follow that
-                $x = preg_replace('#(?<!^)(?:-).*|(?<=^|-)0*|[^-0-9].*#', '', $x);
-
-                $this->value = gmp_init($x);
-                break;
+        if (256 === $base) {
+            $value = '0x'.bin2hex($value);
+            $base = 16;
         }
+
+        $this->value = gmp_init($value, $base);
+    }
+
+    /**
+     * @param \GMP $value
+     *
+     * @return \Jose\Util\BigInteger
+     */
+    public static function createFromGMPResource($value)
+    {
+        Assertion::isInstanceOf($value, \GMP::class);
+
+        return new self($value);
+    }
+
+    /**
+     * @param string $value
+     * @param bool   $is_negative
+     *
+     * @return \Jose\Util\BigInteger
+     */
+    public static function createFromBinaryString($value, $is_negative = false)
+    {
+        Assertion::string($value);
+        $value = '0x'.bin2hex($value);
+        if (true === $is_negative) {
+            $value = '-'.$value;
+        }
+
+        return new self($value, 16);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return \Jose\Util\BigInteger
+     */
+    public static function createFromDecimalString($value)
+    {
+        Assertion::string($value);
+
+        return new self($value, 10);
     }
 
     /**
@@ -103,8 +119,6 @@ final class BigInteger
      *    echo $a->toBytes(); // outputs chr(65)
      * ?>
      * </code>
-     *
-     * @param bool $twos_compliment
      *
      * @return string
      *
@@ -144,10 +158,9 @@ final class BigInteger
      */
     public function add(BigInteger $y)
     {
-        $temp = new static();
-        $temp->value = gmp_add($this->value, $y->value);
+        $value = gmp_add($this->value, $y->value);
 
-        return $temp;
+        return self::createFromGMPResource($value);
     }
 
     /**
@@ -172,10 +185,9 @@ final class BigInteger
      */
     public function subtract(BigInteger $y)
     {
-        $temp = new static();
-        $temp->value = gmp_sub($this->value, $y->value);
+        $value = gmp_sub($this->value, $y->value);
 
-        return $temp;
+        return self::createFromGMPResource($value);
     }
 
     /**
@@ -199,10 +211,9 @@ final class BigInteger
      */
     public function multiply(BigInteger $x)
     {
-        $temp = new static();
-        $temp->value = gmp_mul($this->value, $x->value);
+        $value = gmp_mul($this->value, $x->value);
 
-        return $temp;
+        return self::createFromGMPResource($value);
     }
 
     /**
@@ -233,16 +244,13 @@ final class BigInteger
      */
     public function divide(BigInteger $y)
     {
-        $quotient = new static();
-        $remainder = new static();
+        list($quotient_value, $remainder_value) = gmp_div_qr($this->value, $y->value);
 
-        list($quotient->value, $remainder->value) = gmp_div_qr($this->value, $y->value);
-
-        if (gmp_sign($remainder->value) < 0) {
-            $remainder->value = gmp_add($remainder->value, gmp_abs($y->value));
+        if (gmp_sign($remainder_value) < 0) {
+            $remainder_value = gmp_add($remainder_value, gmp_abs($y->value));
         }
 
-        return [$quotient, $remainder];
+        return [new self($quotient_value), new self($remainder_value)];
     }
 
     /**
@@ -264,7 +272,7 @@ final class BigInteger
      * @param \Jose\Util\BigInteger $e
      * @param \Jose\Util\BigInteger $n
      *
-     * @return \Jose\Util\BigInteger
+     * @return \Jose\Util\BigInteger|bool
      *
      *    and although the approach involving repeated squaring does vastly better, it, too, is impractical
      *    for our purposes.  The reason being that division - by far the most complicated and time-consuming
@@ -289,7 +297,7 @@ final class BigInteger
     {
         $n = $n->abs();
 
-        if ($e->compare(new static()) < 0) {
+        if ($e->compare(new self()) < 0) {
             $e = $e->abs();
 
             $temp = $this->modInverse($n);
@@ -300,10 +308,9 @@ final class BigInteger
             return $temp->modPow($e, $n);
         }
 
-            $temp = new static();
-            $temp->value = gmp_powm($this->value, $e->value, $n->value);
+        $value = gmp_powm($this->value, $e->value, $n->value);
 
-            return $temp;
+        return self::createFromGMPResource($value);
     }
 
     /**
@@ -335,10 +342,9 @@ final class BigInteger
      */
     public function modInverse(BigInteger $n)
     {
-        $temp = new static();
-        $temp->value = gmp_invert($this->value, $n->value);
+        $value = gmp_invert($this->value, $n->value);
 
-        return $temp->value === false ? false : $temp;
+        return false === $value ? false : new self($value);
     }
 
     /**
@@ -348,11 +354,9 @@ final class BigInteger
      */
     public function abs()
     {
-        $temp = new static();
+        $value = gmp_abs($this->value);
 
-        $temp->value = gmp_abs($this->value);
-
-        return $temp;
+        return self::createFromGMPResource($value);
     }
 
     /**
@@ -389,17 +393,10 @@ final class BigInteger
      */
     public function bitwise_leftShift($shift)
     {
-        $temp = new static();
+        $two = gmp_init('2');
+        $value = gmp_mul($this->value, gmp_pow($two, $shift));
 
-        static $two;
-
-        if (!isset($two)) {
-            $two = gmp_init('2');
-        }
-
-        $temp->value = gmp_mul($this->value, gmp_pow($two, $shift));
-
-        return $temp;
+        return self::createFromGMPResource($value);
     }
 
     /**
@@ -413,7 +410,7 @@ final class BigInteger
      */
     private static function _random_number_helper($size)
     {
-        return new static(random_bytes($size), 256);
+        return new self(random_bytes($size), 256);
     }
 
     /**
@@ -443,10 +440,7 @@ final class BigInteger
             $min = $temp;
         }
 
-        static $one;
-        if (!isset($one)) {
-            $one = new static(1);
-        }
+        $one = new self('1');
 
         $max = $max->subtract($min->subtract($one));
         $size = strlen(ltrim($max->toBytes(), chr(0)));
@@ -466,7 +460,7 @@ final class BigInteger
 
             http://crypto.stackexchange.com/questions/5708/creating-a-small-number-from-a-cryptographically-secure-random-string
         */
-        $random_max = new static(chr(1).str_repeat("\0", $size), 256);
+        $random_max = new self(chr(1).str_repeat("\0", $size), 256);
         $random = self::_random_number_helper($size);
 
         list($max_multiple) = $random_max->divide($max);
