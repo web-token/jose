@@ -11,39 +11,70 @@
 
 namespace Jose\Util;
 
-use Assert\Assertion;
-
 class Hash
 {
     /**
      * Hash Parameter.
      *
-     * @var int
+     * @var string
      */
     private $hash;
 
     /**
-     * Default Constructor.
+     * Hash Length.
      *
-     * @param string $hash
+     * @var int
      */
-    public function __construct($hash)
+    private $length;
+
+    /**
+     * @return \Jose\Util\Hash
+     */
+    public static function sha1()
     {
-        Assertion::string($hash);
-        Assertion::inArray($hash, hash_algos());
-        $this->hash = $hash;
+        return new self('sha1', 20);
     }
 
     /**
-     * Gets the hash function.
-     *
-     * As set by the constructor or by the setHash() method.
-     *
-     * @return string
+     * @return \Jose\Util\Hash
      */
-    public function getHash()
+    public static function sha256()
     {
-        return $this->hash;
+        return new self('sha256', 32);
+    }
+
+    /**
+     * @return \Jose\Util\Hash
+     */
+    public static function sha384()
+    {
+        return new self('sha384', 48);
+    }
+
+    /**
+     * @return \Jose\Util\Hash
+     */
+    public static function sha512()
+    {
+        return new self('sha512', 64);
+    }
+
+    /**
+     * @param string $hash
+     * @param int    $length
+     */
+    private function __construct($hash, $length)
+    {
+        $this->hash = $hash;
+        $this->length = $length;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLength()
+    {
+        return $this->length;
     }
 
     /**

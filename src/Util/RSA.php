@@ -11,6 +11,8 @@
 
 namespace Jose\Util;
 
+use Assert\Assertion;
+
 final class RSA
 {
     /**
@@ -118,28 +120,21 @@ final class RSA
      *
      * @var array
      */
-    private $primes;
+    private $primes = [];
 
     /**
      * Exponents for Chinese Remainder Theorem (ie. dP and dQ).
      *
      * @var array
      */
-    private $exponents;
+    private $exponents = [];
 
     /**
      * Coefficients for Chinese Remainder Theorem (ie. qInv).
      *
      * @var array
      */
-    private $coefficients;
-
-    /**
-     * Hash name.
-     *
-     * @var string
-     */
-    private $hashName;
+    private $coefficients = [];
 
     /**
      * Hash function.
@@ -147,13 +142,6 @@ final class RSA
      * @var \Jose\Util\Hash
      */
     private $hash;
-
-    /**
-     * Length of hash function output.
-     *
-     * @var int
-     */
-    private $hLen;
 
     /**
      * Length of salt.
@@ -170,13 +158,6 @@ final class RSA
     private $mgfHash;
 
     /**
-     * Length of MGF hash function output.
-     *
-     * @var int
-     */
-    private $mgfHLen;
-
-    /**
      * Public Exponent.
      *
      * @var mixed
@@ -191,11 +172,8 @@ final class RSA
         $this->zero = BigInteger::createFromDecimalString('0');
         $this->one = BigInteger::createFromDecimalString('1');
 
-        $this->hash = new Hash('sha1');
-        $this->hLen = 20;
-        $this->hashName = 'sha1';
-        $this->mgfHash = new Hash('sha1');
-        $this->mgfHLen = 20;
+        $this->hash = Hash::sha1();
+        $this->mgfHash = Hash::sha1();
     }
 
     /**
@@ -208,103 +186,95 @@ final class RSA
      */
     private function _parseKey($key, $type)
     {
-        if ($type != self::PUBLIC_FORMAT_RAW && !is_string($key)) {
+        Assertion::string($key);
+
+        $decoded = $this->_extractBER($key);
+
+        if ($decoded !== false) {
+            $key = $decoded;
+        }
+
+        $components = [];
+
+        if (ord($this->_string_shift($key)) != self::ASN1_SEQUENCE) {
+            return false;
+        }
+        if ($this->_decodeLength($key) != strlen($key)) {
             return false;
         }
 
-        switch ($type) {
-            case self::PRIVATE_FORMAT_PKCS1:
-            case self::PRIVATE_FORMAT_PKCS8:
-            case self::PUBLIC_FORMAT_PKCS1:
-                $decoded = $this->_extractBER($key);
+        $tag = ord($this->_string_shift($key));
 
-                if ($decoded !== false) {
-                    $key = $decoded;
-                }
-
-                $components = [];
-
-                if (ord($this->_string_shift($key)) != self::ASN1_SEQUENCE) {
-                    return false;
-                }
-                if ($this->_decodeLength($key) != strlen($key)) {
-                    return false;
-                }
-
-                $tag = ord($this->_string_shift($key));
-
-                if ($tag == self::ASN1_INTEGER && substr($key, 0, 3) == "\x01\x00\x30") {
-                    $this->_string_shift($key, 3);
-                    $tag = self::ASN1_SEQUENCE;
-                }
-
-                if ($tag == self::ASN1_SEQUENCE) {
-                    $temp = $this->_string_shift($key, $this->_decodeLength($key));
-                    if (ord($this->_string_shift($temp)) != self::ASN1_OBJECT) {
-                        return false;
-                    }
-                    $length = $this->_decodeLength($temp);
-                    switch ($this->_string_shift($temp, $length)) {
-                        case "\x2a\x86\x48\x86\xf7\x0d\x01\x01\x01": // rsaEncryption
-                            break;
-                    }
-                    $tag = ord($this->_string_shift($key)); // skip over the BIT STRING / OCTET STRING tag
-                    $this->_decodeLength($key); // skip over the BIT STRING / OCTET STRING length
-                    if ($tag == self::ASN1_BITSTRING) {
-                        $this->_string_shift($key);
-                    }
-                    if (ord($this->_string_shift($key)) != self::ASN1_SEQUENCE) {
-                        return false;
-                    }
-                    if ($this->_decodeLength($key) != strlen($key)) {
-                        return false;
-                    }
-                    $tag = ord($this->_string_shift($key));
-                }
-                if ($tag != self::ASN1_INTEGER) {
-                    return false;
-                }
-
-                $length = $this->_decodeLength($key);
-                $temp = $this->_string_shift($key, $length);
-                if (strlen($temp) != 1 || ord($temp) > 2) {
-                    $components['modulus'] = BigInteger::createFromBinaryString($temp);
-                    $this->_string_shift($key); // skip over self::ASN1_INTEGER
-                    $length = $this->_decodeLength($key);
-                    $components[$type == self::PUBLIC_FORMAT_PKCS1 ? 'publicExponent' : 'privateExponent'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
-
-                    return $components;
-                }
-                if (ord($this->_string_shift($key)) != self::ASN1_INTEGER) {
-                    return false;
-                }
-                $length = $this->_decodeLength($key);
-                $components['modulus'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
-                $this->_string_shift($key);
-                $length = $this->_decodeLength($key);
-                $components['publicExponent'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
-                $this->_string_shift($key);
-                $length = $this->_decodeLength($key);
-                $components['privateExponent'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
-                $this->_string_shift($key);
-                $length = $this->_decodeLength($key);
-                $components['primes'] = [1 => BigInteger::createFromBinaryString($this->_string_shift($key, $length))];
-                $this->_string_shift($key);
-                $length = $this->_decodeLength($key);
-                $components['primes'][] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
-                $this->_string_shift($key);
-                $length = $this->_decodeLength($key);
-                $components['exponents'] = [1 => BigInteger::createFromBinaryString($this->_string_shift($key, $length))];
-                $this->_string_shift($key);
-                $length = $this->_decodeLength($key);
-                $components['exponents'][] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
-                $this->_string_shift($key);
-                $length = $this->_decodeLength($key);
-                $components['coefficients'] = [2 => BigInteger::createFromBinaryString($this->_string_shift($key, $length))];
-
-
-                return $components;
+        if ($tag == self::ASN1_INTEGER && substr($key, 0, 3) == "\x01\x00\x30") {
+            $this->_string_shift($key, 3);
+            $tag = self::ASN1_SEQUENCE;
         }
+
+        if ($tag == self::ASN1_SEQUENCE) {
+            $temp = $this->_string_shift($key, $this->_decodeLength($key));
+            if (ord($this->_string_shift($temp)) != self::ASN1_OBJECT) {
+                return false;
+            }
+            $length = $this->_decodeLength($temp);
+            switch ($this->_string_shift($temp, $length)) {
+                case "\x2a\x86\x48\x86\xf7\x0d\x01\x01\x01": // rsaEncryption
+                    break;
+            }
+            $tag = ord($this->_string_shift($key)); // skip over the BIT STRING / OCTET STRING tag
+            $this->_decodeLength($key); // skip over the BIT STRING / OCTET STRING length
+            if ($tag == self::ASN1_BITSTRING) {
+                $this->_string_shift($key);
+            }
+            if (ord($this->_string_shift($key)) != self::ASN1_SEQUENCE) {
+                return false;
+            }
+            if ($this->_decodeLength($key) != strlen($key)) {
+                return false;
+            }
+            $tag = ord($this->_string_shift($key));
+        }
+        if ($tag != self::ASN1_INTEGER) {
+            return false;
+        }
+
+        $length = $this->_decodeLength($key);
+        $temp = $this->_string_shift($key, $length);
+        if (strlen($temp) != 1 || ord($temp) > 2) {
+            $components['modulus'] = BigInteger::createFromBinaryString($temp);
+            $this->_string_shift($key); // skip over self::ASN1_INTEGER
+            $length = $this->_decodeLength($key);
+            $components[$type == self::PUBLIC_FORMAT_PKCS1 ? 'publicExponent' : 'privateExponent'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
+
+            return $components;
+        }
+        if (ord($this->_string_shift($key)) != self::ASN1_INTEGER) {
+            return false;
+        }
+        $length = $this->_decodeLength($key);
+        $components['modulus'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
+        $this->_string_shift($key);
+        $length = $this->_decodeLength($key);
+        $components['publicExponent'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
+        $this->_string_shift($key);
+        $length = $this->_decodeLength($key);
+        $components['privateExponent'] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
+        $this->_string_shift($key);
+        $length = $this->_decodeLength($key);
+        $components['primes'] = [1 => BigInteger::createFromBinaryString($this->_string_shift($key, $length))];
+        $this->_string_shift($key);
+        $length = $this->_decodeLength($key);
+        $components['primes'][] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
+        $this->_string_shift($key);
+        $length = $this->_decodeLength($key);
+        $components['exponents'] = [1 => BigInteger::createFromBinaryString($this->_string_shift($key, $length))];
+        $this->_string_shift($key);
+        $length = $this->_decodeLength($key);
+        $components['exponents'][] = BigInteger::createFromBinaryString($this->_string_shift($key, $length));
+        $this->_string_shift($key);
+        $length = $this->_decodeLength($key);
+        $components['coefficients'] = [2 => BigInteger::createFromBinaryString($this->_string_shift($key, $length))];
+
+        return $components;
     }
 
     /**
@@ -389,23 +359,7 @@ final class RSA
      */
     public function setHash($hash)
     {
-        switch ($hash) {
-            case 'sha1':
-                $this->hLen = 20;
-                break;
-            case 'sha256':
-                $this->hLen = 32;
-                break;
-            case 'sha384':
-                $this->hLen = 48;
-                break;
-            case 'sha512':
-                $this->hLen = 64;
-                break;
-            default:
-                throw new \InvalidArgumentException('Unsupported hash algorithm.');
-        }
-        $this->hash = new Hash($hash);
+        $this->hash = Hash::$hash();
     }
 
     /**
@@ -415,23 +369,7 @@ final class RSA
      */
     public function setMGFHash($hash)
     {
-        switch ($hash) {
-            case 'sha1':
-                $this->mgfHLen = 20;
-                break;
-            case 'sha256':
-                $this->mgfHash = 32;
-                break;
-            case 'sha384':
-                $this->mgfHash = 48;
-                break;
-            case 'sha512':
-                $this->mgfHash = 64;
-                break;
-            default:
-                throw new \InvalidArgumentException('Unsupported hash algorithm.');
-        }
-        $this->mgfHash = new Hash($hash);
+        $this->mgfHash = Hash::$hash();
     }
 
     /**
@@ -650,7 +588,7 @@ final class RSA
         // if $maskLen would yield strings larger than 4GB, PKCS#1 suggests a "Mask too long" error be output.
 
         $t = '';
-        $count = ceil($maskLen / $this->mgfHLen);
+        $count = ceil($maskLen / $this->mgfHash->getLength());
         for ($i = 0; $i < $count; $i++) {
             $c = pack('N', $i);
             $t .= $this->mgfHash->hash($mgfSeed.$c);
@@ -676,7 +614,7 @@ final class RSA
         // if $l is larger than two million terrabytes and you're using sha1, PKCS#1 suggests a "Label too long" error
         // be output.
 
-        if ($mLen > $this->k - 2 * $this->hLen - 2) {
+        if ($mLen > $this->k - 2 * $this->hash->getLength() - 2) {
 
             return false;
         }
@@ -684,12 +622,12 @@ final class RSA
         // EME-OAEP encoding
 
         $lHash = $this->hash->hash($l);
-        $ps = str_repeat(chr(0), $this->k - $mLen - 2 * $this->hLen - 2);
+        $ps = str_repeat(chr(0), $this->k - $mLen - 2 * $this->hash->getLength() - 2);
         $db = $lHash.$ps.chr(1).$m;
-        $seed = random_bytes($this->hLen);
-        $dbMask = $this->_mgf1($seed, $this->k - $this->hLen - 1);
+        $seed = random_bytes($this->hash->getLength());
+        $dbMask = $this->_mgf1($seed, $this->k - $this->hash->getLength() - 1);
         $maskedDB = $db ^ $dbMask;
-        $seedMask = $this->_mgf1($maskedDB, $this->hLen);
+        $seedMask = $this->_mgf1($maskedDB, $this->hash->getLength());
         $maskedSeed = $seed ^ $seedMask;
         $em = chr(0).$maskedSeed.$maskedDB;
 
@@ -719,7 +657,7 @@ final class RSA
         // if $l is larger than two million terrabytes and you're using sha1, PKCS#1 suggests a "Label too long" error
         // be output.
 
-        if (strlen($c) != $this->k || $this->k < 2 * $this->hLen + 2) {
+        if (strlen($c) != $this->k || $this->k < 2 * $this->hash->getLength() + 2) {
 
             return false;
         }
@@ -738,14 +676,14 @@ final class RSA
 
         $lHash = $this->hash->hash($l);
         $y = ord($em[0]);
-        $maskedSeed = substr($em, 1, $this->hLen);
-        $maskedDB = substr($em, $this->hLen + 1);
-        $seedMask = $this->_mgf1($maskedDB, $this->hLen);
+        $maskedSeed = substr($em, 1, $this->hash->getLength());
+        $maskedDB = substr($em, $this->hash->getLength() + 1);
+        $seedMask = $this->_mgf1($maskedDB, $this->hash->getLength());
         $seed = $maskedSeed ^ $seedMask;
-        $dbMask = $this->_mgf1($seed, $this->k - $this->hLen - 1);
+        $dbMask = $this->_mgf1($seed, $this->k - $this->hash->getLength() - 1);
         $db = $maskedDB ^ $dbMask;
-        $lHash2 = substr($db, 0, $this->hLen);
-        $m = substr($db, $this->hLen);
+        $lHash2 = substr($db, 0, $this->hash->getLength());
+        $m = substr($db, $this->hash->getLength());
         if ($lHash != $lHash2) {
 
             return false;
@@ -775,10 +713,10 @@ final class RSA
         // be output.
 
         $emLen = ($emBits + 1) >> 3; // ie. ceil($emBits / 8)
-        $sLen = $this->sLen ? $this->sLen : $this->hLen;
+        $sLen = $this->sLen ? $this->sLen : $this->hash->getLength();
 
         $mHash = $this->hash->hash($m);
-        if ($emLen < $this->hLen + $sLen + 2) {
+        if ($emLen < $this->hash->getLength() + $sLen + 2) {
 
             return false;
         }
@@ -786,9 +724,9 @@ final class RSA
         $salt = random_bytes($sLen);
         $m2 = "\0\0\0\0\0\0\0\0".$mHash.$salt;
         $h = $this->hash->hash($m2);
-        $ps = str_repeat(chr(0), $emLen - $sLen - $this->hLen - 2);
+        $ps = str_repeat(chr(0), $emLen - $sLen - $this->hash->getLength() - 2);
         $db = $ps.chr(1).$salt;
-        $dbMask = $this->_mgf1($h, $emLen - $this->hLen - 1);
+        $dbMask = $this->_mgf1($h, $emLen - $this->hash->getLength() - 1);
         $maskedDB = $db ^ $dbMask;
         $maskedDB[0] = ~chr(0xFF << ($emBits & 7)) & $maskedDB[0];
         $em = $maskedDB.$h.chr(0xBC);
@@ -811,10 +749,10 @@ final class RSA
         // be output.
 
         $emLen = ($emBits + 1) >> 3; // ie. ceil($emBits / 8);
-        $sLen = $this->sLen ? $this->sLen : $this->hLen;
+        $sLen = $this->sLen ? $this->sLen : $this->hash->getLength();
 
         $mHash = $this->hash->hash($m);
-        if ($emLen < $this->hLen + $sLen + 2) {
+        if ($emLen < $this->hash->getLength() + $sLen + 2) {
             return false;
         }
 
@@ -822,16 +760,16 @@ final class RSA
             return false;
         }
 
-        $maskedDB = substr($em, 0, -$this->hLen - 1);
-        $h = substr($em, -$this->hLen - 1, $this->hLen);
+        $maskedDB = substr($em, 0, -$this->hash->getLength() - 1);
+        $h = substr($em, -$this->hash->getLength() - 1, $this->hash->getLength());
         $temp = chr(0xFF << ($emBits & 7));
         if ((~$maskedDB[0] & $temp) != $temp) {
             return false;
         }
-        $dbMask = $this->_mgf1($h, $emLen - $this->hLen - 1);
+        $dbMask = $this->_mgf1($h, $emLen - $this->hash->getLength() - 1);
         $db = $maskedDB ^ $dbMask;
         $db[0] = ~chr(0xFF << ($emBits & 7)) & $db[0];
-        $temp = $emLen - $this->hLen - $sLen - 2;
+        $temp = $emLen - $this->hash->getLength() - $sLen - 2;
         if (substr($db, 0, $temp) != str_repeat(chr(0), $temp) || ord($db[$temp]) != 1) {
             return false;
         }
@@ -919,7 +857,7 @@ final class RSA
      */
     public function encrypt($plaintext)
     {
-        $length = $this->k - 2 * $this->hLen - 2;
+        $length = $this->k - 2 * $this->hash->getLength() - 2;
         if ($length <= 0) {
             return false;
         }

@@ -70,12 +70,12 @@ abstract class RSA implements KeyEncryptionInterface
             $rsa->loadKey($pem, JoseRSA::PRIVATE_FORMAT_PKCS1);
 
             $decrypted = $rsa->decrypt($encrypted_key);
-            Assertion::string($decrypted, 'Unable to decrypt the data11.');
+            Assertion::string($decrypted, 'Unable to decrypt the data.');
 
             return $decrypted;
         } else {
             $res = openssl_private_decrypt($encrypted_key, $decrypted, $pem, OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
-            Assertion::true($res, 'Unable to decrypt the data22.');
+            Assertion::true($res, 'Unable to decrypt the data.');
 
             return $decrypted;
         }
