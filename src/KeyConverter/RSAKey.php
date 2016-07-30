@@ -20,14 +20,10 @@ use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\OctetString;
 use FG\ASN1\Universal\Sequence;
 use Jose\Object\JWKInterface;
+use Jose\Util\BigInteger;
 
 final class RSAKey extends Sequence
 {
-    /**
-     * @var bool
-     */
-    private $private = false;
-
     /**
      * @var array
      */
@@ -49,7 +45,117 @@ final class RSAKey extends Sequence
         } else {
             throw new \InvalidArgumentException('Unsupported input');
         }
-        $this->private = isset($this->values['d']);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublic()
+    {
+        return !$this->isPrivate();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return array_key_exists('d', $this->values);
+    }
+
+    /**
+     * @return \Jose\Util\BigInteger
+     */
+    public function getModulus()
+    {
+        return $this->convertBase64StringToBigInteger($this->values['n']);
+    }
+
+    /**
+     * @return int
+     */
+    public function getModulusLength()
+    {
+        return strlen($this->getModulus()->toBytes());
+    }
+
+    /**
+     * @return \Jose\Util\BigInteger
+     */
+    public function getExponent()
+    {
+        if (array_key_exists('d', $this->values)) {
+            return $this->getPrivateExponent();
+        }
+        return $this->getPublicExponent();
+    }
+
+    /**
+     * @return \Jose\Util\BigInteger
+     */
+    public function getPublicExponent()
+    {
+        return $this->convertBase64StringToBigInteger($this->values['e']);
+    }
+
+    /**
+     * @return \Jose\Util\BigInteger
+     */
+    public function getPrivateExponent()
+    {
+        Assertion::keyExists($this->values, 'd');
+
+        return $this->convertBase64StringToBigInteger($this->values['d']);
+    }
+
+    /**
+     * @return \Jose\Util\BigInteger[]
+     */
+    public function getPrimes()
+    {
+        if (array_key_exists('p', $this->values) && array_key_exists('q', $this->values)) {
+            return [
+                $this->convertBase64StringToBigInteger($this->values['p']),
+                $this->convertBase64StringToBigInteger($this->values['q']),
+            ];
+        }
+
+        return [];
+    }
+
+    /**
+     * @return \Jose\Util\BigInteger[]
+     */
+    public function getExponents()
+    {
+        if (array_key_exists('dp', $this->values) && array_key_exists('dq', $this->values) && array_key_exists('qi', $this->values)) {
+            return [
+                $this->convertBase64StringToBigInteger($this->values['dp']),
+                $this->convertBase64StringToBigInteger($this->values['dq']),
+            ];
+        }
+
+        return [];
+    }
+
+    /**
+     * @return \Jose\Util\BigInteger|null
+     */
+    public function getCoefficient()
+    {
+        if (array_key_exists('qi', $this->values)) {
+            return $this->convertBase64StringToBigInteger($this->values['qi']);
+        }
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return \Jose\Util\BigInteger
+     */
+    private function convertBase64StringToBigInteger($value)
+    {
+        return BigInteger::createFromBinaryString(Base64Url::decode($value));
     }
 
     /**
@@ -173,14 +279,6 @@ final class RSAKey extends Sequence
     }
 
     /**
-     * @return bool
-     */
-    public function isPrivate()
-    {
-        return $this->private;
-    }
-
-    /**
      * @param \Jose\KeyConverter\RSAKey $private
      *
      * @return \Jose\KeyConverter\RSAKey
@@ -224,9 +322,9 @@ final class RSAKey extends Sequence
      */
     public function toPEM()
     {
-        $result = '-----BEGIN '.($this->private ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
+        $result = '-----BEGIN '.($this->isPrivate() ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
         $result .= chunk_split(base64_encode($this->getBinary()), 64, PHP_EOL);
-        $result .= '-----END '.($this->private ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
+        $result .= '-----END '.($this->isPrivate() ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
 
         return $result;
     }

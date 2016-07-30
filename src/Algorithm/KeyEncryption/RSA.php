@@ -13,7 +13,6 @@ namespace Jose\Algorithm\KeyEncryption;
 
 use Assert\Assertion;
 use Jose\KeyConverter\RSAKey;
-use Jose\Object\JWK;
 use Jose\Object\JWKInterface;
 use Jose\Util\RSA as JoseRSA;
 
@@ -39,19 +38,15 @@ abstract class RSA implements KeyEncryptionInterface
     {
         $this->checkKey($key);
 
+        $pub = RSAKey::toPublic(new RSAKey($key));
 
         if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
-            $pub = new JWK(RSAKey::toPublic(new RSAKey($key))->toArray());
-            $rsa = $this->getRsaObject();
-            $rsa->loadKey($pub);
-
-            $encrypted = $rsa->encrypt($cek, $this->getHashAlgorithm());
+            $encrypted = JoseRSA::encrypt($pub, $cek, $this->getHashAlgorithm());
             Assertion::string($encrypted, 'Unable to encrypt the data.');
 
             return $encrypted;
         } else {
-            $pem = RSAKey::toPublic(new RSAKey($key))->toPEM();
-            $res = openssl_public_encrypt($cek, $encrypted, $pem, OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
+            $res = openssl_public_encrypt($cek, $encrypted, $pub->toPEM(), OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
             Assertion::true($res, 'Unable to encrypt the data.');
 
             return $encrypted;
@@ -66,18 +61,16 @@ abstract class RSA implements KeyEncryptionInterface
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The key is not a private key');
 
-        if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
-            $rsa = $this->getRsaObject();
-            $rsa->loadKey($key);
+        $priv = new RSAKey($key);
 
-            $decrypted = $rsa->decrypt($encrypted_key, $this->getHashAlgorithm());
-            Assertion::string($decrypted, 'Unable to decrypt the data11.');
+        if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
+            $decrypted = JoseRSA::decrypt($priv, $encrypted_key, $this->getHashAlgorithm());
+            Assertion::string($decrypted, 'Unable to decrypt the data.');
 
             return $decrypted;
         } else {
-            $pem = (new RSAKey($key))->toPEM();
-            $res = openssl_private_decrypt($encrypted_key, $decrypted, $pem, OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
-            Assertion::true($res, 'Unable to decrypt the data22.');
+            $res = openssl_private_decrypt($encrypted_key, $decrypted, $priv->toPEM(), OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
+            Assertion::true($res, 'Unable to decrypt the data.');
 
             return $decrypted;
         }
@@ -89,16 +82,6 @@ abstract class RSA implements KeyEncryptionInterface
     public function getKeyManagementMode()
     {
         return self::MODE_ENCRYPT;
-    }
-
-    /**
-     * @return \Jose\Util\RSA
-     */
-    private function getRsaObject()
-    {
-        $rsa = new JoseRSA();
-
-        return $rsa;
     }
 
     /**

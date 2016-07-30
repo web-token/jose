@@ -11,132 +11,11 @@
 
 namespace Jose\Util;
 
-use Base64Url\Base64Url;
-use Jose\Object\JWKInterface;
+use Assert\Assertion;
+use Jose\KeyConverter\RSAKey;
 
 final class RSA
 {
-    /**
-     * Precomputed Zero.
-     *
-     * @var \Jose\Util\BigInteger
-     */
-    private $zero;
-
-    /**
-     * Precomputed One.
-     *
-     * @var \Jose\Util\BigInteger
-     */
-    private $one;
-
-    /**
-     * Modulus (ie. n).
-     *
-     * @var \Jose\Util\BigInteger
-     */
-    private $modulus;
-
-    /**
-     * Modulus length.
-     *
-     * @var int
-     */
-    private $k;
-
-    /**
-     * Exponent (ie. e or d).
-     *
-     * @var \Jose\Util\BigInteger
-     */
-    private $exponent;
-
-    /**
-     * Primes for Chinese Remainder Theorem (ie. p and q).
-     *
-     * @var \Jose\Util\BigInteger[]
-     */
-    private $primes;
-
-    /**
-     * Exponents for Chinese Remainder Theorem (ie. dP and dQ).
-     *
-     * @var \Jose\Util\BigInteger[]
-     */
-    private $exponents;
-
-    /**
-     * Coefficients for Chinese Remainder Theorem (ie. qInv).
-     *
-     * @var \Jose\Util\BigInteger[]
-     */
-    private $coefficients;
-
-    /**
-     * Public Exponent.
-     *
-     * @var mixed
-     */
-    private $publicExponent = false;
-
-    /**
-     * RSA constructor.
-     */
-    public function __construct()
-    {
-        $this->zero = BigInteger::createFromDecimalString('0');
-        $this->one = BigInteger::createFromDecimalString('1');
-    }
-
-    /**
-     * Loads a public or private key.
-     *
-     * @param \Jose\Object\JWKInterface $key
-     */
-    public function loadKey(JWKInterface $key)
-    {
-        $this->modulus = $this->getKeyComponent($key, 'n');
-        $this->k = strlen($this->modulus->toBytes());
-
-        if ($key->has('d')) {
-            $this->exponent = $this->getKeyComponent($key, 'd');
-            $this->publicExponent = $this->getKeyComponent($key, 'e');
-        } else {
-            $this->exponent = $this->getKeyComponent($key, 'e');
-        }
-
-        if ($key->has('p') && $key->has('q')) {
-            $this->primes = [
-                $this->getKeyComponent($key, 'p'),
-                $this->getKeyComponent($key, 'q'),
-            ];
-        } else {
-            $this->primes = [];
-        }
-
-        if ($key->has('dp') && $key->has('dq') && $key->has('qi')) {
-            $this->coefficients = [
-                $this->getKeyComponent($key, 'dp'),
-                $this->getKeyComponent($key, 'dq'),
-                $this->getKeyComponent($key, 'qi'),
-            ];
-        } else {
-            $this->coefficients = [];
-        }
-    }
-
-    /**
-     * @param \Jose\Object\JWKInterface $jwk
-     * @param string                    $key
-     *
-     * @return \Jose\Util\BigInteger
-     */
-    public function getKeyComponent(JWKInterface $jwk, $key)
-    {
-        return BigInteger::createFromBinaryString(Base64Url::decode($jwk->get($key)));
-    }
-
-
     /**
      * Integer-to-Octet-String primitive.
      *
@@ -145,7 +24,7 @@ final class RSA
      *
      * @return string
      */
-    private function convertIntegerToOctetString($x, $xLen)
+    private static function convertIntegerToOctetString($x, $xLen)
     {
         $x = $x->toBytes();
         if (strlen($x) > $xLen) {
@@ -162,7 +41,7 @@ final class RSA
      *
      * @return \Jose\Util\BigInteger
      */
-    private function convertOctetStringToInteger($x)
+    private static function convertOctetStringToInteger($x)
     {
         return BigInteger::createFromBinaryString($x);
     }
@@ -170,159 +49,82 @@ final class RSA
     /**
      * Exponentiate with or without Chinese Remainder Theorem.
      *
-     * @param \Jose\Util\BigInteger $x
+     * @param \Jose\KeyConverter\RSAKey $key
+     * @param \Jose\Util\BigInteger     $x
      *
      * @return \Jose\Util\BigInteger
      */
-    private function _exponentiate($x)
+    private static function _exponentiate(RSAKey $key, $x)
     {
-        if (empty($this->primes) || empty($this->coefficients) || empty($this->exponents)) {
-            return $x->modPow($this->exponent, $this->modulus);
-        }
-
-        $num_primes = count($this->primes);
-
-        $smallest = $this->primes[1];
-        for ($i = 2; $i <= $num_primes; $i++) {
-            if ($smallest->compare($this->primes[$i]) > 0) {
-                $smallest = $this->primes[$i];
-            }
-        }
-
-        $one = BigInteger::createFromDecimalString('1');
-
-        $r = $one->random($one, $smallest->subtract($one));
-
-        $m_i = [
-            1 => $this->_blind($x, $r, 1),
-            2 => $this->_blind($x, $r, 2),
-        ];
-        $h = $m_i[1]->subtract($m_i[2]);
-        $h = $h->multiply($this->coefficients[2]);
-        list(, $h) = $h->divide($this->primes[1]);
-        $m = $m_i[2]->add($h->multiply($this->primes[2]));
-
-        $r = $this->primes[1];
-        for ($i = 3; $i <= $num_primes; $i++) {
-            $m_i = $this->_blind($x, $r, $i);
-
-            $r = $r->multiply($this->primes[$i - 1]);
-
-            $h = $m_i->subtract($m);
-            $h = $h->multiply($this->coefficients[$i]);
-            list(, $h) = $h->divide($this->primes[$i]);
-
-            $m = $m->add($r->multiply($h));
-        }
-
-        return $m;
-    }
-
-    /**
-     * Performs RSA Blinding.
-     *
-     * @param \Jose\Util\BigInteger $x
-     * @param \Jose\Util\BigInteger $r
-     * @param int                   $i
-     *
-     * @return \Jose\Util\BigInteger
-     */
-    private function _blind($x, $r, $i)
-    {
-        $x = $x->multiply($r->modPow($this->publicExponent, $this->primes[$i]));
-        $x = $x->modPow($this->exponents[$i], $this->primes[$i]);
-
-        $r = $r->modInverse($this->primes[$i]);
-        $x = $x->multiply($r);
-        list(, $x) = $x->divide($this->primes[$i]);
-
-        return $x;
-    }
-
-    /**
-     * Performs blinded RSA equality testing.
-     *
-     * @param string $x
-     * @param string $y
-     *
-     * @return bool
-     */
-    private function _equals($x, $y)
-    {
-        if (strlen($x) != strlen($y)) {
-            return false;
-        }
-
-        $result = 0;
-        for ($i = 0; $i < strlen($x); $i++) {
-            $result |= ord($x[$i]) ^ ord($y[$i]);
-        }
-
-        return $result == 0;
+        return $x->modPow($key->getExponent(), $key->getModulus());
     }
 
     /**
      * RSAEP.
      *
-     * @param \Jose\Util\BigInteger $m
+     * @param \Jose\KeyConverter\RSAKey $key
+     * @param \Jose\Util\BigInteger     $m
      *
      * @return \Jose\Util\BigInteger|false
      */
-    private function _rsaep($m)
+    private static function _rsaep(RSAKey $key, BigInteger $m)
     {
-        if ($m->compare($this->zero) < 0 || $m->compare($this->modulus) > 0) {
+        if ($m->compare(BigInteger::createFromDecimalString('0')) < 0 || $m->compare($key->getModulus()) > 0) {
             return false;
         }
 
-        return $this->_exponentiate($m);
+        return self::_exponentiate($key, $m);
     }
 
     /**
      * RSADP.
      *
-     * @param \Jose\Util\BigInteger $c
+     * @param \Jose\KeyConverter\RSAKey $key
+     * @param \Jose\Util\BigInteger     $c
      *
      * @return \Jose\Util\BigInteger|false
      */
-    private function _rsadp($c)
+    private static function _rsadp(RSAKey $key, BigInteger $c)
     {
-        if ($c->compare($this->zero) < 0 || $c->compare($this->modulus) > 0) {
+        if ($c->compare(BigInteger::createFromDecimalString('0')) < 0 || $c->compare($key->getModulus()) > 0) {
             return false;
         }
 
-        return $this->_exponentiate($c);
+        return self::_exponentiate($key, $c);
     }
 
     /**
      * RSASP1.
      *
-     * @param \Jose\Util\BigInteger $m
+     * @param \Jose\KeyConverter\RSAKey $key
+     * @param \Jose\Util\BigInteger     $m
      *
      * @return \Jose\Util\BigInteger|false
      */
-    private function _rsasp1($m)
+    private static function _rsasp1(RSAKey $key, BigInteger $m)
     {
-        if ($m->compare($this->zero) < 0 || $m->compare($this->modulus) > 0) {
+        if ($m->compare(BigInteger::createFromDecimalString('0')) < 0 || $m->compare($key->getModulus()) > 0) {
             return false;
         }
 
-        return $this->_exponentiate($m);
+        return self::_exponentiate($key, $m);
     }
 
     /**
      * RSAVP1.
      *
-     * @param \Jose\Util\BigInteger $s
+     * @param \Jose\KeyConverter\RSAKey $key
+     * @param \Jose\Util\BigInteger     $s
      *
      * @return \Jose\Util\BigInteger|false
      */
-    private function _rsavp1($s)
+    private static function _rsavp1(RSAKey $key, BigInteger $s)
     {
-        if ($s->compare($this->zero) < 0 || $s->compare($this->modulus) > 0) {
+        if ($s->compare(BigInteger::createFromDecimalString('0')) < 0 || $s->compare($key->getModulus()) > 0) {
             return false;
         }
 
-        return $this->_exponentiate($s);
+        return self::_exponentiate($key, $s);
     }
 
     /**
@@ -334,10 +136,8 @@ final class RSA
      *
      * @return string
      */
-    private function _mgf1($mgfSeed, $maskLen, Hash $mgfHash)
+    private static function _mgf1($mgfSeed, $maskLen, Hash $mgfHash)
     {
-        // if $maskLen would yield strings larger than 4GB, PKCS#1 suggests a "Mask too long" error be output.
-
         $t = '';
         $count = ceil($maskLen / $mgfHash->getLength());
         for ($i = 0; $i < $count; $i++) {
@@ -351,43 +151,28 @@ final class RSA
     /**
      * RSAES-OAEP-ENCRYPT.
      *
-     * @param string          $m
-     * @param \Jose\Util\Hash $hash
+     * @param \Jose\KeyConverter\RSAKey $key
+     * @param string                    $m
+     * @param \Jose\Util\Hash           $hash
      *
      * @return string
      */
-    private function _rsaes_oaep_encrypt($m, Hash $hash)
+    private static function _rsaes_oaep_encrypt(RSAKey $key, $m, Hash $hash)
     {
         $mLen = strlen($m);
-
-        // Length checking
-
-        // if $l is larger than two million terrabytes and you're using sha1, PKCS#1 suggests a "Label too long" error
-        // be output.
-
-        if ($mLen > $this->k - 2 * $hash->getLength() - 2) {
-            return false;
-        }
-
-        // EME-OAEP encoding
-
         $lHash = $hash->hash('');
-        $ps = str_repeat(chr(0), $this->k - $mLen - 2 * $hash->getLength() - 2);
+        $ps = str_repeat(chr(0), $key->getModulusLength() - $mLen - 2 * $hash->getLength() - 2);
         $db = $lHash.$ps.chr(1).$m;
         $seed = random_bytes($hash->getLength());
-        $dbMask = $this->_mgf1($seed, $this->k - $hash->getLength() - 1, $hash/*MGF*/);
+        $dbMask = self::_mgf1($seed, $key->getModulusLength() - $hash->getLength() - 1, $hash/*MGF*/);
         $maskedDB = $db ^ $dbMask;
-        $seedMask = $this->_mgf1($maskedDB, $hash->getLength(), $hash/*MGF*/);
+        $seedMask = self::_mgf1($maskedDB, $hash->getLength(), $hash/*MGF*/);
         $maskedSeed = $seed ^ $seedMask;
         $em = chr(0).$maskedSeed.$maskedDB;
 
-        // RSA encryption
-
-        $m = $this->convertOctetStringToInteger($em);
-        $c = $this->_rsaep($m);
-        $c = $this->convertIntegerToOctetString($c, $this->k);
-
-        // Output the ciphertext C
+        $m = self::convertOctetStringToInteger($em);
+        $c = self::_rsaep($key, $m);
+        $c = self::convertIntegerToOctetString($c, $key->getModulusLength());
 
         return $c;
     }
@@ -395,51 +180,36 @@ final class RSA
     /**
      * RSAES-OAEP-DECRYPT.
      *
-     * @param string $c
-     * @param \Jose\Util\Hash $hash
+     * @param \Jose\KeyConverter\RSAKey $key
+     * @param string                    $c
+     * @param \Jose\Util\Hash           $hash
      *
      * @return string
      */
-    private function _rsaes_oaep_decrypt($c, Hash $hash)
+    private static function _rsaes_oaep_decrypt(RSAKey $key, $c, Hash $hash)
     {
-        // Length checking
+        $c = self::convertOctetStringToInteger($c);
+        $m = self::_rsadp($key, $c);
 
-        // if $l is larger than two million terrabytes and you're using sha1, PKCS#1 suggests a "Label too long" error
-        // be output.
+        Assertion::isInstanceOf($m, BigInteger::class);
 
-        if (strlen($c) != $this->k || $this->k < 2 * $hash->getLength() + 2) {
-            return false;
-        }
-
-        // RSA decryption
-
-        $c = $this->convertOctetStringToInteger($c);
-        $m = $this->_rsadp($c);
-        if ($m === false) {
-            return false;
-        }
-        $em = $this->convertIntegerToOctetString($m, $this->k);
-
-        // EME-OAEP decoding
+        $em = self::convertIntegerToOctetString($m, $key->getModulusLength());
 
         $lHash = $hash->hash('');
         $maskedSeed = substr($em, 1, $hash->getLength());
         $maskedDB = substr($em, $hash->getLength() + 1);
-        $seedMask = $this->_mgf1($maskedDB, $hash->getLength(), $hash/*MGF*/);
+        $seedMask = self::_mgf1($maskedDB, $hash->getLength(), $hash/*MGF*/);
         $seed = $maskedSeed ^ $seedMask;
-        $dbMask = $this->_mgf1($seed, $this->k - $hash->getLength() - 1, $hash/*MGF*/);
+        $dbMask = self::_mgf1($seed, $key->getModulusLength() - $hash->getLength() - 1, $hash/*MGF*/);
         $db = $maskedDB ^ $dbMask;
         $lHash2 = substr($db, 0, $hash->getLength());
         $m = substr($db, $hash->getLength());
-        if ($lHash != $lHash2) {
-            return false;
-        }
-        $m = ltrim($m, chr(0));
-        if (ord($m[0]) != 1) {
-            return false;
-        }
 
-        // Output the message M
+        Assertion::eq($lHash, $lHash2);
+
+        $m = ltrim($m, chr(0));
+
+        Assertion::eq(ord($m[0]), 1);
 
         return substr($m, 1);
     }
@@ -451,9 +221,9 @@ final class RSA
      * @param int             $emBits
      * @param \Jose\Util\Hash $hash
      *
-     * @return bool
+     * @return string|bool
      */
-    private function _emsa_pss_encode($m, $emBits, Hash $hash)
+    private static function _emsa_pss_encode($m, $emBits, Hash $hash)
     {
         // if $m is larger than two million terrabytes and you're using sha1, PKCS#1 suggests a "Label too long" error
         // be output.
@@ -471,7 +241,7 @@ final class RSA
         $h = $hash->hash($m2);
         $ps = str_repeat(chr(0), $emLen - $sLen - $hash->getLength() - 2);
         $db = $ps.chr(1).$salt;
-        $dbMask = $this->_mgf1($h, $emLen - $hash->getLength() - 1, $hash/*MGF*/);
+        $dbMask = self::_mgf1($h, $emLen - $hash->getLength() - 1, $hash/*MGF*/);
         $maskedDB = $db ^ $dbMask;
         $maskedDB[0] = ~chr(0xFF << ($emBits & 7)) & $maskedDB[0];
         $em = $maskedDB.$h.chr(0xBC);
@@ -482,14 +252,14 @@ final class RSA
     /**
      * EMSA-PSS-VERIFY.
      *
-     * @param string          $m
-     * @param string          $em
-     * @param int             $emBits
-     * @param \Jose\Util\Hash $hash
+     * @param string                    $m
+     * @param string                    $em
+     * @param int                       $emBits
+     * @param \Jose\Util\Hash           $hash
      *
      * @return string
      */
-    private function _emsa_pss_verify($m, $em, $emBits, Hash $hash)
+    private static function _emsa_pss_verify($m, $em, $emBits, Hash $hash)
     {
         // if $m is larger than two million terrabytes and you're using sha1, PKCS#1 suggests a "Label too long" error
         // be output.
@@ -512,7 +282,7 @@ final class RSA
         if ((~$maskedDB[0] & $temp) != $temp) {
             return false;
         }
-        $dbMask = $this->_mgf1($h, $emLen - $hash->getLength() - 1, $hash/*MGF*/);
+        $dbMask = self::_mgf1($h, $emLen - $hash->getLength() - 1, $hash/*MGF*/);
         $db = $maskedDB ^ $dbMask;
         $db[0] = ~chr(0xFF << ($emBits & 7)) & $db[0];
         $temp = $emLen - $hash->getLength() - $sLen - 2;
@@ -523,96 +293,29 @@ final class RSA
         $m2 = "\0\0\0\0\0\0\0\0".$mHash.$salt;
         $h2 = $hash->hash($m2);
 
-        return $this->_equals($h, $h2);
-    }
-
-    /**
-     * RSASSA-PSS-SIGN.
-     *
-     * @param string          $m
-     * @param \Jose\Util\Hash $hash
-     *
-     * @return string
-     */
-    private function _rsassa_pss_sign($m, Hash $hash)
-    {
-        // EMSA-PSS encoding
-
-        $em = $this->_emsa_pss_encode($m, 8 * $this->k - 1, $hash);
-
-        // RSA signature
-
-        $m = $this->convertOctetStringToInteger($em);
-        $s = $this->_rsasp1($m);
-        $s = $this->convertIntegerToOctetString($s, $this->k);
-
-        // Output the signature S
-
-        return $s;
-    }
-
-    /**
-     * RSASSA-PSS-VERIFY.
-     *
-     * @param string          $m
-     * @param string          $s
-     * @param \Jose\Util\Hash $hash
-     *
-     * @return string
-     */
-    private function _rsassa_pss_verify($m, $s, Hash $hash)
-    {
-        // Length checking
-
-        if (strlen($s) != $this->k) {
-            return false;
-        }
-
-        // RSA verification
-
-        $modBits = 8 * $this->k;
-
-        $s2 = $this->convertOctetStringToInteger($s);
-        $m2 = $this->_rsavp1($s2);
-        if ($m2 === false) {
-            return false;
-        }
-        $em = $this->convertIntegerToOctetString($m2, $modBits >> 3);
-        if ($em === false) {
-            return false;
-        }
-
-        // EMSA-PSS verification
-
-        return $this->_emsa_pss_verify($m, $em, $modBits - 1, $hash);
+        return hash_equals($h, $h2);
     }
 
     /**
      * Encryption.
      *
-     * Both self::ENCRYPTION_OAEP and self::ENCRYPTION_PKCS1 both place limits on how long $plaintext can be.
-     * If $plaintext exceeds those limits it will be broken up so that it does and the resultant ciphertext's will
-     * be concatenated together.
-     *
-     * @see self::decrypt()
-     *
-     * @param string $plaintext
-     * @param string $hash_algorithm
+     * @param \Jose\KeyConverter\RSAKey $key
+     * @param string                    $plaintext
+     * @param string                    $hash_algorithm
      *
      * @return string
      */
-    public function encrypt($plaintext, $hash_algorithm)
+    public static function encrypt(RSAKey $key, $plaintext, $hash_algorithm)
     {
         $hash = Hash::$hash_algorithm();
-        $length = $this->k - 2 * $hash->getLength() - 2;
-        if ($length <= 0) {
-            return false;
-        }
+        $length = $key->getModulusLength() - 2 * $hash->getLength() - 2;
+
+        Assertion::greaterThan($length, 0);
 
         $plaintext = str_split($plaintext, $length);
         $ciphertext = '';
         foreach ($plaintext as $m) {
-            $ciphertext .= $this->_rsaes_oaep_encrypt($m, $hash);
+            $ciphertext .= self::_rsaes_oaep_encrypt($key, $m, $hash);
         }
 
         return $ciphertext;
@@ -621,26 +324,25 @@ final class RSA
     /**
      * Decryption.
      *
-     * @param string $ciphertext
-     * @param string $hash_algorithm
+     * @param \Jose\KeyConverter\RSAKey $key
+     * @param string                    $ciphertext
+     * @param string                    $hash_algorithm
      *
      * @return string
      */
-    public function decrypt($ciphertext, $hash_algorithm)
+    public static function decrypt(RSAKey $key, $ciphertext, $hash_algorithm)
     {
-        if ($this->k <= 0) {
-            return false;
-        }
+        Assertion::greaterThan($key->getModulusLength(), 0);
 
         $hash = Hash::$hash_algorithm();
 
-        $ciphertext = str_split($ciphertext, $this->k);
-        $ciphertext[count($ciphertext) - 1] = str_pad($ciphertext[count($ciphertext) - 1], $this->k, chr(0), STR_PAD_LEFT);
+        $ciphertext = str_split($ciphertext, $key->getModulusLength());
+        $ciphertext[count($ciphertext) - 1] = str_pad($ciphertext[count($ciphertext) - 1], $key->getModulusLength(), chr(0), STR_PAD_LEFT);
 
         $plaintext = '';
 
         foreach ($ciphertext as $c) {
-            $temp = $this->_rsaes_oaep_decrypt($c, $hash);
+            $temp = self::_rsaes_oaep_decrypt($key, $c, $hash);
             if ($temp === false) {
                 return false;
             }
@@ -653,35 +355,59 @@ final class RSA
     /**
      * Create a signature.
      *
-     * @param string $message
-     * @param string $hash
+     * @param \Jose\KeyConverter\RSAKey $key
+     * @param string                    $message
+     * @param string                    $hash
      *
      * @return string
      */
-    public function sign($message, $hash)
+    public static function sign(RSAKey $key, $message, $hash)
     {
-        if (empty($this->modulus) || empty($this->exponent)) {
-            return false;
-        }
+        Assertion::string($message);
+        Assertion::string($hash);
+        Assertion::inArray($hash, ['sha256', 'sha384', 'sha512']);
 
-        return $this->_rsassa_pss_sign($message, Hash::$hash());
+        $em = self::_emsa_pss_encode($message, 8 * $key->getModulusLength() - 1, Hash::$hash());
+
+        Assertion::string($em);
+
+        $message = self::convertOctetStringToInteger($em);
+        $signature = self::_rsasp1($key, $message);
+
+        Assertion::isInstanceOf($signature, BigInteger::class);
+
+        $signature = self::convertIntegerToOctetString($signature, $key->getModulusLength());
+
+        return $signature;
     }
 
     /**
      * Verifies a signature.
      *
-     * @param string $message
-     * @param string $signature
-     * @param string $hash
+     * @param \Jose\KeyConverter\RSAKey $key
+     * @param string                    $message
+     * @param string                    $signature
+     * @param string                    $hash
      *
      * @return bool
      */
-    public function verify($message, $signature, $hash)
+    public static function verify(RSAKey $key, $message, $signature, $hash)
     {
-        if (empty($this->modulus) || empty($this->exponent)) {
-            return false;
-        }
+        Assertion::string($message);
+        Assertion::string($signature);
+        Assertion::string($hash);
+        Assertion::inArray($hash, ['sha256', 'sha384', 'sha512']);
+        Assertion::eq(strlen($signature), $key->getModulusLength());
 
-        return $this->_rsassa_pss_verify($message, $signature, Hash::$hash());
+        $modBits = 8 * $key->getModulusLength();
+
+        $s2 = self::convertOctetStringToInteger($signature);
+        $m2 = self::_rsavp1($key, $s2);
+
+        Assertion::isInstanceOf($m2, BigInteger::class);
+
+        $em = self::convertIntegerToOctetString($m2, $modBits >> 3);
+
+        return self::_emsa_pss_verify($message, $em, $modBits - 1, Hash::$hash());
     }
 }

@@ -14,7 +14,6 @@ namespace Jose\Algorithm\Signature;
 use Assert\Assertion;
 use Jose\Algorithm\SignatureAlgorithmInterface;
 use Jose\KeyConverter\RSAKey;
-use Jose\Object\JWK;
 use Jose\Object\JWKInterface;
 use Jose\Util\RSA as JoseRSA;
 
@@ -50,17 +49,14 @@ abstract class RSA implements SignatureAlgorithmInterface
     {
         $this->checkKey($key);
 
+        $pub = RSAKey::toPublic(new RSAKey($key));
 
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
-            $pub = new JWK(RSAKey::toPublic(new RSAKey($key))->toArray());
-            $rsa = $this->getRsaObject();
-            $rsa->loadKey($pub);
 
-            return $rsa->verify($input, $signature, $this->getAlgorithm());
+            return JoseRSA::verify($pub, $input, $signature, $this->getAlgorithm());
         } else {
-            $pem = RSAKey::toPublic(new RSAKey($key))->toPEM();
 
-            return 1 === openssl_verify($input, $signature, $pem, $this->getAlgorithm());
+            return 1 === openssl_verify($input, $signature, $pub->toPEM(), $this->getAlgorithm());
         }
     }
 
@@ -72,17 +68,15 @@ abstract class RSA implements SignatureAlgorithmInterface
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The key is not a private key');
 
+        $priv = new RSAKey($key);
 
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
-            $rsa = $this->getRsaObject();
-            $rsa->loadKey($key);
-            $result = $rsa->sign($input, $this->getAlgorithm());
+            $result = JoseRSA::sign($priv, $input, $this->getAlgorithm());
             Assertion::string($result, 'An error occurred during the creation of the signature');
 
             return $result;
         } else {
-            $pem = (new RSAKey($key))->toPEM();
-            $result = openssl_sign($input, $signature, $pem, $this->getAlgorithm());
+            $result = openssl_sign($input, $signature, $priv->toPEM(), $this->getAlgorithm());
             Assertion::true($result, 'Unable to sign');
 
             return $signature;
@@ -95,15 +89,5 @@ abstract class RSA implements SignatureAlgorithmInterface
     private function checkKey(JWKInterface $key)
     {
         Assertion::eq($key->get('kty'), 'RSA', 'Wrong key type.');
-    }
-
-    /**
-     * @return \Jose\Util\RSA
-     */
-    private function getRsaObject()
-    {
-        $rsa = new JoseRSA();
-
-        return $rsa;
     }
 }

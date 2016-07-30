@@ -17,9 +17,9 @@ use Jose\Object\JWEInterface;
 use Jose\Object\JWSInterface;
 
 /**
- * Class RSASignatureTest.
+ * Class RSAKeyWithoutAllPrimesTest.
  *
- * @group RSA
+ * @group RSA2
  * @group Unit
  */
 class RSAKeyWithoutAllPrimesTest extends \PHPUnit_Framework_TestCase
