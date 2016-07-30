@@ -45,7 +45,7 @@ abstract class RSA implements KeyEncryptionInterface
             $rsa = $this->getRsaObject();
             $rsa->loadKey($pub);
 
-            $encrypted = $rsa->encrypt($cek);
+            $encrypted = $rsa->encrypt($cek, $this->getHashAlgorithm());
             Assertion::string($encrypted, 'Unable to encrypt the data.');
 
             return $encrypted;
@@ -70,7 +70,7 @@ abstract class RSA implements KeyEncryptionInterface
             $rsa = $this->getRsaObject();
             $rsa->loadKey($key);
 
-            $decrypted = $rsa->decrypt($encrypted_key);
+            $decrypted = $rsa->decrypt($encrypted_key, $this->getHashAlgorithm());
             Assertion::string($decrypted, 'Unable to decrypt the data11.');
 
             return $decrypted;
@@ -97,8 +97,6 @@ abstract class RSA implements KeyEncryptionInterface
     private function getRsaObject()
     {
         $rsa = new JoseRSA();
-        $rsa->setHash($this->getHashAlgorithm());
-        $rsa->setMGFHash($this->getHashAlgorithm());
 
         return $rsa;
     }

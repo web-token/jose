@@ -73,20 +73,6 @@ final class RSA
     private $coefficients;
 
     /**
-     * Hash function.
-     *
-     * @var \Jose\Util\Hash
-     */
-    private $hash;
-
-    /**
-     * Hash function for the Mask Generation Function.
-     *
-     * @var \Jose\Util\Hash
-     */
-    private $mgfHash;
-
-    /**
      * Public Exponent.
      *
      * @var mixed
@@ -100,9 +86,6 @@ final class RSA
     {
         $this->zero = BigInteger::createFromDecimalString('0');
         $this->one = BigInteger::createFromDecimalString('1');
-
-        $this->hash = Hash::sha1();
-        $this->mgfHash = Hash::sha1();
     }
 
     /**
@@ -112,20 +95,20 @@ final class RSA
      */
     public function loadKey(JWKInterface $key)
     {
-        $this->modulus = BigInteger::createFromBinaryString(Base64Url::decode($key->get('n')));
+        $this->modulus = $this->getKeyComponent($key, 'n');
         $this->k = strlen($this->modulus->toBytes());
 
         if ($key->has('d')) {
-            $this->exponent = BigInteger::createFromBinaryString(Base64Url::decode($key->get('d')));
-            $this->publicExponent = BigInteger::createFromBinaryString(Base64Url::decode($key->get('e')));
+            $this->exponent = $this->getKeyComponent($key, 'd');
+            $this->publicExponent = $this->getKeyComponent($key, 'e');
         } else {
-            $this->exponent = BigInteger::createFromBinaryString(Base64Url::decode($key->get('e')));
+            $this->exponent = $this->getKeyComponent($key, 'e');
         }
 
         if ($key->has('p') && $key->has('q')) {
             $this->primes = [
-                BigInteger::createFromBinaryString(Base64Url::decode($key->get('p'))),
-                BigInteger::createFromBinaryString(Base64Url::decode($key->get('q'))),
+                $this->getKeyComponent($key, 'p'),
+                $this->getKeyComponent($key, 'q'),
             ];
         } else {
             $this->primes = [];
@@ -133,9 +116,9 @@ final class RSA
 
         if ($key->has('dp') && $key->has('dq') && $key->has('qi')) {
             $this->coefficients = [
-                BigInteger::createFromBinaryString(Base64Url::decode($key->get('dp'))),
-                BigInteger::createFromBinaryString(Base64Url::decode($key->get('dq'))),
-                BigInteger::createFromBinaryString(Base64Url::decode($key->get('qi'))),
+                $this->getKeyComponent($key, 'dp'),
+                $this->getKeyComponent($key, 'dq'),
+                $this->getKeyComponent($key, 'qi'),
             ];
         } else {
             $this->coefficients = [];
@@ -143,24 +126,16 @@ final class RSA
     }
 
     /**
-     * Determines which hashing function should be used.
+     * @param \Jose\Object\JWKInterface $jwk
+     * @param string                    $key
      *
-     * @param string $hash
+     * @return \Jose\Util\BigInteger
      */
-    public function setHash($hash)
+    public function getKeyComponent(JWKInterface $jwk, $key)
     {
-        $this->hash = Hash::$hash();
+        return BigInteger::createFromBinaryString(Base64Url::decode($jwk->get($key)));
     }
 
-    /**
-     * Determines which hashing function should be used for the mask generation function.
-     *
-     * @param string $hash
-     */
-    public function setMGFHash($hash)
-    {
-        $this->mgfHash = Hash::$hash();
-    }
 
     /**
      * Integer-to-Octet-String primitive.
@@ -353,20 +328,21 @@ final class RSA
     /**
      * MGF1.
      *
-     * @param string $mgfSeed
-     * @param int    $maskLen
+     * @param string          $mgfSeed
+     * @param int             $maskLen
+     * @param \Jose\Util\Hash $mgfHash
      *
      * @return string
      */
-    private function _mgf1($mgfSeed, $maskLen)
+    private function _mgf1($mgfSeed, $maskLen, Hash $mgfHash)
     {
         // if $maskLen would yield strings larger than 4GB, PKCS#1 suggests a "Mask too long" error be output.
 
         $t = '';
-        $count = ceil($maskLen / $this->mgfHash->getLength());
+        $count = ceil($maskLen / $mgfHash->getLength());
         for ($i = 0; $i < $count; $i++) {
             $c = pack('N', $i);
-            $t .= $this->mgfHash->hash($mgfSeed.$c);
+            $t .= $mgfHash->hash($mgfSeed.$c);
         }
 
         return substr($t, 0, $maskLen);
@@ -375,12 +351,12 @@ final class RSA
     /**
      * RSAES-OAEP-ENCRYPT.
      *
-     * @param string $m
-     * @param string $l
+     * @param string          $m
+     * @param \Jose\Util\Hash $hash
      *
      * @return string
      */
-    private function _rsaes_oaep_encrypt($m, $l = '')
+    private function _rsaes_oaep_encrypt($m, Hash $hash)
     {
         $mLen = strlen($m);
 
@@ -389,19 +365,19 @@ final class RSA
         // if $l is larger than two million terrabytes and you're using sha1, PKCS#1 suggests a "Label too long" error
         // be output.
 
-        if ($mLen > $this->k - 2 * $this->hash->getLength() - 2) {
+        if ($mLen > $this->k - 2 * $hash->getLength() - 2) {
             return false;
         }
 
         // EME-OAEP encoding
 
-        $lHash = $this->hash->hash($l);
-        $ps = str_repeat(chr(0), $this->k - $mLen - 2 * $this->hash->getLength() - 2);
+        $lHash = $hash->hash('');
+        $ps = str_repeat(chr(0), $this->k - $mLen - 2 * $hash->getLength() - 2);
         $db = $lHash.$ps.chr(1).$m;
-        $seed = random_bytes($this->hash->getLength());
-        $dbMask = $this->_mgf1($seed, $this->k - $this->hash->getLength() - 1);
+        $seed = random_bytes($hash->getLength());
+        $dbMask = $this->_mgf1($seed, $this->k - $hash->getLength() - 1, $hash/*MGF*/);
         $maskedDB = $db ^ $dbMask;
-        $seedMask = $this->_mgf1($maskedDB, $this->hash->getLength());
+        $seedMask = $this->_mgf1($maskedDB, $hash->getLength(), $hash/*MGF*/);
         $maskedSeed = $seed ^ $seedMask;
         $em = chr(0).$maskedSeed.$maskedDB;
 
@@ -420,18 +396,18 @@ final class RSA
      * RSAES-OAEP-DECRYPT.
      *
      * @param string $c
-     * @param string $l
+     * @param \Jose\Util\Hash $hash
      *
      * @return string
      */
-    private function _rsaes_oaep_decrypt($c, $l = '')
+    private function _rsaes_oaep_decrypt($c, Hash $hash)
     {
         // Length checking
 
         // if $l is larger than two million terrabytes and you're using sha1, PKCS#1 suggests a "Label too long" error
         // be output.
 
-        if (strlen($c) != $this->k || $this->k < 2 * $this->hash->getLength() + 2) {
+        if (strlen($c) != $this->k || $this->k < 2 * $hash->getLength() + 2) {
             return false;
         }
 
@@ -446,15 +422,15 @@ final class RSA
 
         // EME-OAEP decoding
 
-        $lHash = $this->hash->hash($l);
-        $maskedSeed = substr($em, 1, $this->hash->getLength());
-        $maskedDB = substr($em, $this->hash->getLength() + 1);
-        $seedMask = $this->_mgf1($maskedDB, $this->hash->getLength());
+        $lHash = $hash->hash('');
+        $maskedSeed = substr($em, 1, $hash->getLength());
+        $maskedDB = substr($em, $hash->getLength() + 1);
+        $seedMask = $this->_mgf1($maskedDB, $hash->getLength(), $hash/*MGF*/);
         $seed = $maskedSeed ^ $seedMask;
-        $dbMask = $this->_mgf1($seed, $this->k - $this->hash->getLength() - 1);
+        $dbMask = $this->_mgf1($seed, $this->k - $hash->getLength() - 1, $hash/*MGF*/);
         $db = $maskedDB ^ $dbMask;
-        $lHash2 = substr($db, 0, $this->hash->getLength());
-        $m = substr($db, $this->hash->getLength());
+        $lHash2 = substr($db, 0, $hash->getLength());
+        $m = substr($db, $hash->getLength());
         if ($lHash != $lHash2) {
             return false;
         }
@@ -471,30 +447,31 @@ final class RSA
     /**
      * EMSA-PSS-ENCODE.
      *
-     * @param string $m
-     * @param int    $emBits
+     * @param string          $m
+     * @param int             $emBits
+     * @param \Jose\Util\Hash $hash
      *
      * @return bool
      */
-    private function _emsa_pss_encode($m, $emBits)
+    private function _emsa_pss_encode($m, $emBits, Hash $hash)
     {
         // if $m is larger than two million terrabytes and you're using sha1, PKCS#1 suggests a "Label too long" error
         // be output.
 
         $emLen = ($emBits + 1) >> 3; // ie. ceil($emBits / 8)
-        $sLen = $this->hash->getLength();
+        $sLen = $hash->getLength();
 
-        $mHash = $this->hash->hash($m);
-        if ($emLen < $this->hash->getLength() + $sLen + 2) {
+        $mHash = $hash->hash($m);
+        if ($emLen < $hash->getLength() + $sLen + 2) {
             return false;
         }
 
         $salt = random_bytes($sLen);
         $m2 = "\0\0\0\0\0\0\0\0".$mHash.$salt;
-        $h = $this->hash->hash($m2);
-        $ps = str_repeat(chr(0), $emLen - $sLen - $this->hash->getLength() - 2);
+        $h = $hash->hash($m2);
+        $ps = str_repeat(chr(0), $emLen - $sLen - $hash->getLength() - 2);
         $db = $ps.chr(1).$salt;
-        $dbMask = $this->_mgf1($h, $emLen - $this->hash->getLength() - 1);
+        $dbMask = $this->_mgf1($h, $emLen - $hash->getLength() - 1, $hash/*MGF*/);
         $maskedDB = $db ^ $dbMask;
         $maskedDB[0] = ~chr(0xFF << ($emBits & 7)) & $maskedDB[0];
         $em = $maskedDB.$h.chr(0xBC);
@@ -505,22 +482,23 @@ final class RSA
     /**
      * EMSA-PSS-VERIFY.
      *
-     * @param string $m
-     * @param string $em
-     * @param int    $emBits
+     * @param string          $m
+     * @param string          $em
+     * @param int             $emBits
+     * @param \Jose\Util\Hash $hash
      *
      * @return string
      */
-    private function _emsa_pss_verify($m, $em, $emBits)
+    private function _emsa_pss_verify($m, $em, $emBits, Hash $hash)
     {
         // if $m is larger than two million terrabytes and you're using sha1, PKCS#1 suggests a "Label too long" error
         // be output.
 
         $emLen = ($emBits + 1) >> 3; // ie. ceil($emBits / 8);
-        $sLen = $this->hash->getLength();
+        $sLen = $hash->getLength();
 
-        $mHash = $this->hash->hash($m);
-        if ($emLen < $this->hash->getLength() + $sLen + 2) {
+        $mHash = $hash->hash($m);
+        if ($emLen < $hash->getLength() + $sLen + 2) {
             return false;
         }
 
@@ -528,22 +506,22 @@ final class RSA
             return false;
         }
 
-        $maskedDB = substr($em, 0, -$this->hash->getLength() - 1);
-        $h = substr($em, -$this->hash->getLength() - 1, $this->hash->getLength());
+        $maskedDB = substr($em, 0, -$hash->getLength() - 1);
+        $h = substr($em, -$hash->getLength() - 1, $hash->getLength());
         $temp = chr(0xFF << ($emBits & 7));
         if ((~$maskedDB[0] & $temp) != $temp) {
             return false;
         }
-        $dbMask = $this->_mgf1($h, $emLen - $this->hash->getLength() - 1);
+        $dbMask = $this->_mgf1($h, $emLen - $hash->getLength() - 1, $hash/*MGF*/);
         $db = $maskedDB ^ $dbMask;
         $db[0] = ~chr(0xFF << ($emBits & 7)) & $db[0];
-        $temp = $emLen - $this->hash->getLength() - $sLen - 2;
+        $temp = $emLen - $hash->getLength() - $sLen - 2;
         if (substr($db, 0, $temp) != str_repeat(chr(0), $temp) || ord($db[$temp]) != 1) {
             return false;
         }
         $salt = substr($db, $temp + 1); // should be $sLen long
         $m2 = "\0\0\0\0\0\0\0\0".$mHash.$salt;
-        $h2 = $this->hash->hash($m2);
+        $h2 = $hash->hash($m2);
 
         return $this->_equals($h, $h2);
     }
@@ -551,15 +529,16 @@ final class RSA
     /**
      * RSASSA-PSS-SIGN.
      *
-     * @param string $m
+     * @param string          $m
+     * @param \Jose\Util\Hash $hash
      *
      * @return string
      */
-    private function _rsassa_pss_sign($m)
+    private function _rsassa_pss_sign($m, Hash $hash)
     {
         // EMSA-PSS encoding
 
-        $em = $this->_emsa_pss_encode($m, 8 * $this->k - 1);
+        $em = $this->_emsa_pss_encode($m, 8 * $this->k - 1, $hash);
 
         // RSA signature
 
@@ -575,12 +554,13 @@ final class RSA
     /**
      * RSASSA-PSS-VERIFY.
      *
-     * @param string $m
-     * @param string $s
+     * @param string          $m
+     * @param string          $s
+     * @param \Jose\Util\Hash $hash
      *
      * @return string
      */
-    private function _rsassa_pss_verify($m, $s)
+    private function _rsassa_pss_verify($m, $s, Hash $hash)
     {
         // Length checking
 
@@ -604,7 +584,7 @@ final class RSA
 
         // EMSA-PSS verification
 
-        return $this->_emsa_pss_verify($m, $em, $modBits - 1);
+        return $this->_emsa_pss_verify($m, $em, $modBits - 1, $hash);
     }
 
     /**
@@ -617,12 +597,14 @@ final class RSA
      * @see self::decrypt()
      *
      * @param string $plaintext
+     * @param string $hash_algorithm
      *
      * @return string
      */
-    public function encrypt($plaintext)
+    public function encrypt($plaintext, $hash_algorithm)
     {
-        $length = $this->k - 2 * $this->hash->getLength() - 2;
+        $hash = Hash::$hash_algorithm();
+        $length = $this->k - 2 * $hash->getLength() - 2;
         if ($length <= 0) {
             return false;
         }
@@ -630,7 +612,7 @@ final class RSA
         $plaintext = str_split($plaintext, $length);
         $ciphertext = '';
         foreach ($plaintext as $m) {
-            $ciphertext .= $this->_rsaes_oaep_encrypt($m);
+            $ciphertext .= $this->_rsaes_oaep_encrypt($m, $hash);
         }
 
         return $ciphertext;
@@ -640,14 +622,17 @@ final class RSA
      * Decryption.
      *
      * @param string $ciphertext
+     * @param string $hash_algorithm
      *
      * @return string
      */
-    public function decrypt($ciphertext)
+    public function decrypt($ciphertext, $hash_algorithm)
     {
         if ($this->k <= 0) {
             return false;
         }
+
+        $hash = Hash::$hash_algorithm();
 
         $ciphertext = str_split($ciphertext, $this->k);
         $ciphertext[count($ciphertext) - 1] = str_pad($ciphertext[count($ciphertext) - 1], $this->k, chr(0), STR_PAD_LEFT);
@@ -655,7 +640,7 @@ final class RSA
         $plaintext = '';
 
         foreach ($ciphertext as $c) {
-            $temp = $this->_rsaes_oaep_decrypt($c);
+            $temp = $this->_rsaes_oaep_decrypt($c, $hash);
             if ($temp === false) {
                 return false;
             }
@@ -669,17 +654,17 @@ final class RSA
      * Create a signature.
      *
      * @param string $message
+     * @param string $hash
      *
      * @return string
      */
-    public function sign($message)
+    public function sign($message, $hash)
     {
         if (empty($this->modulus) || empty($this->exponent)) {
             return false;
         }
 
-
-        return $this->_rsassa_pss_sign($message);
+        return $this->_rsassa_pss_sign($message, Hash::$hash());
     }
 
     /**
@@ -687,15 +672,16 @@ final class RSA
      *
      * @param string $message
      * @param string $signature
+     * @param string $hash
      *
      * @return bool
      */
-    public function verify($message, $signature)
+    public function verify($message, $signature, $hash)
     {
         if (empty($this->modulus) || empty($this->exponent)) {
             return false;
         }
 
-        return $this->_rsassa_pss_verify($message, $signature);
+        return $this->_rsassa_pss_verify($message, $signature, Hash::$hash());
     }
 }

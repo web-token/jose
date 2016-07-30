@@ -56,7 +56,7 @@ abstract class RSA implements SignatureAlgorithmInterface
             $rsa = $this->getRsaObject();
             $rsa->loadKey($pub);
 
-            return $rsa->verify($input, $signature);
+            return $rsa->verify($input, $signature, $this->getAlgorithm());
         } else {
             $pem = RSAKey::toPublic(new RSAKey($key))->toPEM();
 
@@ -76,7 +76,7 @@ abstract class RSA implements SignatureAlgorithmInterface
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
             $rsa = $this->getRsaObject();
             $rsa->loadKey($key);
-            $result = $rsa->sign($input);
+            $result = $rsa->sign($input, $this->getAlgorithm());
             Assertion::string($result, 'An error occurred during the creation of the signature');
 
             return $result;
@@ -103,8 +103,6 @@ abstract class RSA implements SignatureAlgorithmInterface
     private function getRsaObject()
     {
         $rsa = new JoseRSA();
-        $rsa->setHash($this->getAlgorithm());
-        $rsa->setMGFHash($this->getAlgorithm());
 
         return $rsa;
     }
