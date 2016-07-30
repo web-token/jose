@@ -105,6 +105,8 @@ class JWKSetTest extends TestCase
         $jwkset = JWKFactory::createFromValues($values);
         $this->assertInstanceOf(JWKSetInterface::class, $jwkset);
         $this->assertEquals(1, $jwkset->countKeys());
+        $this->assertTrue(isset($jwkset[0]));
+        $this->assertFalse(isset($jwkset[1]));
         $this->assertEquals($values['keys'][0], $jwkset[0]->getAll());
     }
 }
