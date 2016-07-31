@@ -40,7 +40,7 @@ final class BigInteger
     }
 
     /**
-     * @param \GMP $value
+     * @param resource $value
      *
      * @return \Jose\Util\BigInteger
      */
