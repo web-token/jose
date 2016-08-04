@@ -52,10 +52,8 @@ abstract class RSA implements SignatureAlgorithmInterface
         $pub = RSAKey::toPublic(new RSAKey($key));
 
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
-
             return JoseRSA::verify($pub, $input, $signature, $this->getAlgorithm());
         } else {
-
             return 1 === openssl_verify($input, $signature, $pub->toPEM(), $this->getAlgorithm());
         }
     }

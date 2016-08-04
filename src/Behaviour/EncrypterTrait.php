@@ -34,6 +34,7 @@ trait EncrypterTrait
      * @param string                    $algorithm
      */
     abstract protected function checkKeyAlgorithm(Object\JWKInterface $key, $algorithm);
+
     /**
      * @return \Jose\Algorithm\JWAManagerInterface
      */

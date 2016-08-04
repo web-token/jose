@@ -238,7 +238,7 @@ final class RSA
         $emLen = ($emBits + 1) >> 3;
         $sLen = $hash->getLength();
         $mHash = $hash->hash($m);
-        Assertion::greaterThan($emLen , $hash->getLength() + $sLen + 2);
+        Assertion::greaterThan($emLen, $hash->getLength() + $sLen + 2);
         $salt = random_bytes($sLen);
         $m2 = "\0\0\0\0\0\0\0\0".$mHash.$salt;
         $h = $hash->hash($m2);
@@ -255,10 +255,10 @@ final class RSA
     /**
      * EMSA-PSS-VERIFY.
      *
-     * @param string                    $m
-     * @param string                    $em
-     * @param int                       $emBits
-     * @param \Jose\Util\Hash           $hash
+     * @param string          $m
+     * @param string          $em
+     * @param int             $emBits
+     * @param \Jose\Util\Hash $hash
      *
      * @return string
      */
@@ -298,7 +298,7 @@ final class RSA
     public static function encrypt(RSAKey $key, $plaintext, $hash_algorithm)
     {
         /**
-         * @var $hash Hash
+         * @var Hash
          */
         $hash = Hash::$hash_algorithm();
         $length = $key->getModulusLength() - 2 * $hash->getLength() - 2;
