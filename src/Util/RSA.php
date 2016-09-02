@@ -297,7 +297,7 @@ final class RSA
      */
     public static function encrypt(RSAKey $key, $plaintext, $hash_algorithm)
     {
-        /**
+        /*
          * @var Hash
          */
         $hash = Hash::$hash_algorithm();
