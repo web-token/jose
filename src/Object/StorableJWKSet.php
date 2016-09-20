@@ -18,27 +18,27 @@ use Jose\Factory\JWKFactory;
 /**
  * Class StorableJWKSet.
  */
-final class StorableJWKSet implements StorableJWKSetInterface
+class StorableJWKSet implements StorableJWKSetInterface
 {
     /**
      * @var \Jose\Object\JWKSetInterface
      */
-    private $jwkset;
+    protected $jwkset;
 
     /**
      * @var string
      */
-    private $filename;
+    protected $filename;
 
     /**
      * @var array
      */
-    private $parameters;
+    protected $parameters;
 
     /**
      * @var array
      */
-    private $nb_keys;
+    protected $nb_keys;
 
     /**
      * StorableJWKSet constructor.
@@ -61,6 +61,143 @@ final class StorableJWKSet implements StorableJWKSetInterface
     /**
      * {@inheritdoc}
      */
+    public function current()
+    {
+        return $this->getJWKSet()->current();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function next()
+    {
+        $this->getJWKSet()->next();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function key()
+    {
+        return $this->getJWKSet()->key();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function valid()
+    {
+        return $this->getJWKSet()->valid();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rewind()
+    {
+        $this->getJWKSet()->rewind();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetExists($offset)
+    {
+        return $this->getJWKSet()->offsetExists($offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetGet($offset)
+    {
+        return $this->getJWKSet()->offsetGet($offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetSet($offset, $value)
+    {
+        return $this->getJWKSet()->offsetSet($offset, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetUnset($offset)
+    {
+        return $this->getJWKSet()->offsetUnset($offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getKey($index)
+    {
+        return $this->getJWKSet()->getKey($index);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasKey($index)
+    {
+        return $this->getJWKSet()->hasKey($index);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getKeys()
+    {
+        return $this->getJWKSet()->getKeys();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addKey(JWKInterface $key)
+    {
+        return $this->getJWKSet()->addKey($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeKey($index)
+    {
+        return $this->getJWKSet()->removeKey($index);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countKeys()
+    {
+        return $this->getJWKSet()->countKeys();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function selectKey($type, $algorithm = null, array $restrictions = [])
+    {
+        return $this->getJWKSet()->selectKey($type, $algorithm, $restrictions);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return $this->getJWKSet()->count();
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
     public function getFilename()
     {
         return $this->filename;
@@ -77,16 +214,17 @@ final class StorableJWKSet implements StorableJWKSetInterface
     /**
      * @return \Jose\Object\JWKSetInterface
      */
-    private function getJWKSet()
+    protected function getJWKSet()
     {
-        if (null === $this->jwkset) {
-            $this->loadJWKSet();
-        }
+        $this->loadJWKSet();
 
         return $this->jwkset;
     }
 
-    private function loadJWKSet()
+    /**
+     *
+     */
+    protected function loadJWKSet()
     {
         if (file_exists($this->filename)) {
             $content = file_get_contents($this->filename);
@@ -103,14 +241,36 @@ final class StorableJWKSet implements StorableJWKSetInterface
         }
     }
 
-    private function createJWKSet()
+    /**
+     *
+     */
+    protected function createJWKSet()
     {
-        /*$data = JWKFactory::createKey($this->parameters)->getAll();
-        $this->jwkset = JWKFactory::createFromValues($data);
+        $this->jwkset = new JWKSet();
+        for ($i = 0; $i < $this->nb_keys; $i++) {
+            $key = $this->createJWK();
+            $this->jwkset->addKey($key);
+        }
 
-        file_put_contents(
-            $this->filename,
-            json_encode($this->jwkset)
-        );*/
+        $this->save();
+    }
+
+    /**
+     * @return \Jose\Object\JWKInterface
+     */
+    protected function createJWK()
+    {
+        $data = JWKFactory::createKey($this->parameters)->getAll();
+        $data['kid'] = Base64Url::encode(random_bytes(64));
+
+        return JWKFactory::createFromValues($data);
+    }
+
+    /**
+     *
+     */
+    protected function save()
+    {
+        file_put_contents($this->getFilename(), json_encode($this->jwkset));
     }
 }

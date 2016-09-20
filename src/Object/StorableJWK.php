@@ -18,22 +18,22 @@ use Jose\Factory\JWKFactory;
 /**
  * Class StorableJWK.
  */
-final class StorableJWK implements StorableJWKInterface
+class StorableJWK implements StorableJWKInterface
 {
     /**
      * @var \Jose\Object\JWKInterface
      */
-    private $jwk;
+    protected $jwk;
 
     /**
      * @var string
      */
-    private $filename;
+    protected $filename;
 
     /**
      * @var array
      */
-    private $parameters;
+    protected $parameters;
 
     /**
      * RotatableJWK constructor.
@@ -108,16 +108,14 @@ final class StorableJWK implements StorableJWKInterface
     /**
      * @return \Jose\Object\JWKInterface
      */
-    private function getJWK()
+    protected function getJWK()
     {
-        if (null === $this->jwk) {
-            $this->loadJWK();
-        }
+        $this->loadJWK();
 
         return $this->jwk;
     }
 
-    private function loadJWK()
+    protected function loadJWK()
     {
         if (file_exists($this->filename)) {
             $content = file_get_contents($this->filename);
@@ -134,15 +132,23 @@ final class StorableJWK implements StorableJWKInterface
         }
     }
 
-    private function createJWK()
+    /**
+     *
+     */
+    protected function createJWK()
     {
         $data = JWKFactory::createKey($this->parameters)->getAll();
         $data['kid'] = Base64Url::encode(random_bytes(64));
         $this->jwk = JWKFactory::createFromValues($data);
 
-        file_put_contents(
-            $this->filename,
-            json_encode($this->jwk)
-        );
+        $this->save();
+    }
+
+    /**
+     *
+     */
+    protected function save()
+    {
+        file_put_contents($this->getFilename(), json_encode($this->jwk));
     }
 }

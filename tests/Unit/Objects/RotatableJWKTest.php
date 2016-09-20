@@ -9,25 +9,26 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use Jose\Object\StorableJWK;
+use Jose\Object\RotatableJWK;
 
 /**
- * Class StorableJWKTest.
+ * Class RotatableJWKTest.
  *
  * @group Unit
- * @group StorableJWK
+ * @group RotatableJWK
  */
-class StorableJWKTest extends \PHPUnit_Framework_TestCase
+class RotatableJWKTest extends \PHPUnit_Framework_TestCase
 {
     public function testKey()
     {
         @unlink(sys_get_temp_dir().'/JWK.key');
-        $jwk = new StorableJWK(
+        $jwk = new RotatableJWK(
             sys_get_temp_dir().'/JWK.key',
             [
                 'kty'   => 'EC',
                 'crv'   => 'P-256',
-            ]
+            ],
+            10
         );
 
         $this->assertEquals(sys_get_temp_dir().'/JWK.key', $jwk->getFilename());
@@ -41,24 +42,12 @@ class StorableJWKTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_string(json_encode($jwk)));
         $this->assertInstanceOf(\Jose\Object\JWKInterface::class, $jwk->toPublic());
 
-        $jwk = new StorableJWK(
-            sys_get_temp_dir().'/JWK.key',
-            [
-                'kty'   => 'EC',
-                'crv'   => 'P-256',
-            ]
-        );
+        sleep(5);
+
         $this->assertEquals($all, $jwk->getAll());
 
-        // We remove the file to force to creation of a new key
-        @unlink(sys_get_temp_dir().'/JWK.key');
-        $jwk = new StorableJWK(
-            sys_get_temp_dir().'/JWK.key',
-            [
-                'kty'   => 'EC',
-                'crv'   => 'P-256',
-            ]
-        );
+        sleep(6);
+
         $this->assertNotEquals($all, $jwk->getAll());
         $all = $jwk->getAll();
         $this->assertEquals($all, $jwk->getAll());
