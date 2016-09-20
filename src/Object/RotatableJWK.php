@@ -10,6 +10,7 @@
  */
 
 namespace Jose\Object;
+
 use Assert\Assertion;
 
 /**
@@ -21,7 +22,6 @@ final class RotatableJWK extends StorableJWK implements RotatableJWKInterface
      * @var int
      */
     protected $ttl;
-
 
     public function __construct($filename, array $parameters, $ttl)
     {
@@ -38,7 +38,7 @@ final class RotatableJWK extends StorableJWK implements RotatableJWKInterface
     {
         if (file_exists($this->getFilename())) {
             $mtime = filemtime($this->getFilename());
-            if ($mtime+$this->ttl <= time()) {
+            if ($mtime + $this->ttl <= time()) {
                 unlink($this->getFilename());
             }
         }

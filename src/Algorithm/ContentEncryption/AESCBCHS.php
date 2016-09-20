@@ -117,6 +117,6 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
      */
     private function getMode($k)
     {
-        return 'aes-'.(8 *  mb_strlen($k, '8bit')).'-cbc';
+        return 'aes-'.(8 * mb_strlen($k, '8bit')).'-cbc';
     }
 }

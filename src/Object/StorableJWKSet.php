@@ -194,7 +194,6 @@ class StorableJWKSet implements StorableJWKSetInterface
         return $this->getJWKSet()->count();
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -221,9 +220,7 @@ class StorableJWKSet implements StorableJWKSetInterface
         return $this->jwkset;
     }
 
-    /**
-     *
-     */
+
     protected function loadJWKSet()
     {
         if (file_exists($this->filename)) {
@@ -241,9 +238,7 @@ class StorableJWKSet implements StorableJWKSetInterface
         }
     }
 
-    /**
-     *
-     */
+
     protected function createJWKSet()
     {
         $this->jwkset = new JWKSet();
@@ -266,9 +261,7 @@ class StorableJWKSet implements StorableJWKSetInterface
         return JWKFactory::createFromValues($data);
     }
 
-    /**
-     *
-     */
+
     protected function save()
     {
         file_put_contents($this->getFilename(), json_encode($this->jwkset));
