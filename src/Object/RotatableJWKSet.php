@@ -10,6 +10,7 @@
  */
 
 namespace Jose\Object;
+
 use Assert\Assertion;
 
 /**
@@ -45,9 +46,9 @@ final class RotatableJWKSet extends StorableJWKSet implements RotatableJWKSetInt
     {
         if (file_exists($this->getFilename())) {
             $mtime = filemtime($this->getFilename());
-            if ($mtime+$this->ttl <= time()) {
+            if ($mtime + $this->ttl <= time()) {
                 $keys = $this->jwkset->getKeys();
-                unset($keys[count($keys)-1]);
+                unset($keys[count($keys) - 1]);
                 $this->jwkset = new JWKSet();
                 $this->jwkset->addKey($this->createJWK());
                 foreach ($keys as $key) {
