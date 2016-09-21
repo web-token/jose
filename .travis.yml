@@ -1,6 +1,6 @@
 language: php
 
-sudo: false
+sudo: true
 
 matrix:
     fast_finish: true
@@ -25,6 +25,30 @@ before_script:
     - if [[ $deps = low ]]; then composer update --no-interaction --prefer-lowest ; fi
     - if [[ !$deps ]]; then composer install --no-interaction ; fi
     - mkdir -p build/logs
+    - git clone --recursive https://github.com/bukka/php-crypto.git
+    - cd php-crypto
+    - phpize
+    - ./configure
+    - make
+    - sudo make install
+    - echo "extension = crypto.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+    - cd ..
+    - git clone git://github.com/lt/php-curve25519-ext.git
+    - cd php-curve25519-ext
+    - phpize
+    - ./configure
+    - make
+    - sudo make install
+    - cd ..
+    - echo "extension = curve25519.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+    - git clone git://github.com/encedo/php-ed25519-ext.git
+    - cd php-ed25519-ext
+    - phpize
+    - ./configure
+    - make
+    - sudo make install
+    - cd ..
+    - echo "extension = ed25519.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 script:
     - composer test-with-coverage
