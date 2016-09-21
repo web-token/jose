@@ -47,5 +47,15 @@ class RotatableJWKSetTest extends \PHPUnit_Framework_TestCase
         foreach ($jwkset as $key) {
             $this->assertInstanceOf(JWKInterface::class, $key);
         }
+
+        $actual_content = json_encode($jwkset);
+
+        sleep(5);
+
+        $this->assertEquals($actual_content, json_encode($jwkset));
+
+        sleep(6);
+
+        $this->assertNotEquals($actual_content, json_encode($jwkset));
     }
 }

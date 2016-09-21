@@ -52,7 +52,7 @@ class StorableJWK implements StorableJWKInterface
     /**
      * @return string
      */
-    protected function getFilename()
+    public function getFilename()
     {
         return $this->filename;
     }
