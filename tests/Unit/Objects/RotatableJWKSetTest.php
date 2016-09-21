@@ -9,6 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use Jose\Factory\JWKFactory;
 use Jose\Object\JWKInterface;
 use Jose\Object\RotatableJWKSet;
 
@@ -40,6 +41,7 @@ class RotatableJWKSetTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(JWKInterface::class, $jwkset[1]);
         $this->assertInstanceOf(JWKInterface::class, $jwkset[2]);
         $this->assertFalse(isset($jwkset[3]));
+        $this->assertTrue($jwkset->hasKey(0));
         $this->assertEquals($jwkset->getKey(0), $jwkset[0]);
         foreach ($jwkset->getKeys() as $key) {
             $this->assertInstanceOf(JWKInterface::class, $key);
@@ -57,5 +59,10 @@ class RotatableJWKSetTest extends \PHPUnit_Framework_TestCase
         sleep(6);
 
         $this->assertNotEquals($actual_content, json_encode($jwkset));
+
+        $jwkset[] = JWKFactory::createKey(['kty'=>'EC', 'crv'=>'P-521']);
+        unset($jwkset[count($jwkset)-1]);
+        $jwkset->addKey(JWKFactory::createKey(['kty'=>'EC', 'crv'=>'P-521']));
+        $jwkset->removeKey(count($jwkset)-1);
     }
 }

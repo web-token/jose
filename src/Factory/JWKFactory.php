@@ -318,17 +318,19 @@ final class JWKFactory implements JWKFactoryInterface
      * @param string                                 $url
      * @param bool                                   $allow_unsecured_connection
      * @param \Psr\Cache\CacheItemPoolInterface|null $cache
+     * @param int                                    $ttl
      *
      * @return array
      */
-    private static function getContent($url, $allow_unsecured_connection, CacheItemPoolInterface $cache = null)
+    private static function getContent($url, $allow_unsecured_connection, CacheItemPoolInterface $cache = null, $ttl = 300)
     {
-        $cache_key = sprintf('%s-%s', 'JWKFactory-Content', hash('sha512', $url));
+        $cache_key = sprintf('JWKFactory-Content-%s', hash('sha512', $url));
         if (null !== $cache) {
             $item = $cache->getItem($cache_key);
             if (!$item->isHit()) {
                 $content = self::downloadContent($url, $allow_unsecured_connection);
                 $item->set($content);
+                $item->expiresAfter($ttl);
                 $cache->save($item);
 
                 return $content;
