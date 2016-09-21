@@ -31,7 +31,6 @@ class RotatableJWKTest extends \PHPUnit_Framework_TestCase
             10
         );
 
-        $this->assertEquals(sys_get_temp_dir().'/JWK.key', $jwk->getFilename());
         $all = $jwk->getAll();
         $this->assertEquals($all, $jwk->getAll());
         $this->assertTrue($jwk->has('kty'));

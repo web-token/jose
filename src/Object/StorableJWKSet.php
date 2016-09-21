@@ -31,6 +31,11 @@ class StorableJWKSet implements StorableJWKSetInterface
     protected $filename;
 
     /**
+     * @var int
+     */
+    protected $last_modification_time = null;
+
+    /**
      * @var array
      */
     protected $parameters;
@@ -196,9 +201,9 @@ class StorableJWKSet implements StorableJWKSetInterface
 
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
-    public function getFilename()
+    protected function getFilename()
     {
         return $this->filename;
     }
@@ -227,18 +232,48 @@ class StorableJWKSet implements StorableJWKSetInterface
     protected function loadJWKSet()
     {
         if (file_exists($this->filename)) {
-            $content = file_get_contents($this->filename);
-            if (false === $content) {
+            if (false === $this->hasJWKSetBeenUpdated()) {
+                return;
+            }
+            $content = $this->getFileContent();
+            if (null === $content) {
                 $this->createJWKSet();
             }
-            $content = json_decode($content, true);
-            if (!is_array($content)) {
-                $this->createJWKSet();
-            }
+            $this->last_modification_time = filemtime($this->getFilename());
             $this->jwkset = new JWKSet($content);
         } else {
             $this->createJWKSet();
         }
+    }
+
+    /**
+     * @return null|string
+     */
+    protected function getFileContent()
+    {
+        $content = file_get_contents($this->filename);
+        if (false === $content) {
+            return null;
+        }
+        $content = json_decode($content, true);
+        if (!is_array($content)) {
+            return null;
+        }
+
+        return $content;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasJWKSetBeenUpdated()
+    {
+        if (null !== $this->last_modification_time) {
+            $mtime = filemtime($this->getFilename());
+            return $mtime !== $this->last_modification_time;
+        }
+
+        return true;
     }
 
     /**

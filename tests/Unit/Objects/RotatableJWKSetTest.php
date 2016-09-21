@@ -9,6 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use Jose\Object\JWKInterface;
 use Jose\Object\RotatableJWKSet;
 
 /**
@@ -32,8 +33,19 @@ class RotatableJWKSetTest extends \PHPUnit_Framework_TestCase
             10
         );
 
-        $this->assertEquals(sys_get_temp_dir().'/JWKSet.key', $jwkset->getFilename());
+        $this->assertEquals(3, $jwkset->count());
+        $this->assertEquals(3, $jwkset->countKeys());
 
-        //Other tests to be written
+        $this->assertInstanceOf(JWKInterface::class, $jwkset[0]);
+        $this->assertInstanceOf(JWKInterface::class, $jwkset[1]);
+        $this->assertInstanceOf(JWKInterface::class, $jwkset[2]);
+        $this->assertFalse(isset($jwkset[3]));
+        $this->assertEquals($jwkset->getKey(0), $jwkset[0]);
+        foreach ($jwkset->getKeys() as $key) {
+            $this->assertInstanceOf(JWKInterface::class, $key);
+        }
+        foreach ($jwkset as $key) {
+            $this->assertInstanceOf(JWKInterface::class, $key);
+        }
     }
 }

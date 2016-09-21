@@ -50,9 +50,9 @@ class StorableJWK implements StorableJWKInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
-    public function getFilename()
+    protected function getFilename()
     {
         return $this->filename;
     }
