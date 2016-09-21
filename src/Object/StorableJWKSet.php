@@ -228,18 +228,14 @@ class StorableJWKSet implements StorableJWKSetInterface
 
     protected function loadJWKSet()
     {
-        if (file_exists($this->filename)) {
-            if (false === $this->hasJWKSetBeenUpdated()) {
-                return;
-            }
-            $content = $this->getFileContent();
-            if (null === $content) {
-                $this->createJWKSet();
-            }
-            $this->last_modification_time = filemtime($this->getFilename());
-            $this->jwkset = new JWKSet($content);
-        } else {
+        if (false === $this->hasJWKSetBeenUpdated()) {
+            return;
+        }
+        $content = $this->getFileContent();
+        if (null === $content) {
             $this->createJWKSet();
+        } else {
+            $this->jwkset = new JWKSet($content);
         }
     }
 
@@ -248,7 +244,10 @@ class StorableJWKSet implements StorableJWKSetInterface
      */
     protected function getFileContent()
     {
-        $content = file_get_contents($this->filename);
+        if (!file_exists($this->getFilename())) {
+            return null;
+        }
+        $content = file_get_contents($this->getFilename());
         if (false === $content) {
             return null;
         }
@@ -266,8 +265,7 @@ class StorableJWKSet implements StorableJWKSetInterface
     protected function hasJWKSetBeenUpdated()
     {
         if (null !== $this->last_modification_time) {
-            $mtime = filemtime($this->getFilename());
-            return $mtime !== $this->last_modification_time;
+            return $this->last_modification_time !== $this->getLastModificationTime();
         }
 
         return true;
@@ -298,9 +296,21 @@ class StorableJWKSet implements StorableJWKSetInterface
         return JWKFactory::createFromValues($data);
     }
 
+    /**
+     * @return int|null
+     */
+    protected function getLastModificationTime()
+    {
+        if (file_exists($this->getFilename())) {
+            return filemtime($this->getFilename());
+        }
+
+        return null;
+    }
 
     protected function save()
     {
         file_put_contents($this->getFilename(), json_encode($this->jwkset));
+        $this->last_modification_time = filemtime($this->getFilename());
     }
 }

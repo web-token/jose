@@ -44,8 +44,8 @@ final class RotatableJWKSet extends StorableJWKSet implements RotatableJWKSetInt
      */
     protected function getJWKSet()
     {
-        if (file_exists($this->getFilename())) {
-            $mtime = filemtime($this->getFilename());
+        $mtime = $this->getLastModificationTime();
+        if (null !== $mtime) {
             if ($mtime + $this->ttl <= time()) {
                 $keys = $this->jwkset->getKeys();
                 unset($keys[count($keys) - 1]);
