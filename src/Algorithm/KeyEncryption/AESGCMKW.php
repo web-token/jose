@@ -84,7 +84,7 @@ abstract class AESGCMKW implements KeyWrappingInterface
      */
     private function getMode($k)
     {
-        return 'aes-'.(8 *  mb_strlen($k, '8bit')).'-gcm';
+        return 'aes-'.(8 * mb_strlen($k, '8bit')).'-gcm';
     }
 
     /**

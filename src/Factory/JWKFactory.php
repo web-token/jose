@@ -367,7 +367,7 @@ final class JWKFactory implements JWKFactoryInterface
             'Invalid URL.'
         );
         Assertion::false(
-            false === $allow_unsecured_connection && 'https://' !==  mb_substr($url, 0, 8, '8bit'),
+            false === $allow_unsecured_connection && 'https://' !== mb_substr($url, 0, 8, '8bit'),
             'Unsecured connection.'
         );
 
