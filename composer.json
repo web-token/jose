@@ -47,10 +47,6 @@
         "ext-ed25519": "For EdDSA with Ed25519 curves support.",
         "ext-curve25519": "For EdDSA with X25519 curves support."
    },
-  "scripts":{
-    "test": "phpunit",
-    "test-with-coverage": "phpunit --verbose --coverage-clover build/logs/clover.xml"
-  },
     "extra": {
         "branch-alias": {
             "dev-master": "5.1.x-dev"

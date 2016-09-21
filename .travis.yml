@@ -29,7 +29,7 @@ before_script:
     - if [[ !$deps ]]; then composer install --no-interaction ; fi
 
 script:
-    - composer test-with-coverage
+    - ./vendor/bin/phpunit --testdox --coverage-clover build/logs/clover.xml
 
 after_script:
     - vendor/bin/coveralls --no-interaction
