@@ -61,14 +61,4 @@ final class RotatableJWKSet extends StorableJWKSet implements RotatableJWKSetInt
 
         return parent::getJWKSet();
     }
-
-    /**
-     * @return int|null
-     */
-    private function getFileLastModificationTime()
-    {
-        if (file_exists($this->getFilename())) {
-            return filemtime($this->getFilename());
-        }
-    }
 }

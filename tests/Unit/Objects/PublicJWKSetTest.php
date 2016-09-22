@@ -33,6 +33,11 @@ class PublicJWKSetTest extends \PHPUnit_Framework_TestCase
             10
         );
 
-        new PublicJWKSet($jwkset);
+        $public_jwkset = new PublicJWKSet($jwkset);
+
+        $this->assertEquals(3, $public_jwkset->countKeys());
+        foreach ($public_jwkset as $key) {
+            $this->assertEquals(json_encode($key), json_encode($key->toPublic()));
+        }
     }
 }

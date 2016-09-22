@@ -18,6 +18,8 @@ use Jose\KeyConverter\RSAKey;
 use Jose\Object\JWK;
 use Jose\Object\JWKSet;
 use Jose\Object\JWKSetInterface;
+use Jose\Object\JWKSets;
+use Jose\Object\PublicJWKSet;
 use Jose\Object\RotatableJWK;
 use Jose\Object\RotatableJWKSet;
 use Jose\Object\StorableJWK;
@@ -27,12 +29,24 @@ use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\EccFactory;
 use Psr\Cache\CacheItemPoolInterface;
 
-// JWKSet with only public keys of a JWKSet
-// JWKSet that is a set of JWKSet
-
-
 final class JWKFactory implements JWKFactoryInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public static function createPublicKeySet(JWKSetInterface $jwkset)
+    {
+        return new PublicJWKSet($jwkset);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function createKeySets(array $jwksets)
+    {
+        return new JWKSets($jwksets);
+    }
+
     /**
      * {@inheritdoc}
      */

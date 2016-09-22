@@ -17,8 +17,20 @@ use Psr\Cache\CacheItemPoolInterface;
 interface JWKFactoryInterface
 {
     /**
-     * RotatableJWK constructor.
+     * @param \Jose\Object\JWKSetInterface $jwkset
      *
+     * @return \Jose\Object\JWKSetInterface
+     */
+    public static function createPublicKeySet(JWKSetInterface $jwkset);
+
+    /**
+     * @param \Jose\Object\JWKSetInterface[] $jwksets
+     *
+     * @return \Jose\Object\JWKSetInterface
+     */
+    public static function createKeySets(array $jwksets);
+
+    /**
      * @param string $filename
      * @param array  $parameters
      * @param int    $nb_keys
@@ -28,8 +40,6 @@ interface JWKFactoryInterface
     public static function createStorableKeySet($filename, array $parameters, $nb_keys);
 
     /**
-     * RotatableJWK constructor.
-     *
      * @param string $filename
      * @param array  $parameters
      * @param int    $nb_keys
@@ -40,8 +50,6 @@ interface JWKFactoryInterface
     public static function createRotatableKeySet($filename, array $parameters, $nb_keys, $ttl);
 
     /**
-     * RotatableJWK constructor.
-     *
      * @param string $filename
      * @param array  $parameters
      * @param int    $ttl
@@ -51,8 +59,6 @@ interface JWKFactoryInterface
     public static function createRotatableKey($filename, array $parameters, $ttl);
 
     /**
-     * RotatableJWK constructor.
-     *
      * @param string $filename
      * @param array  $parameters
      *

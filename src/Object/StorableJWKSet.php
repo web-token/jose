@@ -41,6 +41,11 @@ class StorableJWKSet implements StorableJWKSetInterface
     protected $nb_keys;
 
     /**
+     * @var null|int
+     */
+    protected $file_last_modification_time = null;
+
+    /**
      * StorableJWKSet constructor.
      *
      * @param string $filename
@@ -225,11 +230,34 @@ class StorableJWKSet implements StorableJWKSetInterface
      */
     protected function loadJWKSetIfNeeded()
     {
+        if (false === $this->hasFileBeenUpdated()) {
+            return;
+        }
         $content = $this->getFileContent();
         if (null === $content) {
             $this->createJWKSet();
         } else {
             $this->jwkset = new JWKSet($content);
+            $this->file_last_modification_time = $this->getFileLastModificationTime();
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasFileBeenUpdated()
+    {
+        if (null === $this->file_last_modification_time || null === $this->getFileLastModificationTime()) {
+            return true;
+        }
+
+        return $this->file_last_modification_time !== $this->getFileLastModificationTime();
+    }
+
+    protected function getFileLastModificationTime()
+    {
+        if (file_exists($this->getFilename())) {
+            return filemtime($this->getFilename());
         }
     }
 
@@ -287,5 +315,6 @@ class StorableJWKSet implements StorableJWKSetInterface
     {
         @unlink($this->getFilename());
         file_put_contents($this->getFilename(), json_encode($this->jwkset));
+        $this->file_last_modification_time = $this->getFileLastModificationTime();
     }
 }

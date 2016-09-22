@@ -48,6 +48,17 @@ class JWKSetsTest extends \PHPUnit_Framework_TestCase
             2
         );
 
-        new JWKSets([$jwkset1, $jwkset2, $jwkset3]);
+        $jwkset = new JWKSets([$jwkset1, $jwkset2, $jwkset3]);
+
+        $this->assertEquals(6, $jwkset->countKeys());
+        for ($i = 0; $i < 2; $i++) {
+            $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset1->getKey($i)));
+        }
+        for ($i = 2; $i < 4; $i++) {
+            $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset2->getKey($i-2)));
+        }
+        for ($i = 4; $i < 6; $i++) {
+            $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset3->getKey($i-4)));
+        }
     }
 }
