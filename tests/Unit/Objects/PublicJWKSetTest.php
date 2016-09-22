@@ -22,9 +22,9 @@ class PublicJWKSetTest extends \PHPUnit_Framework_TestCase
 {
     public function testKey()
     {
-        @unlink(sys_get_temp_dir() . '/Public_JWKSet.keyset');
+        @unlink(sys_get_temp_dir().'/Public_JWKSet.keyset');
         $jwkset = JWKFactory::createRotatableKeySet(
-            sys_get_temp_dir() . '/Public_JWKSet.keyset',
+            sys_get_temp_dir().'/Public_JWKSet.keyset',
             [
                 'kty' => 'EC',
                 'crv' => 'P-256',

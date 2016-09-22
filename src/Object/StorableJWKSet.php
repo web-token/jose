@@ -226,7 +226,7 @@ class StorableJWKSet implements StorableJWKSetInterface
     }
 
     /**
-     * This function loads or creates it the file if needed
+     * This function loads or creates it the file if needed.
      */
     protected function loadJWKSetIfNeeded()
     {
@@ -262,7 +262,7 @@ class StorableJWKSet implements StorableJWKSetInterface
     }
 
     /**
-     * This function returns the content of the file only if it is an array
+     * This function returns the content of the file only if it is an array.
      *
      * @return null|array
      */
@@ -284,7 +284,7 @@ class StorableJWKSet implements StorableJWKSetInterface
     }
 
     /**
-     * This method creates the JWKSet and populate it with keys
+     * This method creates the JWKSet and populate it with keys.
      */
     protected function createJWKSet()
     {

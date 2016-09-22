@@ -22,9 +22,9 @@ class JWKSetsTest extends \PHPUnit_Framework_TestCase
 {
     public function testKey()
     {
-        @unlink(sys_get_temp_dir() . '/Public_JWKSet.keyset');
+        @unlink(sys_get_temp_dir().'/Public_JWKSet.keyset');
         $jwkset1 = JWKFactory::createStorableKeySet(
-            sys_get_temp_dir() . '/keyset1',
+            sys_get_temp_dir().'/keyset1',
             [
                 'kty' => 'EC',
                 'crv' => 'P-256',
@@ -32,7 +32,7 @@ class JWKSetsTest extends \PHPUnit_Framework_TestCase
             2
         );
         $jwkset2 = JWKFactory::createStorableKeySet(
-            sys_get_temp_dir() . '/keyset2',
+            sys_get_temp_dir().'/keyset2',
             [
                 'kty'  => 'RSA',
                 'size' => 4096,
@@ -40,7 +40,7 @@ class JWKSetsTest extends \PHPUnit_Framework_TestCase
             2
         );
         $jwkset3 = JWKFactory::createStorableKeySet(
-            sys_get_temp_dir() . '/keyset3',
+            sys_get_temp_dir().'/keyset3',
             [
                 'kty' => 'OKP',
                 'crv' => 'X25519',
@@ -55,10 +55,10 @@ class JWKSetsTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset1->getKey($i)));
         }
         for ($i = 2; $i < 4; $i++) {
-            $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset2->getKey($i-2)));
+            $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset2->getKey($i - 2)));
         }
         for ($i = 4; $i < 6; $i++) {
-            $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset3->getKey($i-4)));
+            $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset3->getKey($i - 4)));
         }
     }
 }
