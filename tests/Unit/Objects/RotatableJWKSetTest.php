@@ -11,7 +11,6 @@
 
 use Jose\Factory\JWKFactory;
 use Jose\Object\JWKInterface;
-use Jose\Object\RotatableJWKSet;
 
 /**
  * Class RotatableJWKSetTest.
@@ -24,7 +23,7 @@ class RotatableJWKSetTest extends \PHPUnit_Framework_TestCase
     public function testKey()
     {
         @unlink(sys_get_temp_dir().'/JWKSet.key');
-        $jwkset = new RotatableJWKSet(
+        $jwkset = JWKFactory::createRotatableKeySet(
             sys_get_temp_dir().'/JWKSet.key',
             [
                 'kty'   => 'EC',

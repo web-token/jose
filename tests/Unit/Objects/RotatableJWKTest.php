@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use Jose\Object\RotatableJWK;
+use Jose\Factory\JWKFactory;
 
 /**
  * Class RotatableJWKTest.
@@ -22,7 +22,7 @@ class RotatableJWKTest extends \PHPUnit_Framework_TestCase
     public function testKey()
     {
         @unlink(sys_get_temp_dir().'/JWK.key');
-        $jwk = new RotatableJWK(
+        $jwk = JWKFactory::createRotatableKey(
             sys_get_temp_dir().'/JWK.key',
             [
                 'kty'   => 'EC',

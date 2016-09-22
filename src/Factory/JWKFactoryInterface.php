@@ -20,6 +20,40 @@ interface JWKFactoryInterface
      *
      * @param string $filename
      * @param array  $parameters
+     * @param int    $nb_keys
+     *
+     * @return \Jose\Object\JWKSetInterface
+     */
+    public static function createStorableKeySet($filename, array $parameters, $nb_keys);
+
+    /**
+     * RotatableJWK constructor.
+     *
+     * @param string $filename
+     * @param array  $parameters
+     * @param int    $nb_keys
+     * @param int    $ttl
+     *
+     * @return \Jose\Object\JWKSetInterface
+     */
+    public static function createRotatableKeySet($filename, array $parameters, $nb_keys, $ttl);
+
+    /**
+     * RotatableJWK constructor.
+     *
+     * @param string $filename
+     * @param array  $parameters
+     * @param int    $ttl
+     *
+     * @return \Jose\Object\JWKInterface
+     */
+    public static function createRotatableKey($filename, array $parameters, $ttl);
+
+    /**
+     * RotatableJWK constructor.
+     *
+     * @param string $filename
+     * @param array  $parameters
      *
      * @return \Jose\Object\JWKInterface
      */

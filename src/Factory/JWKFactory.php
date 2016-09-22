@@ -17,7 +17,10 @@ use Jose\KeyConverter\KeyConverter;
 use Jose\KeyConverter\RSAKey;
 use Jose\Object\JWK;
 use Jose\Object\JWKSet;
+use Jose\Object\RotatableJWK;
+use Jose\Object\RotatableJWKSet;
 use Jose\Object\StorableJWK;
+use Jose\Object\StorableJWKSet;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\EccFactory;
@@ -31,6 +34,30 @@ final class JWKFactory implements JWKFactoryInterface
     public static function createStorableKey($filename, array $parameters)
     {
         return new StorableJWK($filename, $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function createRotatableKey($filename, array $parameters, $ttl)
+    {
+        return new RotatableJWK($filename, $parameters, $ttl);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function createRotatableKeySet($filename, array $parameters, $nb_keys, $ttl)
+    {
+        return new RotatableJWKSet($filename, $parameters, $nb_keys, $ttl);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function createStorableKeySet($filename, array $parameters, $nb_keys)
+    {
+        return new StorableJWKSet($filename, $parameters, $nb_keys);
     }
 
     /**
