@@ -27,6 +27,10 @@ use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\EccFactory;
 use Psr\Cache\CacheItemPoolInterface;
 
+// JWKSet with only public keys of a JWKSet
+// JWKSet that is a set of JWKSet
+
+
 final class JWKFactory implements JWKFactoryInterface
 {
     /**

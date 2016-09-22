@@ -10,13 +10,12 @@
  */
 
 namespace Jose\Object;
-
 use Assert\Assertion;
 
 /**
- * Class JWKSet.
+ * Class JWKSets
  */
-final class JWKSet implements JWKSetInterface
+final class JWKSets implements JWKSetInterface
 {
     /**
      * @var int
@@ -24,17 +23,102 @@ final class JWKSet implements JWKSetInterface
     private $position = 0;
 
     /**
-     * @var array
+     * @var \Jose\Object\JWKSetInterface[]
      */
-    protected $keys = [];
+    private $jwksets = [];
 
-    public function __construct(array $keys = [])
+    /**
+     * JWKSets constructor.
+     *
+     * @param \Jose\Object\JWKSetInterface[] $jwksets
+     */
+    public function __construct(array $jwksets)
     {
-        if (array_key_exists('keys', $keys)) {
-            foreach ($keys['keys'] as $value) {
-                $this->addKey(new JWK($value));
-            }
-        }
+        Assertion::allIsInstanceOf($jwksets, JWKSetInterface::class);
+
+        $this->jwksets = $jwksets;
+    }
+
+    /**
+     * PublicJWKSet constructor.
+     *
+     * @param \Jose\Object\JWKSetInterface $jwkset
+     */
+    public function addKeySet(JWKSetInterface $jwkset)
+    {
+        $this->jwksets[] = $jwkset;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function current()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function next()
+    {
+        $this->position++;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function key()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function valid()
+    {
+        return $this->current() instanceof JWKInterface;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rewind()
+    {
+        $this->position = 0;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetExists($offset)
+    {
+        return $this->hasKey($offset);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetGet($offset)
+    {
+        return $this->getKey($offset);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetSet($offset, $value)
+    {
+        //Not available
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetUnset($offset)
+    {
+        //Not available
     }
 
     /**
@@ -42,7 +126,7 @@ final class JWKSet implements JWKSetInterface
      */
     public function hasKey($index)
     {
-        return array_key_exists($index, $this->keys);
+        return array_key_exists($index, $this->getKeys());
     }
 
     /**
@@ -52,129 +136,64 @@ final class JWKSet implements JWKSetInterface
     {
         Assertion::true($this->hasKey($index), 'Undefined index.');
 
-        return $this->keys[$index];
+        return $this->getKeys()[$index];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getKeys()
     {
-        return $this->keys;
+        $keys = [];
+
+        foreach ($this->jwksets as $jwkset) {
+            $keys =array_merge(
+                $keys,
+                $jwkset->getKeys()
+            );
+        }
+
+        return $keys;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addKey(JWKInterface $key)
     {
-        $this->keys[] = $key;
+        //Not available
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function removeKey($key)
+    public function removeKey($index)
     {
-        if (isset($this->keys[$key])) {
-            unset($this->keys[$key]);
-        }
+        //Not available
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     */
+    public function countKeys()
+    {
+        return count($this->getKeys());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function count()
+    {
+        return $this->countKeys();
+    }
+
+    /**
+     * @inheritdoc
      */
     public function jsonSerialize()
     {
         return ['keys' => array_values($this->getKeys())];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function count($mode = COUNT_NORMAL)
-    {
-        return count($this->getKeys(), $mode);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function current()
-    {
-        return isset($this->keys[$this->position]) ? $this->keys[$this->position] : null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function key()
-    {
-        return $this->position;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
-    {
-        $this->position++;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
-    {
-        $this->position = 0;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function valid()
-    {
-        return $this->current() instanceof JWKInterface;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function countKeys()
-    {
-        return count($this->keys);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function offsetExists($offset)
-    {
-        return $this->hasKey($offset);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function offsetGet($offset)
-    {
-        return $this->getKey($offset);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function offsetSet($offset, $value)
-    {
-        $this->addKey($value);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function offsetUnset($offset)
-    {
-        $this->removeKey($offset);
     }
 
     /**
@@ -186,7 +205,8 @@ final class JWKSet implements JWKSetInterface
         Assertion::nullOrString($algorithm);
 
         $result = [];
-        foreach ($this->keys as $key) {
+        $keys = $this->getKeys();
+        foreach ($keys as $key) {
             $ind = 0;
 
             // Check usage

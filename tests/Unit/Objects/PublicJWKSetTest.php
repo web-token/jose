@@ -1,0 +1,38 @@
+<?php
+
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2016 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
+use Jose\Factory\JWKFactory;
+use Jose\Object\PublicJWKSet;
+
+/**
+ * Class PublicJWKSetTest.
+ *
+ * @group Unit
+ * @group PublicJWKSet
+ */
+class PublicJWKSetTest extends \PHPUnit_Framework_TestCase
+{
+    public function testKey()
+    {
+        @unlink(sys_get_temp_dir() . '/Public_JWKSet.keyset');
+        $jwkset = JWKFactory::createRotatableKeySet(
+            sys_get_temp_dir() . '/Public_JWKSet.keyset',
+            [
+                'kty' => 'EC',
+                'crv' => 'P-256',
+            ],
+            3,
+            10
+        );
+
+        new PublicJWKSet($jwkset);
+    }
+}

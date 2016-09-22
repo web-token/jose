@@ -21,7 +21,7 @@ final class RotatableJWKSet extends StorableJWKSet implements RotatableJWKSetInt
     /**
      * @var int
      */
-    protected $ttl;
+    private $ttl;
 
     /**
      * RotatableJWKSet constructor.
@@ -44,23 +44,31 @@ final class RotatableJWKSet extends StorableJWKSet implements RotatableJWKSetInt
      */
     protected function getJWKSet()
     {
-        $mtime = $this->getLastModificationTime();
-        if (null === $this->jwkset) {
-            $this->loadJWKSet();
-        }
-        if (null !== $mtime) {
-            if ($mtime + $this->ttl <= time()) {
-                $keys = $this->jwkset->getKeys();
+        $jwkset = parent::getJWKSet();
+        if (null !== $this->getFileLastModificationTime()) {
+            if ($this->getFileLastModificationTime() + $this->ttl < time()) {
+                $keys = $jwkset->getKeys();
                 unset($keys[count($keys) - 1]);
-                $this->jwkset = new JWKSet();
-                $this->jwkset->addKey($this->createJWK());
+                $jwkset = new JWKSet();
+                $jwkset->addKey($this->createJWK());
                 foreach ($keys as $key) {
-                    $this->jwkset->addKey($key);
+                    $jwkset->addKey($key);
                 }
+                $this->jwkset = $jwkset;
                 $this->save();
             }
         }
 
         return parent::getJWKSet();
+    }
+
+    /**
+     * @return int|null
+     */
+    private function getFileLastModificationTime()
+    {
+        if (file_exists($this->getFilename())) {
+            return filemtime($this->getFilename());
+        }
     }
 }
