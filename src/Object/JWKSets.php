@@ -10,10 +10,11 @@
  */
 
 namespace Jose\Object;
+
 use Assert\Assertion;
 
 /**
- * Class JWKSets
+ * Class JWKSets.
  */
 final class JWKSets implements JWKSetInterface
 {
@@ -47,14 +48,14 @@ final class JWKSets implements JWKSetInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getKeys()
     {
         $keys = [];
 
         foreach ($this->jwksets as $jwkset) {
-            $keys =array_merge(
+            $keys = array_merge(
                 $keys,
                 $jwkset->getKeys()
             );
@@ -64,7 +65,7 @@ final class JWKSets implements JWKSetInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function addKey(JWKInterface $key)
     {
@@ -72,7 +73,7 @@ final class JWKSets implements JWKSetInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function removeKey($index)
     {

@@ -14,7 +14,7 @@ namespace Jose\Object;
 use Assert\Assertion;
 
 /**
- * Class BaseJWKSet
+ * Class BaseJWKSet.
  */
 trait BaseJWKSet
 {
@@ -162,7 +162,7 @@ trait BaseJWKSet
     /**
      * @param string      $type
      * @param null|string $algorithm
-     * @param array $restrictions
+     * @param array       $restrictions
      *
      * @return null|\Jose\Object\JWKInterface
      */

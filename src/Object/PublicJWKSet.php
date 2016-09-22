@@ -12,7 +12,7 @@
 namespace Jose\Object;
 
 /**
- * Class PublicJWKSet
+ * Class PublicJWKSet.
  */
 final class PublicJWKSet implements JWKSetInterface
 {
@@ -34,7 +34,7 @@ final class PublicJWKSet implements JWKSetInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getKeys()
     {
@@ -51,7 +51,7 @@ final class PublicJWKSet implements JWKSetInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function addKey(JWKInterface $key)
     {
@@ -59,7 +59,7 @@ final class PublicJWKSet implements JWKSetInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function removeKey($index)
     {
