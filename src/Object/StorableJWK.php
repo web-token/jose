@@ -132,7 +132,6 @@ class StorableJWK implements StorableJWKInterface
         }
     }
 
-
     protected function createJWK()
     {
         $data = JWKFactory::createKey($this->parameters)->getAll();
@@ -141,7 +140,6 @@ class StorableJWK implements StorableJWKInterface
 
         $this->save();
     }
-
 
     protected function save()
     {

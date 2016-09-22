@@ -225,7 +225,6 @@ class StorableJWKSet implements StorableJWKSetInterface
         return $this->jwkset;
     }
 
-
     protected function loadJWKSet()
     {
         if (false === $this->hasJWKSetBeenUpdated()) {
@@ -245,15 +244,15 @@ class StorableJWKSet implements StorableJWKSetInterface
     protected function getFileContent()
     {
         if (!file_exists($this->getFilename())) {
-            return null;
+            return;
         }
         $content = file_get_contents($this->getFilename());
         if (false === $content) {
-            return null;
+            return;
         }
         $content = json_decode($content, true);
         if (!is_array($content)) {
-            return null;
+            return;
         }
 
         return $content;
@@ -271,9 +270,7 @@ class StorableJWKSet implements StorableJWKSetInterface
         return true;
     }
 
-    /**
-     *
-     */
+
     protected function createJWKSet()
     {
         $this->jwkset = new JWKSet();
@@ -304,8 +301,6 @@ class StorableJWKSet implements StorableJWKSetInterface
         if (file_exists($this->getFilename())) {
             return filemtime($this->getFilename());
         }
-
-        return null;
     }
 
     protected function save()

@@ -60,9 +60,9 @@ class RotatableJWKSetTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotEquals($actual_content, json_encode($jwkset));
 
-        $jwkset[] = JWKFactory::createKey(['kty'=>'EC', 'crv'=>'P-521']);
-        unset($jwkset[count($jwkset)-1]);
-        $jwkset->addKey(JWKFactory::createKey(['kty'=>'EC', 'crv'=>'P-521']));
-        $jwkset->removeKey(count($jwkset)-1);
+        $jwkset[] = JWKFactory::createKey(['kty' => 'EC', 'crv' => 'P-521']);
+        unset($jwkset[count($jwkset) - 1]);
+        $jwkset->addKey(JWKFactory::createKey(['kty' => 'EC', 'crv' => 'P-521']));
+        $jwkset->removeKey(count($jwkset) - 1);
     }
 }
