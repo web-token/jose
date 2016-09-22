@@ -85,7 +85,7 @@ class PublicJWKSetTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(json_encode($public_jwkset[$i]), json_encode($jwkset1->getKey($i)->toPublic()));
         }
         for ($i = 3; $i < 7; $i++) {
-            $this->assertEquals(json_encode($public_jwkset[$i]), json_encode($jwkset3->getKey($i-3)->toPublic()));
+            $this->assertEquals(json_encode($public_jwkset[$i]), json_encode($jwkset3->getKey($i - 3)->toPublic()));
         }
     }
 }
