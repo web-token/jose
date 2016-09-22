@@ -30,7 +30,7 @@ final class JWKSets implements JWKSetInterface
      *
      * @param \Jose\Object\JWKSetInterface[] $jwksets
      */
-    public function __construct(array $jwksets)
+    public function __construct(array $jwksets = [])
     {
         Assertion::allIsInstanceOf($jwksets, JWKSetInterface::class);
 
