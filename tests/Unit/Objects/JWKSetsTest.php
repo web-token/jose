@@ -42,8 +42,8 @@ class JWKSetsTest extends \PHPUnit_Framework_TestCase
         $jwkset3 = JWKFactory::createStorableKeySet(
             sys_get_temp_dir().'/keyset3',
             [
-                'kty' => 'OKP',
-                'crv' => 'X25519',
+                'kty'  => 'oct',
+                'size' => 512,
             ],
             2
         );
