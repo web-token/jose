@@ -374,6 +374,29 @@ $jwk = JWKFactory::createKey([
 ]);
 ```
 
+## Create a Storable Key
+
+Keys created with the `createKey` method of the JWKFactory are created randomly.
+You may need to store those keys for futur needs.
+
+```php
+use Jose\Factory\JWKFactory;
+
+$rotatable_key = JWKFactory::createStorableKey(
+    '/path/to/the/storage/file.key', // The file which will contain the key
+    [
+        'kty' => 'OKP',
+        'crv' => 'X25519',
+        'alg' => 'ECDH-ES',
+        'use' => 'enc',
+    ]
+);
+```
+
+If the destination file is deleted, the file is automatically recreated on demand.
+If you want to generate a new key after a period of time, you should use the Rotatable Keys,
+however by deleting the file you can have the same result but you can decide to renew the key at any time.
+
 ## Create a Rotatable Key
 
 Some applications may require that the keys change after a period of time.
@@ -396,35 +419,3 @@ $rotatable_key = JWKFactory::createRotatableKey(
 
 The key can be used like any other keys. After 3600 seconds, the values of that key will be updated.
 If the key exists in the storage and is not expired then it is loaded.
-
-
-## Create a Rotatable Key Set
-
-Some applications may require a key set with keys that are updated after a period of time.
-To continue to validate JWS or decrypt JWE, the old keys should be able for another period of time.
-
-That is the purpose of the Rotatable Key Set.
-
-You have to define which type of key you want to have (onlly one type per JWKSet allowed), how many keys in the key set and a period of time.
-Keys are automatically created and rotation is performed after the period of time.
-
-You can manipulate that key set as any other key sets, however we recommend you to never add or remove keys. All changes will be erased we keys are rotated.
-We also recommend you to use the first key of that key set to perform your signature/encryption operations.
-
-Except when the key set is created, all keys will be available at least during `number of key * period of time`.
-
-```php
-use Jose\Factory\JWKFactory;
-
-$rotatable_key_set = JWKFactory::createRotatableKeySet(
-    '/path/to/the/storage/file.keyset', // The file which will contain the key set
-    [
-        'kty' => 'OKP',
-        'crv' => 'X25519',
-        'alg' => 'ECDH-ES',
-        'use' => 'enc',
-    ],
-    3,                      // Number of keys in that key set
-    3600                    // This key set will rotate all keys after 3600 seconds (1 hour)
-);
-```

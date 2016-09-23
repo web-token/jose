@@ -109,6 +109,129 @@ use Jose\Factory\JWKFactory;
 $jwk_set = JWKFactory::createFromJKU('https://www.googleapis.com/oauth2/v1/certs');
 ```
 
+## Create a Key Set with Random keys
+
+You may need to create and store a key set with random keys.
+This library provides an easy way to create such key set by using the `createStorableKeySet`
+
+```php
+use Jose\Factory\JWKFactory;
+
+$rotatable_key_set = JWKFactory::createStorableKeySet(
+    '/path/to/the/storage/file.keyset', // The file which will contain the key set
+    [
+        'kty' => 'OKP',
+        'crv' => 'X25519',
+        'alg' => 'ECDH-ES',
+        'use' => 'enc',
+    ],
+    3,                      // Number of keys in that key set
+);
+```
+
+## Create a Rotatable Key Set
+
+Some applications may require a key set with keys that are updated after a period of time.
+To continue to validate JWS or decrypt JWE, the old keys should be able for another period of time.
+
+That is the purpose of the Rotatable Key Set.
+
+You have to define which type of key you want to have (only one type per JWKSet allowed), how many keys in the key set and a period of time.
+Keys are automatically created and rotation is performed after the period of time.
+
+You can manipulate that key set as any other key sets, however we recommend you to never add or remove keys. All changes will be erased we keys are rotated.
+We also recommend you to use the first key of that key set to perform your signature/encryption operations.
+
+Except when the key set is created, all keys will be available at least during `number of key * period of time`.
+
+```php
+use Jose\Factory\JWKFactory;
+
+$rotatable_key_set = JWKFactory::createRotatableKeySet(
+    '/path/to/the/storage/file.keyset', // The file which will contain the key set
+    [
+        'kty' => 'OKP',
+        'crv' => 'X25519',
+        'alg' => 'ECDH-ES',
+        'use' => 'enc',
+    ],
+    3,                      // Number of keys in that key set
+    3600                    // This key set will rotate all keys after 3600 seconds (1 hour)
+);
+```
+
+## Key Set of Key Sets
+
+In some cases you may need to merge key sets and use it as a unique key set.
+Then the `JWKSets` class is made for you.
+
+```php
+use Jose\Factory\JWKFactory;
+
+$key_sets = JWKFactory::createKeySets([
+    $jwkset1,
+    $jwkset2,
+    $jwkset3,
+    ...
+]);
+```
+
+## Public Keys Only
+
+In some cases you may need to share public keys with third parties.
+This library provides a JWKSet that returns only public keys.
+
+It is compatible with the any JWKSet, including `JWKSets` or `RotatableJWKSet` classes.
+
+```php
+use Jose\Factory\JWKFactory;
+
+$public_key_set = JWKFactory::createPublicKeySet($jwkset);
+```
+
+## Key Sets Chaining
+
+Let say you have two rotatable key sets: one for signature and the other one for encryption purpose.
+You want to share the public keys with third parties by providing a unique URL where all public keys can be retrieved.
+
+Then you can merge your rotatable key sets and use that JWKSet to share public keys.
+
+```php
+use Jose\Factory\JWKFactory;
+
+$signing_keys = JWKFactory::createRotatableKeySet(
+    '/path/to/the/storage/signature.keyset',
+    [
+        'kty'  => 'RSA',
+        'size' => 4096,
+        'alg'  => 'RS512',
+        'use'  => 'sig',
+    ],
+    3,
+    3600
+);
+
+$encryption_keys = JWKFactory::createRotatableKeySet(
+    '/path/to/the/storage/encryption.keyset',
+    [
+        'kty' => 'OKP',
+        'crv' => 'X25519',
+        'alg' => 'ECDH-ES',
+        'use' => 'enc',
+    ],
+    3,
+    3600
+);
+
+$jwkset = JWKFactory::createKeySets([
+    $signing_keys,
+    $encryption_keys,
+]);
+$public_key_set = JWKFactory::createPublicKeySet($jwkset);
+```
+
+Now you cqn use the first key of the `$signing_keys` and `$encryption_keys` for all your operations and share the `$public_key_set` with third parties.
+
 # Key Selection
 
 JWKSet object can contain several keys. To easily find a key according to constraint, a method `selectKey` is available.
