@@ -75,7 +75,7 @@ abstract class RSA implements SignatureAlgorithmInterface
             $result = openssl_sign($input, $signature, $priv->toPEM(), $this->getAlgorithm());
         }
         Assertion::true($result, 'An error occurred during the creation of the signature');
-        
+
         return $signature;
     }
 

@@ -52,13 +52,13 @@ class JWKSetsTest extends \PHPUnit_Framework_TestCase
         $jwkset->addKeySet($jwkset3);
 
         $this->assertEquals(6, $jwkset->countKeys());
-        
+
         $jwkset->addKey(JWKFactory::createRSAKey(['size' => 384]));
         $this->assertEquals(6, $jwkset->countKeys());
-        
+
         $jwkset->removeKey(0);
         $this->assertEquals(6, $jwkset->countKeys());
-        
+
         for ($i = 0; $i < 2; $i++) {
             $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset1->getKey($i)));
         }
