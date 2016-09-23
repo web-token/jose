@@ -313,7 +313,9 @@ class StorableJWKSet implements StorableJWKSetInterface
      */
     protected function save()
     {
-        @unlink($this->getFilename());
+        if (file_exists($this->getFilename())) {
+            unlink($this->getFilename());
+        }
         file_put_contents($this->getFilename(), json_encode($this->jwkset));
         $this->file_last_modification_time = $this->getFileLastModificationTime();
     }
