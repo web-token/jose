@@ -25,7 +25,7 @@ final class RotatableJWK extends StorableJWK implements RotatableJWKInterface
 
     /**
      * @param string $filename
-     * @param integer $ttl
+     * @param int    $ttl
      */
     public function __construct($filename, array $parameters, $ttl)
     {
