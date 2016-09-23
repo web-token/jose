@@ -67,8 +67,8 @@ class PublicJWKSetTest extends \PHPUnit_Framework_TestCase
         $jwkset3 = JWKFactory::createRotatableKeySet(
             sys_get_temp_dir().'/keyset3.3',
             [
-                'kty' => 'OKP',
-                'crv' => 'X25519',
+                'kty'  => 'RSA',
+                'size' => 4096,
             ],
             4,
             10
