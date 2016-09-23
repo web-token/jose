@@ -36,7 +36,7 @@ class StorableJWKSet implements StorableJWKSetInterface
     protected $parameters;
 
     /**
-     * @var array
+     * @var int
      */
     protected $nb_keys;
 

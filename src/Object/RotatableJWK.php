@@ -23,6 +23,10 @@ final class RotatableJWK extends StorableJWK implements RotatableJWKInterface
      */
     protected $ttl;
 
+    /**
+     * @param string $filename
+     * @param integer $ttl
+     */
     public function __construct($filename, array $parameters, $ttl)
     {
         Assertion::integer($ttl);

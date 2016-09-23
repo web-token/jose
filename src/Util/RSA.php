@@ -260,7 +260,7 @@ final class RSA
      * @param int             $emBits
      * @param \Jose\Util\Hash $hash
      *
-     * @return string
+     * @return bool
      */
     private static function verifyEMSAPSS($m, $em, $emBits, Hash $hash)
     {

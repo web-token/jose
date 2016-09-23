@@ -69,16 +69,14 @@ abstract class RSA implements SignatureAlgorithmInterface
         $priv = new RSAKey($key);
 
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
-            $result = JoseRSA::sign($priv, $input, $this->getAlgorithm());
-            Assertion::string($result, 'An error occurred during the creation of the signature');
-
-            return $result;
+            $signature = JoseRSA::sign($priv, $input, $this->getAlgorithm());
+            $result = is_string($signature);
         } else {
             $result = openssl_sign($input, $signature, $priv->toPEM(), $this->getAlgorithm());
-            Assertion::true($result, 'Unable to sign');
-
-            return $signature;
         }
+        Assertion::true($result, 'An error occurred during the creation of the signature');
+        
+        return $signature;
     }
 
     /**
