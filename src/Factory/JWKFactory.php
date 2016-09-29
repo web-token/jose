@@ -435,8 +435,6 @@ final class JWKFactory implements JWKFactoryInterface
         $ch = curl_init();
         curl_setopt_array($ch, $params);
         $content = curl_exec($ch);
-        $content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-        Assertion::eq(1, preg_match('/^application\/json([\s|;].*)?$/', $content_type), sprintf('Content type is not "application/json". It is "%s".', $content_type));
         curl_close($ch);
 
         Assertion::notEmpty($content, 'Unable to get content.');
