@@ -15,8 +15,7 @@ use Jose\KeyConverter\ECKey;
 use Jose\KeyConverter\RSAKey;
 
 /**
- * Class JWKSetPEM
- * @package Jose\Object
+ * Class JWKSetPEM.
  */
 trait JWKSetPEM
 {
