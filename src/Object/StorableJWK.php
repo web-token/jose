@@ -113,6 +113,4 @@ class StorableJWK implements StorableInterface, JWKInterface
     {
         return new JWK($file_content);
     }
-
-
 }

@@ -12,17 +12,17 @@
 namespace Jose\Object;
 
 /**
- * Interface StorableInterface
+ * Interface StorableInterface.
  */
 interface StorableInterface
 {
     /**
-     * Regenerate a completely new JWK
+     * Regenerate a completely new JWK.
      */
     public function regen();
 
     /**
-     * Delete the JWK
+     * Delete the JWK.
      */
     public function delete();
 
