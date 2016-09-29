@@ -61,4 +61,13 @@ interface JWKSetInterface extends \Countable, \Iterator, \JsonSerializable, \Arr
      * @return \Jose\Object\JWKInterface|null
      */
     public function selectKey($type, $algorithm = null, array $restrictions = []);
+
+    /**
+     * Returns RSA/EC keys in the key set into PEM format
+     * Note that if the key set contains other key types (none, oct, OKP...), they will not be part of the result.
+     * If keys have a key ID, it is used as index.
+     *
+     * @return string[]
+     */
+    public function toPEM();
 }

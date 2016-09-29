@@ -83,6 +83,9 @@ class PublicJWKSetTest extends \PHPUnit_Framework_TestCase
         $public_jwkset->removeKey(0);
         $this->assertEquals(7, $public_jwkset->countKeys());
 
+
+        $this->assertEquals(7, count($public_jwkset->toPEM()));
+
         foreach ($public_jwkset as $key) {
             $this->assertEquals(json_encode($key), json_encode($key->toPublic()));
         }

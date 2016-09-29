@@ -19,6 +19,7 @@ use Assert\Assertion;
 final class JWKSets implements JWKSetsInterface
 {
     use BaseJWKSet;
+    use JWKSetPEM;
 
     /**
      * @var \Jose\Object\JWKSetInterface[]

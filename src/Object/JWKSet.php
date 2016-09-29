@@ -17,6 +17,7 @@ namespace Jose\Object;
 final class JWKSet implements JWKSetInterface
 {
     use BaseJWKSet;
+    use JWKSetPEM;
 
     /**
      * @var array

@@ -14,13 +14,13 @@ namespace Jose\Object;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Factory\JWKFactory;
-
 /**
  * Class StorableJWKSet.
  */
 class StorableJWKSet implements StorableInterface, JWKSetInterface
 {
     use Storable;
+    use JWKSetPEM;
 
     /**
      * @var array
