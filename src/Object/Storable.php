@@ -151,7 +151,6 @@ trait Storable
         return $this->file_modification_time !== $this->getLastModificationTime();
     }
 
-
     protected function createAndSaveObject()
     {
         $object = $this->createNewObject();

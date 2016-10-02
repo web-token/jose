@@ -30,7 +30,7 @@ use Jose\Object\JWKInterface;
  * * P-521 key with SHA-512
  *
  * Other curves or hash method combinaisons are not used by the Jot specification
- * 
+ *
  * @group RFC6979
  */
 class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
