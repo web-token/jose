@@ -121,9 +121,22 @@ To avoid calls to a server each time you need a certificate, the `createFromJKU`
 use Jose\Factory\JWKFactory;
 
 $cacheItemPool = YourValidCacheItemPool //An instance of a class that implements Psr\Cache\CacheItemPoolInterface
-$ttl = 300; //Cache lifetime in seconds. Default is 86400 = 24 hrs.
+$ttl = 300; //Cache lifetime in seconds. Default is 86400 = 24 hrs. 0 means the cache never expires (not recommended).
 
 $jwk_set = JWKFactory::createFromJKU('http://www.example.com/certs', false, $cacheItemPool, $ttl);
+```
+
+### HTTP Connection Support
+
+During tests for example, it is useful to retrieve keys using a non-encrypted connection (HTTP).
+From the version 6.1 of this library, it is possible to allow URLs with the `http://` scheme.
+
+You just have to set the last argument as `true`.
+
+```php
+use Jose\Factory\JWKFactory;
+
+$jwk_set = JWKFactory::createFromJKU('http://www.example.com/certs', false, null, 0, true);
 ```
 
 
@@ -140,9 +153,9 @@ use Jose\Factory\JWKFactory;
 $jwk_set = JWKFactory::createFromX5U('https://www.googleapis.com/oauth2/v1/certs');
 ```
 
-### Unsecured Connections and Caching Support
+### Unsecured, HTTP Connections and Caching Support
 
-The method `createFromX5U` supports the same arguments as the method `createFromJKU` for unsecured connections or caching support.
+The method `createFromX5U` supports the same arguments as the method `createFromJKU` for unsecured, HTTP connections or caching support.
 
 ## Create a Key Set with Random keys
 
