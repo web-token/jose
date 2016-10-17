@@ -14,9 +14,8 @@ namespace Jose\Object;
 use Assert\Assertion;
 use Jose\KeyConverter\KeyConverter;
 
-
 /**
- * Class JKUJWKSet
+ * Class JKUJWKSet.
  */
 final class X5UJWKSet extends DownloadedJWKSet
 {
