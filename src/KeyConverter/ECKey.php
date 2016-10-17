@@ -73,7 +73,6 @@ final class ECKey extends Sequence
             return $this->loadPrivatePEM($children);
         } elseif (3 === count($children)) {
             Assertion::isInstanceOf($children[1], Sequence::class);
-            var_dump($asnObject);
             $binary = hex2bin($children[2]->getContent());
             $asnObject = Object::fromBinary($binary);
             Assertion::isInstanceOf($asnObject, Sequence::class);
