@@ -15,6 +15,7 @@ use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\KeyConverter\KeyConverter;
 use Jose\KeyConverter\RSAKey;
+use Jose\Object\JKUJWKSet;
 use Jose\Object\JWK;
 use Jose\Object\JWKSet;
 use Jose\Object\JWKSetInterface;
@@ -23,6 +24,7 @@ use Jose\Object\PublicJWKSet;
 use Jose\Object\RotatableJWKSet;
 use Jose\Object\StorableJWK;
 use Jose\Object\StorableJWKSet;
+use Jose\Object\X5UJWKSet;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\EccFactory;
@@ -322,64 +324,17 @@ final class JWKFactory implements JWKFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public static function createFromJKU($jku, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400)
+    public static function createFromJKU($jku, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false)
     {
-        $content = self::getContent($jku, $allow_unsecured_connection, $cache, $ttl);
-
-        Assertion::keyExists($content, 'keys', 'Invalid content.');
-
-        return new JWKSet($content);
+        return new JKUJWKSet($jku, $cache, $ttl, $allow_unsecured_connection, $allow_http_connection);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function createFromX5U($x5u, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400)
+    public static function createFromX5U($x5u, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false)
     {
-        $content = self::getContent($x5u, $allow_unsecured_connection, $cache, $ttl);
-
-        $jwkset = new JWKSet();
-        foreach ($content as $kid => $cert) {
-            $jwk = KeyConverter::loadKeyFromCertificate($cert);
-            Assertion::notEmpty($jwk, 'Invalid content.');
-            if (is_string($kid)) {
-                $jwk['kid'] = $kid;
-            }
-            $jwkset->addKey(new JWK($jwk));
-        }
-
-        return $jwkset;
-    }
-
-    /**
-     * @param string                                 $url
-     * @param bool                                   $allow_unsecured_connection
-     * @param \Psr\Cache\CacheItemPoolInterface|null $cache
-     * @param int|null                               $ttl
-     *
-     * @return array
-     */
-    private static function getContent($url, $allow_unsecured_connection, CacheItemPoolInterface $cache = null, $ttl = 86400)
-    {
-        Assertion::nullOrInteger($ttl);
-        $cache_key = sprintf('JWKFactory-Content-%s', hash('sha512', $url));
-        if (null !== $cache) {
-            $item = $cache->getItem($cache_key);
-            if (!$item->isHit()) {
-                $content = self::downloadContent($url, $allow_unsecured_connection);
-                $item->set($content);
-                if (null !== $ttl) {
-                    $item->expiresAfter($ttl);
-                }
-                $cache->save($item);
-
-                return $content;
-            } else {
-                return $item->get();
-            }
-        }
-
-        return self::downloadContent($url, $allow_unsecured_connection);
+        return new X5UJWKSet($x5u, $cache, $ttl, $allow_unsecured_connection, $allow_http_connection);
     }
 
     /**
@@ -401,46 +356,5 @@ final class JWKFactory implements JWKFactoryInterface
         Assertion::integer($key_index);
 
         return $jwk_set->getKey($key_index);
-    }
-
-    /**
-     * @param string $url
-     * @param bool   $allow_unsecured_connection
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return array
-     */
-    private static function downloadContent($url, $allow_unsecured_connection)
-    {
-        // The URL must be a valid URL and scheme must be https
-        Assertion::false(
-            false === filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED),
-            'Invalid URL.'
-        );
-        Assertion::false(
-            false === $allow_unsecured_connection && 'https://' !== mb_substr($url, 0, 8, '8bit'),
-            'Unsecured connection.'
-        );
-
-        $params = [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_URL            => $url,
-        ];
-        if (false === $allow_unsecured_connection) {
-            $params[CURLOPT_SSL_VERIFYPEER] = true;
-            $params[CURLOPT_SSL_VERIFYHOST] = 2;
-        }
-
-        $ch = curl_init();
-        curl_setopt_array($ch, $params);
-        $content = curl_exec($ch);
-        curl_close($ch);
-
-        Assertion::notEmpty($content, 'Unable to get content.');
-        $content = json_decode($content, true);
-        Assertion::isArray($content, 'Invalid content.');
-
-        return $content;
     }
 }

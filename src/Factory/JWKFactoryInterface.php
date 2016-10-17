@@ -152,20 +152,22 @@ interface JWKFactoryInterface
      * @param bool                                   $allow_unsecured_connection
      * @param \Psr\Cache\CacheItemPoolInterface|null $cache
      * @param int|null                               $ttl
+     * @param bool                                   $allow_http_connection
      *
      * @return \Jose\Object\JWKSetInterface
      */
-    public static function createFromJKU($jku, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400);
+    public static function createFromJKU($jku, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false);
 
     /**
      * @param string                                 $x5u
      * @param bool                                   $allow_unsecured_connection
      * @param \Psr\Cache\CacheItemPoolInterface|null $cache
      * @param int|null                               $ttl
+     * @param bool                                   $allow_http_connection
      *
      * @return \Jose\Object\JWKSetInterface
      */
-    public static function createFromX5U($x5u, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400);
+    public static function createFromX5U($x5u, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false);
 
     /**
      * @param array $x5c
