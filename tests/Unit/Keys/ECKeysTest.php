@@ -29,6 +29,23 @@ class ECKeysTest extends TestCase
         KeyConverter::loadFromKeyFile($file);
     }
 
+    /**
+     * @see https://github.com/Spomky-Labs/jose/issues/141
+     * @see https://gist.github.com/Spomky/246eca6aaeeb7a40f11d3a2d98960282
+     */
+    public function testLoadPrivateEC256KeyGenerateByAPN()
+    {
+        $pem = file_get_contents('file://'.__DIR__.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es256.from.APN.key');
+        $details = KeyConverter::loadFromKey($pem);
+        $this->assertEquals($details, [
+            'kty' => 'EC',
+            'crv' => 'P-256',
+            'd'   => '13n3isfsEktzl-CtH5ECpRrKk-40prVuCbldkP77gak',
+            'x'   => 'YcIMUkalwbeeAVkUF6FP3aBVlCzlqxEd7i0uN_4roA0',
+            'y'   => 'bU8wOWJBkTNZ61gB1_4xp-r8-uVsQB8D6Xsl-aKMCy8',
+        ]);
+    }
+
     public function testLoadPublicEC256Key()
     {
         $pem = file_get_contents('file://'.__DIR__.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'public.es256.key');
@@ -38,7 +55,6 @@ class ECKeysTest extends TestCase
             'crv' => 'P-256',
             'x'   => 'vuYsP-QnrqAbM7Iyhzjt08hFSuzapyojCB_gFsBt65U',
             'y'   => 'oq-E2K-X0kPeqGuKnhlXkxc5fnxomRSC6KLby7Ij8AE',
-
         ]);
 
         $ec_key = new ECKey($details);

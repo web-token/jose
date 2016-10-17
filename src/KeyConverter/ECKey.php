@@ -71,6 +71,16 @@ final class ECKey extends Sequence
         $children = $asnObject->getChildren();
         if (4 === count($children)) {
             return $this->loadPrivatePEM($children);
+        } elseif (3 === count($children)) {
+            Assertion::isInstanceOf($children[1], Sequence::class);
+            var_dump($asnObject);
+            $binary = hex2bin($children[2]->getContent());
+            $asnObject = Object::fromBinary($binary);
+            Assertion::isInstanceOf($asnObject, Sequence::class);
+            $children = $asnObject->getChildren();
+            Assertion::eq(4, count($children), 'Unable to load the key');
+
+            return $this->loadPrivatePEM($children);
         } elseif (2 === count($children)) {
             return $this->loadPublicPEM($children);
         }
@@ -202,7 +212,6 @@ final class ECKey extends Sequence
     private function loadPrivatePEM(array $children)
     {
         $this->verifyVersion($children[0]);
-
         $x = null;
         $y = null;
         $d = $this->getD($children[1]);
