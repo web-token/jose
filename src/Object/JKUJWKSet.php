@@ -13,9 +13,8 @@ namespace Jose\Object;
 
 use Assert\Assertion;
 
-
 /**
- * Class JKUJWKSet
+ * Class JKUJWKSet.
  */
 final class JKUJWKSet extends DownloadedJWKSet
 {

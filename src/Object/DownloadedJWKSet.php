@@ -10,6 +10,7 @@
  */
 
 namespace Jose\Object;
+
 use Assert\Assertion;
 use Psr\Cache\CacheItemPoolInterface;
 
