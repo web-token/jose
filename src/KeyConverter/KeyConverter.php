@@ -149,6 +149,8 @@ final class KeyConverter
             $pem = self::decodePem($pem, $matches, $password);
         }
 
+        self::sanitizePEM($pem);
+
         $res = openssl_pkey_get_private($pem);
         if ($res === false) {
             $res = openssl_pkey_get_public($pem);
@@ -171,6 +173,21 @@ final class KeyConverter
             default:
                 throw new \InvalidArgumentException('Unsupported key type');
         }
+    }
+
+    /**
+     * This method modify the PEM to get 64 char lines and fix bug with old OpenSSL versions
+     *
+     * @param string $pem
+     */
+    private static function sanitizePEM(&$pem)
+    {
+        preg_match_all('#(-.*-)#', $pem, $matches, PREG_PATTERN_ORDER);
+        $ciphertext = preg_replace('#-.*-|\r|\n| #', '', $pem);
+
+        $pem = $matches[0][0].PHP_EOL;
+        $pem .= chunk_split($ciphertext, 64, PHP_EOL);
+        $pem .= $matches[0][1].PHP_EOL;
     }
 
     /**
