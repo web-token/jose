@@ -149,7 +149,6 @@ final class KeyConverter
             $pem = self::decodePem($pem, $matches, $password);
         }
 
-        var_dump($pem);
         $res = openssl_pkey_get_private($pem);
         if ($res === false) {
             $res = openssl_pkey_get_public($pem);
