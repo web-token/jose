@@ -105,8 +105,8 @@ final class ECKey extends Sequence
             return false;
         }
 
-        $classes = [0 => Integer::class, 1 => Sequence::class, 2 => OctetString::class,];
-        foreach ($classes as $k=>$class) {
+        $classes = [0 => Integer::class, 1 => Sequence::class, 2 => OctetString::class];
+        foreach ($classes as $k => $class) {
             if (!$children[$k] instanceof $class) {
                 return false;
             }

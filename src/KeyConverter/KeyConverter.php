@@ -176,7 +176,7 @@ final class KeyConverter
     }
 
     /**
-     * This method modify the PEM to get 64 char lines and fix bug with old OpenSSL versions
+     * This method modify the PEM to get 64 char lines and fix bug with old OpenSSL versions.
      *
      * @param string $pem
      */
