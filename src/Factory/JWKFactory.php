@@ -274,7 +274,7 @@ final class JWKFactory implements JWKFactoryInterface
     {
         switch ($curve) {
             case 'P-256':
-                return 'secp256k1';
+                return 'prime256v1';
             case 'P-384':
                 return 'secp384r1';
             case 'P-521':
