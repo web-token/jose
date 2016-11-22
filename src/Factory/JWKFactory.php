@@ -157,15 +157,6 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * @param array $values
-     *
-     * @return array
-     */
-    private static function createECKeyFromNativeFunctions(array $values)
-    {
-    }
-
-    /**
      * {@inheritdoc}
      */
     public static function createOctKey(array $values)
