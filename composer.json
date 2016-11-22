@@ -34,7 +34,7 @@
         "symfony/polyfill-mbstring": "^1.1",
         "symfony/polyfill-php70": "^1.1",
         "fgrosse/phpasn1": "^1.5",
-        "mdanter/ecc": "0.4",
+        "mdanter/ecc": "0.4.*",
         "psr/cache": "^1.0"
     },
     "require-dev": {
