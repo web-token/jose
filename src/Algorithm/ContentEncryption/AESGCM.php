@@ -27,22 +27,6 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
             $calculated_aad .= '.'.$aad;
         }
 
-        if (version_compare(PHP_VERSION, '7.1.0') >= 0) {
-            return openssl_encrypt($data, $this->getMode($cek), $cek, OPENSSL_RAW_DATA, $iv, $tag, $calculated_aad, 16);
-        } elseif (class_exists('\Crypto\Cipher')) {
-            $cipher = Cipher::aes(Cipher::MODE_GCM, $this->getKeySize());
-            $calculated_aad = $encoded_protected_header;
-            if (null !== $aad) {
-                $calculated_aad .= '.'.$aad;
-            }
-
-            $cipher->setAAD($calculated_aad);
-            $cyphertext = $cipher->encrypt($data, $cek, $iv);
-            $tag = $cipher->getTag();
-
-            return $cyphertext;
-        }
-
         list($cyphertext, $tag) = GCM::encrypt($cek, $iv, $data, $calculated_aad);
 
         return $cyphertext;

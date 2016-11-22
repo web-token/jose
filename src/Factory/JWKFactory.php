@@ -13,6 +13,7 @@ namespace Jose\Factory;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
+use Jose\KeyConverter\ECKey;
 use Jose\KeyConverter\KeyConverter;
 use Jose\KeyConverter\RSAKey;
 use Jose\Object\JKUJWKSet;
@@ -119,22 +120,51 @@ final class JWKFactory implements JWKFactoryInterface
     {
         Assertion::keyExists($values, 'crv', 'The curve is not set.');
         $curve = $values['crv'];
-        $curve_name = self::getNistName($curve);
-        $generator = CurveFactory::getGeneratorByName($curve_name);
-        $private_key = $generator->createPrivateKey();
+        if (function_exists('openssl_get_curve_names')) {
+            $curve_name = self::getOpensslName($curve);
+            $args = [
+                'ec_group_name' => $curve_name,
+                'private_key_type' => OPENSSL_KEYTYPE_EC,
+            ];
+            $key = openssl_pkey_new($args);
+            $res = openssl_pkey_export($key, $out);
+            Assertion::true($res, 'Unable to create the key');
 
-        $values = array_merge(
-            $values,
-            [
-                'kty' => 'EC',
-                'crv' => $curve,
-                'x'   => self::encodeValue($private_key->getPublicKey()->getPoint()->getX()),
-                'y'   => self::encodeValue($private_key->getPublicKey()->getPoint()->getY()),
-                'd'   => self::encodeValue($private_key->getSecret()),
-            ]
-        );
+            $rsa = new ECKey($out);
+            $values = array_merge(
+                $values,
+                $rsa->toArray()
+            );
+            var_dump('OpenSSL youpiiii!');
+
+            return new JWK($values);
+        } else {
+            $curve_name = self::getNistName($curve);
+            $generator = CurveFactory::getGeneratorByName($curve_name);
+            $private_key = $generator->createPrivateKey();
+
+            $values = array_merge(
+                $values,
+                [
+                    'kty' => 'EC',
+                    'crv' => $curve,
+                    'x'   => self::encodeValue($private_key->getPublicKey()->getPoint()->getX()),
+                    'y'   => self::encodeValue($private_key->getPublicKey()->getPoint()->getY()),
+                    'd'   => self::encodeValue($private_key->getSecret()),
+                ]
+            );
+        }
 
         return new JWK($values);
+    }
+
+    /**
+     * @param array $values
+     *
+     * @return array
+     */
+    private static function createECKeyFromNativeFunctions(array $values)
+    {
     }
 
     /**
@@ -231,6 +261,27 @@ final class JWKFactory implements JWKFactoryInterface
         $adapter = EccFactory::getAdapter();
 
         return hex2bin($adapter->decHex($value));
+    }
+
+    /**
+     * @param string $curve
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return string
+     */
+    private static function getOpensslName($curve)
+    {
+        switch ($curve) {
+            case 'P-256':
+                return 'secp256k1';
+            case 'P-384':
+                return 'secp384r1';
+            case 'P-521':
+                return 'secp521r1';
+            default:
+                throw new \InvalidArgumentException(sprintf('The curve "%s" is not supported.', $curve));
+        }
     }
 
     /**
