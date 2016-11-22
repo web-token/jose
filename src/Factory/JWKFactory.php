@@ -123,7 +123,7 @@ final class JWKFactory implements JWKFactoryInterface
         if (function_exists('openssl_get_curve_names')) {
             $curve_name = self::getOpensslName($curve);
             $args = [
-                'ec_group_name' => $curve_name,
+                'curve_name'       => $curve_name,
                 'private_key_type' => OPENSSL_KEYTYPE_EC,
             ];
             $key = openssl_pkey_new($args);
