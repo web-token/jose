@@ -121,9 +121,8 @@ final class JWKFactory implements JWKFactoryInterface
         Assertion::keyExists($values, 'crv', 'The curve is not set.');
         $curve = $values['crv'];
         if (function_exists('openssl_get_curve_names')) {
-            $curve_name = self::getOpensslName($curve);
             $args = [
-                'curve_name'       => $curve_name,
+                'curve_name'       => self::getOpensslName($curve),
                 'private_key_type' => OPENSSL_KEYTYPE_EC,
             ];
             $key = openssl_pkey_new($args);
@@ -135,7 +134,6 @@ final class JWKFactory implements JWKFactoryInterface
                 $values,
                 $rsa->toArray()
             );
-            var_dump('OpenSSL youpiiii!');
 
             return new JWK($values);
         } else {
