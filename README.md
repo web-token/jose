@@ -1,22 +1,16 @@
 PHP JOSE Library
 ================
 
-Help me out for a couple of :beers:!
-
-[![Beerpay](https://beerpay.io/Spomky-Labs/jose/badge.svg?style=beer-square)](https://beerpay.io/Spomky-Labs/jose)  [![Beerpay](https://beerpay.io/Spomky-Labs/jose/make-wish.svg?style=flat-square)](https://beerpay.io/Spomky-Labs/jose?focus=wish)
-
----
-
 [![Join the chat at https://gitter.im/Spomky-Labs/jose](https://badges.gitter.im/Spomky-Labs/jose.svg)](https://gitter.im/Spomky-Labs/jose?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Spomky-Labs/jose/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Spomky-Labs/jose/?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/Spomky-Labs/jose/badge.svg?branch=master)](https://coveralls.io/github/Spomky-Labs/jose?branch=master)
+
 [![Build Status](https://travis-ci.org/Spomky-Labs/jose.svg?branch=master)](https://travis-ci.org/Spomky-Labs/jose)
-
-[![Dependency Status](https://www.versioneye.com/user/projects/57ac28c489a9740034ca18c6/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57ac28c489a9740034ca18c6)
-
 [![HHVM Status](http://hhvm.h4cc.de/badge/Spomky-Labs/jose.svg?style=flat)](http://hhvm.h4cc.de/package/Spomky-Labs/jose)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/Spomky-Labs/jose/badge.svg)](https://travis-ci.org/Spomky-Labs/jose)
+
+[![Dependency Status](https://www.versioneye.com/user/projects/57ac28c489a9740034ca18c6/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57ac28c489a9740034ca18c6)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/9123fbfc-7ae1-4d63-9fda-170b8ad794ee/big.png)](https://insight.sensiolabs.com/projects/9123fbfc-7ae1-4d63-9fda-170b8ad794ee)
 
@@ -25,17 +19,13 @@ Help me out for a couple of :beers:!
 [![Latest Unstable Version](https://poser.pugx.org/Spomky-Labs/JOSE/v/unstable.png)](https://packagist.org/packages/Spomky-Labs/JOSE)
 [![License](https://poser.pugx.org/Spomky-Labs/JOSE/license.png)](https://packagist.org/packages/Spomky-Labs/JOSE)
 
-This library aims to provide an implementation of:
+This library provides an implementation of:
 
 * JW**S** [JSON Web Signature (RFC 7515)](https://tools.ietf.org/html/rfc7515),
 * JW**T** [JSON Web Token (RFC 7519)](https://tools.ietf.org/html/rfc7519),
 * JW**E** [JSON Web Encryption (RFC 7516)](http://tools.ietf.org/html/rfc7516),
 * JW**A** [JSON Web Algorithms (RFC 7518)](http://tools.ietf.org/html/rfc7518).
 * JW**K** [JSON Web Key (RFC 7517)](http://tools.ietf.org/html/rfc7517).
-
-It also implements the following specifications:
-
-* Tests vectors from [RFC 7520](http://tools.ietf.org/html/rfc7520) (fully implemented and all test pass).
 * JSON Web Key Thumbprint ([RFC 7638](https://tools.ietf.org/html/rfc7638)).
 * Unencoded Payload Option [RFC7797](https://tools.ietf.org/html/rfc7797).
 
@@ -67,18 +57,22 @@ When `b64` header is set, the `crit` protected header with value `b64` in its ar
 
 ## Supported Compression Methods
 
-* [x] Deflate —DEF—
-* [x] GZip —GZ— *(this compression method is not described in the specification)*
-* [x] ZLib —ZLIB— *(this compression method is not described in the specification)*
+| Compression Method | Supported | Comment                                                         |
+| ------------------ |:---------:| --------------------------------------------------------------- |
+| Deflate (`DEF`)    | YES       |                                                                 |
+| GZip (`GZ`)        | YES       | *This compression method is not described in the specification* |
+| ZLib (`ZLIB`)      | YES       | *This compression method is not described in the specification* |
 
 ## Supported Key Types (JWK)
 
-* [x] None keys (`none`)
-* [x] Symmetric keys (`oct`)
-* [x] Asymmetric keys based on RSA keys (`RSA`)
-* [x] Asymmetric keys based on Elliptic Curves (`EC`)
-* [x] Asymmetric keys based on Octet Key Pair (`OKP`)
-* 
+| Key Type | Supported | Comment                                      |
+| -------- |:---------:| -------------------------------------------- |
+| `none`   | YES       |  None keys are for the `none` algorithm only |
+| `oct`    | YES       | Symmetric keys                               |
+| `RSA`    | YES       | RSA based asymmetric keys                    |
+| `EC`     | YES       | Elliptic Curves based asymmetric keys        |
+| `OKP`    | YES       | Octet Key Pair based asymmetric keys         |
+
 JWK objects support JSON Web Key Thumbprint ([RFC 7638](https://tools.ietf.org/html/rfc7638)).
 
 ## Key Sets (JWKSet)
@@ -87,50 +81,41 @@ JWKSet is fully supported.
 
 ## Supported Signature Algorithms
 
-* [x] HS256, HS384, HS512
-* [x] ES256, ES384, ES512
-* [x] RS256, RS384, RS512
-* [x] PS256, PS384, PS512
-* [x] none (**Please note that this is not a secured algorithm. DO NOT USE IT PRODUCTION!**)
-* [x] Ed25519 ([third party extension required](https://github.com/encedo/php-ed25519-ext))
-* [ ] Ed448
+| Signature Algorithm            | Supported | Comment                                                                     |
+| ------------------------------ |:---------:| --------------------------------------------------------------------------- |
+| `HS256`, `HS384` and `HS512`   | YES       |                                                                             |
+| `HS256`, `ES384` and `ES512`   | YES       |                                                                             |
+| `RS256`, `RS384` and `RS512`   | YES       |                                                                             |
+| `PS256`, `PS384` and `PS512`   | YES       |                                                                             |
+| `none`                         | YES       | **Please note that this is not a secured algorithm. USE IT WITH CAUTION!**  |
+| *`EdDSA` with `Ed25519` curve* | YES       | [Third party extension required](https://github.com/encedo/php-ed25519-ext) |
+| *`EdDSA` with `Ed448` curve*   | **NO**    |                                                                             |
 
 *Please note that the [EdDSA signature algorithm specification](https://tools.ietf.org/html/draft-ietf-jose-cfrg-curves)
 is not not yet approved. Support for algorithms `Ed25518` and `Ed448` may change. Use with caution.*
 
 ## Supported Key Encryption Algorithms
 
-* [x] dir
-* [x] RSA1_5
-* [x] RSA-OAEP
-* [x] RSA-OAEP-256
-* [x] ECDH-ES
-* [x] ECDH-ES+A128KW
-* [x] ECDH-ES+A192KW
-* [x] ECDH-ES+A256KW
-* [x] A128KW
-* [x] A192KW
-* [x] A256KW
-* [x] PBES2-HS256+A128KW
-* [x] PBES2-HS384+A192KW
-* [x] PBES2-HS512+A256KW
-* [x] A128GCMKW (for performance, this [third party extension is highly recommended](https://github.com/bukka/php-crypto))
-* [x] A192GCMKW (for performance, this [third party extension is highly recommended](https://github.com/bukka/php-crypto))
-* [x] A256GCMKW (for performance, this [third party extension is highly recommended](https://github.com/bukka/php-crypto))
-* [x] X25519 ([third party extension required](https://github.com/encedo/php-curve25519-ext))
-* [ ] X448
+| Key Encryption Algorithm                                            | Supported | Comment                                                                                                           |
+| ------------------------------------------------------------------- |:---------:| ----------------------------------------------------------------------------------------------------------------- |
+| `dir`                                                               | YES       |                                                                                                                   |
+| `RSA1_5`, `RSA-OAEP` and `RSA-OAEP-256`                             | YES       |                                                                                                                   |
+| `ECDH-ES`, `ECDH-ES+A128KW`, `ECDH-ES+A192KW` and `ECDH-ES+A256KW`  | YES       |                                                                                                                   |
+| `A128KW`, `A128KW` and `A128KW`                                     | YES       |                                                                                                                   |
+| `PBES2-HS256+A128KW`, `PBES2-HS384+A192KW` and `PBES2-HS512+A256KW` | YES       |                                                                                                                   |
+| `A128GCMKW`, `A192GCMKW` and `A256GCMKW`                            | YES       | For better performance, please use PHP 7.1+ or this [third party extension ](https://github.com/bukka/php-crypto) |
+| `EdDSA` with `X25519` curve                                         | YES       | [Third party extension required](https://github.com/encedo/php-curve25519-ext)                                    |
+| `EdDSA` with `X448` curve                                           | **NO**    |                                                                                                                   |
 
 *Please note that the [EdDSA encryption algorithm specification](https://tools.ietf.org/html/draft-ietf-jose-cfrg-curves)
 is not not yet approved. Support for algorithms `X25518` and `X448` may change. Use with caution.*
 
 ## Supported Content Encryption Algorithms
 
-* [x] A128CBC-HS256
-* [x] A192CBC-HS384
-* [x] A256CBC-HS512
-* [x] A128GCM (for performance, this [third party extension is highly recommended](https://github.com/bukka/php-crypto))
-* [x] A192GCM (for performance, this [third party extension is highly recommended](https://github.com/bukka/php-crypto))
-* [x] A256GCM (for performance, this [third party extension is highly recommended](https://github.com/bukka/php-crypto))
+| Content Encryption Algorithm                         | Supported | Comment                                                                                                          |
+| ---------------------------------------------------- |:---------:| ---------------------------------------------------------------------------------------------------------------- |
+| `A128CBC-HS256`, `A192CBC-HS384` and `A256CBC-HS512` | YES       |                                                                                                                  |
+| `A128GCM`, `A192GCM` and `A256GCM`                   | YES       | For better performance, please use PHP 7.1+ or this [third party extension](https://github.com/bukka/php-crypto) |
 
 # The Release Process
 
@@ -143,7 +128,7 @@ This library needs at least:
 * OpenSSL extension.
 
 Please consider the following optional requirements:
-* For AES-GCM based algorithms (`AxxxGCM` and `AxxxGCMKW`): [PHP Crypto](https://github.com/bukka/php-crypto) Extension (at least `v0.2.1`) is highly recommended as encryption/decryption is faster than the pure PHP implementation.
+* For AES-GCM based algorithms (`AxxxGCM` and `AxxxGCMKW`) if not on PHP 7.1+: [PHP Crypto](https://github.com/bukka/php-crypto) Extension (at least `v0.2.1`) is highly recommended as encryption/decryption is faster than the pure PHP implementation.
 * For Ed25519 algorithm: [php-ed25519-ext](https://github.com/encedo/php-ed25519-ext) required
 * For X25519 algorithm: [php-curve25519-ext](https://github.com/encedo/php-curve25519-ext) required
 
@@ -153,6 +138,8 @@ As the time needed to perform operation is long compared to the other algorithms
 # Continuous Integration
 
 It has been successfully tested using `PHP 5.6`, `PHP 7.0`, `PHP 7.1` and `HHVM` with all algorithms.
+
+Tests vectors from the [RFC 7520](http://tools.ietf.org/html/rfc7520) are fully implemented and all tests pass.
 
 We also track bugs and code quality using [Scrutinizer-CI](https://scrutinizer-ci.com/g/Spomky-Labs/JOSE) and [Sensio Insight](https://insight.sensiolabs.com/projects/9123fbfc-7ae1-4d63-9fda-170b8ad794ee).
 
@@ -178,7 +165,14 @@ Please read the [performance page](doc/Performance.md) to know how fast are the 
 
 # Contributing
 
-Requests for new features, bug fixed and all other ideas to make this library useful are welcome. [Please follow these best practices](doc/Contributing.md).
+Requests for new features, bug fixed and all other ideas to make this library useful are welcome.
+If you feel comfortable writting code, you could try to fix [opened issues where help is wanted](https://github.com/Spomky-Labs/jose/labels/help+wanted) or [those that are easy to fix](https://github.com/Spomky-Labs/jose/labels/easy-pick).
+
+Do not forget to [follow these best practices](doc/Contributing.md).
+
+If you really love that library, then you can help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/Spomky-Labs/jose/badge.svg?style=beer-square)](https://beerpay.io/Spomky-Labs/jose)  [![Beerpay](https://beerpay.io/Spomky-Labs/jose/make-wish.svg?style=flat-square)](https://beerpay.io/Spomky-Labs/jose?focus=wish)
 
 # Licence
 
