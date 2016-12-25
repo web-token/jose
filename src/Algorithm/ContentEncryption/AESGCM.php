@@ -12,7 +12,6 @@
 namespace Jose\Algorithm\ContentEncryption;
 
 use AESGCM\AESGCM as GCM;
-use Crypto\Cipher;
 use Jose\Algorithm\ContentEncryptionAlgorithmInterface;
 
 abstract class AESGCM implements ContentEncryptionAlgorithmInterface
@@ -42,29 +41,7 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
             $calculated_aad .= '.'.$aad;
         }
 
-        if (version_compare(PHP_VERSION, '7.1.0') >= 0) {
-            return openssl_decrypt($data, $this->getMode($cek), $cek, OPENSSL_RAW_DATA, $iv, $tag, $calculated_aad);
-        } elseif (class_exists('\Crypto\Cipher')) {
-            $cipher = Cipher::aes(Cipher::MODE_GCM, $this->getKeySize());
-            $cipher->setTag($tag);
-            $cipher->setAAD($calculated_aad);
-
-            $plaintext = $cipher->decrypt($data, $cek, $iv);
-
-            return $plaintext;
-        }
-
         return GCM::decrypt($cek, $iv, $data, $calculated_aad, $tag);
-    }
-
-    /**
-     * @param string $k
-     *
-     * @return string
-     */
-    private function getMode($k)
-    {
-        return 'aes-'.(8 * mb_strlen($k, '8bit')).'-gcm';
     }
 
     /**

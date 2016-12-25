@@ -14,7 +14,6 @@ namespace Jose\Algorithm\KeyEncryption;
 use AESGCM\AESGCM;
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Crypto\Cipher;
 use Jose\Object\JWKInterface;
 
 /**
@@ -50,29 +49,7 @@ abstract class AESGCMKW implements KeyWrappingInterface
         $tag = Base64Url::decode($header['tag']);
         $iv = Base64Url::decode($header['iv']);
 
-        if (version_compare(PHP_VERSION, '7.1.0') >= 0) {
-            return openssl_decrypt($encrypted_cek, $this->getMode($kek), $kek, OPENSSL_RAW_DATA, $iv, $tag, null);
-        } elseif (class_exists('\Crypto\Cipher')) {
-            $cipher = Cipher::aes(Cipher::MODE_GCM, $this->getKeySize());
-            $cipher->setTag($tag);
-            $cipher->setAAD(null);
-
-            $cek = $cipher->decrypt($encrypted_cek, $kek, $iv);
-
-            return $cek;
-        }
-
         return AESGCM::decrypt($kek, $iv, $encrypted_cek, null, $tag);
-    }
-
-    /**
-     * @param string $k
-     *
-     * @return string
-     */
-    private function getMode($k)
-    {
-        return 'aes-'.(8 * mb_strlen($k, '8bit')).'-gcm';
     }
 
     /**
