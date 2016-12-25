@@ -174,7 +174,6 @@ final class Loader implements LoaderInterface
             }
         }
 
-
         return $recipients;
     }
 
@@ -199,7 +198,6 @@ final class Loader implements LoaderInterface
             $temp['payload'] = $input['payload'];
         }
         $temp['signatures'] = [$signature];
-
 
         return $temp;
     }
@@ -243,7 +241,6 @@ final class Loader implements LoaderInterface
             }
         }
 
-
         return $recipients;
     }
 
@@ -263,7 +260,6 @@ final class Loader implements LoaderInterface
             'protected' => $parts[0],
             'signature' => $parts[2],
         ]];
-
 
         return $temp;
     }

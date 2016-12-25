@@ -74,7 +74,6 @@ final class Signer implements SignerInterface
             $input
         );
 
-
         $signature = Object\Signature::createSignatureFromLoadedData(
             $value,
             $signature->getEncodedProtectedHeaders(),
