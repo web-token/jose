@@ -280,8 +280,10 @@ final class RSAKey extends Sequence
      */
     private function populateCRT()
     {
-        Assertion::keyExists($this->values, 'p', 'The prime "p" is not available.');
-        Assertion::keyExists($this->values, 'q', 'The prime "q" is not available.');
+        if (!array_key_exists('p', $this->values) || !array_key_exists('q', $this->values)) {
+            $this->calculatePAndQ();
+        }
+
         if (array_key_exists('dp', $this->values) && array_key_exists('dq', $this->values) && array_key_exists('qi', $this->values)) {
             return;
         }
@@ -390,5 +392,105 @@ final class RSAKey extends Sequence
     private function convertBase64StringToBigInteger($value)
     {
         return BigInteger::createFromBinaryString(Base64Url::decode($value));
+    }
+
+    /**
+     * Calculates the P and Q values of a private key.
+     */
+    private function calculatePAndQ()
+    {
+        $zero = BigInteger::createFromDecimal(0);
+        $one = BigInteger::createFromDecimal(1);
+        $d = BigInteger::createFromBinaryString(Base64Url::decode($this->values['d']));
+        $e = BigInteger::createFromBinaryString(Base64Url::decode($this->values['e']));
+        $n = BigInteger::createFromBinaryString(Base64Url::decode($this->values['n']));
+
+        $n_minus_one = $n->subtract(BigInteger::createFromDecimal(1));
+
+        // 1a: Let k = de-1
+        $k = $d->multiply($e)->subtract($one);
+
+        // 1b: If k is odd, then say there are no prime factors found.
+        Assertion::true($k->isEven(), 'Prime factors not found.'); // STEP 4
+
+        // 2: Write k as k = 2tr, where r is the largest odd integer dividing k, and t ≥ 1.
+        //    Or in simpler terms, divide k repeatedly by 2 until you reach an odd number.
+        //
+        // BEGIN STEP 2
+        $r = clone $k;
+        $t = BigInteger::createFromDecimal(0);
+        $two = BigInteger::createFromDecimal(2);
+
+        do {
+            $r = $r->divide($two);
+            $t = $t->add($one);
+        } while ($r->isEven());
+        // END STEP 2
+
+        // BEGIN STEP 3
+        $success = false;
+        $y = null;
+
+        for ($i = 0; $i <= 100; $i++) {
+
+            // 3a: Generate a random integer g in the range [0, n−1].
+            $g = BigInteger::randomInt($zero, $n_minus_one);
+
+            // 3b: Let y = gr mod n
+            $y = $g->modPow($r, $n);
+
+            // 3c: If y = 1 or y = n – 1, then go to Step 3.1 (i.e. repeat this loop).
+            if ($y->equals($one) || $y->equals($n_minus_one)) {
+                continue;
+            }
+
+            // 3d: For j = 1 to t – 1 do:
+            for ($j = $one; $j->compare($t) <= 0; $j = $j->add($one)) {
+
+                // 3d1: Let x = y2 mod n
+                $x = $y->modPow($two, $n);
+
+                // 3d2: If x = 1, go to STEP 5.
+                if ($x->equals($one)) {
+                    $success = true;
+                    break 2;
+                }
+
+                // 3d3: If x = n – 1, go to Step 3.1.
+                if ($x->equals($n_minus_one)) {
+                    continue 2;
+                }
+
+                // 3d4: Let y = x.
+                $y = $x;
+            }
+
+            // 3e: Let x = y2 mod n
+            $x = $y->modPow($two, $n);
+
+            // 3f: If x = 1, go to STEP 5.
+            if ($x->equals($one)) {
+                $success = true;
+                break;
+            }
+
+            // 3g: Loop again
+        }
+        //   END STEP 3
+
+        // BEGIN STEP 5
+        if ($success) {
+            $p = $y->subtract($one)->gcd($n);
+            $q = $n->divide($p);
+
+            $this->values['p'] = Base64Url::encode($p->toBytes());
+            $this->values['q'] = Base64Url::encode($q->toBytes());
+
+            return;
+        }
+        //  END  STEP 5
+
+        // STEP 4
+        Assertion::true(false, 'Prime factors not found.');
     }
 }
