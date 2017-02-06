@@ -149,6 +149,20 @@ final class BigInteger
     }
 
     /**
+     * Divides two BigIntegers.
+     *
+     * @param BigInteger $x
+     *
+     * @return BigInteger
+     */
+    public function divide(BigInteger $x)
+    {
+        $value = gmp_div($this->value, $x->value);
+
+        return self::createFromGMPResource($value);
+    }
+
+    /**
      * Performs modular exponentiation.
      *
      * @param \Jose\Util\BigInteger $e
@@ -193,6 +207,20 @@ final class BigInteger
     }
 
     /**
+     * Calculates the greatest common denominator.
+     *
+     * @param BigInteger $x
+     *
+     * @return BigInteger
+     */
+    public function gcd(BigInteger $x)
+    {
+        $value = gmp_gcd($this->value, $x->value);
+
+        return self::createFromGMPResource($value);
+    }
+
+    /**
      * Compares two numbers.
      *
      * @param \Jose\Util\BigInteger $y
@@ -202,5 +230,45 @@ final class BigInteger
     public function compare(BigInteger $y)
     {
         return gmp_cmp($this->value, $y->value);
+    }
+
+    /**
+     * Check whether two BigIntegers are the same.
+     *
+     * @param BigInteger $x
+     *
+     * @return bool
+     */
+    public function equals(BigInteger $x)
+    {
+        return 0 === gmp_cmp($this->value, $x->value);
+    }
+
+    /**
+     * Whether this is an even number.
+     *
+     * @return bool
+     */
+    public function isEven()
+    {
+        $zero = self::createFromDecimal(0);
+        $two = self::createFromDecimal(2);
+
+        return $this->mod($two)->equals($zero);
+    }
+
+    /**
+     * Generate a random integer between min and max.
+     *
+     * @param BigInteger $min
+     * @param BigInteger $max
+     *
+     * @return BigInteger
+     */
+    public static function randomInt(BigInteger $min, BigInteger $max)
+    {
+        $value = gmp_random_range($min->value, $max->value);
+
+        return self::createFromGMPResource($value);
     }
 }
