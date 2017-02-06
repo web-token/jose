@@ -280,8 +280,16 @@ final class RSAKey extends Sequence
      */
     private function populateCRT()
     {
-        Assertion::keyExists($this->values, 'p', 'The prime "p" is not available.');
-        Assertion::keyExists($this->values, 'q', 'The prime "q" is not available.');
+        if (!array_key_exists('p', $this->values) && !array_key_exists('q', $this->values)) {
+            $d = BigInteger::createFromBinaryString(Base64Url::decode($this->values['d']));
+            $e = BigInteger::createFromBinaryString(Base64Url::decode($this->values['e']));
+            $n = BigInteger::createFromBinaryString(Base64Url::decode($this->values['n']));
+
+            list($p, $q) = $this->findPrimeFactors($d, $e, $n);
+            $this->values['p'] = Base64Url::encode($p->toBytes());
+            $this->values['q'] = Base64Url::encode($q->toBytes());
+        }
+
         if (array_key_exists('dp', $this->values) && array_key_exists('dq', $this->values) && array_key_exists('qi', $this->values)) {
             return;
         }
@@ -390,5 +398,72 @@ final class RSAKey extends Sequence
     private function convertBase64StringToBigInteger($value)
     {
         return BigInteger::createFromBinaryString(Base64Url::decode($value));
+    }
+
+    /**
+     * @param BigInteger $d
+     * @param BigInteger $e
+     * @param BigInteger $n
+     * @return array
+     */
+    private function findPrimeFactors(BigInteger $d, BigInteger $e, BigInteger $n)
+    {
+        $zero = BigInteger::createFromDecimal(0);
+        $one  = BigInteger::createFromDecimal(1);
+        $two  = BigInteger::createFromDecimal(2);
+
+        $k = $d->multiply($e)->subtract($one);
+
+        if ($k->isEven()) {
+            $r = $k;
+            $t = $zero;
+
+            do {
+                $r = $r->divide($two);
+                $t = $t->add($one);
+            } while ($r->isEven());
+
+            $found = false;
+            $y = null;
+
+            for($i = 1; $i <= 100; $i++) {
+                $g = BigInteger::random($n->subtract($one));
+                $y = $g->modPow($r, $n);
+
+                if ($y->equals($one) || $y->equals($n->subtract($one))) {
+                    continue;
+                }
+
+                for ($j = $one; $j->lowerThan($t->subtract($one)); $j = $j->add($one)) {
+                    $x = $y->modPow($two, $n);
+
+                    if ($x->equals($one)) {
+                        $found = true;
+                        break;
+                    }
+
+                    if ($x->equals($n->subtract($one))) {
+                        continue;
+                    }
+
+                    $y = $x;
+                }
+
+                $x = $y->modPow($two, $n);
+                if ($x->equals($one)) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (true === $found) {
+                $p = $y->subtract($one)->gcd($n);
+                $q = $n->divide($p);
+
+                return [$p, $q];
+            }
+        }
+
+        throw new \InvalidArgumentException('Unable to find prime factors.');
     }
 }
