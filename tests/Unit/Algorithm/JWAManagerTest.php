@@ -37,26 +37,7 @@ class JWAManagerTest extends TestCase
         $this->assertInstanceOf(JWAInterface::class, $jwa_manager->getAlgorithm('ES256'));
         $this->assertInstanceOf(JWAInterface::class, $jwa_manager->getAlgorithms()['ES256']);
 
-        $jwa_manager->removeAlgorithm('ES256');
-        $jwa_manager->removeAlgorithm('ES256');
-
-        $this->assertNull($jwa_manager->getAlgorithm('ES256'));
-        $this->assertEquals(['ES384'], $jwa_manager->listAlgorithms());
-
-        $jwa_manager->removeAlgorithm(new ES384());
-
         $this->assertNull($jwa_manager->getAlgorithm('HS384'));
-        $this->assertEquals([], $jwa_manager->listAlgorithms());
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Argument must be a string or a JWAInterface object.
-     */
-    public function testBadArgument()
-    {
-        $jwa_manager = new JWAManager();
-        $jwa_manager->removeAlgorithm(new \stdClass());
     }
 
     public function testAllAlgorithms()
