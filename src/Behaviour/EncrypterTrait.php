@@ -105,7 +105,7 @@ trait EncrypterTrait
             $complete_headers = array_merge($jwe->getSharedProtectedHeaders(), $jwe->getSharedHeaders(), $recipient->getHeaders());
             Assertion::keyExists($complete_headers, 'alg', 'Parameter "alg" is missing.');
 
-            $key_encryption_algorithm = $this->getJWAManager()->getAlgorithm($complete_headers['alg']);
+            $key_encryption_algorithm = $this->getJWAManager()->get($complete_headers['alg']);
             Assertion::isInstanceOf($key_encryption_algorithm, Algorithm\KeyEncryptionAlgorithmInterface::class, sprintf('The key encryption algorithm "%s" is not supported or not a key encryption algorithm instance.', $complete_headers['alg']));
 
             if (null === $mode) {
@@ -174,7 +174,7 @@ trait EncrypterTrait
             }
         }
 
-        $content_encryption_algorithm = $this->getJWAManager()->getAlgorithm($algorithm);
+        $content_encryption_algorithm = $this->getJWAManager()->get($algorithm);
         Assertion::isInstanceOf($content_encryption_algorithm, Algorithm\ContentEncryptionAlgorithmInterface::class, sprintf('The content encryption algorithm "%s" is not supported or not a content encryption algorithm instance.', $algorithm));
 
         return $content_encryption_algorithm;
@@ -229,7 +229,7 @@ trait EncrypterTrait
     private function findKeyEncryptionAlgorithm(array $complete_headers)
     {
         Assertion::keyExists($complete_headers, 'alg', 'Parameter "alg" is missing.');
-        $key_encryption_algorithm = $this->getJWAManager()->getAlgorithm($complete_headers['alg']);
+        $key_encryption_algorithm = $this->getJWAManager()->get($complete_headers['alg']);
         Assertion::isInstanceOf($key_encryption_algorithm, Algorithm\KeyEncryptionAlgorithmInterface::class, sprintf('The key encryption algorithm "%s" is not supported or not a key encryption algorithm instance.', $complete_headers['alg']));
 
         return $key_encryption_algorithm;

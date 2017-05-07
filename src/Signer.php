@@ -132,7 +132,7 @@ final class Signer implements SignerInterface
             sprintf('The algorithm "%s" is not allowed with this key.', $complete_header['alg'])
         );
 
-        $signature_algorithm = $this->getJWAManager()->getAlgorithm($complete_header['alg']);
+        $signature_algorithm = $this->getJWAManager()->get($complete_header['alg']);
         Assertion::isInstanceOf($signature_algorithm, Algorithm\SignatureAlgorithmInterface::class, sprintf('The algorithm "%s" is not supported.', $complete_header['alg']));
 
         return $signature_algorithm;

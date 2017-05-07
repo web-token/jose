@@ -27,17 +27,17 @@ class JWAManagerTest extends TestCase
     {
         $jwa_manager = AlgorithmManagerFactory::createAlgorithmManager(['ES256', 'ES384']);
 
-        $this->assertTrue($jwa_manager->isAlgorithmSupported('ES256'));
-        $this->assertTrue($jwa_manager->isAlgorithmSupported('ES384'));
+        $this->assertTrue($jwa_manager->has('ES256'));
+        $this->assertTrue($jwa_manager->has('ES384'));
 
-        $this->assertFalse($jwa_manager->isAlgorithmSupported('ES512'));
-        $this->assertFalse($jwa_manager->isAlgorithmSupported('HS384'));
+        $this->assertFalse($jwa_manager->has('ES512'));
+        $this->assertFalse($jwa_manager->has('HS384'));
 
-        $this->assertEquals(['ES256', 'ES384'], $jwa_manager->listAlgorithms());
-        $this->assertInstanceOf(JWAInterface::class, $jwa_manager->getAlgorithm('ES256'));
-        $this->assertInstanceOf(JWAInterface::class, $jwa_manager->getAlgorithms()['ES256']);
+        $this->assertEquals(['ES256', 'ES384'], $jwa_manager->list());
+        $this->assertInstanceOf(JWAInterface::class, $jwa_manager->get('ES256'));
+        $this->assertInstanceOf(JWAInterface::class, $jwa_manager->all()['ES256']);
 
-        $this->assertNull($jwa_manager->getAlgorithm('HS384'));
+        $this->assertNull($jwa_manager->get('HS384'));
     }
 
     public function testAllAlgorithms()
@@ -81,6 +81,6 @@ class JWAManagerTest extends TestCase
         ];
         $jwa_manager = AlgorithmManagerFactory::createAlgorithmManager($algorithms);
 
-        $this->assertEquals($algorithms, $jwa_manager->listAlgorithms());
+        $this->assertEquals($algorithms, $jwa_manager->list());
     }
 }

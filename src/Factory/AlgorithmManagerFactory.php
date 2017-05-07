@@ -28,11 +28,11 @@ final class AlgorithmManagerFactory
 
         foreach ($algorithms as $algorithm) {
             if ($algorithm instanceof JWAInterface) {
-                $jwa_manager->addAlgorithm($algorithm);
+                $jwa_manager->add($algorithm);
             } else {
                 Assertion::string($algorithm, 'Bad argument: must be a list with either algorithm names (string) or instances of JWAInterface.');
                 $class = self::getAlgorithmClass($algorithm);
-                $jwa_manager->addAlgorithm(new $class());
+                $jwa_manager->add(new $class());
             }
         }
 

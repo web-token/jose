@@ -190,7 +190,7 @@ final class Verifier implements VerifierInterface
         );
         Assertion::keyExists($complete_headers, 'alg', 'No "alg" parameter set in the header.');
 
-        $algorithm = $this->getJWAManager()->getAlgorithm($complete_headers['alg']);
+        $algorithm = $this->getJWAManager()->get($complete_headers['alg']);
         Assertion::isInstanceOf($algorithm, Algorithm\SignatureAlgorithmInterface::class, sprintf('The algorithm "%s" is not supported or does not implement SignatureInterface.', $complete_headers['alg']));
 
         return $algorithm;

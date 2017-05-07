@@ -221,7 +221,7 @@ final class Decrypter implements DecrypterInterface
      */
     private function getKeyEncryptionAlgorithm(array $complete_headers)
     {
-        $key_encryption_algorithm = $this->getJWAManager()->getAlgorithm($complete_headers['alg']);
+        $key_encryption_algorithm = $this->getJWAManager()->get($complete_headers['alg']);
         Assertion::isInstanceOf($key_encryption_algorithm, Algorithm\KeyEncryptionAlgorithmInterface::class, sprintf('The key encryption algorithm "%s" is not supported or does not implement KeyEncryptionAlgorithmInterface.', $complete_headers['alg']));
 
         return $key_encryption_algorithm;
@@ -234,7 +234,7 @@ final class Decrypter implements DecrypterInterface
      */
     private function getContentEncryptionAlgorithm(array $complete_headers)
     {
-        $content_encryption_algorithm = $this->getJWAManager()->getAlgorithm($complete_headers['enc']);
+        $content_encryption_algorithm = $this->getJWAManager()->get($complete_headers['enc']);
         Assertion::isInstanceOf($content_encryption_algorithm, Algorithm\ContentEncryptionAlgorithmInterface::class, sprintf('The key encryption algorithm "%s" is not supported or does not implement ContentEncryptionInterface.', $complete_headers['enc']));
 
         return $content_encryption_algorithm;

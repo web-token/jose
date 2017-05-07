@@ -26,15 +26,15 @@ final class JWAManager
      *
      * @return bool Returns true if the algorithm is supported
      */
-    public function isAlgorithmSupported(string $algorithm): bool
+    public function has(string $algorithm): bool
     {
-        return null !== $this->getAlgorithm($algorithm);
+        return null !== $this->get($algorithm);
     }
 
     /**
      * @return JWAInterface[] Returns the list of supported algorithms
      */
-    public function getAlgorithms(): array
+    public function all(): array
     {
         return $this->algorithms;
     }
@@ -42,9 +42,9 @@ final class JWAManager
     /**
      * @return string[] Returns the list of names of supported algorithms
      */
-    public function listAlgorithms(): array
+    public function list(): array
     {
-        return array_keys($this->getAlgorithms());
+        return array_keys($this->all());
     }
 
     /**
@@ -52,18 +52,22 @@ final class JWAManager
      *
      * @return JWAInterface|null Returns JWAInterface object if the algorithm is supported, else null
      */
-    public function getAlgorithm(string $algorithm): ?JWAInterface
+    public function get(string $algorithm): ?JWAInterface
     {
         return array_key_exists($algorithm, $this->algorithms) ? $this->algorithms[$algorithm] : null;
     }
 
     /**
      * @param JWAInterface $algorithm
+     *
+     * @return self
      */
-    public function addAlgorithm(JWAInterface $algorithm)
+    public function add(JWAInterface $algorithm): JWAManager
     {
-        if (!$this->isAlgorithmSupported($algorithm->getAlgorithmName())) {
+        if (!$this->has($algorithm->getAlgorithmName())) {
             $this->algorithms[$algorithm->getAlgorithmName()] = $algorithm;
         }
+
+        return $this;
     }
 }
