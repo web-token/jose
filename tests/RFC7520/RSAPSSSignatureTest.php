@@ -16,13 +16,14 @@ use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Signer;
 use Jose\Verifier;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-4.2
  *
  * @group RFC7520
  */
-class RSAPSSSignatureTest extends \PHPUnit_Framework_TestCase
+class RSAPSSSignatureTest extends TestCase
 {
     /**
      * Please note that we cannot create the signature and get the same result as the example (RSA-PSS signatures are always different).

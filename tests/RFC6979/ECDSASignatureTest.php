@@ -18,6 +18,7 @@ use Jose\Algorithm\Signature\ES512;
 use Jose\Algorithm\SignatureAlgorithmInterface;
 use Jose\Factory\JWKFactory;
 use Jose\Object\JWKInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc6979#appendix-A.2.5
@@ -33,7 +34,7 @@ use Jose\Object\JWKInterface;
  *
  * @group RFC6979
  */
-class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
+class ECDSASignatureTest extends TestCase
 {
     /**
      * @param \Jose\Algorithm\SignatureAlgorithmInterface $algorithm

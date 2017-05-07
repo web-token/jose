@@ -13,6 +13,7 @@ use Jose\Factory\JWKFactory;
 use Jose\Object\JWKInterface;
 use Jose\Object\JWKSetInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class JWKFactoryTest.
@@ -20,7 +21,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
  * @group JWKFactory
  * @group Unit
  */
-class JWKFactoryTest extends \PHPUnit_Framework_TestCase
+class JWKFactoryTest extends TestCase
 {
     public function testCreateFromECCertificateFileInDERFormat()
     {

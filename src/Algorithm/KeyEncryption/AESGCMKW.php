@@ -11,7 +11,6 @@
 
 namespace Jose\Algorithm\KeyEncryption;
 
-use AESGCM\AESGCM;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Object\JWKInterface;
@@ -31,7 +30,13 @@ abstract class AESGCMKW implements KeyWrappingInterface
         $iv = random_bytes(96 / 8);
         $additional_headers['iv'] = Base64Url::encode($iv);
 
-        list($encrypted_cek, $tag) = AESGCM::encrypt($kek, $iv, $cek, null);
+        $key_length = mb_strlen($kek, '8bit') * 8;
+        $mode = 'aes-'.($key_length).'-gcm';
+        $tag = null;
+        $encrypted_cek = openssl_encrypt($cek, $mode, $kek, OPENSSL_RAW_DATA, $iv, $tag, null);
+        Assertion::true(false !== $encrypted_cek, 'Unable to encrypt the data.');
+
+        //list($encrypted_cek, $tag) = AESGCM::encrypt($kek, $iv, $cek, null);
         $additional_headers['tag'] = Base64Url::encode($tag);
 
         return $encrypted_cek;
@@ -49,7 +54,13 @@ abstract class AESGCMKW implements KeyWrappingInterface
         $tag = Base64Url::decode($header['tag']);
         $iv = Base64Url::decode($header['iv']);
 
-        return AESGCM::decrypt($kek, $iv, $encrypted_cek, null, $tag);
+        $key_length = mb_strlen($kek, '8bit') * 8;
+
+        $mode = sprintf('aes-%d-gcm', $key_length);
+        $cek = openssl_decrypt($encrypted_cek, $mode, $kek, OPENSSL_RAW_DATA, $iv, $tag, null);
+        Assertion::true(false !== $cek, 'Unable to decrypt or to verify the tag.');
+
+        return $cek;
     }
 
     /**

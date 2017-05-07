@@ -11,7 +11,7 @@
 
 namespace Jose\Algorithm\ContentEncryption;
 
-use AESGCM\AESGCM as GCM;
+use Assert\Assertion;
 use Jose\Algorithm\ContentEncryptionAlgorithmInterface;
 
 abstract class AESGCM implements ContentEncryptionAlgorithmInterface
@@ -26,9 +26,13 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
             $calculated_aad .= '.'.$aad;
         }
 
-        list($cyphertext, $tag) = GCM::encrypt($cek, $iv, $data, $calculated_aad);
+        $key_length = mb_strlen($cek, '8bit') * 8;
+        $mode = sprintf('aes-%d-gcm', $key_length);
+        $C = openssl_encrypt($data, $mode, $cek, OPENSSL_RAW_DATA, $iv, $tag, $calculated_aad);
+        Assertion::true(false !== $C, 'Unable to encrypt the data.');
+        //list($cyphertext, $tag) = GCM::encrypt($cek, $iv, $data, $calculated_aad);
 
-        return $cyphertext;
+        return $C;
     }
 
     /**
@@ -41,7 +45,15 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
             $calculated_aad .= '.'.$aad;
         }
 
-        return GCM::decrypt($cek, $iv, $data, $calculated_aad, $tag);
+        // $K,   $IV, $C,    $A,              $T
+        // $cek, $iv, $data, $calculated_aad, $tag
+        $key_length = mb_strlen($cek, '8bit') * 8;
+
+        $mode = 'aes-'.($key_length).'-gcm';
+        $P = openssl_decrypt($data, $mode, $cek, OPENSSL_RAW_DATA, $iv, $tag, $calculated_aad);
+        Assertion::true(false !== $P, 'Unable to decrypt or to verify the tag.');
+
+        return $P;
     }
 
     /**

@@ -16,13 +16,14 @@ use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Signer;
 use Jose\Verifier;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-4.1
  *
  * @group RFC7520
  */
-class RSA15SignatureTest extends \PHPUnit_Framework_TestCase
+class RSA15SignatureTest extends TestCase
 {
     public function testRS256()
     {

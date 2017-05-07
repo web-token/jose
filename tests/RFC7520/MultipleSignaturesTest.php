@@ -16,13 +16,14 @@ use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Signer;
 use Jose\Verifier;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-4.8
  *
  * @group RFC7520
  */
-class MultipleSignaturesTest extends \PHPUnit_Framework_TestCase
+class MultipleSignaturesTest extends TestCase
 {
     public function testMultipleSignatures()
     {

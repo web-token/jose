@@ -13,6 +13,7 @@ use Jose\Algorithm\Signature\HS256;
 use Jose\Algorithm\Signature\HS384;
 use Jose\Algorithm\Signature\HS512;
 use Jose\Object\JWK;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class HMACSignatureTest.
@@ -20,7 +21,7 @@ use Jose\Object\JWK;
  * @group HMAC
  * @group Unit
  */
-class HMACSignatureTest extends \PHPUnit_Framework_TestCase
+class HMACSignatureTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

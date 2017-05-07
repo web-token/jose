@@ -11,6 +11,7 @@
 
 use Jose\KeyConverter\KeyConverter;
 use Jose\Object\JWK;
+use PHPUnit\Framework\TestCase;
 
 /**
  * These tests will try to load certificates from PEM and DER files.
@@ -21,7 +22,7 @@ use Jose\Object\JWK;
  * @group Certificate
  * @group Unit
  */
-class CertificateTest extends \PHPUnit_Framework_TestCase
+class CertificateTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

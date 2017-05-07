@@ -14,12 +14,13 @@ use Jose\Algorithm\KeyEncryption\A128KW;
 use Jose\Algorithm\KeyEncryption\A192KW;
 use Jose\Algorithm\KeyEncryption\A256KW;
 use Jose\Object\JWK;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group AESKW
  * @group Unit
  */
-class AESKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
+class AESKWKeyEncryptionTest extends TestCase
 {
     public function testA128KW()
     {

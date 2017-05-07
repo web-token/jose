@@ -12,6 +12,7 @@
 use Jose\Object\JWK;
 use Jose\Object\JWKInterface;
 use Jose\Object\JWKSet;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class JWKTest.
@@ -19,7 +20,7 @@ use Jose\Object\JWKSet;
  * @group Unit
  * @group JWK
  */
-class JWKTest extends \PHPUnit_Framework_TestCase
+class JWKTest extends TestCase
 {
     public function testKey()
     {

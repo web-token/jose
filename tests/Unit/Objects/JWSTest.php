@@ -13,6 +13,7 @@ use Jose\Factory\CheckerManagerFactory;
 use Jose\Factory\JWSFactory;
 use Jose\Object\JWK;
 use Jose\Object\Signature;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class JWSTest.
@@ -20,7 +21,7 @@ use Jose\Object\Signature;
  * @group JWS
  * @group Unit
  */
-class JWSTest extends \PHPUnit_Framework_TestCase
+class JWSTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

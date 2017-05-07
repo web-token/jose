@@ -15,6 +15,7 @@ use Jose\Algorithm\Signature\ES384;
 use Jose\Algorithm\Signature\ES512;
 use Jose\KeyConverter\KeyConverter;
 use Jose\Object\JWK;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group ECDSA
@@ -22,7 +23,7 @@ use Jose\Object\JWK;
  *
  * The values of these tests come from the JWS specification
  */
-class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
+class ECDSASignatureTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

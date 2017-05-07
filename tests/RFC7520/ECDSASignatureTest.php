@@ -16,13 +16,14 @@ use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Signer;
 use Jose\Verifier;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-4.3
  *
  * @group RFC7520
  */
-class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
+class ECDSASignatureTest extends TestCase
 {
     /**
      * Please note that we cannot create the signature and get the same result as the example (ECDSA signatures are always different).

@@ -17,13 +17,14 @@ use Jose\Encrypter;
 use Jose\Factory\JWEFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-5.6
  *
  * @group RFC7520
  */
-class DirAndA128GCMEncryptionTest extends \PHPUnit_Framework_TestCase
+class DirAndA128GCMEncryptionTest extends TestCase
 {
     /**
      * Please note that we cannot the encryption and get the same result as the example (IV, TAG and other data are always different).

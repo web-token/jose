@@ -15,13 +15,14 @@ use Jose\Decrypter;
 use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Verifier;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-6
  *
  * @group RFC7520
  */
-class NestingTest extends \PHPUnit_Framework_TestCase
+class NestingTest extends TestCase
 {
     public function testSignatureVerification()
     {

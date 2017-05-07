@@ -13,13 +13,14 @@ use Base64Url\Base64Url;
 use Jose\Algorithm\ContentEncryption\A128GCM;
 use Jose\Algorithm\ContentEncryption\A192GCM;
 use Jose\Algorithm\ContentEncryption\A256GCM;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class AESGCMContentEncryptionTest.
  *
  * @group Unit
  */
-class AESGCMContentEncryptionTest extends \PHPUnit_Framework_TestCase
+class AESGCMContentEncryptionTest extends TestCase
 {
     public function testA128GCMEncryptAndDecrypt()
     {

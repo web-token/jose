@@ -16,6 +16,7 @@ use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Signer;
 use Jose\Verifier;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-4.4
@@ -26,7 +27,7 @@ use Jose\Verifier;
  * @group HMAC
  * @group RFC7520
  */
-class HMACSignatureTest extends \PHPUnit_Framework_TestCase
+class HMACSignatureTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7520#section-4.4

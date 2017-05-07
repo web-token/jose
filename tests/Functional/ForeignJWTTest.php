@@ -12,12 +12,13 @@
 use Jose\Factory\JWKFactory;
 use Jose\Loader;
 use Jose\Object\JWSInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group ForeignJWT
  * @group Functional
  */
-class ForeignJWTTest extends \PHPUnit_Framework_TestCase
+class ForeignJWTTest extends TestCase
 {
     /*
      * The following test uses an assertion created with another library.

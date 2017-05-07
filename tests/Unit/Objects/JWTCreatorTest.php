@@ -9,13 +9,15 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Class JWETest.
  *
  * @group JWTCreator
  * @group Unit
  */
-class JWTCreatorTest extends \PHPUnit_Framework_TestCase
+class JWTCreatorTest extends TestCase
 {
     public function testMethods()
     {

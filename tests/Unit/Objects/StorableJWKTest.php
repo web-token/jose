@@ -10,6 +10,7 @@
  */
 
 use Jose\Factory\JWKFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class StorableJWKTest.
@@ -17,7 +18,7 @@ use Jose\Factory\JWKFactory;
  * @group Unit
  * @group StorableJWK
  */
-class StorableJWKTest extends \PHPUnit_Framework_TestCase
+class StorableJWKTest extends TestCase
 {
     public function testKey()
     {

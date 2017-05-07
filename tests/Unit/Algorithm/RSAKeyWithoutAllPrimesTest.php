@@ -15,6 +15,7 @@ use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWEInterface;
 use Jose\Object\JWSInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class RSAKeyWithoutAllPrimesTest.
@@ -22,7 +23,7 @@ use Jose\Object\JWSInterface;
  * @group RSA2
  * @group Unit
  */
-class RSAKeyWithoutAllPrimesTest extends \PHPUnit_Framework_TestCase
+class RSAKeyWithoutAllPrimesTest extends TestCase
 {
     /**
      * @param string $signature_algorithm

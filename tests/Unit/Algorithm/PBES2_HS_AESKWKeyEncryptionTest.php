@@ -14,6 +14,7 @@ use Jose\Algorithm\KeyEncryption\PBES2HS256A128KW;
 use Jose\Algorithm\KeyEncryption\PBES2HS384A192KW;
 use Jose\Algorithm\KeyEncryption\PBES2HS512A256KW;
 use Jose\Object\JWK;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class PBES2_HS_AESKWKeyEncryptionTest.
@@ -21,7 +22,7 @@ use Jose\Object\JWK;
  * @group PBES2HSAESKW
  * @group Unit
  */
-class PBES2_HS_AESKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
+class PBES2_HS_AESKWKeyEncryptionTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7517#appendix-C

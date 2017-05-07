@@ -16,6 +16,7 @@ use Jose\Algorithm\KeyEncryption\ECDHESA192KW;
 use Jose\Algorithm\KeyEncryption\ECDHESA256KW;
 use Jose\Factory\JWKFactory;
 use Jose\Object\JWK;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ECDHESKeyAgreementTest.
@@ -23,7 +24,7 @@ use Jose\Object\JWK;
  * @group ECDHES
  * @group Unit
  */
-class ECDHESKeyAgreementTest extends \PHPUnit_Framework_TestCase
+class ECDHESKeyAgreementTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7518#appendix-C

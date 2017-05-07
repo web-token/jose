@@ -13,6 +13,7 @@ use Base64Url\Base64Url;
 use Jose\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Algorithm\ContentEncryption\A192CBCHS384;
 use Jose\Algorithm\ContentEncryption\A256CBCHS512;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class AESCBC_HSContentEncryptionTest.
@@ -20,7 +21,7 @@ use Jose\Algorithm\ContentEncryption\A256CBCHS512;
  * @group AESCBC
  * @group Unit
  */
-class AESCBC_HSContentEncryptionTest extends \PHPUnit_Framework_TestCase
+class AESCBC_HSContentEncryptionTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7516#appendix-B

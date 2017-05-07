@@ -14,13 +14,14 @@ use Jose\Compression\CompressionManager;
 use Jose\Compression\Deflate;
 use Jose\Compression\GZip;
 use Jose\Compression\ZLib;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CompressionTest.
  *
  * @group Unit
  */
-class CompressionTest extends \PHPUnit_Framework_TestCase
+class CompressionTest extends TestCase
 {
     public function testGetValidCompressionAlgorithm()
     {
