@@ -11,10 +11,27 @@
 
 namespace Jose\Test\Stub;
 
-use Jose\Checker\IssuerChecker as Base;
+use Assert\Assertion;
+use Jose\Checker\ClaimCheckerInterface;
+use Jose\Object\JWTInterface;
 
-class IssuerChecker extends Base
+class IssuerChecker implements ClaimCheckerInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function checkClaim(JWTInterface $jwt)
+    {
+        if (!$jwt->hasClaim('iss')) {
+            return [];
+        }
+
+        $issuer = $jwt->getClaim('iss');
+        Assertion::true($this->isIssuerAllowed($issuer), sprintf('The issuer "%s" is not allowed.', $issuer));
+
+        return ['iss'];
+    }
+
     /**
      * {@inheritdoc}
      */

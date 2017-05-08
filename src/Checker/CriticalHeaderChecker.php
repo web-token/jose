@@ -13,7 +13,7 @@ namespace Jose\Checker;
 
 use Assert\Assertion;
 
-class CriticalHeaderChecker implements HeaderCheckerInterface
+final class CriticalHeaderChecker implements HeaderCheckerInterface
 {
     /**
      * {@inheritdoc}

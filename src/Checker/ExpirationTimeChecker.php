@@ -14,7 +14,7 @@ namespace Jose\Checker;
 use Assert\Assertion;
 use Jose\Object\JWTInterface;
 
-class ExpirationTimeChecker implements ClaimCheckerInterface
+final class ExpirationTimeChecker implements ClaimCheckerInterface
 {
     /**
      * {@inheritdoc}

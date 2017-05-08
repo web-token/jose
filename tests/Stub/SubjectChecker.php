@@ -11,10 +11,27 @@
 
 namespace Jose\Test\Stub;
 
-use Jose\Checker\SubjectChecker as Base;
+use Assert\Assertion;
+use Jose\Checker\ClaimCheckerInterface;
+use Jose\Object\JWTInterface;
 
-class SubjectChecker extends Base
+class SubjectChecker implements ClaimCheckerInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function checkClaim(JWTInterface $jwt)
+    {
+        if (!$jwt->hasClaim('sub')) {
+            return [];
+        }
+
+        $subject = $jwt->getClaim('sub');
+        Assertion::true($this->isSubjectAllowed($subject), sprintf('The subject "%s" is not allowed.', $subject));
+
+        return ['sub'];
+    }
+
     /**
      * {@inheritdoc}
      */

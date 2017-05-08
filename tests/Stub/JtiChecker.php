@@ -11,10 +11,27 @@
 
 namespace Jose\Test\Stub;
 
-use Jose\Checker\JtiChecker as Base;
+use Assert\Assertion;
+use Jose\Checker\ClaimCheckerInterface;
+use Jose\Object\JWTInterface;
 
-class JtiChecker extends Base
+class JtiChecker implements ClaimCheckerInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function checkClaim(JWTInterface $jwt)
+    {
+        if (!$jwt->hasClaim('jti')) {
+            return [];
+        }
+
+        $jti = $jwt->getClaim('jti');
+        Assertion::true($this->isJtiValid($jti), sprintf('Invalid token ID "%s".', $jti));
+
+        return ['jti'];
+    }
+
     /**
      * {@inheritdoc}
      */

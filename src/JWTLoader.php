@@ -23,7 +23,7 @@ final class JWTLoader
     private $loader;
 
     /**
-     * @var Checker\CheckerManagerInterface
+     * @var Checker\CheckerManager
      */
     private $checker_manager;
 
@@ -40,10 +40,10 @@ final class JWTLoader
     /**
      * JWTLoader constructor.
      *
-     * @param Checker\CheckerManagerInterface $checker_manager
+     * @param Checker\CheckerManager $checker_manager
      * @param Verifier               $verifier
      */
-    public function __construct(Checker\CheckerManagerInterface $checker_manager, Verifier $verifier)
+    public function __construct(Checker\CheckerManager $checker_manager, Verifier $verifier)
     {
         $this->checker_manager = $checker_manager;
         $this->verifier = $verifier;

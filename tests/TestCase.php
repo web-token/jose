@@ -26,12 +26,12 @@ use PHPUnit\Framework\TestCase as Base;
 class TestCase extends Base
 {
     /**
-     * @var \Jose\Checker\CheckerManagerInterface|null
+     * @var \Jose\Checker\CheckerManager|null
      */
     private $checker_manager = null;
 
     /**
-     * @return \Jose\Checker\CheckerManagerInterface
+     * @return \Jose\Checker\CheckerManager
      */
     protected function getCheckerManager()
     {

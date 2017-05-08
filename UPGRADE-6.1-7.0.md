@@ -4,7 +4,7 @@
 
 * No feature added
 
-## Deprecation removed
+## Deprecations removed
 
 * `Jose\Algorithm\JWAManager::isAlgorithmSupported` renamed to `Jose\Algorithm\JWAManager::has`
 * `Jose\Algorithm\JWAManager::getAlgorithms` renamed to `Jose\Algorithm\JWAManager::all`
@@ -25,3 +25,18 @@
 * `Jose\Factory\JWKFactoryInterface` removed
 * `Jose\Factory\JWSFactoryInterface` removed
 * `Jose\Compression\CompressionManagerInterface` removed
+* `Jose\Checker\CheckerManager` removed
+* `Jose\Checker\IssuerChecker` removed
+* `Jose\Checker\SubjectChecker` removed
+* `Jose\Checker\JtiChecker` removed
+
+## Final classes
+
+The following classes are now marked as final.
+
+* `Jose\Checker\AudienceChecker`
+* `Jose\Checker\CriticalHeaderChecker`
+* `Jose\Checker\ExpirationTimeChecker`
+* `Jose\Checker\IssuedAtChecker`
+* `Jose\Checker\NotBeforeChecker`
+* `Jose\Checker\CheckerManager`

@@ -14,7 +14,7 @@ namespace Jose\Checker;
 use Assert\Assertion;
 use Jose\Object\JWTInterface;
 
-class AudienceChecker implements ClaimCheckerInterface
+final class AudienceChecker implements ClaimCheckerInterface
 {
     /**
      * @var string

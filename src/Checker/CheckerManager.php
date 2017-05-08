@@ -17,7 +17,7 @@ use Jose\Object;
 /**
  * Class CheckerManager.
  */
-class CheckerManager implements CheckerManagerInterface
+final class CheckerManager
 {
     /**
      * @var \Jose\Checker\ClaimCheckerInterface[]
@@ -61,7 +61,8 @@ class CheckerManager implements CheckerManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Jose\Object\JWS $jws
+     * @param int                       $signature
      */
     public function checkJWS(Object\JWS $jws, $signature)
     {

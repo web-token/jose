@@ -18,7 +18,7 @@ use Jose\Algorithm\JWAManager;
 final class AlgorithmManagerFactory
 {
     /**
-     * @param string[]|\Jose\Algorithm\JWAInterface[] $algorithms
+     * @param string[]|JWAInterface[] $algorithms
      *
      * @return JWAManager
      */

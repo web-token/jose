@@ -14,7 +14,7 @@ namespace Jose\Checker;
 use Assert\Assertion;
 use Jose\Object\JWTInterface;
 
-class IssuedAtChecker implements ClaimCheckerInterface
+final class IssuedAtChecker implements ClaimCheckerInterface
 {
     /**
      * {@inheritdoc}
