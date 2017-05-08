@@ -13,14 +13,13 @@ namespace Jose\Util;
 
 use Base64Url\Base64Url;
 use Jose\Object\JWE;
-use Jose\Object\JWEInterface;
 
 final class JWELoader
 {
     /**
      * @param array $data
      *
-     * @return \Jose\Object\JWEInterface
+     * @return \Jose\Object\JWE
      */
     public static function loadSerializedJsonJWE(array $data)
     {
@@ -44,10 +43,10 @@ final class JWELoader
     }
 
     /**
-     * @param \Jose\Object\JWEInterface $jwe
+     * @param \Jose\Object\JWE $jwe
      * @param array                     $data
      */
-    private static function populateIV(JWEInterface &$jwe, array $data)
+    private static function populateIV(JWE &$jwe, array $data)
     {
         if (array_key_exists('iv', $data)) {
             $jwe = $jwe->withIV(Base64Url::decode($data['iv']));
@@ -55,10 +54,10 @@ final class JWELoader
     }
 
     /**
-     * @param \Jose\Object\JWEInterface $jwe
+     * @param \Jose\Object\JWE $jwe
      * @param array                     $data
      */
-    private static function populateAAD(JWEInterface &$jwe, array $data)
+    private static function populateAAD(JWE &$jwe, array $data)
     {
         if (array_key_exists('aad', $data)) {
             $jwe = $jwe->withAAD(Base64Url::decode($data['aad']));
@@ -66,10 +65,10 @@ final class JWELoader
     }
 
     /**
-     * @param \Jose\Object\JWEInterface $jwe
+     * @param \Jose\Object\JWE $jwe
      * @param array                     $data
      */
-    private static function populateTag(JWEInterface &$jwe, array $data)
+    private static function populateTag(JWE &$jwe, array $data)
     {
         if (array_key_exists('tag', $data)) {
             $jwe = $jwe->withTag(Base64Url::decode($data['tag']));
@@ -77,10 +76,10 @@ final class JWELoader
     }
 
     /**
-     * @param \Jose\Object\JWEInterface $jwe
+     * @param \Jose\Object\JWE $jwe
      * @param array                     $data
      */
-    private static function populateSharedProtectedHeaders(JWEInterface &$jwe, array $data)
+    private static function populateSharedProtectedHeaders(JWE &$jwe, array $data)
     {
         if (array_key_exists('protected', $data)) {
             $jwe = $jwe->withEncodedSharedProtectedHeaders($data['protected']);
@@ -89,10 +88,10 @@ final class JWELoader
     }
 
     /**
-     * @param \Jose\Object\JWEInterface $jwe
+     * @param \Jose\Object\JWE $jwe
      * @param array                     $data
      */
-    private static function populateSharedHeaders(JWEInterface &$jwe, array $data)
+    private static function populateSharedHeaders(JWE &$jwe, array $data)
     {
         if (array_key_exists('unprotected', $data)) {
             $jwe = $jwe->withSharedHeaders($data['unprotected']);

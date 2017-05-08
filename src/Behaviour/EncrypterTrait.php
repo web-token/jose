@@ -41,7 +41,7 @@ trait EncrypterTrait
     abstract protected function getJWAManager();
 
     /**
-     * @return \Jose\Compression\CompressionManagerInterface
+     * @return Compression\CompressionManager
      */
     abstract protected function getCompressionManager();
 
@@ -61,14 +61,14 @@ trait EncrypterTrait
     }
 
     /**
-     * @param \Jose\Object\JWEInterface                           $jwe
+     * @param \Jose\Object\JWE                           $jwe
      * @param \Jose\Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm
      * @param string                                              $key_management_mode
      * @param array                                               $additional_headers
      *
      * @return string
      */
-    private function determineCEK(Object\JWEInterface $jwe, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $key_management_mode, array &$additional_headers)
+    private function determineCEK(Object\JWE $jwe, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $key_management_mode, array &$additional_headers)
     {
         switch ($key_management_mode) {
             case Algorithm\KeyEncryption\KeyEncryptionInterface::MODE_ENCRYPT:
@@ -92,11 +92,11 @@ trait EncrypterTrait
     }
 
     /**
-     * @param \Jose\Object\JWEInterface $jwe
+     * @param \Jose\Object\JWE $jwe
      *
      * @return string
      */
-    private function getKeyManagementMode(Object\JWEInterface $jwe)
+    private function getKeyManagementMode(Object\JWE $jwe)
     {
         $mode = null;
         $recipients = $jwe->getRecipients();
@@ -119,11 +119,11 @@ trait EncrypterTrait
     }
 
     /**
-     * @param \Jose\Object\JWEInterface $jwe
+     * @param \Jose\Object\JWE $jwe
      *
-     * @return \Jose\Compression\CompressionInterface|null
+     * @return Compression\CompressionInterface|null
      */
-    private function getCompressionMethod(Object\JWEInterface $jwe)
+    private function getCompressionMethod(Object\JWE $jwe)
     {
         $method = null;
         $nb_recipients = $jwe->countRecipients();
@@ -156,11 +156,11 @@ trait EncrypterTrait
     }
 
     /**
-     * @param \Jose\Object\JWEInterface $jwe
+     * @param \Jose\Object\JWE $jwe
      *
      * @return \Jose\Algorithm\ContentEncryptionAlgorithmInterface
      */
-    private function getContentEncryptionAlgorithm(Object\JWEInterface $jwe)
+    private function getContentEncryptionAlgorithm(Object\JWE $jwe)
     {
         $algorithm = null;
 

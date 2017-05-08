@@ -16,10 +16,15 @@ use Jose\Encrypter;
 use Jose\Object\JWE;
 use Jose\Object\JWKInterface;
 
-final class JWEFactory implements JWEFactoryInterface
+final class JWEFactory
 {
     /**
-     * {@inheritdoc}
+     * @param mixed       $payload
+     * @param array       $shared_protected_headers
+     * @param array       $shared_headers
+     * @param null|string $aad
+     *
+     * @return \Jose\Object\JWE
      */
     public static function createJWE($payload, array $shared_protected_headers = [], array $shared_headers = [], $aad = null)
     {
@@ -36,7 +41,11 @@ final class JWEFactory implements JWEFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed                     $payload
+     * @param \Jose\Object\JWKInterface $recipient_key
+     * @param array                     $shared_protected_headers
+     *
+     * @return string
      */
     public static function createJWEToCompactJSON($payload, JWKInterface $recipient_key, array $shared_protected_headers)
     {
@@ -46,7 +55,14 @@ final class JWEFactory implements JWEFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed                     $payload
+     * @param \Jose\Object\JWKInterface $recipient_key
+     * @param array                     $shared_protected_headers
+     * @param array                     $shared_headers
+     * @param array                     $recipient_headers
+     * @param string|null               $aad
+     *
+     * @return string
      */
     public static function createJWEToFlattenedJSON($payload, JWKInterface $recipient_key, array $shared_protected_headers = [], $shared_headers = [], $recipient_headers = [], $aad = null)
     {
@@ -63,7 +79,7 @@ final class JWEFactory implements JWEFactoryInterface
      * @param array                     $recipient_headers
      * @param string|null               $aad
      *
-     * @return \Jose\Object\JWEInterface
+     * @return \Jose\Object\JWE
      */
     private static function createJWEAndEncrypt($payload, JWKInterface $recipient_key, array $shared_protected_headers = [], $shared_headers = [], $recipient_headers = [], $aad = null)
     {

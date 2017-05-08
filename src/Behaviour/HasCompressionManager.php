@@ -11,25 +11,25 @@
 
 namespace Jose\Behaviour;
 
-use Jose\Compression\CompressionManagerInterface;
+use Jose\Compression\CompressionManager;
 
 trait HasCompressionManager
 {
     /**
-     * @var \Jose\Compression\CompressionManagerInterface
+     * @var CompressionManager
      */
     private $compression_manager;
 
     /**
-     * @param \Jose\Compression\CompressionManagerInterface $compression_manager
+     * @param CompressionManager $compression_manager
      */
-    private function setCompressionManager(CompressionManagerInterface $compression_manager)
+    private function setCompressionManager(CompressionManager $compression_manager)
     {
         $this->compression_manager = $compression_manager;
     }
 
     /**
-     * @return \Jose\Compression\CompressionManagerInterface
+     * @return CompressionManager
      */
     protected function getCompressionManager()
     {

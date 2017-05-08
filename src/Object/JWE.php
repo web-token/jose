@@ -17,12 +17,12 @@ use Base64Url\Base64Url;
 /**
  * Class JWE.
  */
-final class JWE implements JWEInterface
+final class JWE implements JWTInterface
 {
     use JWT;
 
     /**
-     * @var \Jose\Object\RecipientInterface[]
+     * @var \Jose\Object\Recipient[]
      */
     private $recipients = [];
 
@@ -62,7 +62,9 @@ final class JWE implements JWEInterface
     private $encoded_shared_protected_headers = null;
 
     /**
-     * {@inheritdoc}
+     * Returns the number of recipients associated with the JWS.
+     *
+     * @return int
      */
     public function countRecipients()
     {
@@ -70,7 +72,7 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function isEncrypted()
     {
@@ -78,7 +80,10 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Jose\Object\JWKInterface $recipient_key
+     * @param array                     $recipient_headers
+     *
+     * @return \Jose\Object\JWE
      */
     public function addRecipientInformation(JWKInterface $recipient_key, $recipient_headers = [])
     {
@@ -90,7 +95,10 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string|null $encrypted_key
+     * @param array       $recipient_headers
+     *
+     * @return \Jose\Object\JWE
      */
     public function addRecipientWithEncryptedKey($encrypted_key, array $recipient_headers)
     {
@@ -101,7 +109,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the recipients associated with the JWS.
+     *
+     * @return \Jose\Object\Recipient[]
      */
     public function getRecipients()
     {
@@ -109,7 +119,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $id
+     *
+     * @return \Jose\Object\Recipient
      */
     public function &getRecipient($id)
     {
@@ -119,7 +131,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @internal
+     *
+     * @return string|null The cyphertext
      */
     public function getCiphertext()
     {
@@ -127,7 +141,11 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $ciphertext
+     *
+     * @internal
+     *
+     * @return \Jose\Object\JWE
      */
     public function withCiphertext($ciphertext)
     {
@@ -138,7 +156,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @internal
+     *
+     * @return string|null
      */
     public function getAAD()
     {
@@ -146,7 +166,11 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @internal
+     *
+     * @param string $aad
+     *
+     * @return \Jose\Object\JWE
      */
     public function withAAD($aad)
     {
@@ -157,7 +181,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @internal
+     *
+     * @return string|null
      */
     public function getIV()
     {
@@ -165,7 +191,11 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @internal
+     *
+     * @param string $iv
+     *
+     * @return \Jose\Object\JWE
      */
     public function withIV($iv)
     {
@@ -176,7 +206,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @internal
+     *
+     * @return string|null
      */
     public function getTag()
     {
@@ -184,7 +216,11 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @internal
+     *
+     * @param string $tag
+     *
+     * @return \Jose\Object\JWE
      */
     public function withTag($tag)
     {
@@ -195,7 +231,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @internal
+     *
+     * @return string|null
      */
     public function getEncodedSharedProtectedHeaders()
     {
@@ -203,7 +241,11 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @internal
+     *
+     * @param string $encoded_shared_protected_headers
+     *
+     * @return \Jose\Object\JWE
      */
     public function withEncodedSharedProtectedHeaders($encoded_shared_protected_headers)
     {
@@ -214,7 +256,7 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public function getSharedProtectedHeaders()
     {
@@ -222,7 +264,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $shared_protected_headers
+     *
+     * @return \Jose\Object\JWE
      */
     public function withSharedProtectedHeaders(array $shared_protected_headers)
     {
@@ -233,7 +277,10 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string     $key
+     * @param mixed|null $value
+     *
+     * @return \Jose\Object\JWE
      */
     public function withSharedProtectedHeader($key, $value)
     {
@@ -244,7 +291,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $key The key
+     *
+     * @return mixed|null Header value
      */
     public function getSharedProtectedHeader($key)
     {
@@ -255,7 +304,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $key The key
+     *
+     * @return bool
      */
     public function hasSharedProtectedHeader($key)
     {
@@ -263,7 +314,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $shared_headers
+     *
+     * @return \Jose\Object\JWE
      */
     public function withSharedHeaders(array $shared_headers)
     {
@@ -274,7 +327,10 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string     $key
+     * @param mixed|null $value
+     *
+     * @return \Jose\Object\JWE
      */
     public function withSharedHeader($key, $value)
     {
@@ -285,7 +341,7 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public function getSharedHeaders()
     {
@@ -293,7 +349,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $key The key
+     *
+     * @return mixed|null Header value
      */
     public function getSharedHeader($key)
     {
@@ -304,7 +362,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $key The key
+     *
+     * @return bool
      */
     public function hasSharedHeader($key)
     {
@@ -312,7 +372,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $id
+     *
+     * @return string
      */
     public function toCompactJSON($id)
     {
@@ -357,7 +419,9 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $id
+     *
+     * @return string
      */
     public function toFlattenedJSON($id)
     {
@@ -376,7 +440,7 @@ final class JWE implements JWEInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function toJSON()
     {

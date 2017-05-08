@@ -14,7 +14,7 @@ use Jose\Algorithm\Signature\EdDSA;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
-use Jose\Object\JWSInterface;
+use Jose\Object\JWS;
 use Jose\Test\TestCase;
 use Jose\Verifier;
 
@@ -76,7 +76,7 @@ class EdDSASignatureTest extends TestCase
         $loaded = $loader->load($jws);
         $verifier = Verifier::createVerifier(['EdDSA']);
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
+        $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals(1, $loaded->countSignatures());
         $verifier->verifyWithKey($loaded, $key);
     }

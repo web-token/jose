@@ -14,7 +14,7 @@ namespace Jose\Compression;
 /**
  * Compression algorithm manager.
  */
-final class CompressionManager implements CompressionManagerInterface
+final class CompressionManager
 {
     /**
      * @var \Jose\Compression\CompressionInterface[]
@@ -22,7 +22,7 @@ final class CompressionManager implements CompressionManagerInterface
     protected $compression_algorithms = [];
 
     /**
-     * {@inheritdoc}
+     * @param \Jose\Compression\CompressionInterface $compression_algorithm
      */
     public function addCompressionAlgorithm(CompressionInterface $compression_algorithm)
     {
@@ -30,7 +30,11 @@ final class CompressionManager implements CompressionManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * This method will try to find a CompressionInterface object able to support the compression method.
+     *
+     * @param string $name The name of the compression method
+     *
+     * @return \Jose\Compression\CompressionInterface|null If the compression handler is supported, return CompressionInterface object, else null
      */
     public function getCompressionAlgorithm($name)
     {

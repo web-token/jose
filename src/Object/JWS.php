@@ -17,7 +17,7 @@ use Base64Url\Base64Url;
 /**
  * Class JWS.
  */
-final class JWS implements JWSInterface
+final class JWS implements JWTInterface
 {
     use JWT;
 
@@ -32,12 +32,12 @@ final class JWS implements JWSInterface
     private $encoded_payload = null;
 
     /**
-     * @var \Jose\Object\SignatureInterface[]
+     * @var Signature[]
      */
     private $signatures = [];
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function isPayloadDetached()
     {
@@ -45,7 +45,7 @@ final class JWS implements JWSInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return JWTInterface
      */
     public function withDetachedPayload()
     {
@@ -56,7 +56,7 @@ final class JWS implements JWSInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return JWTInterface
      */
     public function withAttachedPayload()
     {
@@ -78,9 +78,13 @@ final class JWS implements JWSInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Signature $signature
+     *
+     * @internal
+     *
+     * @return string|null
      */
-    public function getEncodedPayload(SignatureInterface $signature)
+    public function getEncodedPayload(Signature $signature)
     {
         if (true === $this->isPayloadDetached()) {
             return;
@@ -98,7 +102,9 @@ final class JWS implements JWSInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the signature associated with the JWS.
+     *
+     * @return Signature[]
      */
     public function getSignatures()
     {
@@ -106,7 +112,9 @@ final class JWS implements JWSInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $id
+     *
+     * @return Signature
      */
     public function &getSignature($id)
     {
@@ -117,7 +125,11 @@ final class JWS implements JWSInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param JWKInterface $signature_key
+     * @param array                     $protected_headers
+     * @param array                     $headers
+     *
+     * @return JWS
      */
     public function addSignatureInformation(JWKInterface $signature_key, array $protected_headers, array $headers = [])
     {
@@ -128,7 +140,11 @@ final class JWS implements JWSInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string      $signature
+     * @param string|null $encoded_protected_headers
+     * @param array       $headers
+     *
+     * @return JWS
      */
     public function addSignatureFromLoadedData($signature, $encoded_protected_headers, array $headers)
     {
@@ -139,7 +155,11 @@ final class JWS implements JWSInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the number of signature associated with the JWS.
+     *
+     * @internal
+     *
+     * @return int
      */
     public function countSignatures()
     {
@@ -147,7 +167,9 @@ final class JWS implements JWSInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $id
+     *
+     * @return string
      */
     public function toCompactJSON($id)
     {
@@ -168,7 +190,9 @@ final class JWS implements JWSInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $id
+     *
+     * @return string
      */
     public function toFlattenedJSON($id)
     {
@@ -192,7 +216,7 @@ final class JWS implements JWSInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function toJSON()
     {
@@ -225,11 +249,11 @@ final class JWS implements JWSInterface
     }
 
     /**
-     * @param \Jose\Object\SignatureInterface $signature
+     * @param Signature $signature
      *
      * @return bool
      */
-    private function isPayloadEncoded(SignatureInterface $signature)
+    private function isPayloadEncoded(Signature $signature)
     {
         return !$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
     }

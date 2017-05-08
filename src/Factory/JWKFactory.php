@@ -31,10 +31,12 @@ use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\EccFactory;
 use Psr\Cache\CacheItemPoolInterface;
 
-final class JWKFactory implements JWKFactoryInterface
+final class JWKFactory
 {
     /**
-     * {@inheritdoc}
+     * @param \Jose\Object\JWKSetInterface $jwkset
+     *
+     * @return \Jose\Object\JWKSetInterface
      */
     public static function createPublicKeySet(JWKSetInterface $jwkset)
     {
@@ -42,7 +44,9 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Jose\Object\JWKSetInterface[] $jwksets
+     *
+     * @return \Jose\Object\JWKSetInterface
      */
     public static function createKeySets(array $jwksets = [])
     {
@@ -50,7 +54,10 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $filename
+     * @param array  $parameters
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createStorableKey($filename, array $parameters)
     {
@@ -58,7 +65,11 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $filename
+     * @param array  $parameters
+     * @param int    $nb_keys
+     *
+     * @return \Jose\Object\JWKSetInterface
      */
     public static function createRotatableKeySet($filename, array $parameters, $nb_keys)
     {
@@ -66,7 +77,11 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $filename
+     * @param array  $parameters
+     * @param int    $nb_keys
+     *
+     * @return \Jose\Object\JWKSetInterface
      */
     public static function createStorableKeySet($filename, array $parameters, $nb_keys)
     {
@@ -74,7 +89,9 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $config
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createKey(array $config)
     {
@@ -88,7 +105,9 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $values Values to configure the key. Must contain at least the index 'size' with the key size in bits
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createRSAKey(array $values)
     {
@@ -114,7 +133,9 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $values Values to configure the key. Must contain at least the index 'crv' with the curve
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createECKey(array $values)
     {
@@ -157,7 +178,9 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $values Values to configure the key. Must contain at least the index 'size' with the key size in bits
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createOctKey(array $values)
     {
@@ -177,7 +200,9 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $values Values to configure the key. Must contain at least the index 'crv' with the curve
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createOKPKey(array $values)
     {
@@ -212,7 +237,9 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $values Values to configure the key.
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createNoneKey(array $values)
     {
@@ -295,7 +322,9 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $values
+     *
+     * @return \Jose\Object\JWKInterface|\Jose\Object\JWKSetInterface
      */
     public static function createFromValues(array $values)
     {
@@ -307,7 +336,10 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $file
+     * @param array  $additional_values
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createFromCertificateFile($file, array $additional_values = [])
     {
@@ -318,7 +350,10 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $certificate
+     * @param array  $additional_values
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createFromCertificate($certificate, array $additional_values = [])
     {
@@ -329,7 +364,10 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param resource $res
+     * @param array    $additional_values
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createFromX509Resource($res, array $additional_values = [])
     {
@@ -340,7 +378,11 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string      $file
+     * @param null|string $password
+     * @param array       $additional_values
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createFromKeyFile($file, $password = null, array $additional_values = [])
     {
@@ -351,7 +393,11 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string      $key
+     * @param null|string $password
+     * @param array       $additional_values
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createFromKey($key, $password = null, array $additional_values = [])
     {
@@ -362,7 +408,13 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string                                 $jku
+     * @param bool                                   $allow_unsecured_connection
+     * @param \Psr\Cache\CacheItemPoolInterface|null $cache
+     * @param int|null                               $ttl
+     * @param bool                                   $allow_http_connection
+     *
+     * @return \Jose\Object\JWKSetInterface
      */
     public static function createFromJKU($jku, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false)
     {
@@ -370,7 +422,13 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string                                 $x5u
+     * @param bool                                   $allow_unsecured_connection
+     * @param \Psr\Cache\CacheItemPoolInterface|null $cache
+     * @param int|null                               $ttl
+     * @param bool                                   $allow_http_connection
+     *
+     * @return \Jose\Object\JWKSetInterface
      */
     public static function createFromX5U($x5u, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false)
     {
@@ -378,7 +436,10 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $x5c
+     * @param array $additional_values
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createFromX5C(array $x5c, array $additional_values = [])
     {
@@ -389,7 +450,10 @@ final class JWKFactory implements JWKFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Jose\Object\JWKSetInterface $jwk_set
+     * @param int                          $key_index
+     *
+     * @return \Jose\Object\JWKInterface
      */
     public static function createFromKeySet(JWKSetInterface $jwk_set, $key_index)
     {

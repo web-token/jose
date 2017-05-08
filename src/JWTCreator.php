@@ -12,39 +12,44 @@
 namespace Jose;
 
 use Assert\Assertion;
+use Jose\Object\JWKInterface;
 
-final class JWTCreator implements JWTCreatorInterface
+final class JWTCreator
 {
     /**
-     * @var \Jose\EncrypterInterface|null
+     * @var Encrypter|null
      */
     private $encrypter = null;
 
     /**
-     * @var \Jose\SignerInterface
+     * @var Signer
      */
     private $signer;
 
     /**
      * JWTCreator constructor.
      *
-     * @param \Jose\SignerInterface $signer
+     * @param Signer $signer
      */
-    public function __construct(SignerInterface $signer)
+    public function __construct(Signer $signer)
     {
         $this->signer = $signer;
     }
 
     /**
-     * @param \Jose\EncrypterInterface $encrypter
+     * @param Encrypter $encrypter
      */
-    public function enableEncryptionSupport(EncrypterInterface $encrypter)
+    public function enableEncryptionSupport(Encrypter $encrypter)
     {
         $this->encrypter = $encrypter;
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed                     $payload
+     * @param array                     $signature_protected_headers
+     * @param JWKInterface $signature_key
+     *
+     * @return string
      */
     public function sign($payload, array $signature_protected_headers, Object\JWKInterface $signature_key)
     {
@@ -57,7 +62,11 @@ final class JWTCreator implements JWTCreatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string                    $payload
+     * @param array                     $encryption_protected_headers
+     * @param JWKInterface $encryption_key
+     *
+     * @return string
      */
     public function encrypt($payload, array $encryption_protected_headers, Object\JWKInterface $encryption_key)
     {
@@ -71,7 +80,13 @@ final class JWTCreator implements JWTCreatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed                     $payload
+     * @param array                     $signature_protected_headers
+     * @param JWKInterface $signature_key
+     * @param array                     $encryption_protected_headers
+     * @param JWKInterface $encryption_key
+     *
+     * @return string
      */
     public function signAndEncrypt($payload, array $signature_protected_headers, Object\JWKInterface $signature_key, array $encryption_protected_headers, Object\JWKInterface $encryption_key)
     {
@@ -82,7 +97,7 @@ final class JWTCreator implements JWTCreatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string[]
      */
     public function getSupportedSignatureAlgorithms()
     {
@@ -98,7 +113,7 @@ final class JWTCreator implements JWTCreatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string[]
      */
     public function getSupportedContentEncryptionAlgorithms()
     {
@@ -106,7 +121,7 @@ final class JWTCreator implements JWTCreatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string[]
      */
     public function getSupportedCompressionMethods()
     {

@@ -17,7 +17,7 @@ use Base64Url\Base64Url;
 /**
  * Class SignatureInstruction.
  */
-final class Signature implements SignatureInterface
+final class Signature
 {
     /**
      * @var null|string
@@ -45,7 +45,11 @@ final class Signature implements SignatureInterface
     private $signature_key;
 
     /**
-     * {@inheritdoc}
+     * @param string      $signature
+     * @param string|null $encoded_protected_headers
+     * @param array       $headers
+     *
+     * @return \Jose\Object\Signature
      */
     public static function createSignatureFromLoadedData($signature, $encoded_protected_headers, array $headers)
     {
@@ -63,7 +67,11 @@ final class Signature implements SignatureInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Jose\Object\JWKInterface $signature_key
+     * @param array                     $protected_headers
+     * @param array                     $headers
+     *
+     * @return \Jose\Object\Signature
      */
     public static function createSignature(JWKInterface $signature_key, array $protected_headers, array $headers)
     {
@@ -79,7 +87,9 @@ final class Signature implements SignatureInterface
     }
 
     /**
-     * {@inheritdoc}
+     * The protected header associated with the signature.
+     *
+     * @return array
      */
     public function getProtectedHeaders()
     {
@@ -87,7 +97,9 @@ final class Signature implements SignatureInterface
     }
 
     /**
-     * {@inheritdoc}
+     * The unprotected header associated with the signature.
+     *
+     * @return array
      */
     public function getHeaders()
     {
@@ -95,7 +107,11 @@ final class Signature implements SignatureInterface
     }
 
     /**
-     * {@inheritdoc}
+     * The protected header associated with the signature.
+     *
+     * @internal
+     *
+     * @return null|string
      */
     public function getEncodedProtectedHeaders()
     {
@@ -103,7 +119,11 @@ final class Signature implements SignatureInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the value of the protected header of the specified key.
+     *
+     * @param string $key The key
+     *
+     * @return mixed|null Header value
      */
     public function getProtectedHeader($key)
     {
@@ -114,7 +134,9 @@ final class Signature implements SignatureInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $key The key
+     *
+     * @return bool
      */
     public function hasProtectedHeader($key)
     {
@@ -122,7 +144,11 @@ final class Signature implements SignatureInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the value of the unprotected header of the specified key.
+     *
+     * @param string $key The key
+     *
+     * @return mixed|null Header value
      */
     public function getHeader($key)
     {
@@ -133,13 +159,20 @@ final class Signature implements SignatureInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $key The key
+     *
+     * @return bool
      */
     public function hasHeader($key)
     {
         return array_key_exists($key, $this->headers);
     }
 
+    /**
+     * The protected and unprotected header associated with the signature.
+     *
+     * @return array
+     */
     public function getAllHeaders()
     {
         return array_merge(
@@ -149,7 +182,9 @@ final class Signature implements SignatureInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the value of the signature.
+     *
+     * @return string
      */
     public function getSignature()
     {

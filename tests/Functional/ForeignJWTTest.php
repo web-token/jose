@@ -11,7 +11,7 @@
 
 use Jose\Factory\JWKFactory;
 use Jose\Loader;
-use Jose\Object\JWSInterface;
+use Jose\Object\JWS;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,7 +54,7 @@ class ForeignJWTTest extends TestCase
             ],
         ];
 
-        $this->assertInstanceOf(JWSInterface::class, $jwt);
+        $this->assertInstanceOf(JWS::class, $jwt);
         $this->assertEquals($expected_index, $index);
         $this->assertEquals($expected_headers, $jwt->getSignature(0)->getAllHeaders());
         $this->assertEquals($expected_claims, $jwt->getClaims());

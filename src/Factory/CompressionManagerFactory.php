@@ -18,9 +18,9 @@ use Jose\Compression\CompressionManager;
 final class CompressionManagerFactory
 {
     /**
-     * @param string[]|\Jose\Compression\CompressionInterface[] $methods
+     * @param string[]|CompressionInterface[] $methods
      *
-     * @return \Jose\Compression\CompressionManagerInterface
+     * @return CompressionManager
      */
     public static function createCompressionManager(array $methods)
     {
@@ -66,9 +66,9 @@ final class CompressionManagerFactory
     private static function getSupportedMethods()
     {
         return [
-            'DEF'  => '\Jose\Compression\Deflate',
-            'GZ'   => '\Jose\Compression\GZip',
-            'ZLIB' => '\Jose\Compression\ZLib',
+            'DEF'  => 'Deflate',
+            'GZ'   => 'GZip',
+            'ZLIB' => 'ZLib',
         ];
     }
 }

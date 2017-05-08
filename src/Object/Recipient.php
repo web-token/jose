@@ -14,7 +14,7 @@ namespace Jose\Object;
 /**
  * Class EncryptionInstruction.
  */
-final class Recipient implements RecipientInterface
+final class Recipient
 {
     /**
      * @var array
@@ -32,7 +32,10 @@ final class Recipient implements RecipientInterface
     private $recipient_key = null;
 
     /**
-     * {@inheritdoc}
+     * @param array       $headers
+     * @param string|null $encrypted_key
+     *
+     * @return \Jose\Object\Recipient
      */
     public static function createRecipientFromLoadedJWE(array $headers, $encrypted_key)
     {
@@ -44,7 +47,10 @@ final class Recipient implements RecipientInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Jose\Object\JWKInterface $recipient_key
+     * @param array                     $headers
+     *
+     * @return \Jose\Object\Recipient
      */
     public static function createRecipient(JWKInterface $recipient_key, array $headers = [])
     {
@@ -56,7 +62,7 @@ final class Recipient implements RecipientInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public function getHeaders()
     {
@@ -64,7 +70,11 @@ final class Recipient implements RecipientInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the value of the unprotected header of the specified key.
+     *
+     * @param string $key The key
+     *
+     * @return mixed|null Header value
      */
     public function getHeader($key)
     {
@@ -75,7 +85,9 @@ final class Recipient implements RecipientInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $key The key
+     *
+     * @return bool
      */
     public function hasHeader($key)
     {
@@ -83,7 +95,7 @@ final class Recipient implements RecipientInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getEncryptedKey()
     {
@@ -91,7 +103,7 @@ final class Recipient implements RecipientInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return \Jose\Object\JWKInterface
      */
     public function getRecipientKey()
     {

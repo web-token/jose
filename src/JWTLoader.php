@@ -12,36 +12,38 @@
 namespace Jose;
 
 use Assert\Assertion;
+use Jose\Object\JWKSetInterface;
+use Jose\Object\JWS;
 
-final class JWTLoader implements JWTLoaderInterface
+final class JWTLoader
 {
     /**
-     * @var \Jose\LoaderInterface
+     * @var Loader
      */
     private $loader;
 
     /**
-     * @var \Jose\Checker\CheckerManagerInterface
+     * @var Checker\CheckerManagerInterface
      */
     private $checker_manager;
 
     /**
-     * @var \Jose\DecrypterInterface|null
+     * @var Decrypter|null
      */
     private $decrypter = null;
 
     /**
-     * @var \Jose\VerifierInterface
+     * @var Verifier
      */
     private $verifier;
 
     /**
      * JWTLoader constructor.
      *
-     * @param \Jose\Checker\CheckerManagerInterface $checker_manager
-     * @param \Jose\VerifierInterface               $verifier
+     * @param Checker\CheckerManagerInterface $checker_manager
+     * @param Verifier               $verifier
      */
-    public function __construct(Checker\CheckerManagerInterface $checker_manager, VerifierInterface $verifier)
+    public function __construct(Checker\CheckerManagerInterface $checker_manager, Verifier $verifier)
     {
         $this->checker_manager = $checker_manager;
         $this->verifier = $verifier;
@@ -49,15 +51,15 @@ final class JWTLoader implements JWTLoaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Decrypter $decrypter
      */
-    public function enableDecryptionSupport(DecrypterInterface $decrypter)
+    public function enableDecryptionSupport(Decrypter $decrypter)
     {
         $this->decrypter = $decrypter;
     }
 
     /**
-     * {@inheritdoc}
+     * @return string[]
      */
     public function getSupportedSignatureAlgorithms()
     {
@@ -73,7 +75,7 @@ final class JWTLoader implements JWTLoaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string[]
      */
     public function getSupportedKeyEncryptionAlgorithms()
     {
@@ -81,7 +83,7 @@ final class JWTLoader implements JWTLoaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string[]
      */
     public function getSupportedContentEncryptionAlgorithms()
     {
@@ -89,7 +91,7 @@ final class JWTLoader implements JWTLoaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string[]
      */
     public function getSupportedCompressionMethods()
     {
@@ -97,14 +99,18 @@ final class JWTLoader implements JWTLoaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string                            $assertion
+     * @param JWKSetInterface|null $encryption_key_set
+     * @param bool                              $is_encryption_required
+     *
+     * @return JWS
      */
     public function load($assertion, Object\JWKSetInterface $encryption_key_set = null, $is_encryption_required = false)
     {
         Assertion::string($assertion);
         Assertion::boolean($is_encryption_required);
         $jwt = $this->loader->load($assertion);
-        if ($jwt instanceof Object\JWEInterface) {
+        if ($jwt instanceof Object\JWE) {
             Assertion::notNull($encryption_key_set, 'Encryption key set is not available.');
             Assertion::true($this->isDecryptionSupportEnabled(), 'Encryption support is not enabled.');
             Assertion::inArray($jwt->getSharedProtectedHeader('alg'), $this->getSupportedKeyEncryptionAlgorithms(), sprintf('The key encryption algorithm "%s" is not allowed.', $jwt->getSharedProtectedHeader('alg')));
@@ -118,9 +124,13 @@ final class JWTLoader implements JWTLoaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param JWS    $jws
+     * @param JWKSetInterface $signature_key_set
+     * @param string|null                  $detached_payload
+     *
+     * @return int
      */
-    public function verify(Object\JWSInterface $jws, Object\JWKSetInterface $signature_key_set, $detached_payload = null)
+    public function verify(Object\JWS $jws, Object\JWKSetInterface $signature_key_set, $detached_payload = null)
     {
         Assertion::inArray($jws->getSignature(0)->getProtectedHeader('alg'), $this->getSupportedSignatureAlgorithms(), sprintf('The signature algorithm "%s" is not supported or not allowed.', $jws->getSignature(0)->getProtectedHeader('alg')));
 
@@ -133,17 +143,17 @@ final class JWTLoader implements JWTLoaderInterface
     }
 
     /**
-     * @param \Jose\Object\JWEInterface    $jwe
-     * @param \Jose\Object\JWKSetInterface $encryption_key_set
+     * @param Object\JWE    $jwe
+     * @param Object\JWKSetInterface $encryption_key_set
      *
-     * @return \Jose\Object\JWSInterface
+     * @return Object\JWS
      */
-    private function decryptAssertion(Object\JWEInterface $jwe, Object\JWKSetInterface $encryption_key_set)
+    private function decryptAssertion(Object\JWE $jwe, Object\JWKSetInterface $encryption_key_set)
     {
         $this->decrypter->decryptUsingKeySet($jwe, $encryption_key_set);
 
         $jws = $this->loader->load($jwe->getPayload());
-        Assertion::isInstanceOf($jws, Object\JWSInterface::class, 'The encrypted assertion does not contain a JWS.');
+        Assertion::isInstanceOf($jws, Object\JWS::class, 'The encrypted assertion does not contain a JWS.');
 
         return $jws;
     }

@@ -13,8 +13,16 @@ namespace Jose;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
+use Jose\Algorithm\ContentEncryptionAlgorithmInterface;
+use Jose\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
+use Jose\Algorithm\KeyEncryption\KeyEncryptionInterface;
+use Jose\Algorithm\KeyEncryptionAlgorithmInterface;
+use Jose\Compression\CompressionInterface;
+use Jose\Object\JWE;
+use Jose\Object\JWKInterface;
+use Jose\Object\Recipient;
 
-final class Encrypter implements EncrypterInterface
+final class Encrypter
 {
     use Behaviour\HasKeyChecker;
     use Behaviour\HasJWAManager;
@@ -23,7 +31,11 @@ final class Encrypter implements EncrypterInterface
     use Behaviour\EncrypterTrait;
 
     /**
-     * {@inheritdoc}
+     * @param string[]|KeyEncryptionAlgorithmInterface[]     $key_encryption_algorithms
+     * @param string[]|ContentEncryptionAlgorithmInterface[] $content_encryption_algorithms
+     * @param string[]|CompressionInterface[]              $compression_methods
+     *
+     * @return Encrypter
      */
     public static function createEncrypter(array $key_encryption_algorithms, array $content_encryption_algorithms, array $compression_methods = ['DEF', 'ZLIB', 'GZ'])
     {
@@ -35,9 +47,9 @@ final class Encrypter implements EncrypterInterface
     /**
      * Decrypter constructor.
      *
-     * @param string[]|\Jose\Algorithm\KeyEncryptionAlgorithmInterface[]     $key_encryption_algorithms
-     * @param string[]|\Jose\Algorithm\ContentEncryptionAlgorithmInterface[] $content_encryption_algorithms
-     * @param string[]|\Jose\Compression\CompressionInterface[]              $compression_methods
+     * @param string[]|KeyEncryptionAlgorithmInterface[]     $key_encryption_algorithms
+     * @param string[]|ContentEncryptionAlgorithmInterface[] $content_encryption_algorithms
+     * @param string[]|CompressionInterface[]              $compression_methods
      */
     public function __construct(array $key_encryption_algorithms, array $content_encryption_algorithms, array $compression_methods)
     {
@@ -49,9 +61,9 @@ final class Encrypter implements EncrypterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param JWE $jwe
      */
-    public function encrypt(Object\JWEInterface &$jwe)
+    public function encrypt(Object\JWE &$jwe)
     {
         Assertion::false($jwe->isEncrypted(), 'The JWE is already encrypted.');
         Assertion::greaterThan($jwe->countRecipients(), 0, 'The JWE does not contain recipient.');
@@ -77,13 +89,13 @@ final class Encrypter implements EncrypterInterface
     }
 
     /**
-     * @param \Jose\Object\JWEInterface                           $jwe
-     * @param \Jose\Object\RecipientInterface                     $recipient
+     * @param JWE                           $jwe
+     * @param Recipient                     $recipient
      * @param string                                              $cek
-     * @param \Jose\Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm
+     * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
      * @param array                                               $additional_headers
      */
-    private function processRecipient(Object\JWEInterface $jwe, Object\RecipientInterface &$recipient, $cek, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array &$additional_headers)
+    private function processRecipient(Object\JWE $jwe, Object\Recipient &$recipient, $cek, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array &$additional_headers)
     {
         if (null === $recipient->getRecipientKey()) {
             return;
@@ -102,13 +114,13 @@ final class Encrypter implements EncrypterInterface
     }
 
     /**
-     * @param \Jose\Object\JWEInterface                           $jwe
-     * @param \Jose\Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm
+     * @param JWE                           $jwe
+     * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
      * @param string                                              $cek
      * @param string                                              $iv
-     * @param \Jose\Compression\CompressionInterface|null         $compression_method
+     * @param CompressionInterface|null         $compression_method
      */
-    private function encryptJWE(Object\JWEInterface &$jwe, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $cek, $iv, Compression\CompressionInterface $compression_method = null)
+    private function encryptJWE(Object\JWE &$jwe, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $cek, $iv, Compression\CompressionInterface $compression_method = null)
     {
         if (!empty($jwe->getSharedProtectedHeaders())) {
             $jwe = $jwe->withEncodedSharedProtectedHeaders(Base64Url::encode(json_encode($jwe->getSharedProtectedHeaders())));
@@ -128,7 +140,7 @@ final class Encrypter implements EncrypterInterface
 
     /**
      * @param string                                      $payload
-     * @param \Jose\Compression\CompressionInterface|null $compression_method
+     * @param CompressionInterface|null $compression_method
      *
      * @return string
      */
@@ -149,9 +161,9 @@ final class Encrypter implements EncrypterInterface
     /**
      * @param array                                               $complete_headers
      * @param string                                              $cek
-     * @param \Jose\Algorithm\KeyEncryptionAlgorithmInterface     $key_encryption_algorithm
-     * @param \Jose\Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm
-     * @param \Jose\Object\JWKInterface                           $recipient_key
+     * @param KeyEncryptionAlgorithmInterface     $key_encryption_algorithm
+     * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
+     * @param JWKInterface                           $recipient_key
      * @param array                                               $additional_headers
      *
      * @return string|null
@@ -170,10 +182,10 @@ final class Encrypter implements EncrypterInterface
     /**
      * @param array                                                       $complete_headers
      * @param string                                                      $cek
-     * @param \Jose\Algorithm\KeyEncryption\KeyAgreementWrappingInterface $key_encryption_algorithm
-     * @param \Jose\Algorithm\ContentEncryptionAlgorithmInterface         $content_encryption_algorithm
+     * @param KeyAgreementWrappingInterface $key_encryption_algorithm
+     * @param ContentEncryptionAlgorithmInterface         $content_encryption_algorithm
      * @param array                                                       $additional_headers
-     * @param \Jose\Object\JWKInterface                                   $recipient_key
+     * @param JWKInterface                                   $recipient_key
      *
      * @return string
      */
@@ -187,8 +199,8 @@ final class Encrypter implements EncrypterInterface
     /**
      * @param array                                                $complete_headers
      * @param string                                               $cek
-     * @param \Jose\Algorithm\KeyEncryption\KeyEncryptionInterface $key_encryption_algorithm
-     * @param \Jose\Object\JWKInterface                            $recipient_key
+     * @param KeyEncryptionInterface $key_encryption_algorithm
+     * @param JWKInterface                            $recipient_key
      * @param array                                                $additional_headers
      *
      * @return string
@@ -201,8 +213,8 @@ final class Encrypter implements EncrypterInterface
     /**
      * @param array                                              $complete_headers
      * @param string                                             $cek
-     * @param \Jose\Algorithm\KeyEncryption\KeyWrappingInterface $key_encryption_algorithm
-     * @param \Jose\Object\JWKInterface                          $recipient_key
+     * @param KeyWrappingInterface $key_encryption_algorithm
+     * @param JWKInterface                          $recipient_key
      * @param array                                              $additional_headers
      *
      * @return string

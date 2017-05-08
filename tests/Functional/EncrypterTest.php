@@ -14,7 +14,7 @@ use Jose\Decrypter;
 use Jose\Encrypter;
 use Jose\Factory\JWEFactory;
 use Jose\Loader;
-use Jose\Object\JWEInterface;
+use Jose\Object\JWE;
 use Jose\Object\JWK;
 use Jose\Object\JWKSet;
 use Jose\Test\Stub\FakeLogger;
@@ -53,7 +53,7 @@ class EncrypterTest extends TestCase
         $loader = new Loader(new FakeLogger());
         $loaded = $loader->load($encrypted);
 
-        $this->assertInstanceOf(JWEInterface::class, $loaded);
+        $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
         $this->assertEquals('A256CBC-HS512', $loaded->getSharedProtectedHeader('enc'));
         $this->assertEquals('DEF', $loaded->getSharedProtectedHeader('zip'));
@@ -80,7 +80,7 @@ class EncrypterTest extends TestCase
         $loader = new Loader(new FakeLogger());
         $loaded = $loader->load($jwe);
 
-        $this->assertInstanceOf(JWEInterface::class, $loaded);
+        $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
         $this->assertEquals('A256CBC-HS512', $loaded->getSharedProtectedHeader('enc'));
         $this->assertEquals('DEF', $loaded->getSharedProtectedHeader('zip'));
@@ -115,7 +115,7 @@ class EncrypterTest extends TestCase
         $loader = new Loader(new FakeLogger());
         $loaded = $loader->load($jwe);
 
-        $this->assertInstanceOf(JWEInterface::class, $loaded);
+        $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
         $this->assertEquals('A256CBC-HS512', $loaded->getSharedProtectedHeader('enc'));
         $this->assertEquals('DEF', $loaded->getSharedProtectedHeader('zip'));
@@ -156,7 +156,7 @@ class EncrypterTest extends TestCase
         $loader = new Loader(new FakeLogger());
         $loaded = $loader->load($encrypted);
 
-        $this->assertInstanceOf(JWEInterface::class, $loaded);
+        $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
         $this->assertEquals('A256CBC-HS512', $loaded->getSharedProtectedHeader('enc'));
         $this->assertEquals('DEF', $loaded->getSharedProtectedHeader('zip'));
@@ -331,7 +331,7 @@ class EncrypterTest extends TestCase
         $loader = new Loader(new FakeLogger());
         $loaded = $loader->load($encrypted);
 
-        $this->assertInstanceOf(JWEInterface::class, $loaded);
+        $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
         $this->assertEquals('A128CBC-HS256', $loaded->getSharedProtectedHeader('enc'));
         $this->assertEquals('DEF', $loaded->getSharedProtectedHeader('zip'));
@@ -453,7 +453,7 @@ class EncrypterTest extends TestCase
         $loader = new Loader(new FakeLogger());
         $loaded = $loader->load($encrypted);
 
-        $this->assertInstanceOf(JWEInterface::class, $loaded);
+        $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('dir', $loaded->getSharedProtectedHeader('alg'));
         $this->assertEquals('A192CBC-HS384', $loaded->getSharedProtectedHeader('enc'));
         $this->assertFalse($loaded->hasSharedHeader('zip'));
@@ -487,7 +487,7 @@ class EncrypterTest extends TestCase
         $loader = new Loader(new FakeLogger());
         $loaded = $loader->load($jwe->toFlattenedJSON(0));
 
-        $this->assertInstanceOf(JWEInterface::class, $loaded);
+        $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('ECDH-ES', $loaded->getSharedProtectedHeader('alg'));
         $this->assertEquals('A192CBC-HS384', $loaded->getSharedProtectedHeader('enc'));
         $this->assertFalse($loaded->hasSharedProtectedHeader('zip'));
@@ -522,7 +522,7 @@ class EncrypterTest extends TestCase
         $loader = new Loader(new FakeLogger());
         $loaded = $loader->load($jwe->toFlattenedJSON(0));
 
-        $this->assertInstanceOf(JWEInterface::class, $loaded);
+        $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('ECDH-ES+A256KW', $loaded->getSharedProtectedHeader('alg'));
         $this->assertEquals('A256CBC-HS512', $loaded->getSharedProtectedHeader('enc'));
         $this->assertFalse($loaded->hasSharedProtectedHeader('zip'));
@@ -562,7 +562,7 @@ class EncrypterTest extends TestCase
 
         $decrypter = Decrypter::createDecrypter(['A256GCM'], ['ECDH-ES+A256KW'], ['DEF'], new FakeLogger());
 
-        $this->assertInstanceOf(JWEInterface::class, $loaded);
+        $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('ECDH-ES+A256KW', $loaded->getSharedProtectedHeader('alg'));
         $this->assertEquals('A256GCM', $loaded->getSharedProtectedHeader('enc'));
         $this->assertFalse($loaded->hasSharedProtectedHeader('zip'));
@@ -600,7 +600,7 @@ class EncrypterTest extends TestCase
 
         $this->assertEquals(2, $loaded->countRecipients());
 
-        $this->assertInstanceOf(JWEInterface::class, $loaded);
+        $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('A256CBC-HS512', $loaded->getSharedProtectedHeader('enc'));
         $this->assertEquals('ECDH-ES+A256KW', $loaded->getRecipient(0)->getHeader('alg'));
         $this->assertEquals('RSA-OAEP-256', $loaded->getRecipient(1)->getHeader('alg'));

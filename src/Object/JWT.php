@@ -22,7 +22,13 @@ trait JWT
     private $payload = null;
 
     /**
-     * {@inheritdoc}
+     * Returns the payload of the JWT.
+     *
+     * @return string                       Payload
+     * @return array                        Payload
+     * @return \Jose\Object\JWKInterface    Payload
+     * @return \Jose\Object\JWKSetInterface Payload
+     * @return mixed                        Payload
      */
     public function getPayload()
     {
@@ -30,7 +36,11 @@ trait JWT
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed $payload
+     *
+     * @internal
+     *
+     * @return \Jose\Object\JWTInterface
      */
     public function withPayload($payload)
     {
@@ -41,7 +51,11 @@ trait JWT
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the value of the payload of the specified key.
+     *
+     * @param string $key The key
+     *
+     * @return mixed|null Payload value
      */
     public function getClaim($key)
     {
@@ -52,7 +66,9 @@ trait JWT
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the claims.
+     *
+     * @return array Payload value
      */
     public function getClaims()
     {
@@ -63,7 +79,9 @@ trait JWT
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $key The key
+     *
+     * @return bool
      */
     public function hasClaim($key)
     {
@@ -71,7 +89,7 @@ trait JWT
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function hasClaims()
     {

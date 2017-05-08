@@ -13,7 +13,7 @@ use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Object\JWKSet;
-use Jose\Object\JWSInterface;
+use Jose\Object\JWS;
 use Jose\Signer;
 use Jose\Test\TestCase;
 use Jose\Verifier;
@@ -76,7 +76,7 @@ class SignerTest extends TestCase
         $loader = new Loader();
         $loaded = $loader->load($jws->toJSON());
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
+        $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertTrue(is_array($loaded->getPayload()));
         $this->assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
         $this->assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
@@ -121,10 +121,10 @@ class SignerTest extends TestCase
         $loaded_2 = $loader->loadAndVerifySignatureUsingKeyAndDetachedPayload($jws2, $this->getKey1(), ['HS512'], 'Live long and Prosper.');
         $loaded_3 = $loader->loadAndVerifySignatureUsingKeyAndDetachedPayload($jws3, $this->getKey2(), ['RS512'], 'Live long and Prosper.');
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded_0);
-        $this->assertInstanceOf(JWSInterface::class, $loaded_1);
-        $this->assertInstanceOf(JWSInterface::class, $loaded_2);
-        $this->assertInstanceOf(JWSInterface::class, $loaded_3);
+        $this->assertInstanceOf(JWS::class, $loaded_0);
+        $this->assertInstanceOf(JWS::class, $loaded_1);
+        $this->assertInstanceOf(JWS::class, $loaded_2);
+        $this->assertInstanceOf(JWS::class, $loaded_3);
     }
 
     public function testSignMultipleInstructionWithFlattenedRepresentation()
@@ -166,10 +166,10 @@ class SignerTest extends TestCase
         $loaded_2 = $loader->loadAndVerifySignatureUsingKeyAndDetachedPayload($jws2, $this->getKey1(), ['HS512'], 'Live long and Prosper.');
         $loaded_3 = $loader->loadAndVerifySignatureUsingKeyAndDetachedPayload($jws3, $this->getKey2(), ['RS512'], 'Live long and Prosper.');
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded_0);
-        $this->assertInstanceOf(JWSInterface::class, $loaded_1);
-        $this->assertInstanceOf(JWSInterface::class, $loaded_2);
-        $this->assertInstanceOf(JWSInterface::class, $loaded_3);
+        $this->assertInstanceOf(JWS::class, $loaded_0);
+        $this->assertInstanceOf(JWS::class, $loaded_1);
+        $this->assertInstanceOf(JWS::class, $loaded_2);
+        $this->assertInstanceOf(JWS::class, $loaded_3);
     }
 
     /**
@@ -223,7 +223,7 @@ class SignerTest extends TestCase
         $loaded = $loader->load($jws->toJSON());
 
         $this->assertEquals(1, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
+        $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertTrue(is_array($loaded->getPayload()));
         $this->assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
     }
@@ -250,7 +250,7 @@ class SignerTest extends TestCase
         $loaded = $loader->load($jws->toJSON());
 
         $this->assertEquals(2, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
+        $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals('Live long and Prosper.', $loaded->getPayload());
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
         $verifier->verifyWithKeySet($loaded, $this->getPublicKeySet());
@@ -280,7 +280,7 @@ class SignerTest extends TestCase
         $loaded = $loader->load($jws->toJSON());
 
         $this->assertEquals(1, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
+        $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals('Live long and Prosper.', $loaded->getPayload());
 
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
@@ -307,7 +307,7 @@ class SignerTest extends TestCase
         $loaded = $loader->load($jws->toJSON());
 
         $this->assertEquals(1, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
+        $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals('Live long and Prosper.', $loaded->getPayload());
 
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
@@ -327,7 +327,7 @@ class SignerTest extends TestCase
         $loaded = $loader->load($jws);
 
         $this->assertEquals(0, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
+        $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals($payload, $loaded->getPayload());
 
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
@@ -392,7 +392,7 @@ class SignerTest extends TestCase
             $index
         );
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
+        $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals(0, $index);
         $this->assertEquals($protected_header, $loaded->getSignature(0)->getProtectedHeaders());
     }
@@ -444,8 +444,8 @@ class SignerTest extends TestCase
             $index2
         );
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded1);
-        $this->assertInstanceOf(JWSInterface::class, $loaded2);
+        $this->assertInstanceOf(JWS::class, $loaded1);
+        $this->assertInstanceOf(JWS::class, $loaded2);
         $this->assertEquals(0, $index1);
         $this->assertEquals(0, $index2);
         $this->assertEquals($protected_header1, $loaded1->getSignature(0)->getProtectedHeaders());
@@ -583,7 +583,7 @@ class SignerTest extends TestCase
             $index
         );
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
+        $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals($payload, $loaded->getPayload());
         $this->assertEquals(0, $index);
         $this->assertEquals($protected_header, $loaded->getSignature(0)->getProtectedHeaders());
@@ -631,7 +631,7 @@ class SignerTest extends TestCase
         $loaded = $loader->load($jws);
 
         $this->assertEquals(1, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
+        $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals($payload, $loaded->getPayload());
 
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
@@ -658,7 +658,7 @@ class SignerTest extends TestCase
         $loader = new Loader();
         $loaded = $loader->load($jws->toJSON());
         $this->assertEquals(2, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
+        $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals($this->getKeyset(), new JWKSet($loaded->getPayload()));
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
         $verifier->verifyWithKeySet($loaded, $this->getPublicKeySet());
@@ -692,7 +692,7 @@ class SignerTest extends TestCase
         $loader = new Loader();
         $loaded = $loader->load($jws->toJSON());
         $this->assertEquals(2, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
+        $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals($this->getKeyset(), new JWKSet($loaded->getPayload()));
         $verifier->verifyWithKeySet($loaded, new JWKSet());
         $verifier->verifyWithKey($loaded, new JWK(['kty' => 'EC']));

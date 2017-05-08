@@ -63,7 +63,7 @@ class CheckerManager implements CheckerManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkJWS(Object\JWSInterface $jws, $signature)
+    public function checkJWS(Object\JWS $jws, $signature)
     {
         Assertion::integer($signature);
         Assertion::lessThan($signature, $jws->countSignatures());

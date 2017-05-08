@@ -13,8 +13,8 @@ use Jose\Factory\JWEFactory;
 use Jose\Factory\JWKFactory;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
-use Jose\Object\JWEInterface;
-use Jose\Object\JWSInterface;
+use Jose\Object\JWE;
+use Jose\Object\JWS;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,7 +40,7 @@ class RSAKeyWithoutAllPrimesTest extends TestCase
 
         $loader = new Loader();
 
-        $this->assertInstanceOf(JWSInterface::class, $loader->loadAndVerifySignatureUsingKey($jwt, $key, [$signature_algorithm]));
+        $this->assertInstanceOf(JWS::class, $loader->loadAndVerifySignatureUsingKey($jwt, $key, [$signature_algorithm]));
     }
 
     /**
@@ -85,7 +85,7 @@ class RSAKeyWithoutAllPrimesTest extends TestCase
 
         $loader = new Loader();
 
-        $this->assertInstanceOf(JWEInterface::class, $loader->loadAndDecryptUsingKey($jwt, $key, [$encryption_algorithm], ['A256GCM']));
+        $this->assertInstanceOf(JWE::class, $loader->loadAndDecryptUsingKey($jwt, $key, [$encryption_algorithm], ['A256GCM']));
     }
 
     /**
@@ -103,7 +103,7 @@ class RSAKeyWithoutAllPrimesTest extends TestCase
 
         $loader = new Loader();
 
-        $this->assertInstanceOf(JWEInterface::class, $loader->loadAndDecryptUsingKey($jwt, $key, [$encryption_algorithm], ['A256GCM']));
+        $this->assertInstanceOf(JWE::class, $loader->loadAndDecryptUsingKey($jwt, $key, [$encryption_algorithm], ['A256GCM']));
     }
 
     /**

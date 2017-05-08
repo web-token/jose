@@ -14,15 +14,14 @@ namespace Jose\Util;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Object\JWS;
-use Jose\Object\JWSInterface;
-use Jose\Object\SignatureInterface;
+use Jose\Object\Signature;
 
 final class JWSLoader
 {
     /**
      * @param array $data
      *
-     * @return \Jose\Object\JWSInterface
+     * @return \Jose\Object\JWS
      */
     public static function loadSerializedJsonJWS(array $data)
     {
@@ -68,10 +67,10 @@ final class JWSLoader
     }
 
     /**
-     * @param \Jose\Object\JWSInterface $jws
+     * @param \Jose\Object\JWS $jws
      * @param array                     $data
      */
-    private static function populatePayload(JWSInterface &$jws, array $data)
+    private static function populatePayload(JWS &$jws, array $data)
     {
         $is_encoded = null;
         foreach ($jws->getSignatures() as $signature) {
@@ -98,11 +97,11 @@ final class JWSLoader
     }
 
     /**
-     * @param \Jose\Object\SignatureInterface $signature
+     * @param \Jose\Object\Signature $signature
      *
      * @return bool
      */
-    private static function isPayloadEncoded(SignatureInterface $signature)
+    private static function isPayloadEncoded(Signature $signature)
     {
         return !$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
     }
