@@ -25,5 +25,5 @@ interface ClaimCheckerInterface
      *
      * @return string[]
      */
-    public function checkClaim(JWTInterface $jwt);
+    public function checkClaim(JWTInterface $jwt): array;
 }

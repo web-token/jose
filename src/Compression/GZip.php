@@ -29,7 +29,7 @@ final class GZip implements CompressionInterface
      *
      * @param int $compression_level
      */
-    public function __construct($compression_level = -1)
+    public function __construct(int $compression_level = -1)
     {
         Assertion::integer($compression_level, 'The compression level can be given as 0 for no compression up to 9 for maximum compression. If -1 given, the default compression level will be the default compression level of the zlib library.');
         Assertion::range($compression_level, -1, 9, 'The compression level can be given as 0 for no compression up to 9 for maximum compression. If -1 given, the default compression level will be the default compression level of the zlib library.');
@@ -40,7 +40,7 @@ final class GZip implements CompressionInterface
     /**
      * @return int
      */
-    private function getCompressionLevel()
+    private function getCompressionLevel(): int
     {
         return $this->compression_level;
     }
@@ -48,7 +48,7 @@ final class GZip implements CompressionInterface
     /**
      * {@inheritdoc}
      */
-    public function getMethodName()
+    public function name(): string
     {
         return 'GZ';
     }
@@ -56,7 +56,7 @@ final class GZip implements CompressionInterface
     /**
      * {@inheritdoc}
      */
-    public function compress($data)
+    public function compress(string $data): string
     {
         $data = gzencode($data, $this->getCompressionLevel());
         Assertion::false(false === $data, 'Unable to compress data');
@@ -67,7 +67,7 @@ final class GZip implements CompressionInterface
     /**
      * {@inheritdoc}
      */
-    public function uncompress($data)
+    public function uncompress(string $data): string
     {
         $data = gzdecode($data);
         Assertion::false(false === $data, 'Unable to uncompress data');

@@ -19,7 +19,7 @@ interface CompressionInterface
     /**
      * @return string Return the name of the method
      */
-    public function getMethodName();
+    public function name(): string;
 
     /**
      * Compress the data.
@@ -30,7 +30,7 @@ interface CompressionInterface
      *
      * @return string The compressed data
      */
-    public function compress($data);
+    public function compress(string $data): string;
 
     /**
      * Uncompress the data.
@@ -41,5 +41,5 @@ interface CompressionInterface
      *
      * @return string The uncompressed data
      */
-    public function uncompress($data);
+    public function uncompress(string $data): string;
 }

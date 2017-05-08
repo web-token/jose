@@ -13,6 +13,7 @@ namespace Jose\KeyConverter;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
+use FG\ASN1\Exception\ParserException;
 use FG\ASN1\Universal\BitString;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\NullObject;
@@ -30,7 +31,7 @@ final class RSAKey extends Sequence
     private $values = [];
 
     /**
-     * @var \Jose\Util\BigInteger
+     * @var BigInteger
      */
     private $modulus;
 
@@ -40,32 +41,32 @@ final class RSAKey extends Sequence
     private $modulus_length;
 
     /**
-     * @var \Jose\Util\BigInteger
+     * @var BigInteger
      */
     private $public_exponent;
 
     /**
-     * @var \Jose\Util\BigInteger|null
+     * @var BigInteger|null
      */
     private $private_exponent = null;
 
     /**
-     * @var \Jose\Util\BigInteger[]
+     * @var BigInteger[]
      */
     private $primes = [];
 
     /**
-     * @var \Jose\Util\BigInteger[]
+     * @var BigInteger[]
      */
     private $exponents = [];
 
     /**
-     * @var \Jose\Util\BigInteger|null
+     * @var BigInteger|null
      */
     private $coefficient = null;
 
     /**
-     * @param \Jose\Object\JWKInterface|string|array $data
+     * @param JWKInterface|string|array $data
      */
     public function __construct($data)
     {
@@ -87,7 +88,7 @@ final class RSAKey extends Sequence
     /**
      * @return bool
      */
-    public function isPublic()
+    public function isPublic(): bool
     {
         return !$this->isPrivate();
     }
@@ -95,15 +96,15 @@ final class RSAKey extends Sequence
     /**
      * @return bool
      */
-    public function isPrivate()
+    public function isPrivate(): bool
     {
         return array_key_exists('d', $this->values);
     }
 
     /**
-     * @return \Jose\Util\BigInteger
+     * @return BigInteger
      */
-    public function getModulus()
+    public function getModulus(): BigInteger
     {
         return $this->modulus;
     }
@@ -111,15 +112,15 @@ final class RSAKey extends Sequence
     /**
      * @return int
      */
-    public function getModulusLength()
+    public function getModulusLength(): int
     {
         return $this->modulus_length;
     }
 
     /**
-     * @return \Jose\Util\BigInteger
+     * @return BigInteger
      */
-    public function getExponent()
+    public function getExponent(): BigInteger
     {
         $d = $this->getPrivateExponent();
         if (null !== $d) {
@@ -130,51 +131,51 @@ final class RSAKey extends Sequence
     }
 
     /**
-     * @return \Jose\Util\BigInteger
+     * @return BigInteger
      */
-    public function getPublicExponent()
+    public function getPublicExponent(): BigInteger
     {
         return $this->public_exponent;
     }
 
     /**
-     * @return \Jose\Util\BigInteger
+     * @return BigInteger|null
      */
-    public function getPrivateExponent()
+    public function getPrivateExponent(): ?BigInteger
     {
         return $this->private_exponent;
     }
 
     /**
-     * @return \Jose\Util\BigInteger[]
+     * @return BigInteger[]
      */
-    public function getPrimes()
+    public function getPrimes(): array
     {
         return $this->primes;
     }
 
     /**
-     * @return \Jose\Util\BigInteger[]
+     * @return BigInteger[]
      */
-    public function getExponents()
+    public function getExponents(): array
     {
         return $this->exponents;
     }
 
     /**
-     * @return \Jose\Util\BigInteger|null
+     * @return BigInteger|null
      */
-    public function getCoefficient()
+    public function getCoefficient(): ?BigInteger
     {
         return $this->coefficient;
     }
 
     /**
-     * @param \Jose\KeyConverter\RSAKey $private
+     * @param RSAKey $private
      *
-     * @return \Jose\KeyConverter\RSAKey
+     * @return RSAKey
      */
-    public static function toPublic(RSAKey $private)
+    public static function toPublic(RSAKey $private): RSAKey
     {
         $data = $private->toArray();
         $keys = ['p', 'd', 'q', 'dp', 'dq', 'qi'];
@@ -187,6 +188,9 @@ final class RSAKey extends Sequence
         return new self($data);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return $this->toPEM();
@@ -195,7 +199,7 @@ final class RSAKey extends Sequence
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->values;
     }
@@ -203,7 +207,7 @@ final class RSAKey extends Sequence
     /**
      * @return string
      */
-    public function toDER()
+    public function toDER(): string
     {
         return $this->getBinary();
     }
@@ -211,7 +215,7 @@ final class RSAKey extends Sequence
     /**
      * @return string
      */
-    public function toPEM()
+    public function toPEM(): string
     {
         $result = '-----BEGIN '.($this->isPrivate() ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
         $result .= chunk_split(base64_encode($this->getBinary()), 64, PHP_EOL);
@@ -224,11 +228,9 @@ final class RSAKey extends Sequence
      * @param string $data
      *
      * @throws \Exception
-     * @throws \FG\ASN1\Exception\ParserException
-     *
-     * @return array
+     * @throws ParserException
      */
-    private function loadPEM($data)
+    private function loadPEM(string $data)
     {
         $res = openssl_pkey_get_private($data);
         if (false === $res) {
@@ -362,7 +364,7 @@ final class RSAKey extends Sequence
      *
      * @return string
      */
-    private function fromBase64ToInteger($value)
+    private function fromBase64ToInteger(string $value): string
     {
         return gmp_strval(gmp_init(current(unpack('H*', Base64Url::decode($value))), 16), 10);
     }
@@ -393,9 +395,9 @@ final class RSAKey extends Sequence
     /**
      * @param string $value
      *
-     * @return \Jose\Util\BigInteger
+     * @return BigInteger
      */
-    private function convertBase64StringToBigInteger($value)
+    private function convertBase64StringToBigInteger(string $value): BigInteger
     {
         return BigInteger::createFromBinaryString(Base64Url::decode($value));
     }
@@ -404,9 +406,9 @@ final class RSAKey extends Sequence
      * @param BigInteger $d
      * @param BigInteger $e
      * @param BigInteger $n
-     * @return array
+     * @return BigInteger[]
      */
-    private function findPrimeFactors(BigInteger $d, BigInteger $e, BigInteger $n)
+    private function findPrimeFactors(BigInteger $d, BigInteger $e, BigInteger $n): array
     {
         $zero = BigInteger::createFromDecimal(0);
         $one  = BigInteger::createFromDecimal(1);

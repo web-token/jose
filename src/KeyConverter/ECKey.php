@@ -13,6 +13,7 @@ namespace Jose\KeyConverter;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
+use FG\ASN1\Exception\ParserException;
 use FG\ASN1\ExplicitlyTaggedObject;
 use FG\ASN1\Object;
 use FG\ASN1\Universal\BitString;
@@ -35,7 +36,7 @@ final class ECKey extends Sequence
     private $values = [];
 
     /**
-     * @param \Jose\Object\JWKInterface|string|array $data
+     * @param JWKInterface|string|array $data
      */
     public function __construct($data)
     {
@@ -57,11 +58,9 @@ final class ECKey extends Sequence
      * @param string $data
      *
      * @throws \Exception
-     * @throws \FG\ASN1\Exception\ParserException
-     *
-     * @return array
+     * @throws ParserException
      */
-    private function loadPEM($data)
+    private function loadPEM(string $data)
     {
         $data = base64_decode(preg_replace('#-.*-|\r|\n#', '', $data));
         $asnObject = Object::fromBinary($data);
@@ -73,9 +72,13 @@ final class ECKey extends Sequence
         }
 
         if (4 === count($children)) {
-            return $this->loadPrivatePEM($children);
+            $this->loadPrivatePEM($children);
+
+            return;
         } elseif (2 === count($children)) {
-            return $this->loadPublicPEM($children);
+            $this->loadPublicPEM($children);
+
+            return;
         }
         throw new \Exception('Unable to load the key');
     }
@@ -85,7 +88,7 @@ final class ECKey extends Sequence
      *
      * @return array
      */
-    private function loadPKCS8(array $children)
+    private function loadPKCS8(array $children): array
     {
         $binary = hex2bin($children[2]->getContent());
         $asnObject = Object::fromBinary($binary);
@@ -99,7 +102,7 @@ final class ECKey extends Sequence
      *
      * @return bool
      */
-    private function isPKCS8(array $children)
+    private function isPKCS8(array $children): bool
     {
         if (3 !== count($children)) {
             return false;
@@ -166,8 +169,6 @@ final class ECKey extends Sequence
      * @param array $children
      *
      * @throws \Exception
-     *
-     * @return array
      */
     private function loadPublicPEM(array $children)
     {
@@ -192,7 +193,7 @@ final class ECKey extends Sequence
     }
 
     /**
-     * @param \FG\ASN1\Object $children
+     * @param Object $children
      */
     private function verifyVersion(Object $children)
     {
@@ -201,11 +202,11 @@ final class ECKey extends Sequence
     }
 
     /**
-     * @param \FG\ASN1\Object $children
+     * @param Object $children
      * @param string|null     $x
      * @param string|null     $y
      */
-    private function getXAndY(Object $children, &$x, &$y)
+    private function getXAndY(Object $children, ?string &$x, ?string &$y)
     {
         Assertion::isInstanceOf($children, ExplicitlyTaggedObject::class, 'Unable to load the key');
         Assertion::isArray($children->getContent(), 'Unable to load the key');
@@ -221,11 +222,11 @@ final class ECKey extends Sequence
     }
 
     /**
-     * @param \FG\ASN1\Object $children
+     * @param Object $children
      *
      * @return string
      */
-    private function getD(Object $children)
+    private function getD(Object $children): string
     {
         Assertion::isInstanceOf($children, '\FG\ASN1\Universal\OctetString', 'Unable to load the key');
 
@@ -234,8 +235,6 @@ final class ECKey extends Sequence
 
     /**
      * @param array $children
-     *
-     * @return array
      */
     private function loadPrivatePEM(array $children)
     {

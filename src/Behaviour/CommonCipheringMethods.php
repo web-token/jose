@@ -102,7 +102,7 @@ trait CommonCipheringMethods
             if (is_string($compression_method)) {
                 $result[] = $compression_method;
             } elseif ($compression_method instanceof CompressionInterface) {
-                $result[] = $compression_method->getMethodName();
+                $result[] = $compression_method->name();
             } else {
                 throw new \InvalidArgumentException('Parameter must be a string or an instance of CompressionInterface');
             }

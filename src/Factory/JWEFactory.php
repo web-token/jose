@@ -24,9 +24,9 @@ final class JWEFactory
      * @param array       $shared_headers
      * @param null|string $aad
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public static function createJWE($payload, array $shared_protected_headers = [], array $shared_headers = [], $aad = null)
+    public static function createJWE($payload, array $shared_protected_headers = [], array $shared_headers = [], ?string $aad = null): JWE
     {
         $jwe = new JWE();
         $jwe = $jwe->withSharedProtectedHeaders($shared_protected_headers);
@@ -42,12 +42,12 @@ final class JWEFactory
 
     /**
      * @param mixed                     $payload
-     * @param \Jose\Object\JWKInterface $recipient_key
+     * @param JWKInterface $recipient_key
      * @param array                     $shared_protected_headers
      *
      * @return string
      */
-    public static function createJWEToCompactJSON($payload, JWKInterface $recipient_key, array $shared_protected_headers)
+    public static function createJWEToCompactJSON($payload, JWKInterface $recipient_key, array $shared_protected_headers): string
     {
         $jwe = self::createJWEAndEncrypt($payload, $recipient_key, $shared_protected_headers, [], [], null);
 
@@ -56,7 +56,7 @@ final class JWEFactory
 
     /**
      * @param mixed                     $payload
-     * @param \Jose\Object\JWKInterface $recipient_key
+     * @param JWKInterface $recipient_key
      * @param array                     $shared_protected_headers
      * @param array                     $shared_headers
      * @param array                     $recipient_headers
@@ -64,7 +64,7 @@ final class JWEFactory
      *
      * @return string
      */
-    public static function createJWEToFlattenedJSON($payload, JWKInterface $recipient_key, array $shared_protected_headers = [], $shared_headers = [], $recipient_headers = [], $aad = null)
+    public static function createJWEToFlattenedJSON($payload, JWKInterface $recipient_key, array $shared_protected_headers = [], array $shared_headers = [], array $recipient_headers = [], ?string $aad = null): string
     {
         $jwe = self::createJWEAndEncrypt($payload, $recipient_key, $shared_protected_headers, $shared_headers, $recipient_headers, $aad);
 
@@ -73,15 +73,15 @@ final class JWEFactory
 
     /**
      * @param mixed                     $payload
-     * @param \Jose\Object\JWKInterface $recipient_key
+     * @param JWKInterface $recipient_key
      * @param array                     $shared_protected_headers
      * @param array                     $shared_headers
      * @param array                     $recipient_headers
      * @param string|null               $aad
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    private static function createJWEAndEncrypt($payload, JWKInterface $recipient_key, array $shared_protected_headers = [], $shared_headers = [], $recipient_headers = [], $aad = null)
+    private static function createJWEAndEncrypt($payload, JWKInterface $recipient_key, array $shared_protected_headers = [], array $shared_headers = [], array $recipient_headers = [], ?string $aad = null): JWE
     {
         $complete_headers = array_merge($shared_protected_headers, $shared_headers, $recipient_headers);
         Assertion::keyExists($complete_headers, 'alg', 'No "alg" parameter set in the header');

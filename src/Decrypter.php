@@ -14,11 +14,13 @@ namespace Jose;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Algorithm\ContentEncryptionAlgorithmInterface;
+use Jose\Algorithm\JWAInterface;
 use Jose\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Compression\CompressionInterface;
 use Jose\Object\JWE;
 use Jose\Object\JWKInterface;
 use Jose\Object\JWKSetInterface;
+use Jose\Object\Recipient;
 
 final class Decrypter
 {

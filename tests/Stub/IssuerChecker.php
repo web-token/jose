@@ -20,7 +20,7 @@ class IssuerChecker implements ClaimCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWTInterface $jwt)
+    public function checkClaim(JWTInterface $jwt): array
     {
         if (!$jwt->hasClaim('iss')) {
             return [];
@@ -33,9 +33,10 @@ class IssuerChecker implements ClaimCheckerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $issuer
+     * @return bool
      */
-    protected function isIssuerAllowed($issuer)
+    protected function isIssuerAllowed(string $issuer): bool
     {
         return in_array($issuer, ['ISS1', 'ISS2']);
     }

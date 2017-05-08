@@ -18,6 +18,7 @@ use Jose\KeyConverter\KeyConverter;
 use Jose\KeyConverter\RSAKey;
 use Jose\Object\JKUJWKSet;
 use Jose\Object\JWK;
+use Jose\Object\JWKInterface;
 use Jose\Object\JWKSet;
 use Jose\Object\JWKSetInterface;
 use Jose\Object\JWKSets;
@@ -34,21 +35,21 @@ use Psr\Cache\CacheItemPoolInterface;
 final class JWKFactory
 {
     /**
-     * @param \Jose\Object\JWKSetInterface $jwkset
+     * @param JWKSetInterface $jwkset
      *
-     * @return \Jose\Object\JWKSetInterface
+     * @return JWKSetInterface
      */
-    public static function createPublicKeySet(JWKSetInterface $jwkset)
+    public static function createPublicKeySet(JWKSetInterface $jwkset): JWKSetInterface
     {
         return new PublicJWKSet($jwkset);
     }
 
     /**
-     * @param \Jose\Object\JWKSetInterface[] $jwksets
+     * @param JWKSetInterface[] $jwksets
      *
-     * @return \Jose\Object\JWKSetInterface
+     * @return JWKSetInterface
      */
-    public static function createKeySets(array $jwksets = [])
+    public static function createKeySets(array $jwksets = []): JWKSetInterface
     {
         return new JWKSets($jwksets);
     }
@@ -57,9 +58,9 @@ final class JWKFactory
      * @param string $filename
      * @param array  $parameters
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createStorableKey($filename, array $parameters)
+    public static function createStorableKey(string $filename, array $parameters): JWKInterface
     {
         return new StorableJWK($filename, $parameters);
     }
@@ -69,9 +70,9 @@ final class JWKFactory
      * @param array  $parameters
      * @param int    $nb_keys
      *
-     * @return \Jose\Object\JWKSetInterface
+     * @return JWKSetInterface
      */
-    public static function createRotatableKeySet($filename, array $parameters, $nb_keys)
+    public static function createRotatableKeySet(string $filename, array $parameters, int $nb_keys): JWKSetInterface
     {
         return new RotatableJWKSet($filename, $parameters, $nb_keys);
     }
@@ -81,9 +82,9 @@ final class JWKFactory
      * @param array  $parameters
      * @param int    $nb_keys
      *
-     * @return \Jose\Object\JWKSetInterface
+     * @return JWKSetInterface
      */
-    public static function createStorableKeySet($filename, array $parameters, $nb_keys)
+    public static function createStorableKeySet(string $filename, array $parameters, $nb_keys): JWKSetInterface
     {
         return new StorableJWKSet($filename, $parameters, $nb_keys);
     }
@@ -91,9 +92,9 @@ final class JWKFactory
     /**
      * @param array $config
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createKey(array $config)
+    public static function createKey(array $config): JWKInterface
     {
         Assertion::keyExists($config, 'kty', 'The key "kty" must be set');
         $supported_types = ['RSA' => 'RSA', 'OKP' => 'OKP', 'EC' => 'EC', 'oct' => 'Oct', 'none' => 'None'];
@@ -107,9 +108,9 @@ final class JWKFactory
     /**
      * @param array $values Values to configure the key. Must contain at least the index 'size' with the key size in bits
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createRSAKey(array $values)
+    public static function createRSAKey(array $values): JWKInterface
     {
         Assertion::keyExists($values, 'size', 'The key size is not set.');
         $size = $values['size'];
@@ -135,9 +136,9 @@ final class JWKFactory
     /**
      * @param array $values Values to configure the key. Must contain at least the index 'crv' with the curve
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createECKey(array $values)
+    public static function createECKey(array $values): JWKInterface
     {
         Assertion::keyExists($values, 'crv', 'The curve is not set.');
         $curve = $values['crv'];
@@ -180,9 +181,9 @@ final class JWKFactory
     /**
      * @param array $values Values to configure the key. Must contain at least the index 'size' with the key size in bits
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createOctKey(array $values)
+    public static function createOctKey(array $values): JWKInterface
     {
         Assertion::keyExists($values, 'size', 'The key size is not set.');
         $size = $values['size'];
@@ -202,9 +203,9 @@ final class JWKFactory
     /**
      * @param array $values Values to configure the key. Must contain at least the index 'crv' with the curve
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createOKPKey(array $values)
+    public static function createOKPKey(array $values): JWKInterface
     {
         Assertion::keyExists($values, 'crv', 'The curve is not set.');
         $curve = $values['crv'];
@@ -239,9 +240,9 @@ final class JWKFactory
     /**
      * @param array $values Values to configure the key.
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createNoneKey(array $values)
+    public static function createNoneKey(array $values): JWKInterface
     {
         $values = array_merge(
             $values,
@@ -260,7 +261,7 @@ final class JWKFactory
      *
      * @return string
      */
-    private static function encodeValue($value)
+    private static function encodeValue(string $value): string
     {
         $value = gmp_strval($value);
 
@@ -272,7 +273,7 @@ final class JWKFactory
      *
      * @return string
      */
-    private static function convertDecToBin($value)
+    private static function convertDecToBin(string $value): string
     {
         $adapter = EccFactory::getAdapter();
 
@@ -286,7 +287,7 @@ final class JWKFactory
      *
      * @return string
      */
-    private static function getOpensslName($curve)
+    private static function getOpensslName(string $curve): string
     {
         switch ($curve) {
             case 'P-256':
@@ -307,7 +308,7 @@ final class JWKFactory
      *
      * @return string
      */
-    private static function getNistName($curve)
+    private static function getNistName(string $curve): string
     {
         switch ($curve) {
             case 'P-256':
@@ -324,7 +325,7 @@ final class JWKFactory
     /**
      * @param array $values
      *
-     * @return \Jose\Object\JWKInterface|\Jose\Object\JWKSetInterface
+     * @return JWKInterface|JWKSetInterface
      */
     public static function createFromValues(array $values)
     {
@@ -339,9 +340,9 @@ final class JWKFactory
      * @param string $file
      * @param array  $additional_values
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createFromCertificateFile($file, array $additional_values = [])
+    public static function createFromCertificateFile(string $file, array $additional_values = []): JWKInterface
     {
         $values = KeyConverter::loadKeyFromCertificateFile($file);
         $values = array_merge($values, $additional_values);
@@ -353,9 +354,9 @@ final class JWKFactory
      * @param string $certificate
      * @param array  $additional_values
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createFromCertificate($certificate, array $additional_values = [])
+    public static function createFromCertificate(string $certificate, array $additional_values = []): JWKInterface
     {
         $values = KeyConverter::loadKeyFromCertificate($certificate);
         $values = array_merge($values, $additional_values);
@@ -367,9 +368,9 @@ final class JWKFactory
      * @param resource $res
      * @param array    $additional_values
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createFromX509Resource($res, array $additional_values = [])
+    public static function createFromX509Resource($res, array $additional_values = []): JWKInterface
     {
         $values = KeyConverter::loadKeyFromX509Resource($res);
         $values = array_merge($values, $additional_values);
@@ -382,9 +383,9 @@ final class JWKFactory
      * @param null|string $password
      * @param array       $additional_values
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createFromKeyFile($file, $password = null, array $additional_values = [])
+    public static function createFromKeyFile(string $file, ?string $password = null, array $additional_values = []): JWKInterface
     {
         $values = KeyConverter::loadFromKeyFile($file, $password);
         $values = array_merge($values, $additional_values);
@@ -397,9 +398,9 @@ final class JWKFactory
      * @param null|string $password
      * @param array       $additional_values
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createFromKey($key, $password = null, array $additional_values = [])
+    public static function createFromKey(string $key, ?string $password = null, array $additional_values = []): JWKInterface
     {
         $values = KeyConverter::loadFromKey($key, $password);
         $values = array_merge($values, $additional_values);
@@ -410,13 +411,13 @@ final class JWKFactory
     /**
      * @param string                                 $jku
      * @param bool                                   $allow_unsecured_connection
-     * @param \Psr\Cache\CacheItemPoolInterface|null $cache
+     * @param CacheItemPoolInterface|null $cache
      * @param int|null                               $ttl
      * @param bool                                   $allow_http_connection
      *
-     * @return \Jose\Object\JWKSetInterface
+     * @return JWKSetInterface
      */
-    public static function createFromJKU($jku, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false)
+    public static function createFromJKU(string $jku, bool $allow_unsecured_connection = false, ?CacheItemPoolInterface $cache = null, int $ttl = 86400, bool $allow_http_connection = false): JWKSetInterface
     {
         return new JKUJWKSet($jku, $cache, $ttl, $allow_unsecured_connection, $allow_http_connection);
     }
@@ -424,13 +425,13 @@ final class JWKFactory
     /**
      * @param string                                 $x5u
      * @param bool                                   $allow_unsecured_connection
-     * @param \Psr\Cache\CacheItemPoolInterface|null $cache
+     * @param CacheItemPoolInterface|null $cache
      * @param int|null                               $ttl
      * @param bool                                   $allow_http_connection
      *
-     * @return \Jose\Object\JWKSetInterface
+     * @return JWKSetInterface
      */
-    public static function createFromX5U($x5u, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false)
+    public static function createFromX5U(string $x5u, bool $allow_unsecured_connection = false, ?CacheItemPoolInterface $cache = null, int $ttl = 86400, bool $allow_http_connection = false): JWKSetInterface
     {
         return new X5UJWKSet($x5u, $cache, $ttl, $allow_unsecured_connection, $allow_http_connection);
     }
@@ -439,9 +440,9 @@ final class JWKFactory
      * @param array $x5c
      * @param array $additional_values
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createFromX5C(array $x5c, array $additional_values = [])
+    public static function createFromX5C(array $x5c, array $additional_values = []): JWKInterface
     {
         $values = KeyConverter::loadFromX5C($x5c);
         $values = array_merge($values, $additional_values);
@@ -450,12 +451,12 @@ final class JWKFactory
     }
 
     /**
-     * @param \Jose\Object\JWKSetInterface $jwk_set
+     * @param JWKSetInterface $jwk_set
      * @param int                          $key_index
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public static function createFromKeySet(JWKSetInterface $jwk_set, $key_index)
+    public static function createFromKeySet(JWKSetInterface $jwk_set, int $key_index): JWKInterface
     {
         Assertion::integer($key_index);
 

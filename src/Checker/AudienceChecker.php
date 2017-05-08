@@ -26,7 +26,7 @@ final class AudienceChecker implements ClaimCheckerInterface
      *
      * @param string $audience
      */
-    public function __construct($audience)
+    public function __construct(string $audience)
     {
         $this->audience = $audience;
     }
@@ -34,7 +34,7 @@ final class AudienceChecker implements ClaimCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWTInterface $jwt)
+    public function checkClaim(JWTInterface $jwt): array
     {
         if (!$jwt->hasClaim('aud')) {
             return [];
@@ -55,7 +55,7 @@ final class AudienceChecker implements ClaimCheckerInterface
     /**
      * @return string
      */
-    public function getAudience()
+    public function getAudience(): string
     {
         return $this->audience;
     }

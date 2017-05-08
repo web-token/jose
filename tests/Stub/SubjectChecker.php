@@ -20,7 +20,7 @@ class SubjectChecker implements ClaimCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWTInterface $jwt)
+    public function checkClaim(JWTInterface $jwt): array
     {
         if (!$jwt->hasClaim('sub')) {
             return [];
@@ -33,9 +33,10 @@ class SubjectChecker implements ClaimCheckerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $subject
+     * @return bool
      */
-    protected function isSubjectAllowed($subject)
+    protected function isSubjectAllowed(string $subject): bool
     {
         return in_array($subject, ['SUB1', 'SUB2']);
     }

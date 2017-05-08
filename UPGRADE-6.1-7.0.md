@@ -25,6 +25,7 @@
 * `Jose\Factory\JWKFactoryInterface` removed
 * `Jose\Factory\JWSFactoryInterface` removed
 * `Jose\Compression\CompressionManagerInterface` removed
+* `Jose\Compression\CompressionInterface::getMethodName` renamed to `Jose\Compression\CompressionInterface::name`
 * `Jose\Checker\CheckerManager` removed
 * `Jose\Checker\IssuerChecker` removed
 * `Jose\Checker\SubjectChecker` removed

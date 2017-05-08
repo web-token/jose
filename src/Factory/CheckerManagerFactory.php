@@ -22,9 +22,9 @@ final class CheckerManagerFactory
      * @param string[]|ClaimCheckerInterface[]  $claims
      * @param string[]|HeaderCheckerInterface[] $headers
      *
-     * @return \Jose\Checker\CheckerManager
+     * @return CheckerManager
      */
-    public static function createClaimCheckerManager(array $claims = ['exp', 'iat', 'nbf'], array $headers = ['crit'])
+    public static function createClaimCheckerManager(array $claims = ['exp', 'iat', 'nbf'], array $headers = ['crit']): CheckerManager
     {
         $checker_manager = new CheckerManager();
 
@@ -38,7 +38,7 @@ final class CheckerManagerFactory
      * @param CheckerManager $checker_manager
      * @param array                                 $claims
      */
-    private static function populateClaimCheckers(CheckerManager &$checker_manager, array $claims)
+    private static function populateClaimCheckers(CheckerManager $checker_manager, array $claims)
     {
         foreach ($claims as $claim) {
             if ($claim instanceof ClaimCheckerInterface) {
@@ -55,7 +55,7 @@ final class CheckerManagerFactory
      * @param CheckerManager $checker_manager
      * @param array                                 $headers
      */
-    private static function populateHeaderCheckers(CheckerManager &$checker_manager, array $headers)
+    private static function populateHeaderCheckers(CheckerManager $checker_manager, array $headers)
     {
         foreach ($headers as $claim) {
             if ($claim instanceof HeaderCheckerInterface) {
@@ -73,7 +73,7 @@ final class CheckerManagerFactory
      *
      * @return bool
      */
-    private static function isClaimSupported($claim)
+    private static function isClaimSupported(string $claim): bool
     {
         return array_key_exists($claim, self::getSupportedClaims());
     }
@@ -83,7 +83,7 @@ final class CheckerManagerFactory
      *
      * @return bool
      */
-    private static function isHeaderSupported($header)
+    private static function isHeaderSupported(string $header): bool
     {
         return array_key_exists($header, self::getSupportedHeaders());
     }
@@ -95,7 +95,7 @@ final class CheckerManagerFactory
      *
      * @return string
      */
-    private static function getClaimClass($claim)
+    private static function getClaimClass(string $claim): string
     {
         Assertion::true(self::isClaimSupported($claim), sprintf('Claim "%s" is not supported. Please add an instance of ClaimCheckerInterface directly.', $claim));
 
@@ -109,7 +109,7 @@ final class CheckerManagerFactory
      *
      * @return string
      */
-    private static function getHeaderClass($header)
+    private static function getHeaderClass(string $header): string
     {
         Assertion::true(self::isHeaderSupported($header), sprintf('Header "%s" is not supported. Please add an instance of HeaderCheckerInterface directly.', $header));
 
@@ -119,7 +119,7 @@ final class CheckerManagerFactory
     /**
      * @return array
      */
-    private static function getSupportedClaims()
+    private static function getSupportedClaims(): array
     {
         return [
             'aud' => '\Jose\Checker\AudienceChecker',
@@ -132,7 +132,7 @@ final class CheckerManagerFactory
     /**
      * @return array
      */
-    private static function getSupportedHeaders()
+    private static function getSupportedHeaders(): array
     {
         return [
             'crit' => '\Jose\Checker\CriticalHeaderChecker',

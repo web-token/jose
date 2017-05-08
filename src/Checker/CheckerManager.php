@@ -12,7 +12,8 @@
 namespace Jose\Checker;
 
 use Assert\Assertion;
-use Jose\Object;
+use Jose\Object\JWS;
+use Jose\Object\JWTInterface;
 
 /**
  * Class CheckerManager.
@@ -20,21 +21,21 @@ use Jose\Object;
 final class CheckerManager
 {
     /**
-     * @var \Jose\Checker\ClaimCheckerInterface[]
+     * @var ClaimCheckerInterface[]
      */
     private $claim_checkers = [];
 
     /**
-     * @var \Jose\Checker\HeaderCheckerInterface[]
+     * @var HeaderCheckerInterface[]
      */
     private $header_checkers = [];
 
     /**
-     * @param \Jose\Object\JWTInterface $jwt
+     * @param JWTInterface $jwt
      *
      * @return string[]
      */
-    private function checkJWT(Object\JWTInterface $jwt)
+    private function checkJWT(JWTInterface $jwt): array
     {
         $checked_claims = [];
 
@@ -61,10 +62,10 @@ final class CheckerManager
     }
 
     /**
-     * @param \Jose\Object\JWS $jws
+     * @param JWS $jws
      * @param int                       $signature
      */
-    public function checkJWS(Object\JWS $jws, $signature)
+    public function checkJWS(JWS $jws, int $signature)
     {
         Assertion::integer($signature);
         Assertion::lessThan($signature, $jws->countSignatures());
@@ -77,7 +78,7 @@ final class CheckerManager
     }
 
     /**
-     * @param \Jose\Checker\ClaimCheckerInterface $claim_checker
+     * @param ClaimCheckerInterface $claim_checker
      */
     public function addClaimChecker(ClaimCheckerInterface $claim_checker)
     {
@@ -85,7 +86,7 @@ final class CheckerManager
     }
 
     /**
-     * @param \Jose\Checker\HeaderCheckerInterface $header_checker
+     * @param HeaderCheckerInterface $header_checker
      */
     public function addHeaderChecker(HeaderCheckerInterface $header_checker)
     {

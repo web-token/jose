@@ -22,7 +22,7 @@ final class CompressionManagerFactory
      *
      * @return CompressionManager
      */
-    public static function createCompressionManager(array $methods)
+    public static function createCompressionManager(array $methods): CompressionManager
     {
         $compression_manager = new CompressionManager();
 
@@ -44,7 +44,7 @@ final class CompressionManagerFactory
      *
      * @return bool
      */
-    private static function isAlgorithmSupported($method)
+    private static function isAlgorithmSupported(string $method): bool
     {
         return array_key_exists($method, self::getSupportedMethods());
     }
@@ -56,14 +56,14 @@ final class CompressionManagerFactory
      *
      * @return string
      */
-    private static function getMethodClass($method)
+    private static function getMethodClass(string $method): string
     {
         Assertion::true(self::isAlgorithmSupported($method), sprintf('Compression method "%s" is not supported.', $method));
 
         return self::getSupportedMethods()[$method];
     }
 
-    private static function getSupportedMethods()
+    private static function getSupportedMethods(): array
     {
         return [
             'DEF'  => '\Jose\Compression\Deflate',

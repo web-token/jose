@@ -20,7 +20,7 @@ class JtiChecker implements ClaimCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWTInterface $jwt)
+    public function checkClaim(JWTInterface $jwt): array
     {
         if (!$jwt->hasClaim('jti')) {
             return [];
@@ -33,9 +33,10 @@ class JtiChecker implements ClaimCheckerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $jti
+     * @return bool
      */
-    protected function isJtiValid($jti)
+    protected function isJtiValid(string $jti): bool
     {
         return in_array($jti, ['JTI1', 'JTI2']);
     }
