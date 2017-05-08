@@ -21,5 +21,5 @@ interface KeyEncryptionAlgorithmInterface extends JWAInterface
     /**
      * @return string
      */
-    public function getKeyManagementMode();
+    public function getKeyManagementMode(): string;
 }

@@ -31,7 +31,7 @@ trait HasJWAManager
     /**
      * @return JWAManager
      */
-    protected function getJWAManager()
+    protected function getJWAManager(): JWAManager
     {
         return $this->jwa_manager;
     }

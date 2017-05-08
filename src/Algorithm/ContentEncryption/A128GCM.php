@@ -27,7 +27,7 @@ final class A128GCM extends AESGCM
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'A128GCM';
     }

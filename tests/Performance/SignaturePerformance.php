@@ -41,7 +41,7 @@ function testSignaturePerformance(SignatureAlgorithmInterface $alg, JWKInterface
 
     $time_end = microtime(true);
     $time = ($time_end - $time_start) / $nb * 1000;
-    printf('%s: %f milliseconds/signature'.PHP_EOL, $alg->getAlgorithmName(), $time);
+    printf('%s: %f milliseconds/signature'.PHP_EOL, $alg->name(), $time);
 }
 
 function testVerificationPerformance(SignatureAlgorithmInterface $alg, JWKInterface $key)
@@ -57,7 +57,7 @@ function testVerificationPerformance(SignatureAlgorithmInterface $alg, JWKInterf
 
     $time_end = microtime(true);
     $time = ($time_end - $time_start) / $nb * 1000;
-    printf('%s: %f milliseconds/verification'.PHP_EOL, $alg->getAlgorithmName(), $time);
+    printf('%s: %f milliseconds/verification'.PHP_EOL, $alg->name(), $time);
 }
 
 function dataSignaturePerformance()

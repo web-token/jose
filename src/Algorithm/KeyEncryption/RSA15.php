@@ -36,7 +36,7 @@ final class RSA15 extends RSA
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'RSA1_5';
     }

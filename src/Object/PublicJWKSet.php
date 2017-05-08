@@ -37,7 +37,7 @@ final class PublicJWKSet implements JWKSetInterface
     /**
      * {@inheritdoc}
      */
-    public function getKeys()
+    public function getKeys(): array
     {
         $keys = [];
 

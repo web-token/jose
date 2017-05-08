@@ -18,7 +18,7 @@ interface JWKInterface extends \JsonSerializable
      *
      * @return array Values of the JWK object
      */
-    public function getAll();
+    public function getAll(): array;
 
     /**
      * Get the value with a specific key.
@@ -29,7 +29,7 @@ interface JWKInterface extends \JsonSerializable
      *
      * @return mixed|null The value
      */
-    public function get($key);
+    public function get(string $key);
 
     /**
      * Returns true if the JWK has the value identified by.
@@ -38,7 +38,7 @@ interface JWKInterface extends \JsonSerializable
      *
      * @return bool
      */
-    public function has($key);
+    public function has(string $key): bool;
 
     /**
      * Returns the thumbprint of the key.
@@ -51,10 +51,10 @@ interface JWKInterface extends \JsonSerializable
      *
      * @return string
      */
-    public function thumbprint($hash_algorithm);
+    public function thumbprint(string $hash_algorithm): string;
 
     /**
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public function toPublic();
+    public function toPublic(): JWKInterface;
 }

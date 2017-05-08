@@ -6,6 +6,7 @@
 
 ## Deprecations removed
 
+* `Jose\Algorithm\JWAInterface::getAlgorithmName` renamed to `Jose\Algorithm\JWAInterface::name`
 * `Jose\Algorithm\JWAManager::isAlgorithmSupported` renamed to `Jose\Algorithm\JWAManager::has`
 * `Jose\Algorithm\JWAManager::getAlgorithms` renamed to `Jose\Algorithm\JWAManager::all`
 * `Jose\Algorithm\JWAManager::listAlgorithms` renamed to `Jose\Algorithm\JWAManager::list`

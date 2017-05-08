@@ -13,74 +13,79 @@ namespace Jose\Behaviour;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Algorithm;
-use Jose\Compression;
-use Jose\Object;
+use Jose\Algorithm\ContentEncryptionAlgorithmInterface;
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\KeyEncryption\KeyEncryptionInterface;
+use Jose\Algorithm\KeyEncryptionAlgorithmInterface;
+use Jose\Compression\CompressionInterface;
+use Jose\Compression\CompressionManager;
+use Jose\Object\JWE;
+use Jose\Object\JWKInterface;
 
 trait EncrypterTrait
 {
     /**
-     * @param \Jose\Object\JWKInterface $key
+     * @param JWKInterface $key
      * @param string                    $usage
      *
      * @throws \InvalidArgumentException
      *
      * @return bool
      */
-    abstract protected function checkKeyUsage(Object\JWKInterface $key, $usage);
+    abstract protected function checkKeyUsage(JWKInterface $key, string $usage): bool;
 
     /**
-     * @param \Jose\Object\JWKInterface $key
+     * @param JWKInterface $key
      * @param string                    $algorithm
      */
-    abstract protected function checkKeyAlgorithm(Object\JWKInterface $key, $algorithm);
+    abstract protected function checkKeyAlgorithm(JWKInterface $key, string $algorithm);
 
     /**
      * @return JWAManager
      */
-    abstract protected function getJWAManager();
+    abstract protected function getJWAManager(): JWAManager;
 
     /**
-     * @return Compression\CompressionManager
+     * @return CompressionManager
      */
-    abstract protected function getCompressionManager();
+    abstract protected function getCompressionManager(): CompressionManager;
 
     /**
-     * @param \Jose\Algorithm\KeyEncryptionAlgorithmInterface     $key_encryption_algorithm
-     * @param \Jose\Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm
-     * @param \Jose\Object\JWKInterface                           $recipient_key
+     * @param KeyEncryptionAlgorithmInterface     $key_encryption_algorithm
+     * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
+     * @param JWKInterface                           $recipient_key
      */
-    private function checkKeys(Algorithm\KeyEncryptionAlgorithmInterface $key_encryption_algorithm, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, Object\JWKInterface $recipient_key)
+    private function checkKeys(KeyEncryptionAlgorithmInterface $key_encryption_algorithm, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, JWKInterface $recipient_key)
     {
         $this->checkKeyUsage($recipient_key, 'encryption');
-        if ('dir' !== $key_encryption_algorithm->getAlgorithmName()) {
-            $this->checkKeyAlgorithm($recipient_key, $key_encryption_algorithm->getAlgorithmName());
+        if ('dir' !== $key_encryption_algorithm->name()) {
+            $this->checkKeyAlgorithm($recipient_key, $key_encryption_algorithm->name());
         } else {
-            $this->checkKeyAlgorithm($recipient_key, $content_encryption_algorithm->getAlgorithmName());
+            $this->checkKeyAlgorithm($recipient_key, $content_encryption_algorithm->name());
         }
     }
 
     /**
-     * @param \Jose\Object\JWE                           $jwe
-     * @param \Jose\Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm
+     * @param JWE                           $jwe
+     * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
      * @param string                                              $key_management_mode
      * @param array                                               $additional_headers
      *
      * @return string
      */
-    private function determineCEK(Object\JWE $jwe, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $key_management_mode, array &$additional_headers)
+    private function determineCEK(JWE $jwe, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $key_management_mode, array &$additional_headers): string
     {
         switch ($key_management_mode) {
-            case Algorithm\KeyEncryption\KeyEncryptionInterface::MODE_ENCRYPT:
-            case Algorithm\KeyEncryption\KeyEncryptionInterface::MODE_WRAP:
+            case KeyEncryptionInterface::MODE_ENCRYPT:
+            case KeyEncryptionInterface::MODE_WRAP:
                 return $this->createCEK($content_encryption_algorithm->getCEKSize());
-            case Algorithm\KeyEncryption\KeyEncryptionInterface::MODE_AGREEMENT:
+            case KeyEncryptionInterface::MODE_AGREEMENT:
                 Assertion::eq(1, $jwe->countRecipients(), 'Unable to encrypt for multiple recipients using key agreement algorithms.');
                 $complete_headers = array_merge($jwe->getSharedProtectedHeaders(), $jwe->getSharedHeaders(), $jwe->getRecipient(0)->getHeaders());
                 $algorithm = $this->findKeyEncryptionAlgorithm($complete_headers);
 
-                return $algorithm->getAgreementKey($content_encryption_algorithm->getCEKSize(), $content_encryption_algorithm->getAlgorithmName(), $jwe->getRecipient(0)->getRecipientKey(), $complete_headers, $additional_headers);
-            case Algorithm\KeyEncryption\KeyEncryptionInterface::MODE_DIRECT:
+                return $algorithm->getAgreementKey($content_encryption_algorithm->getCEKSize(), $content_encryption_algorithm->name(), $jwe->getRecipient(0)->getRecipientKey(), $complete_headers, $additional_headers);
+            case KeyEncryptionInterface::MODE_DIRECT:
                 Assertion::eq(1, $jwe->countRecipients(), 'Unable to encrypt for multiple recipients using key agreement algorithms.');
                 Assertion::eq($jwe->getRecipient(0)->getRecipientKey()->get('kty'), 'oct', 'Wrong key type.');
                 Assertion::true($jwe->getRecipient(0)->getRecipientKey()->has('k'), 'The key parameter "k" is missing.');
@@ -92,11 +97,11 @@ trait EncrypterTrait
     }
 
     /**
-     * @param \Jose\Object\JWE $jwe
+     * @param JWE $jwe
      *
      * @return string
      */
-    private function getKeyManagementMode(Object\JWE $jwe)
+    private function getKeyManagementMode(JWE $jwe): string
     {
         $mode = null;
         $recipients = $jwe->getRecipients();
@@ -106,7 +111,7 @@ trait EncrypterTrait
             Assertion::keyExists($complete_headers, 'alg', 'Parameter "alg" is missing.');
 
             $key_encryption_algorithm = $this->getJWAManager()->get($complete_headers['alg']);
-            Assertion::isInstanceOf($key_encryption_algorithm, Algorithm\KeyEncryptionAlgorithmInterface::class, sprintf('The key encryption algorithm "%s" is not supported or not a key encryption algorithm instance.', $complete_headers['alg']));
+            Assertion::isInstanceOf($key_encryption_algorithm, KeyEncryptionAlgorithmInterface::class, sprintf('The key encryption algorithm "%s" is not supported or not a key encryption algorithm instance.', $complete_headers['alg']));
 
             if (null === $mode) {
                 $mode = $key_encryption_algorithm->getKeyManagementMode();
@@ -119,11 +124,11 @@ trait EncrypterTrait
     }
 
     /**
-     * @param \Jose\Object\JWE $jwe
+     * @param JWE $jwe
      *
-     * @return Compression\CompressionInterface|null
+     * @return CompressionInterface|null
      */
-    private function getCompressionMethod(Object\JWE $jwe)
+    private function getCompressionMethod(JWE $jwe): ?CompressionInterface
     {
         $method = null;
         $nb_recipients = $jwe->countRecipients();
@@ -146,21 +151,21 @@ trait EncrypterTrait
         }
 
         if (null === $method) {
-            return;
+            return null;
         }
 
         $compression_method = $this->getCompressionManager()->getCompressionAlgorithm($method);
-        Assertion::isInstanceOf($compression_method, Compression\CompressionInterface::class, sprintf('Compression method "%s" not supported.', $method));
+        Assertion::isInstanceOf($compression_method, CompressionInterface::class, sprintf('Compression method "%s" not supported.', $method));
 
         return $compression_method;
     }
 
     /**
-     * @param \Jose\Object\JWE $jwe
+     * @param JWE $jwe
      *
-     * @return \Jose\Algorithm\ContentEncryptionAlgorithmInterface
+     * @return ContentEncryptionAlgorithmInterface
      */
-    private function getContentEncryptionAlgorithm(Object\JWE $jwe)
+    private function getContentEncryptionAlgorithm(JWE $jwe): ContentEncryptionAlgorithmInterface
     {
         $algorithm = null;
 
@@ -175,7 +180,7 @@ trait EncrypterTrait
         }
 
         $content_encryption_algorithm = $this->getJWAManager()->get($algorithm);
-        Assertion::isInstanceOf($content_encryption_algorithm, Algorithm\ContentEncryptionAlgorithmInterface::class, sprintf('The content encryption algorithm "%s" is not supported or not a content encryption algorithm instance.', $algorithm));
+        Assertion::isInstanceOf($content_encryption_algorithm, ContentEncryptionAlgorithmInterface::class, sprintf('The content encryption algorithm "%s" is not supported or not a content encryption algorithm instance.', $algorithm));
 
         return $content_encryption_algorithm;
     }
@@ -186,12 +191,12 @@ trait EncrypterTrait
      *
      * @return bool
      */
-    private function areKeyManagementModesCompatible($current, $new)
+    private function areKeyManagementModesCompatible(string $current, string $new): bool
     {
-        $agree = Algorithm\KeyEncryptionAlgorithmInterface::MODE_AGREEMENT;
-        $dir = Algorithm\KeyEncryptionAlgorithmInterface::MODE_DIRECT;
-        $enc = Algorithm\KeyEncryptionAlgorithmInterface::MODE_ENCRYPT;
-        $wrap = Algorithm\KeyEncryptionAlgorithmInterface::MODE_WRAP;
+        $agree = KeyEncryptionAlgorithmInterface::MODE_AGREEMENT;
+        $dir = KeyEncryptionAlgorithmInterface::MODE_DIRECT;
+        $enc = KeyEncryptionAlgorithmInterface::MODE_ENCRYPT;
+        $wrap = KeyEncryptionAlgorithmInterface::MODE_WRAP;
         $supported_key_management_mode_combinations = [$enc.$enc     => true, $enc.$wrap    => true, $wrap.$enc    => true, $wrap.$wrap   => true, $agree.$agree => false, $agree.$dir   => false, $agree.$enc   => false, $agree.$wrap  => false, $dir.$agree   => false, $dir.$dir     => false, $dir.$enc     => false, $dir.$wrap    => false, $enc.$agree   => false, $enc.$dir     => false, $wrap.$agree  => false, $wrap.$dir    => false];
 
         if (array_key_exists($current.$new, $supported_key_management_mode_combinations)) {
@@ -206,7 +211,7 @@ trait EncrypterTrait
      *
      * @return string
      */
-    private function createCEK($size)
+    private function createCEK(int $size): string
     {
         return random_bytes($size / 8);
     }
@@ -216,7 +221,7 @@ trait EncrypterTrait
      *
      * @return string
      */
-    private function createIV($size)
+    private function createIV(int $size): string
     {
         return random_bytes($size / 8);
     }
@@ -224,13 +229,13 @@ trait EncrypterTrait
     /**
      * @param array $complete_headers
      *
-     * @return \Jose\Algorithm\KeyEncryptionAlgorithmInterface
+     * @return KeyEncryptionAlgorithmInterface
      */
-    private function findKeyEncryptionAlgorithm(array $complete_headers)
+    private function findKeyEncryptionAlgorithm(array $complete_headers): KeyEncryptionAlgorithmInterface
     {
         Assertion::keyExists($complete_headers, 'alg', 'Parameter "alg" is missing.');
         $key_encryption_algorithm = $this->getJWAManager()->get($complete_headers['alg']);
-        Assertion::isInstanceOf($key_encryption_algorithm, Algorithm\KeyEncryptionAlgorithmInterface::class, sprintf('The key encryption algorithm "%s" is not supported or not a key encryption algorithm instance.', $complete_headers['alg']));
+        Assertion::isInstanceOf($key_encryption_algorithm, KeyEncryptionAlgorithmInterface::class, sprintf('The key encryption algorithm "%s" is not supported or not a key encryption algorithm instance.', $complete_headers['alg']));
 
         return $key_encryption_algorithm;
     }

@@ -29,7 +29,7 @@ final class ECDHESA128KW extends ECDHESAESKW
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'ECDH-ES+A128KW';
     }

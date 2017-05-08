@@ -43,7 +43,7 @@ abstract class PBES2AESKW implements KeyWrappingInterface
     /**
      * {@inheritdoc}
      */
-    public function wrapKey(JWKInterface $key, $cek, array $complete_headers, array &$additional_headers)
+    public function wrapKey(JWKInterface $key, string $cek, array $complete_headers, array &$additional_headers): string
     {
         $this->checkKey($key);
         $this->checkHeaderAlgorithm($complete_headers);
@@ -65,16 +65,16 @@ abstract class PBES2AESKW implements KeyWrappingInterface
     /**
      * {@inheritdoc}
      */
-    public function unwrapKey(JWKInterface $key, $encrypted_cek, array $header)
+    public function unwrapKey(JWKInterface $key, string $encrypted_cek, array $complete_headers): string
     {
         $this->checkKey($key);
-        $this->checkHeaderAlgorithm($header);
-        $this->checkHeaderAdditionalParameters($header);
+        $this->checkHeaderAlgorithm($complete_headers);
+        $this->checkHeaderAdditionalParameters($complete_headers);
         $wrapper = $this->getWrapper();
         $hash_algorithm = $this->getHashAlgorithm();
         $key_size = $this->getKeySize();
-        $salt = $header['alg']."\x00".Base64Url::decode($header['p2s']);
-        $count = $header['p2c'];
+        $salt = $complete_headers['alg']."\x00".Base64Url::decode($complete_headers['p2s']);
+        $count = $complete_headers['p2c'];
         $password = Base64Url::decode($key->get('k'));
 
         $derived_key = hash_pbkdf2($hash_algorithm, $password, $salt, $count, $key_size, true);
@@ -85,7 +85,7 @@ abstract class PBES2AESKW implements KeyWrappingInterface
     /**
      * {@inheritdoc}
      */
-    public function getKeyManagementMode()
+    public function getKeyManagementMode(): string
     {
         return self::MODE_WRAP;
     }

@@ -47,7 +47,7 @@ final class JWK implements JWKInterface
     /**
      * {@inheritdoc}
      */
-    public function get($key)
+    public function get(string $key)
     {
         if ($this->has($key)) {
             return $this->values[$key];
@@ -58,7 +58,7 @@ final class JWK implements JWKInterface
     /**
      * {@inheritdoc}
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return array_key_exists($key, $this->getAll());
     }
@@ -66,12 +66,15 @@ final class JWK implements JWKInterface
     /**
      * {@inheritdoc}
      */
-    public function getAll()
+    public function getAll(): array
     {
         return $this->values;
     }
 
-    public function thumbprint($hash_algorithm)
+    /**
+     * {@inheritdoc}
+     */
+    public function thumbprint(string $hash_algorithm): string
     {
         Assertion::inArray($hash_algorithm, hash_algos(), sprintf('Hash algorithm "%s" is not supported', $hash_algorithm));
 
@@ -83,9 +86,9 @@ final class JWK implements JWKInterface
     }
 
     /**
-     * @return \Jose\Object\JWKInterface
+     * {@inheritdoc}
      */
-    public function toPublic()
+    public function toPublic(): JWKInterface
     {
         $values = $this->getAll();
         $values = array_diff_key($values, array_flip(['p', 'd', 'q', 'dp', 'dq', 'qi']));

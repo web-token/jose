@@ -14,8 +14,10 @@ namespace Jose;
 use Assert\Assertion;
 use Jose\Object\JWE;
 use Jose\Object\JWKInterface;
+use Jose\Object\JWKSet;
 use Jose\Object\JWKSetInterface;
 use Jose\Object\JWS;
+use Jose\Object\JWTInterface;
 
 /**
  * Class able to load JWS or JWE.
@@ -32,9 +34,9 @@ final class Loader
      *
      * @return JWS|JWE If the data has been loaded.
      */
-    public function loadAndDecryptUsingKey($input, Object\JWKInterface $jwk, array $allowed_key_encryption_algorithms, array $allowed_content_encryption_algorithms, &$recipient_index = null)
+    public function loadAndDecryptUsingKey(string $input, JWKInterface $jwk, array $allowed_key_encryption_algorithms, array $allowed_content_encryption_algorithms, ?int &$recipient_index = null): JWTInterface
     {
-        $jwk_set = new Object\JWKSet();
+        $jwk_set = new JWKSet();
         $jwk_set->addKey($jwk);
 
         return $this->loadAndDecrypt($input, $jwk_set, $allowed_key_encryption_algorithms, $allowed_content_encryption_algorithms, $recipient_index);
@@ -49,7 +51,7 @@ final class Loader
      *
      * @return JWE If the data has been loaded.
      */
-    public function loadAndDecryptUsingKeySet($input, Object\JWKSetInterface $jwk_set, array $allowed_key_encryption_algorithms, array $allowed_content_encryption_algorithms, &$recipient_index = null)
+    public function loadAndDecryptUsingKeySet(string $input, JWKSetInterface $jwk_set, array $allowed_key_encryption_algorithms, array $allowed_content_encryption_algorithms, ?int &$recipient_index = null): JWE
     {
         return $this->loadAndDecrypt($input, $jwk_set, $allowed_key_encryption_algorithms, $allowed_content_encryption_algorithms, $recipient_index);
     }
@@ -62,9 +64,9 @@ final class Loader
      *
      * @return JWS If the data has been loaded.
      */
-    public function loadAndVerifySignatureUsingKey($input, Object\JWKInterface $jwk, array $allowed_algorithms, &$signature_index = null)
+    public function loadAndVerifySignatureUsingKey($input, JWKInterface $jwk, array $allowed_algorithms, ?int &$signature_index = null): JWS
     {
-        $jwk_set = new Object\JWKSet();
+        $jwk_set = new JWKSet();
         $jwk_set->addKey($jwk);
 
         return $this->loadAndVerifySignature($input, $jwk_set, $allowed_algorithms, null, $signature_index);
@@ -78,7 +80,7 @@ final class Loader
      *
      * @return JWS If the data has been loaded.
      */
-    public function loadAndVerifySignatureUsingKeySet($input, Object\JWKSetInterface $jwk_set, array $allowed_algorithms, &$signature_index = null)
+    public function loadAndVerifySignatureUsingKeySet(string $input, JWKSetInterface $jwk_set, array $allowed_algorithms, ?int &$signature_index = null): JWS
     {
         return $this->loadAndVerifySignature($input, $jwk_set, $allowed_algorithms, null, $signature_index);
     }
@@ -92,9 +94,9 @@ final class Loader
      *
      * @return JWS If the data has been loaded.
      */
-    public function loadAndVerifySignatureUsingKeyAndDetachedPayload($input, Object\JWKInterface $jwk, array $allowed_algorithms, $detached_payload, &$signature_index = null)
+    public function loadAndVerifySignatureUsingKeyAndDetachedPayload(string $input, JWKInterface $jwk, array $allowed_algorithms, $detached_payload, ?int &$signature_index = null): JWS
     {
-        $jwk_set = new Object\JWKSet();
+        $jwk_set = new JWKSet();
         $jwk_set->addKey($jwk);
 
         return $this->loadAndVerifySignature($input, $jwk_set, $allowed_algorithms, $detached_payload, $signature_index);
@@ -109,7 +111,7 @@ final class Loader
      *
      * @return JWS If the data has been loaded.
      */
-    public function loadAndVerifySignatureUsingKeySetAndDetachedPayload($input, Object\JWKSetInterface $jwk_set, array $allowed_algorithms, $detached_payload, &$signature_index = null)
+    public function loadAndVerifySignatureUsingKeySetAndDetachedPayload(string $input, JWKSetInterface $jwk_set, array $allowed_algorithms, string $detached_payload, ?int &$signature_index = null): JWS
     {
         return $this->loadAndVerifySignature($input, $jwk_set, $allowed_algorithms, $detached_payload, $signature_index);
     }
@@ -123,10 +125,10 @@ final class Loader
      *
      * @return JWE
      */
-    private function loadAndDecrypt($input, Object\JWKSetInterface $jwk_set, array $allowed_key_encryption_algorithms, array $allowed_content_encryption_algorithms, &$recipient_index = null)
+    private function loadAndDecrypt(string $input, JWKSetInterface $jwk_set, array $allowed_key_encryption_algorithms, array $allowed_content_encryption_algorithms, ?int &$recipient_index = null): JWE
     {
         $jwt = $this->load($input);
-        Assertion::isInstanceOf($jwt, Object\JWE::class, 'The input is not a valid JWE');
+        Assertion::isInstanceOf($jwt, JWE::class, 'The input is not a valid JWE');
         $decrypted = Decrypter::createDecrypter($allowed_key_encryption_algorithms, $allowed_content_encryption_algorithms, ['DEF', 'ZLIB', 'GZ']);
 
         $decrypted->decryptUsingKeySet($jwt, $jwk_set, $recipient_index);
@@ -143,10 +145,10 @@ final class Loader
      *
      * @return JWS
      */
-    private function loadAndVerifySignature($input, Object\JWKSetInterface $jwk_set, array $allowed_algorithms, $detached_payload = null, &$signature_index = null)
+    private function loadAndVerifySignature(string $input, JWKSetInterface $jwk_set, array $allowed_algorithms, ?string $detached_payload = null, ?int &$signature_index = null): JWS
     {
         $jwt = $this->load($input);
-        Assertion::isInstanceOf($jwt, Object\JWS::class, 'The input is not a valid JWS.');
+        Assertion::isInstanceOf($jwt, JWS::class, 'The input is not a valid JWS.');
         $verifier = Verifier::createVerifier($allowed_algorithms);
 
         $verifier->verifyWithKeySet($jwt, $jwk_set, $detached_payload, $signature_index);
@@ -163,7 +165,7 @@ final class Loader
      *
      * @return JWS|JWE If the data has been loaded.
      */
-    public function load($input)
+    public function load(string $input): JWTInterface
     {
         $json = $this->convert($input);
         if (array_key_exists('signatures', $json)) {
@@ -179,7 +181,7 @@ final class Loader
      *
      * @return array
      */
-    private function convert($input)
+    private function convert(string $input): array
     {
         if (is_array($data = json_decode($input, true))) {
             if (array_key_exists('signatures', $data) || array_key_exists('recipients', $data)) {
@@ -196,11 +198,11 @@ final class Loader
     }
 
     /**
-     * @param $input
+     * @param array $input
      *
      * @return array
      */
-    private function fromFlattenedSerializationRecipientToSerialization($input)
+    private function fromFlattenedSerializationRecipientToSerialization(array $input): array
     {
         $recipient = [];
         foreach (['header', 'encrypted_key'] as $key) {
@@ -222,11 +224,11 @@ final class Loader
     }
 
     /**
-     * @param $input
+     * @param array $input
      *
      * @return array
      */
-    private function fromFlattenedSerializationSignatureToSerialization($input)
+    private function fromFlattenedSerializationSignatureToSerialization(array $input): array
     {
         $signature = [
             'signature' => $input['signature'],
@@ -251,7 +253,7 @@ final class Loader
      *
      * @return array
      */
-    private function fromCompactSerializationToSerialization($input)
+    private function fromCompactSerializationToSerialization(string $input): array
     {
         $parts = explode('.', $input);
         switch (count($parts)) {
@@ -269,7 +271,7 @@ final class Loader
      *
      * @return array
      */
-    private function fromCompactSerializationRecipientToSerialization(array $parts)
+    private function fromCompactSerializationRecipientToSerialization(array $parts): array
     {
         $recipient = [];
         if (!empty($parts[1])) {
@@ -293,7 +295,7 @@ final class Loader
      *
      * @return array
      */
-    private function fromCompactSerializationSignatureToSerialization(array $parts)
+    private function fromCompactSerializationSignatureToSerialization(array $parts): array
     {
         $temp = [];
 

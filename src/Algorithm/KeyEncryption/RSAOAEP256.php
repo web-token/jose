@@ -35,7 +35,7 @@ final class RSAOAEP256 extends RSA
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'RSA-OAEP-256';
     }

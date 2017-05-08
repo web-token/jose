@@ -35,7 +35,7 @@ final class PS512 extends RSA
     /**
      * @return string
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'PS512';
     }

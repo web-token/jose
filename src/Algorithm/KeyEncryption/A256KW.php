@@ -29,7 +29,7 @@ final class A256KW extends AESKW
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'A256KW';
     }

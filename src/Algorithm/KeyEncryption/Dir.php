@@ -20,7 +20,7 @@ final class Dir implements DirectEncryptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getCEK(JWKInterface $key)
+    public function getCEK(JWKInterface $key): string
     {
         Assertion::eq($key->get('kty'), 'oct', 'Wrong key type.');
         Assertion::true($key->has('k'), 'The key parameter "k" is missing.');
@@ -31,7 +31,7 @@ final class Dir implements DirectEncryptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'dir';
     }
@@ -39,7 +39,7 @@ final class Dir implements DirectEncryptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getKeyManagementMode()
+    public function getKeyManagementMode(): string
     {
         return self::MODE_DIRECT;
     }

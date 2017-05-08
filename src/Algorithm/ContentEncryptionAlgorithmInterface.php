@@ -25,7 +25,7 @@ interface ContentEncryptionAlgorithmInterface extends JWAInterface
      *
      * @return string The encrypted data
      */
-    public function encryptContent($data, $cek, $iv, $aad, $encoded_protected_header, &$tag);
+    public function encryptContent(string $data, string $cek, string $iv, ?string $aad, string $encoded_protected_header, ?string &$tag): string;
 
     /**
      * Decrypt data.
@@ -39,15 +39,15 @@ interface ContentEncryptionAlgorithmInterface extends JWAInterface
      *
      * @return string
      */
-    public function decryptContent($data, $cek, $iv, $aad, $encoded_protected_header, $tag);
-
-    /**
-     * @return int|null
-     */
-    public function getIVSize();
+    public function decryptContent(string $data, string $cek, string $iv, ?string $aad, string $encoded_protected_header, string $tag): string ;
 
     /**
      * @return int
      */
-    public function getCEKSize();
+    public function getIVSize(): int;
+
+    /**
+     * @return int
+     */
+    public function getCEKSize(): int;
 }

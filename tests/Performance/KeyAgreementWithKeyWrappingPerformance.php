@@ -21,7 +21,7 @@ use Jose\Object\JWKInterface;
 function testKeyAgreementWithKeyWrappingEncryptionPerformance($message, KeyAgreementWrappingInterface $alg, JWKInterface $recipient_key)
 {
     $header = [
-        'alg' => $alg->getAlgorithmName(),
+        'alg' => $alg->name(),
         'enc' => 'A128GCM',
         'exp' => time() + 3600,
         'iat' => time(),
@@ -38,13 +38,13 @@ function testKeyAgreementWithKeyWrappingEncryptionPerformance($message, KeyAgree
     $time_end = microtime(true);
 
     $time = ($time_end - $time_start) / $nb * 1000;
-    printf('%s: %f milliseconds/wrapping of key agreement (%s)'.PHP_EOL, $alg->getAlgorithmName(), $time, $message);
+    printf('%s: %f milliseconds/wrapping of key agreement (%s)'.PHP_EOL, $alg->name(), $time, $message);
 }
 
 function testKeyAgreementWithKeyWrappingDecryptionPerformance($message, KeyAgreementWrappingInterface $alg, JWKInterface $recipient_key, array $ahv)
 {
     $header = [
-        'alg' => $alg->getAlgorithmName(),
+        'alg' => $alg->name(),
         'enc' => 'A128GCM',
         'exp' => time() + 3600,
         'iat' => time(),
@@ -66,7 +66,7 @@ function testKeyAgreementWithKeyWrappingDecryptionPerformance($message, KeyAgree
     $time_end = microtime(true);
 
     $time = ($time_end - $time_start) / $nb * 1000;
-    printf('%s: %f milliseconds/unwrapping of key agreement (%s)'.PHP_EOL, $alg->getAlgorithmName(), $time, $message);
+    printf('%s: %f milliseconds/unwrapping of key agreement (%s)'.PHP_EOL, $alg->name(), $time, $message);
 }
 
 function dataPrivateKeyAgreementWithKeyWrappingPerformance()

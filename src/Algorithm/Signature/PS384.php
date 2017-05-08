@@ -35,7 +35,7 @@ final class PS384 extends RSA
     /**
      * @return string
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'PS384';
     }

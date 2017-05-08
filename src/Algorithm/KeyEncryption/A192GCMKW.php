@@ -27,7 +27,7 @@ final class A192GCMKW extends AESGCMKW
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'A192GCMKW';
     }

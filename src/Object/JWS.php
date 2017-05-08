@@ -39,7 +39,7 @@ final class JWS implements JWTInterface
     /**
      * @return bool
      */
-    public function isPayloadDetached()
+    public function isPayloadDetached(): bool
     {
         return $this->is_payload_detached;
     }
@@ -47,7 +47,7 @@ final class JWS implements JWTInterface
     /**
      * @return JWTInterface
      */
-    public function withDetachedPayload()
+    public function withDetachedPayload(): JWTInterface
     {
         $jwt = clone $this;
         $jwt->is_payload_detached = true;
@@ -58,7 +58,7 @@ final class JWS implements JWTInterface
     /**
      * @return JWTInterface
      */
-    public function withAttachedPayload()
+    public function withAttachedPayload(): JWTInterface
     {
         $jwt = clone $this;
         $jwt->is_payload_detached = false;
@@ -69,7 +69,7 @@ final class JWS implements JWTInterface
     /**
      * {@inheritdoc}
      */
-    public function withEncodedPayload($encoded_payload)
+    public function withEncodedPayload(string $encoded_payload): JWTInterface
     {
         $jwt = clone $this;
         $jwt->encoded_payload = $encoded_payload;
@@ -84,10 +84,10 @@ final class JWS implements JWTInterface
      *
      * @return string|null
      */
-    public function getEncodedPayload(Signature $signature)
+    public function getEncodedPayload(Signature $signature): ?string
     {
         if (true === $this->isPayloadDetached()) {
-            return;
+            return null;
         }
         if (null !== $this->encoded_payload) {
             return $this->encoded_payload;
@@ -106,7 +106,7 @@ final class JWS implements JWTInterface
      *
      * @return Signature[]
      */
-    public function getSignatures()
+    public function getSignatures(): array
     {
         return $this->signatures;
     }
@@ -116,7 +116,7 @@ final class JWS implements JWTInterface
      *
      * @return Signature
      */
-    public function &getSignature($id)
+    public function &getSignature(int $id): Signature
     {
         if (isset($this->signatures[$id])) {
             return $this->signatures[$id];
@@ -131,7 +131,7 @@ final class JWS implements JWTInterface
      *
      * @return JWS
      */
-    public function addSignatureInformation(JWKInterface $signature_key, array $protected_headers, array $headers = [])
+    public function addSignatureInformation(JWKInterface $signature_key, array $protected_headers, array $headers = []): JWS
     {
         $jws = clone $this;
         $jws->signatures[] = Signature::createSignature($signature_key, $protected_headers, $headers);
@@ -146,7 +146,7 @@ final class JWS implements JWTInterface
      *
      * @return JWS
      */
-    public function addSignatureFromLoadedData($signature, $encoded_protected_headers, array $headers)
+    public function addSignatureFromLoadedData(string $signature, ?string $encoded_protected_headers, array $headers): JWS
     {
         $jws = clone $this;
         $jws->signatures[] = Signature::createSignatureFromLoadedData($signature, $encoded_protected_headers, $headers);
@@ -161,7 +161,7 @@ final class JWS implements JWTInterface
      *
      * @return int
      */
-    public function countSignatures()
+    public function countSignatures(): int
     {
         return count($this->signatures);
     }
@@ -171,7 +171,7 @@ final class JWS implements JWTInterface
      *
      * @return string
      */
-    public function toCompactJSON($id)
+    public function toCompactJSON(int $id): string
     {
         $signature = $this->getSignature($id);
 
@@ -194,7 +194,7 @@ final class JWS implements JWTInterface
      *
      * @return string
      */
-    public function toFlattenedJSON($id)
+    public function toFlattenedJSON(int $id): string
     {
         $signature = $this->getSignature($id);
 
@@ -218,7 +218,7 @@ final class JWS implements JWTInterface
     /**
      * @return string
      */
-    public function toJSON()
+    public function toJSON(): string
     {
         Assertion::greaterThan($this->countSignatures(), 0, 'No signature.');
 
@@ -253,7 +253,7 @@ final class JWS implements JWTInterface
      *
      * @return bool
      */
-    private function isPayloadEncoded(Signature $signature)
+    private function isPayloadEncoded(Signature $signature): bool
     {
         return !$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
     }

@@ -19,9 +19,9 @@ use Assert\Assertion;
 final class JKUJWKSet extends DownloadedJWKSet
 {
     /**
-     * @return \Jose\Object\JWKInterface[]
+     * {@inheritdoc}
      */
-    public function getKeys()
+    public function getKeys(): array
     {
         $content = json_decode($this->getContent(), true);
         Assertion::isArray($content, 'Invalid content.');

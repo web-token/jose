@@ -17,7 +17,7 @@ namespace Jose\Object;
 interface JWKSetsInterface extends JWKSetInterface
 {
     /**
-     * @param \Jose\Object\JWKSetInterface $jwkset
+     * @param JWKSetInterface $jwkset
      */
     public function addKeySet(JWKSetInterface $jwkset);
 }

@@ -19,7 +19,7 @@ use Jose\Object\JWTInterface;
 interface ClaimCheckerInterface
 {
     /**
-     * @param \Jose\Object\JWTInterface $jwt
+     * @param JWTInterface $jwt
      *
      * @throws \InvalidArgumentException
      *

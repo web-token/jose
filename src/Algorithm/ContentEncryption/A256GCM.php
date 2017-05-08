@@ -27,7 +27,7 @@ final class A256GCM extends AESGCM
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'A256GCM';
     }

@@ -34,7 +34,7 @@ abstract class RSA implements KeyEncryptionInterface
     /**
      * {@inheritdoc}
      */
-    public function encryptKey(JWKInterface $key, $cek, array $complete_headers, array &$additional_headers)
+    public function encryptKey(JWKInterface $key, string $cek, array $complete_headers, array &$additional_headers): string
     {
         $this->checkKey($key);
 
@@ -56,7 +56,7 @@ abstract class RSA implements KeyEncryptionInterface
     /**
      * {@inheritdoc}
      */
-    public function decryptKey(JWKInterface $key, $encrypted_key, array $header)
+    public function decryptKey(JWKInterface $key, string $encrypted_cek, array $header): string
     {
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The key is not a private key');
@@ -64,12 +64,12 @@ abstract class RSA implements KeyEncryptionInterface
         $priv = new RSAKey($key);
 
         if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
-            $decrypted = JoseRSA::decrypt($priv, $encrypted_key, $this->getHashAlgorithm());
+            $decrypted = JoseRSA::decrypt($priv, $encrypted_cek, $this->getHashAlgorithm());
             Assertion::string($decrypted, 'Unable to decrypt the data.');
 
             return $decrypted;
         } else {
-            $res = openssl_private_decrypt($encrypted_key, $decrypted, $priv->toPEM(), OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
+            $res = openssl_private_decrypt($encrypted_cek, $decrypted, $priv->toPEM(), OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
             Assertion::true($res, 'Unable to decrypt the data.');
 
             return $decrypted;
@@ -79,7 +79,7 @@ abstract class RSA implements KeyEncryptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getKeyManagementMode()
+    public function getKeyManagementMode(): string
     {
         return self::MODE_ENCRYPT;
     }

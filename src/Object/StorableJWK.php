@@ -41,7 +41,7 @@ class StorableJWK implements StorableInterface, JWKInterface
     /**
      * {@inheritdoc}
      */
-    public function getAll()
+    public function getAll(): array
     {
         return $this->getJWK()->getAll();
     }
@@ -49,7 +49,7 @@ class StorableJWK implements StorableInterface, JWKInterface
     /**
      * {@inheritdoc}
      */
-    public function get($key)
+    public function get(string $key)
     {
         return $this->getJWK()->get($key);
     }
@@ -57,7 +57,7 @@ class StorableJWK implements StorableInterface, JWKInterface
     /**
      * {@inheritdoc}
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return $this->getJWK()->has($key);
     }
@@ -65,7 +65,7 @@ class StorableJWK implements StorableInterface, JWKInterface
     /**
      * {@inheritdoc}
      */
-    public function thumbprint($hash_algorithm)
+    public function thumbprint(string $hash_algorithm): string
     {
         return $this->getJWK()->thumbprint($hash_algorithm);
     }
@@ -73,7 +73,7 @@ class StorableJWK implements StorableInterface, JWKInterface
     /**
      * {@inheritdoc}
      */
-    public function toPublic()
+    public function toPublic(): JWKInterface
     {
         return $this->getJWK()->toPublic();
     }

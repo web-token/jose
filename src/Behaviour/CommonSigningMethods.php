@@ -21,15 +21,15 @@ trait CommonSigningMethods
     private $signature_algorithms;
 
     /**
-     * {@inheritdoc}
+     * @return string[]
      */
-    public function getSupportedSignatureAlgorithms()
+    public function getSupportedSignatureAlgorithms(): array
     {
         return $this->signature_algorithms;
     }
 
     /**
-     * @param string[]|\Jose\Algorithm\SignatureAlgorithmInterface[] $signature_algorithms
+     * @param string[]|SignatureAlgorithmInterface[] $signature_algorithms
      */
     private function setSignatureAlgorithms($signature_algorithms)
     {
@@ -38,7 +38,7 @@ trait CommonSigningMethods
             if (is_string($signature_algorithm)) {
                 $result[] = $signature_algorithm;
             } elseif ($signature_algorithm instanceof SignatureAlgorithmInterface) {
-                $result[] = $signature_algorithm->getAlgorithmName();
+                $result[] = $signature_algorithm->name();
             } else {
                 throw new \InvalidArgumentException('Parameter must be a string or an instance of SignatureAlgorithmInterface');
             }

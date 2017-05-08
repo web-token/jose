@@ -27,7 +27,7 @@ use Jose\Object\JWKInterface;
 function testKeyWrappinPerformance(KeyWrappingInterface $alg, JWKInterface $recipient_key)
 {
     $header = [
-        'alg' => $alg->getAlgorithmName(),
+        'alg' => $alg->name(),
         'enc' => 'A128GCM',
         'exp' => time() + 3600,
         'iat' => time(),
@@ -43,13 +43,13 @@ function testKeyWrappinPerformance(KeyWrappingInterface $alg, JWKInterface $reci
     $time_end = microtime(true);
 
     $time = ($time_end - $time_start) / $nb * 1000;
-    printf('%s: %f milliseconds/wrapping'.PHP_EOL, $alg->getAlgorithmName(), $time);
+    printf('%s: %f milliseconds/wrapping'.PHP_EOL, $alg->name(), $time);
 }
 
 function testKeyUnwrappingPerformance(KeyWrappingInterface $alg, JWKInterface $recipient_key)
 {
     $header = [
-        'alg' => $alg->getAlgorithmName(),
+        'alg' => $alg->name(),
         'enc' => 'A128GCM',
         'exp' => time() + 3600,
         'iat' => time(),
@@ -67,7 +67,7 @@ function testKeyUnwrappingPerformance(KeyWrappingInterface $alg, JWKInterface $r
     $time_end = microtime(true);
 
     $time = ($time_end - $time_start) / $nb * 1000;
-    printf('%s: %f milliseconds/unwrapping'.PHP_EOL, $alg->getAlgorithmName(), $time);
+    printf('%s: %f milliseconds/unwrapping'.PHP_EOL, $alg->name(), $time);
 }
 
 function dataKeyWrappinPerformance()

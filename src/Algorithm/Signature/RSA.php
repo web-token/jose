@@ -45,7 +45,7 @@ abstract class RSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function verify(JWKInterface $key, $input, $signature)
+    public function verify(JWKInterface $key, string $input, string $signature): bool
     {
         $this->checkKey($key);
 
@@ -61,7 +61,7 @@ abstract class RSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function sign(JWKInterface $key, $input)
+    public function sign(JWKInterface $key, string $input): string
     {
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The key is not a private key');

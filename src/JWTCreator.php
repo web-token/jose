@@ -51,7 +51,7 @@ final class JWTCreator
      *
      * @return string
      */
-    public function sign($payload, array $signature_protected_headers, Object\JWKInterface $signature_key)
+    public function sign($payload, array $signature_protected_headers, Object\JWKInterface $signature_key): string
     {
         $jws = Factory\JWSFactory::createJWS($payload);
 
@@ -68,7 +68,7 @@ final class JWTCreator
      *
      * @return string
      */
-    public function encrypt($payload, array $encryption_protected_headers, Object\JWKInterface $encryption_key)
+    public function encrypt(string $payload, array $encryption_protected_headers, Object\JWKInterface $encryption_key): string
     {
         Assertion::true($this->isEncryptionSupportEnabled(), 'The encryption support is not enabled');
 
@@ -88,7 +88,7 @@ final class JWTCreator
      *
      * @return string
      */
-    public function signAndEncrypt($payload, array $signature_protected_headers, Object\JWKInterface $signature_key, array $encryption_protected_headers, Object\JWKInterface $encryption_key)
+    public function signAndEncrypt($payload, array $signature_protected_headers, Object\JWKInterface $signature_key, array $encryption_protected_headers, Object\JWKInterface $encryption_key): string
     {
         $jws = $this->sign($payload, $signature_protected_headers, $signature_key);
         $jwe = $this->encrypt($jws, $encryption_protected_headers, $encryption_key);
@@ -99,7 +99,7 @@ final class JWTCreator
     /**
      * @return string[]
      */
-    public function getSupportedSignatureAlgorithms()
+    public function getSupportedSignatureAlgorithms(): array
     {
         return $this->signer->getSupportedSignatureAlgorithms();
     }
@@ -107,7 +107,7 @@ final class JWTCreator
     /**
      * {@inheritdoc}
      */
-    public function getSupportedKeyEncryptionAlgorithms()
+    public function getSupportedKeyEncryptionAlgorithms(): array
     {
         return false === $this->isEncryptionSupportEnabled() ? [] : $this->encrypter->getSupportedKeyEncryptionAlgorithms();
     }
@@ -115,7 +115,7 @@ final class JWTCreator
     /**
      * @return string[]
      */
-    public function getSupportedContentEncryptionAlgorithms()
+    public function getSupportedContentEncryptionAlgorithms(): array
     {
         return false === $this->isEncryptionSupportEnabled() ? [] : $this->encrypter->getSupportedContentEncryptionAlgorithms();
     }
@@ -123,7 +123,7 @@ final class JWTCreator
     /**
      * @return string[]
      */
-    public function getSupportedCompressionMethods()
+    public function getSupportedCompressionMethods(): array
     {
         return false === $this->isEncryptionSupportEnabled() ? [] : $this->encrypter->getSupportedCompressionMethods();
     }
@@ -131,7 +131,7 @@ final class JWTCreator
     /**
      * @return bool
      */
-    public function isEncryptionSupportEnabled()
+    public function isEncryptionSupportEnabled(): bool
     {
         return null !== $this->encrypter;
     }

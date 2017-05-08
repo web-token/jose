@@ -20,7 +20,7 @@ use Jose\Object\JWKInterface;
 function testKeyAgreementPerformance($message, KeyAgreementInterface $alg, JWKInterface $recipient_key)
 {
     $header = [
-        'alg' => $alg->getAlgorithmName(),
+        'alg' => $alg->name(),
         'enc' => 'A256CBC-HS512',
         'exp' => time() + 3600,
         'iat' => time(),
@@ -36,7 +36,7 @@ function testKeyAgreementPerformance($message, KeyAgreementInterface $alg, JWKIn
 
     $time_end = microtime(true);
     $time = ($time_end - $time_start) / $nb * 1000;
-    printf('%s: %f milliseconds/key agreement (%s)'.PHP_EOL, $alg->getAlgorithmName(), $time, $message);
+    printf('%s: %f milliseconds/key agreement (%s)'.PHP_EOL, $alg->name(), $time, $message);
 }
 
 function dataKeyAgreementPerformance()

@@ -18,8 +18,8 @@ interface JWTInterface
      *
      * @return string                       Payload
      * @return array                        Payload
-     * @return \Jose\Object\JWKInterface    Payload
-     * @return \Jose\Object\JWKSetInterface Payload
+     * @return JWKInterface    Payload
+     * @return JWKSetInterface Payload
      * @return mixed                        Payload
      */
     public function getPayload();
@@ -29,9 +29,9 @@ interface JWTInterface
      *
      * @internal
      *
-     * @return \Jose\Object\JWTInterface
+     * @return JWTInterface
      */
-    public function withPayload($payload);
+    public function withPayload($payload): JWTInterface;
 
     /**
      * Returns the value of the payload of the specified key.
@@ -40,24 +40,24 @@ interface JWTInterface
      *
      * @return mixed|null Payload value
      */
-    public function getClaim($key);
+    public function getClaim(string $key);
 
     /**
      * Returns the claims.
      *
      * @return array Payload value
      */
-    public function getClaims();
+    public function getClaims(): array;
 
     /**
      * @param string $key The key
      *
      * @return bool
      */
-    public function hasClaim($key);
+    public function hasClaim(string $key): bool;
 
     /**
      * @return bool
      */
-    public function hasClaims();
+    public function hasClaims(): bool;
 }

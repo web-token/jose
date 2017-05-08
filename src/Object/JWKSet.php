@@ -36,7 +36,7 @@ final class JWKSet implements JWKSetInterface
     /**
      * {@inheritdoc}
      */
-    public function getKeys()
+    public function getKeys(): array
     {
         return $this->keys;
     }

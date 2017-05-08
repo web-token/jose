@@ -22,7 +22,7 @@ final class JWE implements JWTInterface
     use JWT;
 
     /**
-     * @var \Jose\Object\Recipient[]
+     * @var Recipient[]
      */
     private $recipients = [];
 
@@ -66,7 +66,7 @@ final class JWE implements JWTInterface
      *
      * @return int
      */
-    public function countRecipients()
+    public function countRecipients(): int
     {
         return count($this->recipients);
     }
@@ -74,18 +74,18 @@ final class JWE implements JWTInterface
     /**
      * @return bool
      */
-    public function isEncrypted()
+    public function isEncrypted(): bool
     {
         return null !== $this->getCiphertext();
     }
 
     /**
-     * @param \Jose\Object\JWKInterface $recipient_key
+     * @param JWKInterface $recipient_key
      * @param array                     $recipient_headers
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public function addRecipientInformation(JWKInterface $recipient_key, $recipient_headers = [])
+    public function addRecipientInformation(JWKInterface $recipient_key, array $recipient_headers = []): JWE
     {
         Assertion::true(null === $this->getCiphertext(), 'The JWE is encrypted. No additional recipient allowed.');
         $jwe = clone $this;
@@ -98,9 +98,9 @@ final class JWE implements JWTInterface
      * @param string|null $encrypted_key
      * @param array       $recipient_headers
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public function addRecipientWithEncryptedKey($encrypted_key, array $recipient_headers)
+    public function addRecipientWithEncryptedKey(?string $encrypted_key, array $recipient_headers): JWE
     {
         $jwe = clone $this;
         $jwe->recipients[] = Recipient::createRecipientFromLoadedJWE($recipient_headers, $encrypted_key);
@@ -111,9 +111,9 @@ final class JWE implements JWTInterface
     /**
      * Returns the recipients associated with the JWS.
      *
-     * @return \Jose\Object\Recipient[]
+     * @return Recipient[]
      */
-    public function getRecipients()
+    public function getRecipients(): array
     {
         return $this->recipients;
     }
@@ -121,9 +121,9 @@ final class JWE implements JWTInterface
     /**
      * @param int $id
      *
-     * @return \Jose\Object\Recipient
+     * @return Recipient
      */
-    public function &getRecipient($id)
+    public function &getRecipient(int $id): Recipient
     {
         Assertion::keyExists($this->recipients, $id, 'The recipient does not exist.');
 
@@ -135,7 +135,7 @@ final class JWE implements JWTInterface
      *
      * @return string|null The cyphertext
      */
-    public function getCiphertext()
+    public function getCiphertext(): ?string
     {
         return $this->ciphertext;
     }
@@ -145,9 +145,9 @@ final class JWE implements JWTInterface
      *
      * @internal
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public function withCiphertext($ciphertext)
+    public function withCiphertext(string $ciphertext): JWE
     {
         $jwe = clone $this;
         $jwe->ciphertext = $ciphertext;
@@ -160,7 +160,7 @@ final class JWE implements JWTInterface
      *
      * @return string|null
      */
-    public function getAAD()
+    public function getAAD(): ?string
     {
         return $this->aad;
     }
@@ -170,9 +170,9 @@ final class JWE implements JWTInterface
      *
      * @param string $aad
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public function withAAD($aad)
+    public function withAAD(string $aad): JWE
     {
         $jwe = clone $this;
         $jwe->aad = $aad;
@@ -185,7 +185,7 @@ final class JWE implements JWTInterface
      *
      * @return string|null
      */
-    public function getIV()
+    public function getIV(): ?string
     {
         return $this->iv;
     }
@@ -195,9 +195,9 @@ final class JWE implements JWTInterface
      *
      * @param string $iv
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public function withIV($iv)
+    public function withIV(string $iv): JWE
     {
         $jwe = clone $this;
         $jwe->iv = $iv;
@@ -210,7 +210,7 @@ final class JWE implements JWTInterface
      *
      * @return string|null
      */
-    public function getTag()
+    public function getTag(): ?string
     {
         return $this->tag;
     }
@@ -220,9 +220,9 @@ final class JWE implements JWTInterface
      *
      * @param string $tag
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public function withTag($tag)
+    public function withTag(string $tag): JWE
     {
         $jwe = clone $this;
         $jwe->tag = $tag;
@@ -233,11 +233,11 @@ final class JWE implements JWTInterface
     /**
      * @internal
      *
-     * @return string|null
+     * @return string
      */
-    public function getEncodedSharedProtectedHeaders()
+    public function getEncodedSharedProtectedHeaders(): string
     {
-        return $this->encoded_shared_protected_headers;
+        return $this->encoded_shared_protected_headers ?? '';
     }
 
     /**
@@ -245,9 +245,9 @@ final class JWE implements JWTInterface
      *
      * @param string $encoded_shared_protected_headers
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public function withEncodedSharedProtectedHeaders($encoded_shared_protected_headers)
+    public function withEncodedSharedProtectedHeaders(string $encoded_shared_protected_headers): JWE
     {
         $jwe = clone $this;
         $jwe->encoded_shared_protected_headers = $encoded_shared_protected_headers;
@@ -258,7 +258,7 @@ final class JWE implements JWTInterface
     /**
      * @return array
      */
-    public function getSharedProtectedHeaders()
+    public function getSharedProtectedHeaders(): array
     {
         return $this->shared_protected_headers;
     }
@@ -266,9 +266,9 @@ final class JWE implements JWTInterface
     /**
      * @param array $shared_protected_headers
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public function withSharedProtectedHeaders(array $shared_protected_headers)
+    public function withSharedProtectedHeaders(array $shared_protected_headers): JWE
     {
         $jwe = clone $this;
         $jwe->shared_protected_headers = $shared_protected_headers;
@@ -280,9 +280,9 @@ final class JWE implements JWTInterface
      * @param string     $key
      * @param mixed|null $value
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public function withSharedProtectedHeader($key, $value)
+    public function withSharedProtectedHeader(string $key, $value): JWE
     {
         $jwe = clone $this;
         $jwe->shared_protected_headers[$key] = $value;
@@ -295,7 +295,7 @@ final class JWE implements JWTInterface
      *
      * @return mixed|null Header value
      */
-    public function getSharedProtectedHeader($key)
+    public function getSharedProtectedHeader(string $key)
     {
         if ($this->hasSharedProtectedHeader($key)) {
             return $this->shared_protected_headers[$key];
@@ -308,7 +308,7 @@ final class JWE implements JWTInterface
      *
      * @return bool
      */
-    public function hasSharedProtectedHeader($key)
+    public function hasSharedProtectedHeader(string $key): bool
     {
         return array_key_exists($key, $this->shared_protected_headers);
     }
@@ -316,9 +316,9 @@ final class JWE implements JWTInterface
     /**
      * @param array $shared_headers
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public function withSharedHeaders(array $shared_headers)
+    public function withSharedHeaders(array $shared_headers): JWE
     {
         $jwe = clone $this;
         $jwe->shared_headers = $shared_headers;
@@ -330,9 +330,9 @@ final class JWE implements JWTInterface
      * @param string     $key
      * @param mixed|null $value
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public function withSharedHeader($key, $value)
+    public function withSharedHeader(string $key, $value): JWE
     {
         $jwe = clone $this;
         $jwe->shared_headers[$key] = $value;
@@ -343,7 +343,7 @@ final class JWE implements JWTInterface
     /**
      * @return array
      */
-    public function getSharedHeaders()
+    public function getSharedHeaders(): array
     {
         return $this->shared_headers;
     }
@@ -353,7 +353,7 @@ final class JWE implements JWTInterface
      *
      * @return mixed|null Header value
      */
-    public function getSharedHeader($key)
+    public function getSharedHeader(string $key)
     {
         if ($this->hasSharedHeader($key)) {
             return $this->shared_headers[$key];
@@ -366,7 +366,7 @@ final class JWE implements JWTInterface
      *
      * @return bool
      */
-    public function hasSharedHeader($key)
+    public function hasSharedHeader(string $key): bool
     {
         return array_key_exists($key, $this->shared_headers);
     }
@@ -376,7 +376,7 @@ final class JWE implements JWTInterface
      *
      * @return string
      */
-    public function toCompactJSON($id)
+    public function toCompactJSON(int $id): string
     {
         $recipient = $this->getRecipient($id);
 
@@ -402,7 +402,7 @@ final class JWE implements JWTInterface
     /**
      * @param int $id
      */
-    private function checkRecipientHasNoHeaders($id)
+    private function checkRecipientHasNoHeaders(int $id)
     {
         Assertion::true(
             empty($this->getSharedHeaders()) && empty($this->getRecipient($id)->getHeaders()),
@@ -423,7 +423,7 @@ final class JWE implements JWTInterface
      *
      * @return string
      */
-    public function toFlattenedJSON($id)
+    public function toFlattenedJSON(int $id): string
     {
         $recipient = $this->getRecipient($id);
 
@@ -442,7 +442,7 @@ final class JWE implements JWTInterface
     /**
      * @return string
      */
-    public function toJSON()
+    public function toJSON(): string
     {
         $json = $this->getJSONBase();
         $json['recipients'] = [];
@@ -464,7 +464,7 @@ final class JWE implements JWTInterface
     /**
      * @return array
      */
-    private function getJSONBase()
+    private function getJSONBase(): array
     {
         $json = [
             'ciphertext' => Base64Url::encode($this->getCiphertext()),

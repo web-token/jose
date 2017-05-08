@@ -19,7 +19,7 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function encryptContent($data, $cek, $iv, $aad, $encoded_protected_header, &$tag)
+    public function encryptContent(string $data, string $cek, string $iv, ?string $aad, string $encoded_protected_header, ?string &$tag): string
     {
         $k = mb_substr($cek, mb_strlen($cek, '8bit') / 2, null, '8bit');
 
@@ -41,7 +41,7 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
      *
      * @return string
      */
-    public function decryptContent($data, $cek, $iv, $aad, $encoded_protected_header, $tag)
+    public function decryptContent(string $data, string $cek, string $iv, ?string $aad, string $encoded_protected_header, string $tag): string
     {
         Assertion::true(
             $this->isTagValid($data, $cek, $iv, $aad, $encoded_protected_header, $tag),
@@ -105,7 +105,7 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
     /**
      * @return int
      */
-    public function getIVSize()
+    public function getIVSize(): int
     {
         return 128;
     }

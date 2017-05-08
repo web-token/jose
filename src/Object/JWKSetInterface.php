@@ -16,28 +16,28 @@ interface JWKSetInterface extends \Countable, \Iterator, \JsonSerializable, \Arr
     /**
      * @param $index
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public function getKey($index);
+    public function getKey($index): JWKInterface;
 
     /**
      * @param $index
      *
      * @return bool
      */
-    public function hasKey($index);
+    public function hasKey($index): bool;
 
     /**
      * Returns all keys in the key set.
      *
-     * @return \Jose\Object\JWKInterface[] An array of keys stored in the key set
+     * @return JWKInterface[] An array of keys stored in the key set
      */
-    public function getKeys();
+    public function getKeys(): array;
 
     /**
      * Add key in the key set.
      *
-     * @param \Jose\Object\JWKInterface A key to store in the key set
+     * @param JWKInterface $key A key to store in the key set
      */
     public function addKey(JWKInterface $key);
 
@@ -51,16 +51,16 @@ interface JWKSetInterface extends \Countable, \Iterator, \JsonSerializable, \Arr
     /**
      * @return int
      */
-    public function countKeys();
+    public function countKeys(): int;
 
     /**
      * @param string      $type         Must be 'sig' (signature) or 'enc' (encryption)
      * @param string|null $algorithm    Specifies the algorithm to be used
      * @param array       $restrictions More restrictions such as 'kid' or 'kty'
      *
-     * @return \Jose\Object\JWKInterface|null
+     * @return JWKInterface|null
      */
-    public function selectKey($type, $algorithm = null, array $restrictions = []);
+    public function selectKey(string $type, ?string $algorithm = null, array $restrictions = []): ?JWKInterface;
 
     /**
      * Returns RSA/EC keys in the key set into PEM format
@@ -69,5 +69,5 @@ interface JWKSetInterface extends \Countable, \Iterator, \JsonSerializable, \Arr
      *
      * @return string[]
      */
-    public function toPEM();
+    public function toPEM(): array;
 }

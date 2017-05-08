@@ -64,8 +64,8 @@ final class JWAManager
      */
     public function add(JWAInterface $algorithm): JWAManager
     {
-        if (!$this->has($algorithm->getAlgorithmName())) {
-            $this->algorithms[$algorithm->getAlgorithmName()] = $algorithm;
+        if (!$this->has($algorithm->name())) {
+            $this->algorithms[$algorithm->name()] = $algorithm;
         }
 
         return $this;

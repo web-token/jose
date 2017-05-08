@@ -16,5 +16,5 @@ interface JWAInterface
     /**
      * @return string Returns the name of the algorithm
      */
-    public function getAlgorithmName();
+    public function name(): string;
 }

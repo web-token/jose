@@ -24,7 +24,7 @@ class EdDSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function sign(JWKInterface $key, $data)
+    public function sign(JWKInterface $key, string $input): string
     {
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The key is not private');
@@ -34,7 +34,7 @@ class EdDSA implements SignatureAlgorithmInterface
 
         switch ($key->get('crv')) {
             case 'Ed25519':
-                return ed25519_sign($data, $secret, $public);
+                return ed25519_sign($input, $secret, $public);
             default:
                 throw new \InvalidArgumentException('Unsupported curve');
         }
@@ -43,7 +43,7 @@ class EdDSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function verify(JWKInterface $key, $data, $signature)
+    public function verify(JWKInterface $key, string $input, string $signature): bool
     {
         $this->checkKey($key);
 
@@ -51,7 +51,7 @@ class EdDSA implements SignatureAlgorithmInterface
 
         switch ($key->get('crv')) {
             case 'Ed25519':
-                return ed25519_sign_open($data, $public, $signature);
+                return ed25519_sign_open($input, $public, $signature);
             default:
                 throw new \InvalidArgumentException('Unsupported curve');
         }
@@ -71,7 +71,7 @@ class EdDSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'EdDSA';
     }

@@ -24,7 +24,7 @@ function testContentEncryptionPerformance(ContentEncryptionAlgorithmInterface $a
 {
     $header = Base64Url::encode(json_encode([
         'alg' => 'A128GCM',
-        'enc' => $alg->getAlgorithmName(),
+        'enc' => $alg->name(),
         'exp' => time() + 3600,
         'iat' => time(),
         'nbf' => time(),
@@ -42,14 +42,14 @@ function testContentEncryptionPerformance(ContentEncryptionAlgorithmInterface $a
     $time_end = microtime(true);
 
     $time = ($time_end - $time_start) / $nb * 1000;
-    printf('%s: %f milliseconds/encryption'.PHP_EOL, $alg->getAlgorithmName(), $time);
+    printf('%s: %f milliseconds/encryption'.PHP_EOL, $alg->name(), $time);
 }
 
 function testContentDecryptionPerformance(ContentEncryptionAlgorithmInterface $alg)
 {
     $header = Base64Url::encode(json_encode([
         'alg' => 'A128GCM',
-        'enc' => $alg->getAlgorithmName(),
+        'enc' => $alg->name(),
         'exp' => time() + 3600,
         'iat' => time(),
         'nbf' => time(),
@@ -68,7 +68,7 @@ function testContentDecryptionPerformance(ContentEncryptionAlgorithmInterface $a
     $time_end = microtime(true);
 
     $time = ($time_end - $time_start) / $nb * 1000;
-    printf('%s: %f milliseconds/decryption'.PHP_EOL, $alg->getAlgorithmName(), $time);
+    printf('%s: %f milliseconds/decryption'.PHP_EOL, $alg->name(), $time);
 }
 
 function dataContentEncryptionPerformance()

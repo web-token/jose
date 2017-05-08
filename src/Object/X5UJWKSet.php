@@ -15,14 +15,14 @@ use Assert\Assertion;
 use Jose\KeyConverter\KeyConverter;
 
 /**
- * Class JKUJWKSet.
+ * Class X5UJWKSet
  */
 final class X5UJWKSet extends DownloadedJWKSet
 {
     /**
-     * @return \Jose\Object\JWKInterface[]
+     * @return JWKInterface[]
      */
-    public function getKeys()
+    public function getKeys(): array
     {
         $content = json_decode($this->getContent(), true);
         Assertion::isArray($content, 'Invalid content.');

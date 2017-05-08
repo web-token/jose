@@ -28,7 +28,7 @@ final class ECDHES implements KeyAgreementInterface
     /**
      * {@inheritdoc}
      */
-    public function getAgreementKey($encryption_key_length, $algorithm, JWKInterface $recipient_key, array $complete_header = [], array &$additional_header_values = [])
+    public function getAgreementKey(int $encryption_key_length, string $algorithm, JWKInterface $recipient_key, array $complete_header = [], array &$additional_header_values = []): string
     {
         if ($recipient_key->has('d')) {
             $this->checkKey($recipient_key, true);
@@ -105,7 +105,7 @@ final class ECDHES implements KeyAgreementInterface
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'ECDH-ES';
     }
@@ -113,7 +113,7 @@ final class ECDHES implements KeyAgreementInterface
     /**
      * {@inheritdoc}
      */
-    public function getKeyManagementMode()
+    public function getKeyManagementMode(): string
     {
         return self::MODE_AGREEMENT;
     }

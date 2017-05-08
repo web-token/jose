@@ -35,7 +35,7 @@ final class RS384 extends RSA
     /**
      * @return string
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'RS384';
     }

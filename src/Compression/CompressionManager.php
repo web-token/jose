@@ -17,12 +17,12 @@ namespace Jose\Compression;
 final class CompressionManager
 {
     /**
-     * @var \Jose\Compression\CompressionInterface[]
+     * @var CompressionInterface[]
      */
     protected $compression_algorithms = [];
 
     /**
-     * @param \Jose\Compression\CompressionInterface $compression_algorithm
+     * @param CompressionInterface $compression_algorithm
      */
     public function addCompressionAlgorithm(CompressionInterface $compression_algorithm)
     {
@@ -34,9 +34,9 @@ final class CompressionManager
      *
      * @param string $name The name of the compression method
      *
-     * @return \Jose\Compression\CompressionInterface|null If the compression handler is supported, return CompressionInterface object, else null
+     * @return CompressionInterface|null If the compression handler is supported, return CompressionInterface object, else null
      */
-    public function getCompressionAlgorithm($name)
+    public function getCompressionAlgorithm(string $name): ?CompressionInterface
     {
         return array_key_exists($name, $this->compression_algorithms) ? $this->compression_algorithms[$name] : null;
     }

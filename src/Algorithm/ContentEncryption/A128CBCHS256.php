@@ -27,7 +27,7 @@ final class A128CBCHS256 extends AESCBCHS
     /**
      * {@inheritdoc}
      */
-    public function getCEKSize()
+    public function getCEKSize(): int
     {
         return 256;
     }
@@ -35,7 +35,7 @@ final class A128CBCHS256 extends AESCBCHS
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'A128CBC-HS256';
     }

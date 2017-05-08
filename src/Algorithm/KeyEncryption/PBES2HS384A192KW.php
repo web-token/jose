@@ -45,7 +45,7 @@ final class PBES2HS384A192KW extends PBES2AESKW
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'PBES2-HS384+A192KW';
     }

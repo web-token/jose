@@ -30,7 +30,7 @@ final class HS512 extends HMAC
     /**
      * @return string
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'HS512';
     }

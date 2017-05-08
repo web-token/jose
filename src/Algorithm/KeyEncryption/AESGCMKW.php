@@ -23,7 +23,7 @@ abstract class AESGCMKW implements KeyWrappingInterface
     /**
      * {@inheritdoc}
      */
-    public function wrapKey(JWKInterface $key, $cek, array $complete_headers, array &$additional_headers)
+    public function wrapKey(JWKInterface $key, string $cek, array $complete_headers, array &$additional_headers): string
     {
         $this->checkKey($key);
         $kek = Base64Url::decode($key->get('k'));
@@ -45,14 +45,14 @@ abstract class AESGCMKW implements KeyWrappingInterface
     /**
      * {@inheritdoc}
      */
-    public function unwrapKey(JWKInterface $key, $encrypted_cek, array $header)
+    public function unwrapKey(JWKInterface $key, string $encrypted_cek, array $complete_headers): string
     {
         $this->checkKey($key);
-        $this->checkAdditionalParameters($header);
+        $this->checkAdditionalParameters($complete_headers);
 
         $kek = Base64Url::decode($key->get('k'));
-        $tag = Base64Url::decode($header['tag']);
-        $iv = Base64Url::decode($header['iv']);
+        $tag = Base64Url::decode($complete_headers['tag']);
+        $iv = Base64Url::decode($complete_headers['iv']);
 
         $key_length = mb_strlen($kek, '8bit') * 8;
 
@@ -66,7 +66,7 @@ abstract class AESGCMKW implements KeyWrappingInterface
     /**
      * {@inheritdoc}
      */
-    public function getKeyManagementMode()
+    public function getKeyManagementMode(): string
     {
         return self::MODE_WRAP;
     }

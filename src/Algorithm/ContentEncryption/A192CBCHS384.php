@@ -27,7 +27,7 @@ final class A192CBCHS384 extends AESCBCHS
     /**
      * {@inheritdoc}
      */
-    public function getCEKSize()
+    public function getCEKSize(): int
     {
         return 384;
     }
@@ -35,7 +35,7 @@ final class A192CBCHS384 extends AESCBCHS
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'A192CBC-HS384';
     }

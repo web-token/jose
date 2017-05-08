@@ -49,7 +49,7 @@ final class JWKSets implements JWKSetsInterface
     /**
      * {@inheritdoc}
      */
-    public function getKeys()
+    public function getKeys(): array
     {
         $keys = [];
 

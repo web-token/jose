@@ -20,14 +20,14 @@ use Jose\KeyConverter\RSAKey;
 trait JWKSetPEM
 {
     /**
-     * @return \Jose\Object\JWKInterface[]
+     * @return JWKInterface[]
      */
-    abstract public function getKeys();
+    abstract public function getKeys(): array;
 
     /**
      * {@inheritdoc}
      */
-    public function toPEM()
+    public function toPEM(): array
     {
         $keys = $this->getKeys();
         $result = [];
@@ -49,11 +49,11 @@ trait JWKSetPEM
     }
 
     /**
-     * @param \Jose\Object\JWKInterface $key
+     * @param JWKInterface $key
      *
      * @return string
      */
-    private function getPEM(JWKInterface $key)
+    private function getPEM(JWKInterface $key): string
     {
         switch ($key->get('kty')) {
             case 'RSA':

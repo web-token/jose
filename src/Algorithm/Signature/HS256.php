@@ -31,7 +31,7 @@ final class HS256 extends HMAC
     /**
      * @return string
      */
-    public function getAlgorithmName()
+    public function name(): string
     {
         return 'HS256';
     }

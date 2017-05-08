@@ -19,7 +19,7 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function encryptContent($data, $cek, $iv, $aad, $encoded_protected_header, &$tag)
+    public function encryptContent(string $data, string $cek, string $iv, ?string $aad, string $encoded_protected_header, ?string &$tag): string
     {
         $calculated_aad = $encoded_protected_header;
         if (null !== $aad) {
@@ -38,7 +38,7 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
     /**
      *  {@inheritdoc}
      */
-    public function decryptContent($data, $cek, $iv, $aad, $encoded_protected_header, $tag)
+    public function decryptContent(string $data, string $cek, string $iv, ?string $aad, string $encoded_protected_header, string $tag): string
     {
         $calculated_aad = $encoded_protected_header;
         if (null !== $aad) {
@@ -59,7 +59,7 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
     /**
      * @return int
      */
-    public function getIVSize()
+    public function getIVSize(): int
     {
         return 96;
     }
@@ -67,7 +67,7 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
     /**
      * @return int
      */
-    public function getCEKSize()
+    public function getCEKSize(): int
     {
         return $this->getKeySize();
     }

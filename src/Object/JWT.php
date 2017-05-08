@@ -26,8 +26,8 @@ trait JWT
      *
      * @return string                       Payload
      * @return array                        Payload
-     * @return \Jose\Object\JWKInterface    Payload
-     * @return \Jose\Object\JWKSetInterface Payload
+     * @return JWKInterface    Payload
+     * @return JWKSetInterface Payload
      * @return mixed                        Payload
      */
     public function getPayload()
@@ -40,9 +40,9 @@ trait JWT
      *
      * @internal
      *
-     * @return \Jose\Object\JWTInterface
+     * @return JWTInterface
      */
-    public function withPayload($payload)
+    public function withPayload($payload): JWTInterface
     {
         $jwt = clone $this;
         $jwt->payload = $payload;
@@ -57,7 +57,7 @@ trait JWT
      *
      * @return mixed|null Payload value
      */
-    public function getClaim($key)
+    public function getClaim(string $key)
     {
         if ($this->hasClaim($key)) {
             return $this->payload[$key];
@@ -70,7 +70,7 @@ trait JWT
      *
      * @return array Payload value
      */
-    public function getClaims()
+    public function getClaims(): array
     {
         if (is_array($this->payload)) {
             return $this->payload;
@@ -83,7 +83,7 @@ trait JWT
      *
      * @return bool
      */
-    public function hasClaim($key)
+    public function hasClaim(string $key): bool
     {
         return $this->hasClaims() && array_key_exists($key, $this->payload);
     }
@@ -91,7 +91,7 @@ trait JWT
     /**
      * @return bool
      */
-    public function hasClaims()
+    public function hasClaims(): bool
     {
         return is_array($this->payload);
     }

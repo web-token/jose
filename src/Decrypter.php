@@ -73,11 +73,11 @@ final class Decrypter
     }
 
     /**
-     * @param JWE    $input           A JWE object to decrypt
+     * @param JWE    $jwe           A JWE object to decrypt
      * @param JWKSetInterface $jwk_set         The key set used to decrypt the input
      * @param null|int                     $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
      */
-    public function decryptUsingKeySet(Object\JWE &$jwe, Object\JWKSetInterface $jwk_set, &$recipient_index = null)
+    public function decryptUsingKeySet(JWE &$jwe, JWKSetInterface $jwk_set, &$recipient_index = null)
     {
         $this->checkJWKSet($jwk_set);
         $this->checkPayload($jwe);
@@ -115,10 +115,10 @@ final class Decrypter
         foreach ($jwk_set as $jwk) {
             try {
                 $this->checkKeyUsage($jwk, 'decryption');
-                if ('dir' !== $key_encryption_algorithm->getAlgorithmName()) {
-                    $this->checkKeyAlgorithm($jwk, $key_encryption_algorithm->getAlgorithmName());
+                if ('dir' !== $key_encryption_algorithm->name()) {
+                    $this->checkKeyAlgorithm($jwk, $key_encryption_algorithm->name());
                 } else {
-                    $this->checkKeyAlgorithm($jwk, $content_encryption_algorithm->getAlgorithmName());
+                    $this->checkKeyAlgorithm($jwk, $content_encryption_algorithm->name());
                 }
                 $cek = $this->decryptCEK($key_encryption_algorithm, $content_encryption_algorithm, $jwk, $recipient, $complete_headers);
                 if (null !== $cek) {
@@ -171,7 +171,7 @@ final class Decrypter
         if ($key_encryption_algorithm instanceof Algorithm\KeyEncryption\DirectEncryptionInterface) {
             return $key_encryption_algorithm->getCEK($key);
         } elseif ($key_encryption_algorithm instanceof Algorithm\KeyEncryption\KeyAgreementInterface) {
-            return $key_encryption_algorithm->getAgreementKey($content_encryption_algorithm->getCEKSize(), $content_encryption_algorithm->getAlgorithmName(), $key, $complete_headers);
+            return $key_encryption_algorithm->getAgreementKey($content_encryption_algorithm->getCEKSize(), $content_encryption_algorithm->name(), $key, $complete_headers);
         } elseif ($key_encryption_algorithm instanceof Algorithm\KeyEncryption\KeyAgreementWrappingInterface) {
             return $key_encryption_algorithm->unwrapAgreementKey($key, $recipient->getEncryptedKey(), $content_encryption_algorithm->getCEKSize(), $complete_headers);
         } elseif ($key_encryption_algorithm instanceof Algorithm\KeyEncryption\KeyEncryptionInterface) {
@@ -191,7 +191,7 @@ final class Decrypter
      *
      * @return bool
      */
-    private function decryptPayload(Object\JWE &$jwe, $cek, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array $complete_headers)
+    private function decryptPayload(Object\JWE &$jwe, $cek, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array $complete_headers)
     {
         $payload = $content_encryption_algorithm->decryptContent($jwe->getCiphertext(), $cek, $jwe->getIV(), null === $jwe->getAAD() ? null : Base64Url::encode($jwe->getAAD()), $jwe->getEncodedSharedProtectedHeaders(), $jwe->getTag());
         if (null === $payload) {

@@ -28,7 +28,7 @@ trait BaseJWKSet
      *
      * @return bool
      */
-    public function hasKey($index)
+    public function hasKey($index): bool
     {
         return array_key_exists($index, $this->getKeys());
     }
@@ -36,9 +36,9 @@ trait BaseJWKSet
     /**
      * @param int $index
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public function getKey($index)
+    public function getKey($index): JWKInterface
     {
         Assertion::integer($index, 'The index must be a positive integer.');
         Assertion::greaterOrEqualThan($index, 0, 'The index must be a positive integer.');
@@ -48,12 +48,12 @@ trait BaseJWKSet
     }
 
     /**
-     * @return \Jose\Object\JWKInterface[]
+     * @return JWKInterface[]
      */
-    abstract public function getKeys();
+    abstract public function getKeys(): array;
 
     /**
-     * @param \Jose\Object\JWKInterface $key
+     * @param JWKInterface $key
      */
     abstract public function addKey(JWKInterface $key);
 
@@ -65,7 +65,7 @@ trait BaseJWKSet
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return ['keys' => array_values($this->getKeys())];
     }
@@ -75,15 +75,15 @@ trait BaseJWKSet
      *
      * @return int
      */
-    public function count($mode = COUNT_NORMAL)
+    public function count($mode = COUNT_NORMAL): int
     {
         return count($this->getKeys(), $mode);
     }
 
     /**
-     * @return \Jose\Object\JWKInterface|null
+     * @return JWKInterface|null
      */
-    public function current()
+    public function current(): ?JWKInterface
     {
         return $this->hasKey($this->position) ? $this->getKey($this->position) : null;
     }
@@ -91,7 +91,7 @@ trait BaseJWKSet
     /**
      * @return int
      */
-    public function key()
+    public function key(): int
     {
         return $this->position;
     }
@@ -109,7 +109,7 @@ trait BaseJWKSet
     /**
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->current() instanceof JWKInterface;
     }
@@ -117,7 +117,7 @@ trait BaseJWKSet
     /**
      * @return int
      */
-    public function countKeys()
+    public function countKeys(): int
     {
         return count($this->getKeys());
     }
@@ -127,7 +127,7 @@ trait BaseJWKSet
      *
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->hasKey($offset);
     }
@@ -135,9 +135,9 @@ trait BaseJWKSet
     /**
      * @param mixed $offset
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): JWKInterface
     {
         return $this->getKey($offset);
     }
@@ -164,9 +164,9 @@ trait BaseJWKSet
      * @param null|string $algorithm
      * @param array       $restrictions
      *
-     * @return null|\Jose\Object\JWKInterface
+     * @return null|JWKInterface
      */
-    public function selectKey($type, $algorithm = null, array $restrictions = [])
+    public function selectKey(string $type, ?string $algorithm = null, array $restrictions = []): ?JWKInterface
     {
         Assertion::inArray($type, ['enc', 'sig']);
         Assertion::nullOrString($algorithm);
@@ -200,7 +200,7 @@ trait BaseJWKSet
 
         //Return null if no key
         if (empty($result)) {
-            return;
+            return null;
         }
 
         //Sort by trust indicator
@@ -211,11 +211,11 @@ trait BaseJWKSet
 
     /**
      * @param string                    $type
-     * @param \Jose\Object\JWKInterface $key
+     * @param JWKInterface $key
      *
      * @return bool|int
      */
-    private function canKeyBeUsedFor($type, JWKInterface $key)
+    private function canKeyBeUsedFor(string $type, JWKInterface $key)
     {
         if ($key->has('use')) {
             return $type === $key->get('use') ? 1 : false;
@@ -229,11 +229,11 @@ trait BaseJWKSet
 
     /**
      * @param null|string               $algorithm
-     * @param \Jose\Object\JWKInterface $key
+     * @param JWKInterface $key
      *
      * @return bool|int
      */
-    private function canKeyBeUsedWithAlgorithm($algorithm, JWKInterface $key)
+    private function canKeyBeUsedWithAlgorithm(string $algorithm, JWKInterface $key)
     {
         if (null === $algorithm) {
             return 0;
@@ -247,11 +247,11 @@ trait BaseJWKSet
 
     /**
      * @param array                     $restrictions
-     * @param \Jose\Object\JWKInterface $key
+     * @param JWKInterface $key
      *
      * @return bool
      */
-    private function doesKeySatisfyRestrictions(array $restrictions, JWKInterface $key)
+    private function doesKeySatisfyRestrictions(array $restrictions, JWKInterface $key): bool
     {
         foreach ($restrictions as $k => $v) {
             if (!$key->has($k) || $v !== $key->get($k)) {
@@ -267,7 +267,7 @@ trait BaseJWKSet
      *
      * @return string
      */
-    private static function convertKeyOpsToKeyUse($key_ops)
+    private static function convertKeyOpsToKeyUse(string $key_ops): string
     {
         switch ($key_ops) {
             case 'verify':
@@ -289,7 +289,7 @@ trait BaseJWKSet
      *
      * @return int
      */
-    public function sortKeys($a, $b)
+    public function sortKeys(array $a, array $b): int
     {
         if ($a['ind'] === $b['ind']) {
             return 0;

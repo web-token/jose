@@ -21,7 +21,7 @@ use Jose\Object\JWKInterface;
 function testKeyEncryptionPerformance(KeyEncryptionInterface $alg, JWKInterface $recipient_key)
 {
     $header = [
-        'alg' => $alg->getAlgorithmName(),
+        'alg' => $alg->name(),
         'enc' => 'A128GCM',
         'exp' => time() + 3600,
         'iat' => time(),
@@ -37,13 +37,13 @@ function testKeyEncryptionPerformance(KeyEncryptionInterface $alg, JWKInterface 
     $time_end = microtime(true);
 
     $time = ($time_end - $time_start) / $nb * 1000;
-    printf('%s: %f milliseconds/wrapping'.PHP_EOL, $alg->getAlgorithmName(), $time);
+    printf('%s: %f milliseconds/wrapping'.PHP_EOL, $alg->name(), $time);
 }
 
 function testKeyDecryptionPerformance(KeyEncryptionInterface $alg, JWKInterface $recipient_key)
 {
     $header = [
-        'alg' => $alg->getAlgorithmName(),
+        'alg' => $alg->name(),
         'enc' => 'A128GCM',
         'exp' => time() + 3600,
         'iat' => time(),
@@ -61,7 +61,7 @@ function testKeyDecryptionPerformance(KeyEncryptionInterface $alg, JWKInterface 
     $time_end = microtime(true);
 
     $time = ($time_end - $time_start) / $nb * 1000;
-    printf('%s: %f milliseconds/unwrapping'.PHP_EOL, $alg->getAlgorithmName(), $time);
+    printf('%s: %f milliseconds/unwrapping'.PHP_EOL, $alg->name(), $time);
 }
 
 function dataKeyEncryptionPerformance()

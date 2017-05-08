@@ -21,19 +21,19 @@ interface SignatureAlgorithmInterface extends JWAInterface
     /**
      * Sign the input.
      *
-     * @param \Jose\Object\JWKInterface $key   The private key used to sign the data
+     * @param JWKInterface $key   The private key used to sign the data
      * @param string                    $input The input
      *
      * @throws \Exception If key does not support the algorithm or if the key usage does not authorize the operation
      *
      * @return string
      */
-    public function sign(JWKInterface $key, $input);
+    public function sign(JWKInterface $key, string $input): string;
 
     /**
      * Verify the signature of data.
      *
-     * @param \Jose\Object\JWKInterface $key       The private key used to sign the data
+     * @param JWKInterface $key       The private key used to sign the data
      * @param string                    $input     The input
      * @param string                    $signature The signature to verify
      *
@@ -41,5 +41,5 @@ interface SignatureAlgorithmInterface extends JWAInterface
      *
      * @return bool
      */
-    public function verify(JWKInterface $key, $input, $signature);
+    public function verify(JWKInterface $key, string $input, string $signature): bool;
 }

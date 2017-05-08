@@ -23,5 +23,5 @@ interface DirectEncryptionInterface extends KeyEncryptionAlgorithmInterface
      *
      * @return string The CEK
      */
-    public function getCEK(JWKInterface $key);
+    public function getCEK(JWKInterface $key): string;
 }

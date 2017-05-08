@@ -14,6 +14,9 @@ namespace Jose;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Algorithm\SignatureAlgorithmInterface;
+use Jose\Object\JWKInterface;
+use Jose\Object\JWS;
+use Jose\Object\Signature;
 
 final class Signer
 {
@@ -40,7 +43,7 @@ final class Signer
      *
      * @return Signer
      */
-    public static function createSigner(array $signature_algorithms)
+    public static function createSigner(array $signature_algorithms): Signer
     {
         $signer = new self($signature_algorithms);
 
@@ -48,9 +51,9 @@ final class Signer
     }
 
     /**
-     * @param Object\JWS $jws
+     * @param JWS $jws
      */
-    public function sign(Object\JWS &$jws)
+    public function sign(JWS &$jws)
     {
         $nb_signatures = $jws->countSignatures();
 
@@ -60,10 +63,10 @@ final class Signer
     }
 
     /**
-     * @param Object\JWS       $jws
-     * @param Object\Signature $signature
+     * @param JWS       $jws
+     * @param Signature $signature
      */
-    private function computeSignature(Object\JWS $jws, Object\Signature &$signature)
+    private function computeSignature(JWS $jws, Signature &$signature)
     {
         if (null === $signature->getSignatureKey()) {
             return;
@@ -87,12 +90,12 @@ final class Signer
     }
 
     /**
-     * @param Object\JWS       $jws
-     * @param Object\Signature $signature
+     * @param JWS       $jws
+     * @param Signature $signature
      *
      * @return string
      */
-    private function getInputToSign(Object\JWS $jws, Object\Signature $signature)
+    private function getInputToSign(JWS $jws, Signature $signature): string
     {
         $this->checkB64HeaderAndCrit($signature);
         $encoded_protected_headers = $signature->getEncodedProtectedHeaders();
@@ -107,11 +110,11 @@ final class Signer
     }
 
     /**
-     * @param Object\Signature $signature
+     * @param Signature $signature
      *
      * @throws \InvalidArgumentException
      */
-    private function checkB64HeaderAndCrit(Object\Signature $signature)
+    private function checkB64HeaderAndCrit(Signature $signature)
     {
         if (!$signature->hasProtectedHeader('b64')) {
             return;
@@ -124,11 +127,11 @@ final class Signer
 
     /**
      * @param array                     $complete_header The complete header
-     * @param Object\JWKInterface $key
+     * @param JWKInterface $key
      *
      * @return SignatureAlgorithmInterface
      */
-    private function getSignatureAlgorithm(array $complete_header, Object\JWKInterface $key)
+    private function getSignatureAlgorithm(array $complete_header, JWKInterface $key): SignatureAlgorithmInterface
     {
         Assertion::keyExists($complete_header, 'alg', 'No "alg" parameter set in the header.');
 
