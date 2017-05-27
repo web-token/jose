@@ -261,17 +261,17 @@ final class ECKey extends Sequence
     /**
      * @return bool
      */
-    public function isPrivate()
+    public function isPrivate(): bool
     {
         return $this->private;
     }
 
     /**
-     * @param \Jose\KeyConverter\ECKey $private
+     * @param ECKey $private
      *
-     * @return \Jose\KeyConverter\ECKey
+     * @return ECKey
      */
-    public static function toPublic(ECKey $private)
+    public static function toPublic(ECKey $private): ECKey
     {
         $data = $private->toArray();
         if (array_key_exists('d', $data)) {
@@ -284,7 +284,7 @@ final class ECKey extends Sequence
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toPEM();
     }
@@ -300,7 +300,7 @@ final class ECKey extends Sequence
     /**
      * @return string
      */
-    public function toDER()
+    public function toDER(): string
     {
         return $this->getBinary();
     }
@@ -308,7 +308,7 @@ final class ECKey extends Sequence
     /**
      * @return string
      */
-    public function toPEM()
+    public function toPEM(): string
     {
         $result = '-----BEGIN '.($this->private ? 'EC PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
         $result .= chunk_split(base64_encode($this->getBinary()), 64, PHP_EOL);
@@ -322,7 +322,7 @@ final class ECKey extends Sequence
      *
      * @return string
      */
-    private function getOID($curve)
+    private function getOID(string $curve): string
     {
         $curves = $this->getSupportedCurves();
         $oid = array_key_exists($curve, $curves) ? $curves[$curve] : null;
@@ -337,7 +337,7 @@ final class ECKey extends Sequence
      *
      * @return string
      */
-    private function getCurve($oid)
+    private function getCurve(string $oid): string
     {
         $curves = $this->getSupportedCurves();
         $curve = array_search($oid, $curves, true);
@@ -349,7 +349,7 @@ final class ECKey extends Sequence
     /**
      * @return array
      */
-    private function getSupportedCurves()
+    private function getSupportedCurves(): array
     {
         return [
             'P-256' => '1.2.840.10045.3.1.7',

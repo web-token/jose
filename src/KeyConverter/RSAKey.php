@@ -191,7 +191,7 @@ final class RSAKey extends Sequence
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toPEM();
     }
