@@ -120,11 +120,10 @@ The release process [is described here](doc/Release.md).
 # Prerequisites
 
 This library needs at least:
-* ![PHP 5.6+](https://img.shields.io/badge/PHP-5.6%2B-ff69b4.svg),
+* ![PHP 7.1+](https://img.shields.io/badge/PHP-7.1%2B-ff69b4.svg),
 * OpenSSL extension.
 
 Please consider the following optional requirements:
-* For AES-GCM based algorithms (`AxxxGCM` and `AxxxGCMKW`) if not on PHP 7.1+: [PHP Crypto](https://github.com/bukka/php-crypto) Extension (at least `v0.2.1`) is highly recommended as encryption/decryption is faster than the pure PHP implementation.
 * For Ed25519 algorithm: [php-ed25519-ext](https://github.com/encedo/php-ed25519-ext) required
 * For X25519 algorithm: [php-curve25519-ext](https://github.com/encedo/php-curve25519-ext) required
 

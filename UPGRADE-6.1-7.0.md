@@ -1,5 +1,17 @@
 # Upgrade from 6.1 to 7.0
 
+## Old PHP Versions Dropped
+
+PHP 5.x and 7.0 support removed.
+You need at least PHP 7.1.
+
+Tests on HHVM are not performed anymore.
+
+## `ECDH-ES*` Encryption Algorithms
+
+The library `mdanter/ecc` is not installed by default.
+If you need `ECDH-ES*` encryption algorithms, then you have to install it explicitly. 
+
 ## Features added
 
 * No feature added

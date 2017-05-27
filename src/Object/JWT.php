@@ -38,7 +38,6 @@ trait JWT
     /**
      * @param mixed $payload
      *
-     * @internal
      *
      * @return JWTInterface
      */

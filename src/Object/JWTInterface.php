@@ -27,7 +27,6 @@ interface JWTInterface
     /**
      * @param mixed $payload
      *
-     * @internal
      *
      * @return JWTInterface
      */

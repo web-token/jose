@@ -131,7 +131,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     * @internal
      *
      * @return string|null The cyphertext
      */
@@ -143,7 +142,6 @@ final class JWE implements JWTInterface
     /**
      * @param string $ciphertext
      *
-     * @internal
      *
      * @return JWE
      */
@@ -156,7 +154,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     * @internal
      *
      * @return string|null
      */
@@ -166,7 +163,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     * @internal
      *
      * @param string $aad
      *
@@ -181,7 +177,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     * @internal
      *
      * @return string|null
      */
@@ -191,7 +186,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     * @internal
      *
      * @param string $iv
      *
@@ -206,7 +200,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     * @internal
      *
      * @return string|null
      */
@@ -216,7 +209,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     * @internal
      *
      * @param string $tag
      *
@@ -231,7 +223,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     * @internal
      *
      * @return string
      */
@@ -241,7 +232,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     * @internal
      *
      * @param string $encoded_shared_protected_headers
      *

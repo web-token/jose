@@ -109,7 +109,6 @@ final class Signature
     /**
      * The protected header associated with the signature.
      *
-     * @internal
      *
      * @return null|string
      */

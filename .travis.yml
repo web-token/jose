@@ -7,24 +7,16 @@ matrix:
         - php: nightly
     fast_finish: true
     include:
-        - php: 5.6
-          env: deps=low
-        - php: 5.6
-        - php: 7.0
-        - php: 7.0
+        - php: 7.1
           env: deps=low
         - php: 7.1
-        - php: hhvm
-        - php: hhvm
-          env: deps=low
         - php: nightly
 
 before_script:
     - composer self-update
-    - sh -c 'if [ "$WITH_CRYPTO" != "" ]; then pecl install crypto-0.2.2; fi;'
     - mkdir -p build/logs
     - chmod +x tests/ci/install_php_ext.sh
-    - if [ "$TRAVIS_PHP_VERSION" != 'hhvm' ]; then ./tests/ci/install_php_ext.sh; fi
+    - ./tests/ci/install_php_ext.sh
     - if [[ $deps = low ]]; then composer update --no-interaction --prefer-lowest ; fi
     - if [[ !$deps ]]; then composer install --no-interaction ; fi
 

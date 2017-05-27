@@ -80,7 +80,6 @@ final class JWS implements JWTInterface
     /**
      * @param Signature $signature
      *
-     * @internal
      *
      * @return string|null
      */
@@ -157,7 +156,6 @@ final class JWS implements JWTInterface
     /**
      * Returns the number of signature associated with the JWS.
      *
-     * @internal
      *
      * @return int
      */
