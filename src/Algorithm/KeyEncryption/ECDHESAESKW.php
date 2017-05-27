@@ -60,5 +60,5 @@ abstract class ECDHESAESKW implements KeyAgreementWrappingInterface
     /**
      * @return int
      */
-    abstract protected function getKeyLength();
+    abstract protected function getKeyLength(): int;
 }

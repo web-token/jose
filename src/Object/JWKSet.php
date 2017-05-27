@@ -52,7 +52,7 @@ final class JWKSet implements JWKSetInterface
     /**
      * {@inheritdoc}
      */
-    public function removeKey($key)
+    public function removeKey(int $key)
     {
         if (isset($this->keys[$key])) {
             unset($this->keys[$key]);

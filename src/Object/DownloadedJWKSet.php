@@ -81,7 +81,7 @@ abstract class DownloadedJWKSet implements JWKSetInterface
     /**
      * {@inheritdoc}
      */
-    public function removeKey($index)
+    public function removeKey(int $index)
     {
         //Not available
     }

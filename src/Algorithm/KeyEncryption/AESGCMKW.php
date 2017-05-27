@@ -92,5 +92,5 @@ abstract class AESGCMKW implements KeyWrappingInterface
     /**
      * @return int
      */
-    abstract protected function getKeySize();
+    abstract protected function getKeySize(): int;
 }

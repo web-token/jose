@@ -51,7 +51,7 @@ abstract class AESKW implements KeyWrappingInterface
     }
 
     /**
-     * @param \Jose\Object\JWKInterface $key
+     * @param JWKInterface $key
      */
     protected function checkKey(JWKInterface $key)
     {
@@ -63,7 +63,7 @@ abstract class AESKW implements KeyWrappingInterface
     /**
      * @return int
      */
-    abstract protected function getKeySize();
+    abstract protected function getKeySize(): int;
 
     /**
      * @return \AESKW\A128KW|\AESKW\A192KW|\AESKW\A256KW

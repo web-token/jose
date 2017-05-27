@@ -18,6 +18,48 @@ use Jose\Algorithm\JWAManager;
 final class AlgorithmManagerFactory
 {
     /**
+     * @param JWAInterface[] $algorithms
+     *
+     * @return JWAManager
+     */
+    public static function createFromAlgorithms(array $algorithms): JWAManager
+    {
+        $jwa_manager = new JWAManager();
+
+        foreach ($algorithms as $algorithm) {
+            if ($algorithm instanceof JWAInterface) {
+                $jwa_manager->add($algorithm);
+            } else {
+                throw new \InvalidArgumentException('The list must only contains objects that implement the JWAInterface.');
+            }
+        }
+
+        return $jwa_manager;
+    }
+
+    /**
+     * @param string[] $algorithms
+     *
+     * @return JWAManager
+     */
+    public static function createFromAlgorithmName(array $algorithms): JWAManager
+    {
+        $jwa_manager = new JWAManager();
+
+        foreach ($algorithms as $algorithm) {
+            if (is_string($algorithm)) {
+                $class = self::getAlgorithmClass($algorithm);
+                $jwa_manager->add(new $class());
+            } else {
+                throw new \InvalidArgumentException('The list must only contains algorithm names.');
+            }
+        }
+
+        return $jwa_manager;
+    }
+
+    /**
+     * @deprecated Please use createFromAlgorithms or createFromAlgorithmName. Will be removed on v7.x
      * @param string[]|JWAInterface[] $algorithms
      *
      * @return JWAManager

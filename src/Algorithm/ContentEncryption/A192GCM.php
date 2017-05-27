@@ -19,7 +19,7 @@ final class A192GCM extends AESGCM
     /**
      * {@inheritdoc}
      */
-    protected function getKeySize()
+    protected function getKeySize(): int
     {
         return 192;
     }

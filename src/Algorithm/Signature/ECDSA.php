@@ -111,11 +111,6 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     }
 
     /**
-     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
-     */
-    abstract protected function getGenerator();
-
-    /**
      * @return string
      */
     abstract protected function getHashAlgorithm();

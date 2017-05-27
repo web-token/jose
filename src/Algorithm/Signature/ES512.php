@@ -11,18 +11,8 @@
 
 namespace Jose\Algorithm\Signature;
 
-use Mdanter\Ecc\EccFactory;
-
 final class ES512 extends ECDSA
 {
-    /**
-     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
-     */
-    protected function getGenerator()
-    {
-        return EccFactory::getNistCurves()->generator521();
-    }
-
     /**
      * @return string
      */

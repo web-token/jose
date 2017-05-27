@@ -54,15 +54,15 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
     }
 
     /**
-     * @param $encrypted_data
-     * @param $cek
-     * @param $iv
-     * @param $aad
+     * @param string $encrypted_data
+     * @param string $cek
+     * @param string $iv
+     * @param null|string $aad
      * @param string $encoded_header
      *
      * @return string
      */
-    protected function calculateAuthenticationTag($encrypted_data, $cek, $iv, $aad, $encoded_header)
+    protected function calculateAuthenticationTag(string $encrypted_data, string $cek, string $iv, ?string $aad, string $encoded_header): string
     {
         $calculated_aad = $encoded_header;
         if (null !== $aad) {
@@ -92,7 +92,7 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
      *
      * @return bool
      */
-    protected function isTagValid($encrypted_data, $cek, $iv, $aad, $encoded_header, $authentication_tag)
+    protected function isTagValid(string $encrypted_data, string $cek, string $iv, ?string $aad, string $encoded_header, string $authentication_tag): bool
     {
         return $authentication_tag === $this->calculateAuthenticationTag($encrypted_data, $cek, $iv, $aad, $encoded_header);
     }
@@ -100,7 +100,7 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
     /**
      * @return string
      */
-    abstract protected function getHashAlgorithm();
+    abstract protected function getHashAlgorithm(): string;
 
     /**
      * @return int
@@ -115,7 +115,7 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
      *
      * @return string
      */
-    private function getMode($k)
+    private function getMode(string $k): string
     {
         return 'aes-'.(8 * mb_strlen($k, '8bit')).'-cbc';
     }

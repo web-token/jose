@@ -19,7 +19,7 @@ final class A192CBCHS384 extends AESCBCHS
     /**
      * {@inheritdoc}
      */
-    protected function getHashAlgorithm()
+    protected function getHashAlgorithm(): string
     {
         return 'sha384';
     }

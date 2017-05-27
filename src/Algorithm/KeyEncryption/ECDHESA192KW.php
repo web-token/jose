@@ -37,7 +37,7 @@ final class ECDHESA192KW extends ECDHESAESKW
     /**
      * {@inheritdoc}
      */
-    protected function getKeyLength()
+    protected function getKeyLength(): int
     {
         return 192;
     }

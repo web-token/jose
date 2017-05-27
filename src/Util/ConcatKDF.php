@@ -33,7 +33,7 @@ final class ConcatKDF
      *
      * @return string
      */
-    public static function generate($Z, $algorithm, $encryption_key_size, $apu = '', $apv = '')
+    public static function generate(string $Z, string $algorithm, int $encryption_key_size, string $apu = '', string $apv = ''): string
     {
         $apu = !empty($apu) ? Base64Url::decode($apu) : '';
         $apv = !empty($apv) ? Base64Url::decode($apv) : '';
@@ -61,7 +61,7 @@ final class ConcatKDF
      *
      * @return string
      */
-    private static function toInt32Bits($value)
+    private static function toInt32Bits(int $value): string
     {
         return hex2bin(str_pad(dechex($value), 8, '0', STR_PAD_LEFT));
     }

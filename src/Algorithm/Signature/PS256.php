@@ -19,7 +19,7 @@ final class PS256 extends RSA
     /**
      * @return string
      */
-    protected function getAlgorithm()
+    protected function getAlgorithm(): string
     {
         return 'sha256';
     }
@@ -27,7 +27,7 @@ final class PS256 extends RSA
     /**
      * @return int
      */
-    protected function getSignatureMethod()
+    protected function getSignatureMethod(): int
     {
         return self::SIGNATURE_PSS;
     }

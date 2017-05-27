@@ -19,7 +19,7 @@ final class A128CBCHS256 extends AESCBCHS
     /**
      * {@inheritdoc}
      */
-    protected function getHashAlgorithm()
+    protected function getHashAlgorithm(): string
     {
         return 'sha256';
     }

@@ -21,9 +21,9 @@ final class JWSLoader
     /**
      * @param array $data
      *
-     * @return \Jose\Object\JWS
+     * @return JWS
      */
-    public static function loadSerializedJsonJWS(array $data)
+    public static function loadSerializedJsonJWS(array $data): JWS
     {
         $jws = new JWS();
 
@@ -45,11 +45,13 @@ final class JWSLoader
      *
      * @return string|null
      */
-    private static function getProtectedHeaders(array $data)
+    private static function getProtectedHeaders(array $data): ?string
     {
         if (array_key_exists('protected', $data)) {
             return $data['protected'];
         }
+
+        return null;
     }
 
     /**
@@ -57,7 +59,7 @@ final class JWSLoader
      *
      * @return array
      */
-    private static function getHeaders(array $data)
+    private static function getHeaders(array $data): array
     {
         if (array_key_exists('header', $data)) {
             return $data['header'];
@@ -67,7 +69,7 @@ final class JWSLoader
     }
 
     /**
-     * @param \Jose\Object\JWS $jws
+     * @param JWS $jws
      * @param array                     $data
      */
     private static function populatePayload(JWS &$jws, array $data)
@@ -97,11 +99,11 @@ final class JWSLoader
     }
 
     /**
-     * @param \Jose\Object\Signature $signature
+     * @param Signature $signature
      *
      * @return bool
      */
-    private static function isPayloadEncoded(Signature $signature)
+    private static function isPayloadEncoded(Signature $signature): bool
     {
         return !$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
     }

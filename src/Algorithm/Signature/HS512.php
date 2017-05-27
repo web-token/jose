@@ -22,7 +22,7 @@ final class HS512 extends HMAC
     /**
      * @return string
      */
-    protected function getHashAlgorithm()
+    protected function getHashAlgorithm(): string
     {
         return 'sha512';
     }

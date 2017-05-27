@@ -28,7 +28,7 @@ trait BaseJWKSet
      *
      * @return bool
      */
-    public function hasKey($index): bool
+    public function hasKey(int $index): bool
     {
         return array_key_exists($index, $this->getKeys());
     }
@@ -38,9 +38,8 @@ trait BaseJWKSet
      *
      * @return JWKInterface
      */
-    public function getKey($index): JWKInterface
+    public function getKey(int $index): JWKInterface
     {
-        Assertion::integer($index, 'The index must be a positive integer.');
         Assertion::greaterOrEqualThan($index, 0, 'The index must be a positive integer.');
         Assertion::true($this->hasKey($index), 'Undefined index.');
 
@@ -60,7 +59,7 @@ trait BaseJWKSet
     /**
      * @param int $index
      */
-    abstract public function removeKey($index);
+    abstract public function removeKey(int $index);
 
     /**
      * @return array
@@ -233,7 +232,7 @@ trait BaseJWKSet
      *
      * @return bool|int
      */
-    private function canKeyBeUsedWithAlgorithm(string $algorithm, JWKInterface $key)
+    private function canKeyBeUsedWithAlgorithm(?string $algorithm, JWKInterface $key)
     {
         if (null === $algorithm) {
             return 0;

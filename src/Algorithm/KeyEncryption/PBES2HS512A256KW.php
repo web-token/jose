@@ -29,7 +29,7 @@ final class PBES2HS512A256KW extends PBES2AESKW
     /**
      * {@inheritdoc}
      */
-    protected function getHashAlgorithm()
+    protected function getHashAlgorithm(): string
     {
         return 'sha512';
     }
@@ -37,7 +37,7 @@ final class PBES2HS512A256KW extends PBES2AESKW
     /**
      * {@inheritdoc}
      */
-    protected function getKeySize()
+    protected function getKeySize(): int
     {
         return 32;
     }

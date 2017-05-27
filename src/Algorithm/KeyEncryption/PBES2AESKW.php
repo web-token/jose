@@ -34,7 +34,7 @@ abstract class PBES2AESKW implements KeyWrappingInterface
      * @param int $salt_size
      * @param int $nb_count
      */
-    public function __construct($salt_size = 64, $nb_count = 4096)
+    public function __construct(int $salt_size = 64, int $nb_count = 4096)
     {
         $this->salt_size = $salt_size;
         $this->nb_count = $nb_count;
@@ -127,10 +127,10 @@ abstract class PBES2AESKW implements KeyWrappingInterface
     /**
      * @return string
      */
-    abstract protected function getHashAlgorithm();
+    abstract protected function getHashAlgorithm(): string;
 
     /**
      * @return int
      */
-    abstract protected function getKeySize();
+    abstract protected function getKeySize(): int;
 }

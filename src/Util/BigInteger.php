@@ -11,8 +11,6 @@
 
 namespace Jose\Util;
 
-use Assert\Assertion;
-
 final class BigInteger
 {
     /**
@@ -25,30 +23,21 @@ final class BigInteger
     /**
      * Converts base-10 and binary strings (base-256) to BigIntegers.
      *
-     * @param \GMP|string $value
-     * @param int         $base
+     * @param \GMP $value
      */
-    private function __construct($value, $base)
+    private function __construct(\GMP $value)
     {
-        if ($value instanceof \GMP) {
-            $this->value = $value;
-
-            return;
-        }
-
-        $this->value = gmp_init($value, $base);
+        $this->value = $value;
     }
 
     /**
-     * @param resource $value
+     * @param \GMP $value
      *
      * @return BigInteger
      */
-    public static function createFromGMPResource($value)
+    public static function createFromGMPResource(\GMP $value): BigInteger
     {
-        Assertion::isInstanceOf($value, \GMP::class);
-
-        return new self($value, 0);
+        return new self($value);
     }
 
     /**
@@ -56,12 +45,12 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public static function createFromBinaryString($value)
+    public static function createFromBinaryString(string $value): BigInteger
     {
-        Assertion::string($value);
         $value = '0x'.bin2hex($value);
+        $value = gmp_init($value, 16);
 
-        return new self($value, 16);
+        return new self($value);
     }
 
     /**
@@ -69,9 +58,9 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public static function createFromDecimalString($value)
+    public static function createFromDecimalString(string $value): BigInteger
     {
-        Assertion::string($value);
+        $value = gmp_init($value, 10);
 
         return new self($value, 10);
     }
@@ -81,9 +70,9 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public static function createFromDecimal($value)
+    public static function createFromDecimal(int $value): BigInteger
     {
-        Assertion::integer($value);
+        $value = gmp_init($value, 10);
 
         return new self($value, 10);
     }
@@ -93,7 +82,7 @@ final class BigInteger
      *
      * @return string
      */
-    public function toBytes()
+    public function toBytes(): string
     {
         if (gmp_cmp($this->value, gmp_init(0)) === 0) {
             return '';
@@ -111,7 +100,7 @@ final class BigInteger
      *
      * @return int
      */
-    public function toInteger()
+    public function toInteger(): int
     {
         if (gmp_cmp($this->value, gmp_init(0)) === 0) {
             return '';
@@ -129,7 +118,7 @@ final class BigInteger
      *
      *  @return BigInteger
      */
-    public function add(BigInteger $y)
+    public function add(BigInteger $y): BigInteger
     {
         $value = gmp_add($this->value, $y->value);
 
@@ -143,7 +132,7 @@ final class BigInteger
      *
      *  @return BigInteger
      */
-    public function subtract(BigInteger $y)
+    public function subtract(BigInteger $y): BigInteger
     {
         $value = gmp_sub($this->value, $y->value);
 
@@ -157,7 +146,7 @@ final class BigInteger
      *
      *  @return BigInteger
      */
-    public function multiply(BigInteger $x)
+    public function multiply(BigInteger $x): BigInteger
     {
         $value = gmp_mul($this->value, $x->value);
 
@@ -171,7 +160,7 @@ final class BigInteger
      *
      *  @return BigInteger
      */
-    public function divide(BigInteger $x)
+    public function divide(BigInteger $x): BigInteger
     {
         $value = gmp_div($this->value, $x->value);
 
@@ -186,7 +175,7 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public function modPow(BigInteger $e, BigInteger $n)
+    public function modPow(BigInteger $e, BigInteger $n): BigInteger
     {
         $value = gmp_powm($this->value, $e->value, $n->value);
 
@@ -200,7 +189,7 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public function mod(BigInteger $d)
+    public function mod(BigInteger $d): BigInteger
     {
         $value = gmp_mod($this->value, $d->value);
 
@@ -214,10 +203,9 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public function modInverse(BigInteger $n)
+    public function modInverse(BigInteger $n): BigInteger
     {
         $value = gmp_invert($this->value, $n->value);
-        Assertion::isInstanceOf($value, \GMP::class);
 
         return self::createFromGMPResource($value);
     }
@@ -229,7 +217,7 @@ final class BigInteger
      *
      * @return int < 0 if $this is less than $y; > 0 if $this is greater than $y, and 0 if they are equal.
      */
-    public function compare(BigInteger $y)
+    public function compare(BigInteger $y): int
     {
         return gmp_cmp($this->value, $y->value);
     }
@@ -239,7 +227,7 @@ final class BigInteger
      *
      * @return bool
      */
-    public function equals(BigInteger $y)
+    public function equals(BigInteger $y): bool
     {
         return 0 === $this->compare($y);
     }
@@ -249,7 +237,7 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public static function random(BigInteger $y)
+    public static function random(BigInteger $y): BigInteger
     {
         $zero = BigInteger::createFromDecimal(0);
 
@@ -261,7 +249,7 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public function gcd(BigInteger $y)
+    public function gcd(BigInteger $y): BigInteger
     {
         return BigInteger::createFromGMPResource(gmp_gcd($this->value, $y->value));
     }
@@ -271,7 +259,7 @@ final class BigInteger
      *
      * @return bool
      */
-    public function lowerThan(BigInteger $y)
+    public function lowerThan(BigInteger $y): bool
     {
         return 0 > $this->compare($y);
     }
@@ -281,7 +269,7 @@ final class BigInteger
      *
      * @return bool
      */
-    public function lowerOrEqualThan(BigInteger $y)
+    public function lowerOrEqualThan(BigInteger $y): bool
     {
         return 0 >= $this->compare($y);
     }
@@ -291,7 +279,7 @@ final class BigInteger
      *
      * @return bool
      */
-    public function greaterThan(BigInteger $y)
+    public function greaterThan(BigInteger $y): bool
     {
         return 0 < $this->compare($y);
     }
@@ -301,7 +289,7 @@ final class BigInteger
      *
      * @return bool
      */
-    public function greaterOrEqualThan(BigInteger $y)
+    public function greaterOrEqualThan(BigInteger $y): bool
     {
         return 0 <= $this->compare($y);
     }
@@ -309,7 +297,7 @@ final class BigInteger
     /**
      * @return bool
      */
-    public function isEven()
+    public function isEven(): bool
     {
         $zero = BigInteger::createFromDecimal(0);
         $two  = BigInteger::createFromDecimal(2);
@@ -320,7 +308,7 @@ final class BigInteger
     /**
      * @return bool
      */
-    public function isOdd()
+    public function isOdd(): bool
     {
         return !$this->isEven();
     }

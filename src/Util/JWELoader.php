@@ -19,9 +19,9 @@ final class JWELoader
     /**
      * @param array $data
      *
-     * @return \Jose\Object\JWE
+     * @return JWE
      */
-    public static function loadSerializedJsonJWE(array $data)
+    public static function loadSerializedJsonJWE(array $data): JWE
     {
         $jwe = new JWE();
         $jwe = $jwe->withCiphertext(Base64Url::decode($data['ciphertext']));
@@ -43,7 +43,7 @@ final class JWELoader
     }
 
     /**
-     * @param \Jose\Object\JWE $jwe
+     * @param JWE $jwe
      * @param array                     $data
      */
     private static function populateIV(JWE &$jwe, array $data)
@@ -54,7 +54,7 @@ final class JWELoader
     }
 
     /**
-     * @param \Jose\Object\JWE $jwe
+     * @param JWE $jwe
      * @param array                     $data
      */
     private static function populateAAD(JWE &$jwe, array $data)
@@ -65,7 +65,7 @@ final class JWELoader
     }
 
     /**
-     * @param \Jose\Object\JWE $jwe
+     * @param JWE $jwe
      * @param array                     $data
      */
     private static function populateTag(JWE &$jwe, array $data)
@@ -76,7 +76,7 @@ final class JWELoader
     }
 
     /**
-     * @param \Jose\Object\JWE $jwe
+     * @param JWE $jwe
      * @param array                     $data
      */
     private static function populateSharedProtectedHeaders(JWE &$jwe, array $data)
@@ -88,7 +88,7 @@ final class JWELoader
     }
 
     /**
-     * @param \Jose\Object\JWE $jwe
+     * @param JWE $jwe
      * @param array                     $data
      */
     private static function populateSharedHeaders(JWE &$jwe, array $data)
@@ -103,7 +103,7 @@ final class JWELoader
      *
      * @return array
      */
-    private static function getRecipientHeaders(array $data)
+    private static function getRecipientHeaders(array $data): array
     {
         if (array_key_exists('header', $data)) {
             return $data['header'];
@@ -117,10 +117,12 @@ final class JWELoader
      *
      * @return null|string
      */
-    private static function getRecipientEncryptedKey(array $data)
+    private static function getRecipientEncryptedKey(array $data): ?string
     {
         if (array_key_exists('encrypted_key', $data)) {
             return Base64Url::decode($data['encrypted_key']);
         }
+
+        return null;
     }
 }

@@ -65,8 +65,8 @@ final class ECDHES implements KeyAgreementInterface
     }
 
     /**
-     * @param \Jose\Object\JWKInterface $private_key
-     * @param \Jose\Object\JWKInterface $public_key
+     * @param JWKInterface $private_key
+     * @param JWKInterface $public_key
      *
      * @throws \InvalidArgumentException
      *
@@ -121,7 +121,7 @@ final class ECDHES implements KeyAgreementInterface
     /**
      * @param array $complete_header
      *
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
     private function getPublicKey(array $complete_header)
     {
@@ -135,7 +135,7 @@ final class ECDHES implements KeyAgreementInterface
     }
 
     /**
-     * @param \Jose\Object\JWKInterface $key
+     * @param JWKInterface $key
      * @param bool                      $is_private
      */
     private function checkKey(JWKInterface $key, $is_private)

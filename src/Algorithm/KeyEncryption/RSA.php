@@ -95,10 +95,10 @@ abstract class RSA implements KeyEncryptionInterface
     /**
      * @return int
      */
-    abstract protected function getEncryptionMode();
+    abstract protected function getEncryptionMode(): int;
 
     /**
      * @return string
      */
-    abstract protected function getHashAlgorithm();
+    abstract protected function getHashAlgorithm(): string;
 }

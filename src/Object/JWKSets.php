@@ -22,14 +22,14 @@ final class JWKSets implements JWKSetsInterface
     use JWKSetPEM;
 
     /**
-     * @var \Jose\Object\JWKSetInterface[]
+     * @var JWKSetInterface[]
      */
     private $jwksets = [];
 
     /**
      * JWKSets constructor.
      *
-     * @param \Jose\Object\JWKSetInterface[] $jwksets
+     * @param JWKSetInterface[] $jwksets
      */
     public function __construct(array $jwksets = [])
     {
@@ -74,7 +74,7 @@ final class JWKSets implements JWKSetsInterface
     /**
      * {@inheritdoc}
      */
-    public function removeKey($index)
+    public function removeKey(int $index)
     {
         //Not available
     }

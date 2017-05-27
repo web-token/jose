@@ -75,5 +75,5 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
     /**
      * @return int
      */
-    abstract protected function getKeySize();
+    abstract protected function getKeySize(): int;
 }

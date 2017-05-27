@@ -124,7 +124,7 @@ class StorableJWKSet implements StorableInterface, JWKSetInterface
     /**
      * {@inheritdoc}
      */
-    public function getKey($index): JWKInterface
+    public function getKey(int $index): JWKInterface
     {
         return $this->getJWKSet()->getKey($index);
     }
@@ -132,7 +132,7 @@ class StorableJWKSet implements StorableInterface, JWKSetInterface
     /**
      * {@inheritdoc}
      */
-    public function hasKey($index): bool
+    public function hasKey(int $index): bool
     {
         return $this->getJWKSet()->hasKey($index);
     }
@@ -156,7 +156,7 @@ class StorableJWKSet implements StorableInterface, JWKSetInterface
     /**
      * {@inheritdoc}
      */
-    public function removeKey($index)
+    public function removeKey(int $index)
     {
         // Not available
     }

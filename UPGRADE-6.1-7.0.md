@@ -42,3 +42,7 @@ The following classes are now marked as final.
 * `Jose\Checker\IssuedAtChecker`
 * `Jose\Checker\NotBeforeChecker`
 * `Jose\Checker\CheckerManager`
+
+## Typehinting
+
+Every classes of the project has methods and functions have strict type hinting. 

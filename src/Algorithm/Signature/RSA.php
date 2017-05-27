@@ -35,12 +35,12 @@ abstract class RSA implements SignatureAlgorithmInterface
     /**
      * @return mixed
      */
-    abstract protected function getAlgorithm();
+    abstract protected function getAlgorithm(): string;
 
     /**
-     * @return mixed
+     * @return int
      */
-    abstract protected function getSignatureMethod();
+    abstract protected function getSignatureMethod(): int;
 
     /**
      * {@inheritdoc}

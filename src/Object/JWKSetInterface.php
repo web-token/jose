@@ -18,14 +18,14 @@ interface JWKSetInterface extends \Countable, \Iterator, \JsonSerializable, \Arr
      *
      * @return JWKInterface
      */
-    public function getKey($index): JWKInterface;
+    public function getKey(int $index): JWKInterface;
 
     /**
      * @param $index
      *
      * @return bool
      */
-    public function hasKey($index): bool;
+    public function hasKey(int $index): bool;
 
     /**
      * Returns all keys in the key set.
@@ -46,7 +46,7 @@ interface JWKSetInterface extends \Countable, \Iterator, \JsonSerializable, \Arr
      *
      * @param int $index Key to remove from the key set
      */
-    public function removeKey($index);
+    public function removeKey(int $index);
 
     /**
      * @return int

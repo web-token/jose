@@ -52,5 +52,5 @@ abstract class HMAC implements SignatureAlgorithmInterface
     /**
      * @return string
      */
-    abstract protected function getHashAlgorithm();
+    abstract protected function getHashAlgorithm(): string;
 }
