@@ -26,7 +26,7 @@ trait EncrypterTrait
 {
     /**
      * @param JWKInterface $key
-     * @param string                    $usage
+     * @param string       $usage
      *
      * @throws \InvalidArgumentException
      *
@@ -36,7 +36,7 @@ trait EncrypterTrait
 
     /**
      * @param JWKInterface $key
-     * @param string                    $algorithm
+     * @param string       $algorithm
      */
     abstract protected function checkKeyAlgorithm(JWKInterface $key, string $algorithm);
 
