@@ -24,25 +24,25 @@ If you need `ECDH-ES*` encryption algorithms, then you have to install it explic
 * `Jose\Algorithm\JWAManager::listAlgorithms` renamed to `Jose\Algorithm\JWAManager::list`
 * `Jose\Algorithm\JWAManager::getAlgorithm` renamed to `Jose\Algorithm\JWAManager::get`
 * `Jose\Algorithm\JWAManager::addAlgorithm` renamed to `Jose\Algorithm\JWAManager::add`
-* `Jose\Algorithm\JWAManagerInterface` removed
-* `Jose\VerifierInterface` removed
-* `Jose\SignerInterface` removed
-* `Jose\DecrypterInterface` removed
-* `Jose\EncdrypterInterface` removed
-* `Jose\JWTCreatorInterface` removed
-* `Jose\JWTLoaderInterface` removed
-* `Jose\Object\JWSInterface` removed
-* `Jose\Object\JWEInterface` removed
-* `Jose\Object\RecipientInterface` removed
-* `Jose\Object\SignatureInterface` removed
-* `Jose\Factory\JWKFactoryInterface` removed
-* `Jose\Factory\JWSFactoryInterface` removed
-* `Jose\Compression\CompressionManagerInterface` removed
+* `Jose\Algorithm\JWAManagerInterface` removed. Use the concrete class `Jose\Algorithm\JWAManager` instead.
+* `Jose\VerifierInterface` removed. Use the concrete class `Jose\Verifier` instead.
+* `Jose\SignerInterface` removed. Use the concrete class `Jose\Signer` instead.
+* `Jose\DecrypterInterface` removed. Use the concrete class `Jose\Decrypter` instead.
+* `Jose\EncdrypterInterface` removed. Use the concrete class `Jose\Encdrypter` instead.
+* `Jose\JWTCreatorInterface` removed. Use the concrete class `Jose\JWTCreator` instead.
+* `Jose\JWTLoaderInterface` removed. Use the concrete class `Jose\JWTLoader` instead.
+* `Jose\Object\JWSInterface` removed. Use the concrete class `Jose\Object\JWS` instead.
+* `Jose\Object\JWEInterface` removed. Use the concrete class `Jose\` instead.
+* `Jose\Object\RecipientInterface` removed. Use the concrete class `Jose\Object\Recipient` instead.
+* `Jose\Object\SignatureInterface` removed. Use the concrete class `Jose\Object\Signature` instead.
+* `Jose\Factory\JWKFactoryInterface` removed. Use the concrete class `Jose\Factory\JWKFactory` instead.
+* `Jose\Factory\JWSFactoryInterface` removed. Use the concrete class `Jose\Factory\JWSFactory` instead.
+* `Jose\Compression\CompressionManagerInterface` removed. Use the concrete class `Jose\Compression\CompressionManager` instead.
 * `Jose\Compression\CompressionInterface::getMethodName` renamed to `Jose\Compression\CompressionInterface::name`
-* `Jose\Checker\CheckerManager` removed
-* `Jose\Checker\IssuerChecker` removed
-* `Jose\Checker\SubjectChecker` removed
-* `Jose\Checker\JtiChecker` removed
+* `Jose\Checker\CheckerManagerInterface` removed. Use the concrete class `Jose\Checker\CheckerManager` instead.
+* `Jose\Checker\IssuerChecker` removed.
+* `Jose\Checker\SubjectChecker` removed.
+* `Jose\Checker\JtiChecker` removed.
 
 ## Final classes
 
