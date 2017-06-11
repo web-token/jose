@@ -19,7 +19,7 @@ use Jose\Object\JWKInterface;
 /**
  * Class Ed25519.
  */
-class EdDSA implements SignatureAlgorithmInterface
+final class EdDSA implements SignatureAlgorithmInterface
 {
     /**
      * {@inheritdoc}
