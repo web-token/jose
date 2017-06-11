@@ -11,6 +11,8 @@
 
 namespace Jose\Test\RFC7520;
 
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\Signature\HS256;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
@@ -61,10 +63,11 @@ final class HMACSignatureTest extends TestCase
         $jws = JWSFactory::createJWS($payload);
         $jws = $jws->addSignatureInformation($key, $headers);
 
-        $signer = Signer::createSigner(['HS256']);
+        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
+        $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 
-        $verifer = Verifier::createVerifier(['HS256']);
 
         /*
          * Header
@@ -82,13 +85,13 @@ final class HMACSignatureTest extends TestCase
 
         $loader = new Loader();
         $loaded_compact_json = $loader->load($expected_compact_json);
-        $verifer->verifyWithKey($loaded_compact_json, $key);
+        $verifier->verifyWithKey($loaded_compact_json, $key);
 
         $loaded_flattened_json = $loader->load($expected_flattened_json);
-        $verifer->verifyWithKey($loaded_flattened_json, $key);
+        $verifier->verifyWithKey($loaded_flattened_json, $key);
 
         $loaded_json = $loader->load($expected_json);
-        $verifer->verifyWithKey($loaded_json, $key);
+        $verifier->verifyWithKey($loaded_json, $key);
     }
 
     /**
@@ -123,10 +126,11 @@ final class HMACSignatureTest extends TestCase
         $jws = JWSFactory::createJWS($payload, true);
         $jws = $jws->addSignatureInformation($key, $headers);
 
-        $signer = Signer::createSigner(['HS256']);
+        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
+        $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 
-        $verifer = Verifier::createVerifier(['HS256']);
 
         /*
          * Header
@@ -145,13 +149,13 @@ final class HMACSignatureTest extends TestCase
 
         $loader = new Loader();
         $loaded_compact_json = $loader->load($expected_compact_json);
-        $verifer->verifyWithKey($loaded_compact_json, $key, $payload);
+        $verifier->verifyWithKey($loaded_compact_json, $key, $payload);
 
         $loaded_flattened_json = $loader->load($expected_flattened_json);
-        $verifer->verifyWithKey($loaded_flattened_json, $key, $payload);
+        $verifier->verifyWithKey($loaded_flattened_json, $key, $payload);
 
         $loaded_json = $loader->load($expected_json);
-        $verifer->verifyWithKey($loaded_json, $key, $payload);
+        $verifier->verifyWithKey($loaded_json, $key, $payload);
     }
 
     /**
@@ -188,10 +192,11 @@ final class HMACSignatureTest extends TestCase
         $jws = JWSFactory::createJWS($payload);
         $jws = $jws->addSignatureInformation($key, $protected_headers, $unprotected_headers);
 
-        $signer = Signer::createSigner(['HS256']);
+        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
+        $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 
-        $verifer = Verifier::createVerifier(['HS256']);
 
         /*
          * Header
@@ -206,10 +211,10 @@ final class HMACSignatureTest extends TestCase
 
         $loader = new Loader();
         $loaded_flattened_json = $loader->load($expected_flattened_json);
-        $verifer->verifyWithKey($loaded_flattened_json, $key);
+        $verifier->verifyWithKey($loaded_flattened_json, $key);
 
         $loaded_json = $loader->load($expected_json);
-        $verifer->verifyWithKey($loaded_json, $key);
+        $verifier->verifyWithKey($loaded_json, $key);
     }
 
     /**
@@ -244,10 +249,11 @@ final class HMACSignatureTest extends TestCase
         $jws = JWSFactory::createJWS($payload);
         $jws = $jws->addSignatureInformation($key, [], $unprotected_headers);
 
-        $signer = Signer::createSigner(['HS256']);
+        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
+        $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 
-        $verifer = Verifier::createVerifier(['HS256']);
 
         /*
          * Header
@@ -262,9 +268,9 @@ final class HMACSignatureTest extends TestCase
 
         $loader = new Loader();
         $loaded_flattened_json = $loader->load($expected_flattened_json);
-        $verifer->verifyWithKey($loaded_flattened_json, $key);
+        $verifier->verifyWithKey($loaded_flattened_json, $key);
 
         $loaded_json = $loader->load($expected_json);
-        $verifer->verifyWithKey($loaded_json, $key);
+        $verifier->verifyWithKey($loaded_json, $key);
     }
 }

@@ -11,6 +11,7 @@
 
 namespace Jose\Test\Unit\Algorithm;
 
+use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\Signature\None;
 use Jose\Loader;
 use Jose\Object\JWK;
@@ -66,7 +67,8 @@ final class NoneSignatureTest extends TestCase
         $jws = \Jose\Factory\JWSFactory::createJWS('Live long and Prosper.');
         $jws = $jws->addSignatureInformation($jwk, ['alg' => 'none']);
 
-        $signer = Signer::createSigner(['none']);
+        $signatureAlgorithmManager = JWAManager::create([new None()]);
+        $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 
         $this->assertEquals(1, $jws->countSignatures());

@@ -347,8 +347,6 @@ final class RSA
      */
     public static function sign(RSAKey $key, string $message, string $hash): string
     {
-        Assertion::string($message);
-        Assertion::string($hash);
         Assertion::inArray($hash, ['sha256', 'sha384', 'sha512']);
         $em = self::encodeEMSAPSS($message, 8 * $key->getModulusLength() - 1, Hash::$hash());
         Assertion::string($em);
@@ -371,9 +369,6 @@ final class RSA
      */
     public static function verify(RSAKey $key, string $message, string $signature, string $hash): bool
     {
-        Assertion::string($message);
-        Assertion::string($signature);
-        Assertion::string($hash);
         Assertion::inArray($hash, ['sha256', 'sha384', 'sha512']);
         Assertion::eq(strlen($signature), $key->getModulusLength());
         $modBits = 8 * $key->getModulusLength();

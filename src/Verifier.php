@@ -13,6 +13,7 @@ namespace Jose;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
+use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\SignatureAlgorithmInterface;
 use Jose\Object\JWKInterface;
 use Jose\Object\JWKSet;
@@ -23,32 +24,28 @@ use Jose\Object\Signature;
 final class Verifier
 {
     use Behaviour\HasKeyChecker;
-    use Behaviour\HasJWAManager;
-    use Behaviour\CommonSigningMethods;
 
     /**
-     * Verifier constructor.
-     *
-     * @param string[]|SignatureAlgorithmInterface[] $signature_algorithms
+     * @var JWAManager
      */
-    public function __construct(array $signature_algorithms)
-    {
-        $this->setSignatureAlgorithms($signature_algorithms);
-        $this->setJWAManager(Factory\AlgorithmManagerFactory::createAlgorithmManager($signature_algorithms));
-    }
+    private $signatureAlgorithmManager;
 
     /**
      * Signer constructor.
      *
-     * @param string[]|SignatureAlgorithmInterface[] $signature_algorithms
-     *
-     * @return Verifier
+     * @param JWAManager $signatureAlgorithmManager
      */
-    public static function createVerifier(array $signature_algorithms): Verifier
+    public function __construct(JWAManager $signatureAlgorithmManager)
     {
-        $verifier = new self($signature_algorithms);
+        $this->signatureAlgorithmManager = $signatureAlgorithmManager;
+    }
 
-        return $verifier;
+    /**
+     * @return string[]
+     */
+    public function getSupportedSignatureAlgorithms(): array
+    {
+        return $this->signatureAlgorithmManager->list();
     }
 
     /**
@@ -207,8 +204,8 @@ final class Verifier
         );
         Assertion::keyExists($complete_headers, 'alg', 'No "alg" parameter set in the header.');
 
-        $algorithm = $this->getJWAManager()->get($complete_headers['alg']);
-        Assertion::isInstanceOf($algorithm, Algorithm\SignatureAlgorithmInterface::class, sprintf('The algorithm "%s" is not supported or does not implement Signature.', $complete_headers['alg']));
+        $algorithm = $this->signatureAlgorithmManager->get($complete_headers['alg']);
+        Assertion::isInstanceOf($algorithm, Algorithm\SignatureAlgorithmInterface::class, sprintf('The algorithm "%s" is not supported or is not a signature algorithm.', $complete_headers['alg']));
 
         return $algorithm;
     }

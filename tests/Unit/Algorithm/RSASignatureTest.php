@@ -16,6 +16,7 @@ use Jose\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\KeyEncryption\A128KW;
 use Jose\Algorithm\KeyEncryption\RSA15;
+use Jose\Algorithm\Signature\ES256;
 use Jose\Algorithm\Signature\PS256;
 use Jose\Algorithm\Signature\PS384;
 use Jose\Algorithm\Signature\PS512;
@@ -222,7 +223,8 @@ final class RSASignatureTest extends TestCase
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
 
-        $signer = Signer::createSigner(['RS256']);
+        $signatureAlgorithmManager = JWAManager::create([new RS256()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = $jws->addSignatureInformation(
             $key,
@@ -264,7 +266,8 @@ final class RSASignatureTest extends TestCase
 
         $jws = JWSFactory::createJWS('Live long and Prosper.', true);
 
-        $signer = Signer::createSigner(['RS256']);
+        $signatureAlgorithmManager = JWAManager::create([new RS256()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = $jws->addSignatureInformation(
             $key,
@@ -306,7 +309,8 @@ final class RSASignatureTest extends TestCase
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
 
-        $signer = Signer::createSigner(['RS384']);
+        $signatureAlgorithmManager = JWAManager::create([new RS384()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = $jws->addSignatureInformation(
             $key,
@@ -348,7 +352,8 @@ final class RSASignatureTest extends TestCase
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
 
-        $signer = Signer::createSigner(['RS512']);
+        $signatureAlgorithmManager = JWAManager::create([new RS512()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = $jws->addSignatureInformation(
             $key,
@@ -392,7 +397,8 @@ final class RSASignatureTest extends TestCase
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
 
-        $signer = Signer::createSigner(['PS256']);
+        $signatureAlgorithmManager = JWAManager::create([new PS256()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = $jws->addSignatureInformation(
             $key,
@@ -434,7 +440,8 @@ final class RSASignatureTest extends TestCase
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
 
-        $signer = Signer::createSigner(['PS384']);
+        $signatureAlgorithmManager = JWAManager::create([new PS384()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = $jws->addSignatureInformation(
             $key,
@@ -475,7 +482,8 @@ final class RSASignatureTest extends TestCase
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
 
-        $signer = Signer::createSigner(['PS512']);
+        $signatureAlgorithmManager = JWAManager::create([new PS512()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = $jws->addSignatureInformation(
             $key,
@@ -575,7 +583,8 @@ final class RSASignatureTest extends TestCase
      */
     public function testLoadJWSJSONSerializationWithDetachedPayload()
     {
-        $verifier = Verifier::createVerifier(['RS256', 'ES256']);
+        $signatureAlgorithmManager = JWAManager::create([new ES256(), new RS256()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
 
         $loader = new Loader();
         $result = $loader->load('{"signatures":[{"protected":"eyJhbGciOiJSUzI1NiJ9","header":{"kid":"2010-12-29"},"signature":"cC4hiUPoj9Eetdgtv3hF80EGrhuB__dzERat0XF9g2VtQgr9PJbu3XOiZj5RZmh7AAuHIm4Bh-0Qc_lF5YKt_O8W2Fp5jujGbds9uJdbF9CUAr7t1dnZcAcQjbKBYNX4BAynRFdiuB--f_nZLgrnbyTyWzO75vRK5h6xBArLIARNPvkSjtQBMHlb1L07Qe7K0GarZRmB_eSN9383LcOLn6_dO--xi12jzDwusC-eOkHWEsqtFZESc6BfI7noOPqvhJ1phCnvWh6IeYI2w9QOYEUipUTI8np6LbgGY9Fs98rqVt5AXLIhWkWywlVmtVrBp0igcN_IoypGlUPQGe77Rw"},{"protected":"eyJhbGciOiJFUzI1NiJ9","header":{"kid":"e9bc097a-ce51-4036-9562-d2ade882db0d"},"signature":"DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q"}]}');
@@ -593,7 +602,8 @@ final class RSASignatureTest extends TestCase
      */
     public function testLoadJWSJSONSerializationWithDetachedPayloadAndPayloadInJWS()
     {
-        $verifier = Verifier::createVerifier(['RS256']);
+        $signatureAlgorithmManager = JWAManager::create([new RS256()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
 
         $loader = new Loader();
         $result = $loader->load('{"payload":"eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ","signatures":[{"protected":"eyJhbGciOiJSUzI1NiJ9","header":{"kid":"2010-12-29"},"signature":"cC4hiUPoj9Eetdgtv3hF80EGrhuB__dzERat0XF9g2VtQgr9PJbu3XOiZj5RZmh7AAuHIm4Bh-0Qc_lF5YKt_O8W2Fp5jujGbds9uJdbF9CUAr7t1dnZcAcQjbKBYNX4BAynRFdiuB--f_nZLgrnbyTyWzO75vRK5h6xBArLIARNPvkSjtQBMHlb1L07Qe7K0GarZRmB_eSN9383LcOLn6_dO--xi12jzDwusC-eOkHWEsqtFZESc6BfI7noOPqvhJ1phCnvWh6IeYI2w9QOYEUipUTI8np6LbgGY9Fs98rqVt5AXLIhWkWywlVmtVrBp0igcN_IoypGlUPQGe77Rw"},{"protected":"eyJhbGciOiJFUzI1NiJ9","header":{"kid":"e9bc097a-ce51-4036-9562-d2ade882db0d"},"signature":"DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q"}]}');

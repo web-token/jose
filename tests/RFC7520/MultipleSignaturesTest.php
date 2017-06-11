@@ -11,6 +11,10 @@
 
 namespace Jose\Test\RFC7520;
 
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\Signature\ES512;
+use Jose\Algorithm\Signature\HS256;
+use Jose\Algorithm\Signature\RS256;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
@@ -105,16 +109,16 @@ final class MultipleSignaturesTest extends TestCase
             ]
         );
 
-        $signer = Signer::createSigner(['RS256', 'ES512', 'HS256']);
+        $signatureAlgorithmManager = JWAManager::create([new RS256(), new ES512(), new HS256()]);
+        $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 
         $this->assertEquals(3, $jws->countSignatures());
+        $verifier = new Verifier($signatureAlgorithmManager);
 
-        $verifer = Verifier::createVerifier(['RS256', 'ES512', 'HS256']);
-
-        $verifer->verifyWithKey($jws, $rsa_private_key);
-        $verifer->verifyWithKey($jws, $ecdsa_private_key);
-        $verifer->verifyWithKey($jws, $symmetric_key);
+        $verifier->verifyWithKey($jws, $rsa_private_key);
+        $verifier->verifyWithKey($jws, $ecdsa_private_key);
+        $verifier->verifyWithKey($jws, $symmetric_key);
 
         /*
          * @see https://tools.ietf.org/html/rfc7520#section-4.8.5
@@ -126,8 +130,8 @@ final class MultipleSignaturesTest extends TestCase
 
         $this->assertEquals(3, $loaded_json->countSignatures());
 
-        $verifer->verifyWithKey($loaded_json, $rsa_private_key);
-        $verifer->verifyWithKey($loaded_json, $ecdsa_private_key);
-        $verifer->verifyWithKey($loaded_json, $symmetric_key);
+        $verifier->verifyWithKey($loaded_json, $rsa_private_key);
+        $verifier->verifyWithKey($loaded_json, $ecdsa_private_key);
+        $verifier->verifyWithKey($loaded_json, $symmetric_key);
     }
 }

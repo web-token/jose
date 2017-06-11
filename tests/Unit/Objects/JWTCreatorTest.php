@@ -15,6 +15,7 @@ use Jose\Algorithm\ContentEncryption\A128GCM;
 use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\KeyEncryption\A256GCMKW;
 use Jose\Algorithm\KeyEncryption\A256KW;
+use Jose\Algorithm\Signature\HS256;
 use Jose\Compression\CompressionManager;
 use Jose\Compression\Deflate;
 use Jose\Compression\GZip;
@@ -35,7 +36,8 @@ final class JWTCreatorTest extends TestCase
 {
     public function testMethods()
     {
-        $signer = Signer::createSigner(['HS256']);
+        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new A256GCMKW(), new A256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);

@@ -86,7 +86,11 @@ final class JWEFactory
         $complete_headers = array_merge($shared_protected_headers, $shared_headers, $recipient_headers);
         Assertion::keyExists($complete_headers, 'alg', 'No "alg" parameter set in the header');
         Assertion::keyExists($complete_headers, 'enc', 'No "enc" parameter set in the header');
-        $encrypter = Encrypter::createEncrypter([$complete_headers['alg']], [$complete_headers['enc']], ['DEF', 'ZLIB', 'GZ']);
+
+        $keyEncryptionAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName([$complete_headers['alg']]);
+        $contentEncryptionAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName([$complete_headers['enc']]);
+        $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF', 'ZLIB', 'GZ']);
+        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager,$compressionManager);
 
         $jwe = self::createJWE($payload, $shared_protected_headers, $shared_headers, $aad);
 

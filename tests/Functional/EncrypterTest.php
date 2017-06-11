@@ -612,7 +612,7 @@ final class EncrypterTest extends TestCase
     {
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA256KW()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
         $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 

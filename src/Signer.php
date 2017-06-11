@@ -13,6 +13,7 @@ namespace Jose;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
+use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\SignatureAlgorithmInterface;
 use Jose\Object\JWKInterface;
 use Jose\Object\JWS;
@@ -21,33 +22,28 @@ use Jose\Object\Signature;
 final class Signer
 {
     use Behaviour\HasKeyChecker;
-    use Behaviour\HasJWAManager;
-    use Behaviour\CommonSigningMethods;
+
+    /**
+     * @var JWAManager
+     */
+    private $signatureAlgorithmManager;
 
     /**
      * Signer constructor.
      *
-     * @param string[]|SignatureAlgorithmInterface[] $signature_algorithms
+     * @param JWAManager $signatureAlgorithmManager
      */
-    public function __construct(array $signature_algorithms)
+    public function __construct(JWAManager $signatureAlgorithmManager)
     {
-        $this->setSignatureAlgorithms($signature_algorithms);
-
-        $this->setJWAManager(Factory\AlgorithmManagerFactory::createAlgorithmManager($signature_algorithms));
+        $this->signatureAlgorithmManager = $signatureAlgorithmManager;
     }
 
     /**
-     * Signer constructor.
-     *
-     * @param string[]|SignatureAlgorithmInterface[] $signature_algorithms
-     *
-     * @return Signer
+     * @return string[]
      */
-    public static function createSigner(array $signature_algorithms): Signer
+    public function getSupportedSignatureAlgorithms(): array
     {
-        $signer = new self($signature_algorithms);
-
-        return $signer;
+        return $this->signatureAlgorithmManager->list();
     }
 
     /**
@@ -140,7 +136,7 @@ final class Signer
             sprintf('The algorithm "%s" is not allowed with this key.', $complete_header['alg'])
         );
 
-        $signature_algorithm = $this->getJWAManager()->get($complete_header['alg']);
+        $signature_algorithm = $this->signatureAlgorithmManager->get($complete_header['alg']);
         Assertion::isInstanceOf($signature_algorithm, SignatureAlgorithmInterface::class, sprintf('The algorithm "%s" is not supported.', $complete_header['alg']));
 
         return $signature_algorithm;

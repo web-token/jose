@@ -33,9 +33,8 @@ trait Storable
     /**
      * @param string $filename
      */
-    public function setFilename($filename)
+    public function setFilename(string $filename)
     {
-        Assertion::string($filename, 'Invalid filename.');
         Assertion::directory(dirname($filename), 'The selected directory does not exist.');
         Assertion::writeable(dirname($filename), 'The selected directory is not writable.');
         $this->filename = $filename;

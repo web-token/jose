@@ -14,6 +14,7 @@ namespace Jose\Test\RFC7520;
 use Jose\Algorithm\ContentEncryption\A128GCM;
 use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\KeyEncryption\RSAOAEP;
+use Jose\Algorithm\Signature\PS256;
 use Jose\Compression\CompressionManager;
 use Jose\Compression\Deflate;
 use Jose\Decrypter;
@@ -61,9 +62,10 @@ final class NestingTest extends TestCase
         $loader = new Loader();
         $loaded_compact_json = $loader->load($json_compact);
 
-        $verifer = Verifier::createVerifier(['PS256']);
+        $signatureAlgorithmManager = JWAManager::create([new PS256()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
 
-        $verifer->verifyWithKey($loaded_compact_json, $signature_key, null, $index);
+        $verifier->verifyWithKey($loaded_compact_json, $signature_key, null, $index);
 
         $this->assertEquals(0, $index);
         $this->assertEquals($signature_header, $loaded_compact_json->getSignature($index)->getProtectedHeaders());

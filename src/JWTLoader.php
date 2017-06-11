@@ -109,8 +109,6 @@ final class JWTLoader
      */
     public function load(string $assertion, JWKSetInterface $encryption_key_set = null, bool $is_encryption_required = false): JWS
     {
-        Assertion::string($assertion);
-        Assertion::boolean($is_encryption_required);
         $jwt = $this->loader->load($assertion);
         if ($jwt instanceof JWE) {
             Assertion::notNull($encryption_key_set, 'Encryption key set is not available.');

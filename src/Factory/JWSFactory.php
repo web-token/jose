@@ -110,7 +110,8 @@ final class JWSFactory
 
         $complete_headers = array_merge($protected_headers, $headers);
         Assertion::keyExists($complete_headers, 'alg', 'No "alg" parameter set in the header');
-        $signer = Signer::createSigner([$complete_headers['alg']]);
+        $signatureAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName([$complete_headers['alg']]);
+        $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 
         return $jws;
@@ -132,7 +133,8 @@ final class JWSFactory
 
         $complete_headers = array_merge($protected_headers, $headers);
         Assertion::keyExists($complete_headers, 'alg', 'No "alg" parameter set in the header');
-        $signer = Signer::createSigner([$complete_headers['alg']]);
+        $signatureAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName([$complete_headers['alg']]);
+        $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 
         return $jws;

@@ -12,6 +12,7 @@
 namespace Jose\Test\Unit\Algorithm;
 
 use Base64Url\Base64Url;
+use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\Signature\EdDSA;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
@@ -78,7 +79,8 @@ final class EdDSASignatureTest extends TestCase
 
         $loader = new Loader();
         $loaded = $loader->load($jws);
-        $verifier = Verifier::createVerifier(['EdDSA']);
+        $signatureAlgorithmManager = JWAManager::create([new EdDSA()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
 
         $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals(1, $loaded->countSignatures());

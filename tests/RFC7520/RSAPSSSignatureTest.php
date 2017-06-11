@@ -11,6 +11,8 @@
 
 namespace Jose\Test\RFC7520;
 
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\Signature\PS384;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
@@ -66,12 +68,12 @@ final class RSAPSSSignatureTest extends TestCase
         $jws = JWSFactory::createJWS($payload);
         $jws = $jws->addSignatureInformation($private_key, $headers);
 
-        $signer = Signer::createSigner(['PS384']);
+        $signatureAlgorithmManager = JWAManager::create([new PS384()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
+        $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 
-        $verifer = Verifier::createVerifier(['PS384']);
-
-        $verifer->verifyWithKey($jws, $private_key);
+        $verifier->verifyWithKey($jws, $private_key);
 
         /*
          * Header
@@ -83,12 +85,12 @@ final class RSAPSSSignatureTest extends TestCase
 
         $loader = new Loader();
         $loaded_compact_json = $loader->load($expected_compact_json);
-        $verifer->verifyWithKey($loaded_compact_json, $private_key);
+        $verifier->verifyWithKey($loaded_compact_json, $private_key);
 
         $loaded_flattened_json = $loader->load($expected_flattened_json);
-        $verifer->verifyWithKey($loaded_flattened_json, $private_key);
+        $verifier->verifyWithKey($loaded_flattened_json, $private_key);
 
         $loaded_json = $loader->load($expected_json);
-        $verifer->verifyWithKey($loaded_json, $private_key);
+        $verifier->verifyWithKey($loaded_json, $private_key);
     }
 }

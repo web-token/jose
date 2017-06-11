@@ -77,20 +77,6 @@ final class Encrypter
     }
 
     /**
-     * @param string[]|KeyEncryptionAlgorithmInterface[]     $key_encryption_algorithms
-     * @param string[]|ContentEncryptionAlgorithmInterface[] $content_encryption_algorithms
-     * @param string[]|CompressionInterface[]              $compression_methods
-     *
-     * @return Encrypter
-     */
-    public static function createEncrypter(array $key_encryption_algorithms, array $content_encryption_algorithms, array $compression_methods = ['DEF', 'ZLIB', 'GZ'])
-    {
-        $encrypter = new self($key_encryption_algorithms, $content_encryption_algorithms, $compression_methods);
-
-        return $encrypter;
-    }
-
-    /**
      * Encrypter constructor.
      *
      * @param JWAManager         $keyEncryptionAlgorithmManager

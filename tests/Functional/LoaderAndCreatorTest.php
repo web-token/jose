@@ -14,6 +14,8 @@ namespace Jose\Test\Functional;
 use Jose\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\KeyEncryption\A256GCMKW;
+use Jose\Algorithm\Signature\HS512;
+use Jose\Algorithm\Signature\RS512;
 use Jose\Compression\CompressionManager;
 use Jose\Compression\Deflate;
 use Jose\Decrypter;
@@ -37,17 +39,18 @@ final class LoaderAndCreatorTest extends TestCase
     public function testSignAndLoadUsingJWTCreatorAndJWTLoader()
     {
         $checker = CheckerManagerFactory::createClaimCheckerManager();
-        $jwt_creator = new JWTCreator(Signer::createSigner(['HS512']));
+        $signatureAlgorithmManager = JWAManager::create([new HS512()]);
+        $signer = new Signer($signatureAlgorithmManager);
+        $jwt_creator = new JWTCreator($signer);
         $keyEncryptionAlgorithmManager = JWAManager::create([new A256GCMKW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
         $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $jwt_creator->enableEncryptionSupport($encrypter);
 
-        $jwt_loader = new JWTLoader(
-            $checker,
-            Verifier::createVerifier(['HS512', 'RS512'])
-        );
+        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
+        $jwt_loader = new JWTLoader($checker, $verifier);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $jwt_loader->enableDecryptionSupport($decrypter);
 

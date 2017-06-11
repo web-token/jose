@@ -11,6 +11,11 @@
 
 namespace Jose\Test\Functional;
 
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\Signature\HS256;
+use Jose\Algorithm\Signature\HS512;
+use Jose\Algorithm\Signature\PS512;
+use Jose\Algorithm\Signature\RS512;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
@@ -32,7 +37,8 @@ final class SignerTest extends TestCase
      */
     public function testAlgParameterIsMissing()
     {
-        $signer = Signer::createSigner([]);
+        $signatureAlgorithmManager = JWAManager::create([]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = JWSFactory::createJWS($this->getKey3());
         $jws = $jws->addSignatureInformation($this->getKey1(), []);
@@ -46,7 +52,8 @@ final class SignerTest extends TestCase
      */
     public function testAlgParameterIsNotSupported()
     {
-        $signer = Signer::createSigner([]);
+        $signatureAlgorithmManager = JWAManager::create([]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = JWSFactory::createJWS($this->getKey3());
         $jws = $jws->addSignatureInformation(
@@ -59,7 +66,8 @@ final class SignerTest extends TestCase
 
     public function testSignAndLoadCompact()
     {
-        $signer = Signer::createSigner(['HS512', 'RS512']);
+        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = JWSFactory::createJWS($this->getKey3());
         $jws = $jws->addSignatureInformation(
@@ -86,7 +94,8 @@ final class SignerTest extends TestCase
 
     public function testSignMultipleInstructionWithCompactRepresentation()
     {
-        $signer = Signer::createSigner(['HS512', 'RS512']);
+        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
         $jws = $jws->addSignatureInformation(
@@ -131,7 +140,8 @@ final class SignerTest extends TestCase
 
     public function testSignMultipleInstructionWithFlattenedRepresentation()
     {
-        $signer = Signer::createSigner(['HS512', 'RS512']);
+        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
         $jws = $jws->addSignatureInformation(
@@ -180,7 +190,8 @@ final class SignerTest extends TestCase
      */
     public function testAlgorithmNotAllowedForTheKey()
     {
-        $signer = Signer::createSigner([]);
+        $signatureAlgorithmManager = JWAManager::create([]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
         $jws = $jws->addSignatureInformation(
@@ -197,7 +208,8 @@ final class SignerTest extends TestCase
      */
     public function testOperationNotAllowedForTheKey()
     {
-        $signer = Signer::createSigner(['PS512']);
+        $signatureAlgorithmManager = JWAManager::create([new PS512()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
         $jws = $jws->addSignatureInformation(
@@ -210,7 +222,8 @@ final class SignerTest extends TestCase
 
     public function testSignAndLoadFlattened()
     {
-        $signer = Signer::createSigner(['HS512']);
+        $signatureAlgorithmManager = JWAManager::create([new HS512()]);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = JWSFactory::createJWS(['baz', 'ban']);
         $jws = $jws->addSignatureInformation(
@@ -232,8 +245,9 @@ final class SignerTest extends TestCase
 
     public function testSignAndLoad()
     {
-        $signer = Signer::createSigner(['HS512', 'RS512']);
-        $verifier = Verifier::createVerifier(['HS512', 'RS512']);
+        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
         $jws = $jws->addSignatureInformation(
@@ -267,8 +281,9 @@ final class SignerTest extends TestCase
      */
     public function testSignAndLoadWithWrongKeys()
     {
-        $signer = Signer::createSigner(['RS512']);
-        $verifier = Verifier::createVerifier(['RS512']);
+        $signatureAlgorithmManager = JWAManager::create([new RS512()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
         $jws = $jws->addSignatureInformation(
@@ -290,12 +305,12 @@ final class SignerTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The algorithm "RS512" is not supported or does not implement Signature.
+     * @expectedExceptionMessage The algorithm "RS512" is not supported or is not a signature algorithm.
      */
     public function testSignAndLoadWithUnsupportedAlgorithm()
     {
-        $signer = Signer::createSigner(['RS512']);
-        $verifier = Verifier::createVerifier(['HS512']);
+        $verifier = new Verifier(JWAManager::create([new HS512()]));
+        $signer = new Signer(JWAManager::create([new RS512()]));
 
         $jws = JWSFactory::createJWS('Live long and Prosper.');
         $jws = $jws->addSignatureInformation(
@@ -321,7 +336,8 @@ final class SignerTest extends TestCase
      */
     public function testSignAndLoadWithJWSWithoutSignatures()
     {
-        $verifier = Verifier::createVerifier(['RS512']);
+        $signatureAlgorithmManager = JWAManager::create([new RS512()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
         $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
         $jws = '{"payload":"SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4","signatures":[]}';
 
@@ -423,7 +439,8 @@ final class SignerTest extends TestCase
         $jws = $jws->addSignatureInformation($key, $protected_header1);
         $jws = $jws->addSignatureInformation($key, $protected_header2);
 
-        $signer = new Signer(['HS256']);
+        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
+        $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 
         $expected_result = '{"signatures":[{"signature":"A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY","protected":"eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19"},{"signature":"5mvfOroL-g7HyqJoozehmsaqmvTYGEq5jTI1gVvoEoQ","protected":"eyJhbGciOiJIUzI1NiJ9"}]}';
@@ -481,7 +498,8 @@ final class SignerTest extends TestCase
         $jws = $jws->addSignatureInformation($key, $protected_header1);
         $jws = $jws->addSignatureInformation($key, $protected_header2);
 
-        $signer = new Signer(['HS256']);
+        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
+        $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 
         $jws->toJSON();
@@ -625,7 +643,8 @@ final class SignerTest extends TestCase
      */
     public function testSignAndLoadWithoutAlgParameterInTheHeader()
     {
-        $verifier = Verifier::createVerifier(['RS512']);
+        $signatureAlgorithmManager = JWAManager::create([new RS512()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
         $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
         $jws = 'eyJraWQiOiJiaWxiby5iYWdnaW5zQGhvYmJpdG9uLmV4YW1wbGUifQ.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.MRjdkly7_-oTPTS3AXP41iQIGKa80A0ZmTuV5MEaHoxnW2e5CZ5NlKtainoFmKZopdHM1O2U4mwzJdQx996ivp83xuglII7PNDi84wnB-BDkoBwA78185hX-Es4JIwmDLJK3lfWRa-XtL0RnltuYv746iYTh_qHRD68BNt1uSNCrUCTJDt5aAE6x8wW1Kt9eRo4QPocSadnHXFxnt8Is9UzpERV0ePPQdLuW3IS_de3xyIrDaLGdjluPxUAhb6L2aXic1U12podGU0KLUQSE_oI-ZnmKJ3F4uOZDnd6QZWJushZ41Axf_fcIe8u9ipH84ogoree7vjbU5y18kDquDg';
 
@@ -641,8 +660,9 @@ final class SignerTest extends TestCase
 
     public function testSignAndLoadJWKSet()
     {
-        $signer = Signer::createSigner(['HS512', 'RS512']);
-        $verifier = Verifier::createVerifier(['HS512', 'RS512']);
+        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = JWSFactory::createJWS($this->getKeyset());
         $jws = $jws->addSignatureInformation(
@@ -675,8 +695,9 @@ final class SignerTest extends TestCase
      */
     public function testKeySetIsEmpty()
     {
-        $signer = Signer::createSigner(['HS512', 'RS512']);
-        $verifier = Verifier::createVerifier(['HS512', 'RS512']);
+        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
+        $verifier = new Verifier($signatureAlgorithmManager);
+        $signer = new Signer($signatureAlgorithmManager);
 
         $jws = JWSFactory::createJWS($this->getKeyset());
         $jws = $jws->addSignatureInformation(
