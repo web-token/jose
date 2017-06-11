@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Algorithm;
+
 use Jose\Algorithm\Signature\None;
 use Jose\Loader;
 use Jose\Object\JWK;
@@ -17,12 +19,12 @@ use Jose\Signer;
 use Jose\Test\TestCase;
 
 /**
- * Class NoneSignatureTest.
+ * final class NoneSignatureTest.
  *
  * @group None
  * @group Unit
  */
-class NoneSignatureTest extends TestCase
+final class NoneSignatureTest extends TestCase
 {
     public function testNoneSignAndVerifyAlgorithm()
     {

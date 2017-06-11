@@ -9,13 +9,21 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Algorithm;
+
 use Base64Url\Base64Url;
+use Jose\Algorithm\ContentEncryption\A128CBCHS256;
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\KeyEncryption\A128KW;
+use Jose\Algorithm\KeyEncryption\RSA15;
 use Jose\Algorithm\Signature\PS256;
 use Jose\Algorithm\Signature\PS384;
 use Jose\Algorithm\Signature\PS512;
 use Jose\Algorithm\Signature\RS256;
 use Jose\Algorithm\Signature\RS384;
 use Jose\Algorithm\Signature\RS512;
+use Jose\Compression\CompressionManager;
+use Jose\Compression\Deflate;
 use Jose\Decrypter;
 use Jose\Factory\JWSFactory;
 use Jose\KeyConverter\KeyConverter;
@@ -28,12 +36,12 @@ use Jose\Test\TestCase;
 use Jose\Verifier;
 
 /**
- * Class RSASignatureTest.
+ * final class RSASignatureTest.
  *
  * @group RSA
  * @group Unit
  */
-class RSASignatureTest extends TestCase
+final class RSASignatureTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException
@@ -497,7 +505,10 @@ class RSASignatureTest extends TestCase
      */
     public function testLoadJWEFromRFC7516()
     {
-        $decrypter = Decrypter::createDecrypter(['RSA1_5'], ['A128CBC-HS256'], ['DEF']);
+        $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loader = new Loader();
         $loaded = $loader->load('eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.UGhIOguC7IuEvf_NPVaXsGMoLOmwvc1GyqlIKOK1nN94nHPoltGRhWhw7Zx0-kFm1NJn8LE9XShH59_i8J0PH5ZZyNfGy2xGdULU7sHNF6Gp2vPLgNZ__deLKxGHZ7PcHALUzoOegEI-8E66jX2E4zyJKx-YxzZIItRzC5hlRirb6Y5Cl_p-ko3YvkkysZIFNPccxRU7qve1WYPxqbb2Yw8kZqa2rMWI5ng8OtvzlV7elprCbuPhcCdZ6XDP0_F8rkXds2vE4X-ncOIM8hAYHHi29NX0mcKiRaD0-D-ljQTP-cFPgwCp6X-nZZd9OHBv-B3oWh2TbqmScqXMR4gp_A.AxY8DCtDaGlsbGljb3RoZQ.KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY.9hH0vgRfYgPnAHOd8stkvw');
@@ -518,7 +529,10 @@ class RSASignatureTest extends TestCase
      */
     public function testLoadJWEJSONSerialization()
     {
-        $decrypter = Decrypter::createDecrypter(['RSA1_5', 'A128KW'], ['A128CBC-HS256'], ['DEF']);
+        $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15(), new A128KW()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loader = new Loader();
         $loaded = $loader->load('{"protected":"eyJlbmMiOiJBMTI4Q0JDLUhTMjU2In0","unprotected":{"jku":"https://server.example.com/keys.jwks"},"recipients":[{"header":{"alg":"RSA1_5","kid":"2011-04-29"},"encrypted_key":"UGhIOguC7IuEvf_NPVaXsGMoLOmwvc1GyqlIKOK1nN94nHPoltGRhWhw7Zx0-kFm1NJn8LE9XShH59_i8J0PH5ZZyNfGy2xGdULU7sHNF6Gp2vPLgNZ__deLKxGHZ7PcHALUzoOegEI-8E66jX2E4zyJKx-YxzZIItRzC5hlRirb6Y5Cl_p-ko3YvkkysZIFNPccxRU7qve1WYPxqbb2Yw8kZqa2rMWI5ng8OtvzlV7elprCbuPhcCdZ6XDP0_F8rkXds2vE4X-ncOIM8hAYHHi29NX0mcKiRaD0-D-ljQTP-cFPgwCp6X-nZZd9OHBv-B3oWh2TbqmScqXMR4gp_A"},{"header":{"alg":"A128KW","kid":"7"},"encrypted_key":"6KB707dM9YTIgHtLvtgWQ8mKwboJW3of9locizkDTHzBC2IlrT1oOQ"}],"iv":"AxY8DCtDaGlsbGljb3RoZQ","ciphertext":"KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY","tag":"Mz-VPPyU4RlcuYv1IwIvzw"}');

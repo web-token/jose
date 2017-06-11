@@ -9,17 +9,19 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Objects;
+
 use Jose\Factory\JWKFactory;
 use Jose\Object\PublicJWKSet;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class PublicJWKSetTest.
+ * final class PublicJWKSetTest.
  *
  * @group Unit
  * @group PublicJWKSet
  */
-class PublicJWKSetTest extends TestCase
+final class PublicJWKSetTest extends TestCase
 {
     public function testKey()
     {

@@ -9,16 +9,18 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Objects;
+
 use Jose\Factory\JWEFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class JWETest.
+ * final class JWETest.
  *
  * @group JWE
  * @group Unit
  */
-class JWETest extends TestCase
+final class JWETest extends TestCase
 {
     public function testJWE()
     {

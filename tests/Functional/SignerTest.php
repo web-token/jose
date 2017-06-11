@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Functional;
+
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
@@ -22,7 +24,7 @@ use Jose\Verifier;
  * @group Signer
  * @group Functional
  */
-class SignerTest extends TestCase
+final class SignerTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

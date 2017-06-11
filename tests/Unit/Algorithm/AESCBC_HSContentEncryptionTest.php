@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Algorithm;
+
 use Base64Url\Base64Url;
 use Jose\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Algorithm\ContentEncryption\A192CBCHS384;
@@ -16,12 +18,12 @@ use Jose\Algorithm\ContentEncryption\A256CBCHS512;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class AESCBC_HSContentEncryptionTest.
+ * final class AESCBC_HSContentEncryptionTest.
  *
  * @group AESCBC
  * @group Unit
  */
-class AESCBC_HSContentEncryptionTest extends TestCase
+final class AESCBC_HSContentEncryptionTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7516#appendix-B
@@ -97,8 +99,8 @@ class AESCBC_HSContentEncryptionTest extends TestCase
         $this->assertEquals($expected_cyphertext, $cyphertext);
 
         //We invoke protected methods to test vectors directly. This is due to the encryption signature: this test case uses a string as AAD, but the algorithm uses the protected header.
-        $calc_method = self::getMethod('\Jose\Algorithm\ContentEncryption\A128CBCHS256', 'calculateAuthenticationTag');
-        $check_method = self::getMethod('\Jose\Algorithm\ContentEncryption\A128CBCHS256', 'isTagValid');
+        $calc_method = self::getMethod(A128CBCHS256::class, 'calculateAuthenticationTag');
+        $check_method = self::getMethod(A128CBCHS256::class, 'isTagValid');
 
         $T = $calc_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad]);
         $this->assertEquals($expected_T, $T);
@@ -131,8 +133,8 @@ class AESCBC_HSContentEncryptionTest extends TestCase
         }
 
         //We invoke protected methods to test vectors directly. This is due to the encryption signature: this test case uses a string as AAD, but the algorithm uses the protected header.
-        $calc_method = self::getMethod('\Jose\Algorithm\ContentEncryption\A128CBCHS256', 'calculateAuthenticationTag');
-        $check_method = self::getMethod('\Jose\Algorithm\ContentEncryption\A128CBCHS256', 'isTagValid');
+        $calc_method = self::getMethod(A128CBCHS256::class, 'calculateAuthenticationTag');
+        $check_method = self::getMethod(A128CBCHS256::class, 'isTagValid');
 
         $T = $calc_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad]);
         $this->assertEquals($expected_T, $T);
@@ -165,8 +167,8 @@ class AESCBC_HSContentEncryptionTest extends TestCase
         }
 
         //We invoke protected methods to test vectors directly. This is due to the encryption signature: this test case uses a string as AAD, but the algorithm uses the protected header.
-        $calc_method = self::getMethod('\Jose\Algorithm\ContentEncryption\A128CBCHS256', 'calculateAuthenticationTag');
-        $check_method = self::getMethod('\Jose\Algorithm\ContentEncryption\A128CBCHS256', 'isTagValid');
+        $calc_method = self::getMethod(A128CBCHS256::class, 'calculateAuthenticationTag');
+        $check_method = self::getMethod(A128CBCHS256::class, 'isTagValid');
 
         $T = $calc_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad]);
         $this->assertEquals($expected_T, $T);

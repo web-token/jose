@@ -9,18 +9,20 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Objects;
+
 use Jose\Factory\JWKFactory;
 use Jose\Object\JWKInterface;
 use Jose\Object\JWKSetInterface;
 use Jose\Test\TestCase;
 
 /**
- * Class JWKTest.
+ * final class JWKTest.
  *
  * @group Unit
  * @group JWKSet
  */
-class JWKSetTest extends TestCase
+final class JWKSetTest extends TestCase
 {
     public function testKeySelection()
     {

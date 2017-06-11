@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Keys;
+
 use Jose\Factory\JWKFactory;
 use Jose\Test\TestCase;
 
@@ -16,7 +18,7 @@ use Jose\Test\TestCase;
  * @group OctKeys
  * @group Unit
  */
-class OctKeysTest extends TestCase
+final class OctKeysTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

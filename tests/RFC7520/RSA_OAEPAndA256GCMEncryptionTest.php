@@ -12,6 +12,11 @@
 namespace Jose\Test\RFC7520;
 
 use Base64Url\Base64Url;
+use Jose\Algorithm\ContentEncryption\A256GCM;
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\KeyEncryption\RSAOAEP;
+use Jose\Compression\CompressionManager;
+use Jose\Compression\Deflate;
 use Jose\Decrypter;
 use Jose\Encrypter;
 use Jose\Factory\JWEFactory;
@@ -24,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-class RSA_OAEPAndA256GCMEncryptionTest extends TestCase
+final class RSA_OAEPAndA256GCMEncryptionTest extends TestCase
 {
     /**
      * Please note that we cannot the encryption and get the same result as the example (IV, TAG and other data are always different).
@@ -63,7 +68,10 @@ class RSA_OAEPAndA256GCMEncryptionTest extends TestCase
         $expected_ciphertext = 'o4k2cnGN8rSSw3IDo1YuySkqeS_t2m1GXklSgqBdpACm6UJuJowOHC5ytjqYgRL-I-soPlwqMUf4UgRWWeaOGNw6vGW-xyM01lTYxrXfVzIIaRdhYtEMRBvBWbEwP7ua1DRfvaOjgZv6Ifa3brcAM64d8p5lhhNcizPersuhw5f-pGYzseva-TUaL8iWnctc-sSwy7SQmRkfhDjwbz0fz6kFovEgj64X1I5s7E6GLp5fnbYGLa1QUiML7Cc2GxgvI7zqWo0YIEc7aCflLG1-8BboVWFdZKLK9vNoycrYHumwzKluLWEbSVmaPpOslY2n525DxDfWaVFUfKQxMF56vn4B9QMpWAbnypNimbM8zVOw';
         $expected_tag = 'UCGiqJxhBI3IFVdPalHHvA';
 
-        $decrypter = Decrypter::createDecrypter(['A256GCM'], ['RSA-OAEP']);
+        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loader = new Loader();
         $loaded_compact_json = $loader->load($expected_compact_json);
@@ -127,15 +135,18 @@ class RSA_OAEPAndA256GCMEncryptionTest extends TestCase
         ];
 
         $jwe = JWEFactory::createJWE($expected_payload, $protected_headers);
-        $encrypter = Encrypter::createEncrypter(['RSA-OAEP'], ['A256GCM']);
+
+        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jwe->addRecipientInformation(
             $private_key
         );
 
         $encrypter->encrypt($jwe);
-
-        $decrypter = Decrypter::createDecrypter(['A256GCM'], ['RSA-OAEP']);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loader = new Loader();
         $loaded_compact_json = $loader->load($jwe->toCompactJSON(0));

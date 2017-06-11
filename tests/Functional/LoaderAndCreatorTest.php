@@ -9,8 +9,16 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Functional;
+
+use Jose\Algorithm\ContentEncryption\A128CBCHS256;
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\KeyEncryption\A256GCMKW;
+use Jose\Compression\CompressionManager;
+use Jose\Compression\Deflate;
 use Jose\Decrypter;
 use Jose\Encrypter;
+use Jose\Factory\CheckerManagerFactory;
 use Jose\JWTCreator;
 use Jose\JWTLoader;
 use Jose\Object\JWK;
@@ -24,19 +32,24 @@ use Jose\Verifier;
  * @group JWTCreator
  * @group Functional
  */
-class LoaderAndCreatorTest extends TestCase
+final class LoaderAndCreatorTest extends TestCase
 {
     public function testSignAndLoadUsingJWTCreatorAndJWTLoader()
     {
-        $checker = \Jose\Factory\CheckerManagerFactory::createClaimCheckerManager();
+        $checker = CheckerManagerFactory::createClaimCheckerManager();
         $jwt_creator = new JWTCreator(Signer::createSigner(['HS512']));
-        $jwt_creator->enableEncryptionSupport(Encrypter::createEncrypter(['A256GCMKW'], ['A128CBC-HS256'], ['DEF']));
+        $keyEncryptionAlgorithmManager = JWAManager::create([new A256GCMKW()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jwt_creator->enableEncryptionSupport($encrypter);
 
         $jwt_loader = new JWTLoader(
             $checker,
             Verifier::createVerifier(['HS512', 'RS512'])
         );
-        $jwt_loader->enableDecryptionSupport(Decrypter::createDecrypter(['A256GCMKW'], ['A128CBC-HS256'], ['DEF']));
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jwt_loader->enableDecryptionSupport($decrypter);
 
         $jws = $jwt_creator->sign(
             'Live long and Prosper.',

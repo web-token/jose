@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Algorithm;
+
 use Base64Url\Base64Url;
 use Jose\Algorithm\Signature\EdDSA;
 use Jose\Factory\JWSFactory;
@@ -19,12 +21,12 @@ use Jose\Test\TestCase;
 use Jose\Verifier;
 
 /**
- * Class EdDSASignatureTest.
+ * final class EdDSASignatureTest.
  *
  * @group EdDSA
  * @group Unit
  */
-class EdDSASignatureTest extends TestCase
+final class EdDSASignatureTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/draft-ietf-jose-cfrg-curves-00#appendix-A.5

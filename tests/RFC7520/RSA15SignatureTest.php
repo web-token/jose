@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-class RSA15SignatureTest extends TestCase
+final class RSA15SignatureTest extends TestCase
 {
     public function testRS256()
     {

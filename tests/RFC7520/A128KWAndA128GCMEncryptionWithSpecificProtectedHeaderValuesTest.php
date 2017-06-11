@@ -12,6 +12,11 @@
 namespace Jose\Test\RFC7520;
 
 use Base64Url\Base64Url;
+use Jose\Algorithm\ContentEncryption\A128GCM;
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\KeyEncryption\A128KW;
+use Jose\Compression\CompressionManager;
+use Jose\Compression\Deflate;
 use Jose\Decrypter;
 use Jose\Encrypter;
 use Jose\Factory\JWEFactory;
@@ -24,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-class A128KWAndA128GCMEncryptionWithSpecificProtectedHeaderValuesTest extends TestCase
+final class A128KWAndA128GCMEncryptionWithSpecificProtectedHeaderValuesTest extends TestCase
 {
     /**
      * Please note that we cannot the encryption and get the same result as the example (IV, TAG and other data are always different).
@@ -58,7 +63,11 @@ class A128KWAndA128GCMEncryptionWithSpecificProtectedHeaderValuesTest extends Te
         $expected_ciphertext = 'lIbCyRmRJxnB2yLQOTqjCDKV3H30ossOw3uD9DPsqLL2DM3swKkjOwQyZtWsFLYMj5YeLht_StAn21tHmQJuuNt64T8D4t6C7kC9OCCJ1IHAolUv4MyOt80MoPb8fZYbNKqplzYJgIL58g8N2v46OgyG637d6uuKPwhAnTGm_zWhqc_srOvgiLkzyFXPq1hBAURbc3-8BqeRb48iR1-_5g5UjWVD3lgiLCN_P7AW8mIiFvUNXBPJK3nOWL4teUPS8yHLbWeL83olU4UAgL48x-8dDkH23JykibVSQju-f7e-1xreHWXzWLHs1NqBbre0dEwK3HX_xM0LjUz77Krppgegoutpf5qaKg3l-_xMINmf';
         $expected_tag = 'fNYLqpUe84KD45lvDiaBAQ';
 
-        $decrypter = Decrypter::createDecrypter(['A128KW'], ['A128GCM']);
+        $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+
 
         $loader = new Loader();
         $loaded_flattened_json = $loader->load($expected_flattened_json);
@@ -110,15 +119,19 @@ class A128KWAndA128GCMEncryptionWithSpecificProtectedHeaderValuesTest extends Te
         ];
 
         $jwe = JWEFactory::createJWE($expected_payload, $protected_headers, $headers);
-        $encrypter = Encrypter::createEncrypter(['A128KW'], ['A128GCM']);
+
+        $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jwe->addRecipientInformation(
             $private_key
         );
 
         $encrypter->encrypt($jwe);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $decrypter = Decrypter::createDecrypter(['A128KW'], ['A128GCM']);
 
         $loader = new Loader();
         $loaded_flattened_json = $loader->load($jwe->toFlattenedJSON(0));

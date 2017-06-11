@@ -11,6 +11,11 @@
 
 namespace Jose\Test\RFC7520;
 
+use Jose\Algorithm\ContentEncryption\A128GCM;
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\KeyEncryption\RSAOAEP;
+use Jose\Compression\CompressionManager;
+use Jose\Compression\Deflate;
 use Jose\Decrypter;
 use Jose\Loader;
 use Jose\Object\JWK;
@@ -22,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-class NestingTest extends TestCase
+final class NestingTest extends TestCase
 {
     public function testSignatureVerification()
     {
@@ -99,11 +104,14 @@ class NestingTest extends TestCase
         $loaded_flasttened_json = $loader->load($json_flattened);
         $loaded_json = $loader->load($json);
 
-        $verifer = Decrypter::createDecrypter(['RSA-OAEP'], ['A128GCM']);
+        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $verifer->decryptUsingKey($loaded_compact_json, $encryption_key, $index);
-        $verifer->decryptUsingKey($loaded_flasttened_json, $encryption_key, $index);
-        $verifer->decryptUsingKey($loaded_json, $encryption_key, $index);
+        $decrypter->decryptUsingKey($loaded_compact_json, $encryption_key, $index);
+        $decrypter->decryptUsingKey($loaded_flasttened_json, $encryption_key, $index);
+        $decrypter->decryptUsingKey($loaded_json, $encryption_key, $index);
 
         $this->assertEquals(0, $index);
         $this->assertEquals($encryption_header, $loaded_compact_json->getSharedProtectedHeaders());

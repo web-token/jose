@@ -12,6 +12,11 @@
 namespace Jose\Test\RFC7520;
 
 use Base64Url\Base64Url;
+use Jose\Algorithm\ContentEncryption\A128CBCHS256;
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\KeyEncryption\PBES2HS512A256KW;
+use Jose\Compression\CompressionManager;
+use Jose\Compression\Deflate;
 use Jose\Decrypter;
 use Jose\Encrypter;
 use Jose\Factory\JWEFactory;
@@ -24,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends TestCase
+final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends TestCase
 {
     /**
      * Please note that we cannot the encryption and get the same result as the example (IV, TAG and other data are always different).
@@ -76,7 +81,10 @@ class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends TestCase
         $expected_ciphertext = '23i-Tb1AV4n0WKVSSgcQrdg6GRqsUKxjruHXYsTHAJLZ2nsnGIX86vMXqIi6IRsfywCRFzLxEcZBRnTvG3nhzPk0GDD7FMyXhUHpDjEYCNA_XOmzg8yZR9oyjo6lTF6si4q9FZ2EhzgFQCLO_6h5EVg3vR75_hkBsnuoqoM3dwejXBtIodN84PeqMb6asmas_dpSsz7H10fC5ni9xIz424givB1YLldF6exVmL93R3fOoOJbmk2GBQZL_SEGllv2cQsBgeprARsaQ7Bq99tT80coH8ItBjgV08AtzXFFsx9qKvC982KLKdPQMTlVJKkqtV4Ru5LEVpBZXBnZrtViSOgyg6AiuwaS-rCrcD_ePOGSuxvgtrokAKYPqmXUeRdjFJwafkYEkiuDCV9vWGAi1DH2xTafhJwcmywIyzi4BqRpmdn_N-zl5tuJYyuvKhjKv6ihbsV_k1hJGPGAxJ6wUpmwC4PTQ2izEm0TuSE8oMKdTw8V3kobXZ77ulMwDs4p';
         $expected_tag = '0HlwodAhOCILG5SQ2LQ9dg';
 
-        $decrypter = Decrypter::createDecrypter(['PBES2-HS512+A256KW'], ['A128CBC-HS256']);
+        $keyEncryptionAlgorithmManager = JWAManager::create([new PBES2HS512A256KW()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loader = new Loader();
         $loaded_compact_json = $loader->load($expected_compact_json);
@@ -153,15 +161,18 @@ class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends TestCase
         ];
 
         $jwe = JWEFactory::createJWE($expected_payload, $protected_headers);
-        $encrypter = Encrypter::createEncrypter(['PBES2-HS512+A256KW'], ['A128CBC-HS256']);
+
+        $keyEncryptionAlgorithmManager = JWAManager::create([new PBES2HS512A256KW()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jwe->addRecipientInformation(
             $private_key
         );
 
         $encrypter->encrypt($jwe);
-
-        $decrypter = Decrypter::createDecrypter(['PBES2-HS512+A256KW'], ['A128CBC-HS256']);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loader = new Loader();
         $loaded_flattened_json = $loader->load($jwe->toFlattenedJSON(0));

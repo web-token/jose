@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Algorithm;
+
 use Jose\Factory\JWEFactory;
 use Jose\Factory\JWKFactory;
 use Jose\Factory\JWSFactory;
@@ -18,12 +20,12 @@ use Jose\Object\JWS;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class RSAKeyWithoutAllPrimesTest.
+ * final class RSAKeyWithoutAllPrimesTest.
  *
  * @group RSA2
  * @group Unit
  */
-class RSAKeyWithoutAllPrimesTest extends TestCase
+final class RSAKeyWithoutAllPrimesTest extends TestCase
 {
     /**
      * @param string $signature_algorithm

@@ -9,6 +9,13 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Functional;
+
+use Jose\Algorithm\ContentEncryption\A128CBCHS256;
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\KeyEncryption\A128KW;
+use Jose\Compression\CompressionManager;
+use Jose\Compression\Deflate;
 use Jose\Decrypter;
 use Jose\Loader;
 use Jose\Object\JWE;
@@ -16,18 +23,21 @@ use Jose\Object\JWS;
 use Jose\Test\TestCase;
 
 /**
- * Class FlattenedTest.
+ * final class FlattenedTest.
  *
  * @group Functional
  */
-class FlattenedTest extends TestCase
+final class FlattenedTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7516#appendix-A.5
      */
     public function testLoadFlattenedJWE()
     {
-        $decrypter = Decrypter::createDecrypter(['A128KW'], ['A128CBC-HS256'], ['DEF']);
+        $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loader = new Loader();
         $loaded = $loader->load('{"protected":"eyJlbmMiOiJBMTI4Q0JDLUhTMjU2In0","unprotected":{"jku":"https://server.example.com/keys.jwks"},"header":{"alg":"A128KW","kid":"7"},"encrypted_key":"6KB707dM9YTIgHtLvtgWQ8mKwboJW3of9locizkDTHzBC2IlrT1oOQ","iv":"AxY8DCtDaGlsbGljb3RoZQ","ciphertext":"KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY","tag":"Mz-VPPyU4RlcuYv1IwIvzw"}');

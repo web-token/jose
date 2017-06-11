@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Algorithm;
+
 use Jose\Algorithm\JWAInterface;
 use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\Signature\ES384;
@@ -16,12 +18,12 @@ use Jose\Factory\AlgorithmManagerFactory;
 use Jose\Test\TestCase;
 
 /**
- * Class JWAManagerTest.
+ * final class JWAManagerTest.
  *
  * @group JWA
  * @group Unit
  */
-class JWAManagerTest extends TestCase
+final class JWAManagerTest extends TestCase
 {
     public function testAlgorithmIsSupported()
     {
@@ -35,7 +37,6 @@ class JWAManagerTest extends TestCase
 
         $this->assertEquals(['ES256', 'ES384'], $jwa_manager->list());
         $this->assertInstanceOf(JWAInterface::class, $jwa_manager->get('ES256'));
-        $this->assertInstanceOf(JWAInterface::class, $jwa_manager->all()['ES256']);
 
         $this->assertNull($jwa_manager->get('HS384'));
     }

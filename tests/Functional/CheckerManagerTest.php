@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Functional;
+
 use Jose\Factory\JWSFactory;
 use Jose\Object\JWK;
 use Jose\Test\TestCase;
@@ -17,7 +19,7 @@ use Jose\Test\TestCase;
  * @group CheckerManager
  * @group Functional
  */
-class CheckerManagerTest extends TestCase
+final class CheckerManagerTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

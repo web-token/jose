@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Keys;
+
 use Jose\Factory\JWKFactory;
 use Jose\Object\JWK;
 use Jose\Test\TestCase;
@@ -17,7 +19,7 @@ use Jose\Test\TestCase;
  * @group NoneKeys
  * @group Unit
  */
-class NoneKeysTest extends TestCase
+final class NoneKeysTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7638#section-3.1

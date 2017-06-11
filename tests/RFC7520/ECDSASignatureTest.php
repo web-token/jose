@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-class ECDSASignatureTest extends TestCase
+final class ECDSASignatureTest extends TestCase
 {
     /**
      * Please note that we cannot create the signature and get the same result as the example (ECDSA signatures are always different).

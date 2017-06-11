@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Algorithm;
+
 use Base64Url\Base64Url;
 use Jose\Algorithm\Signature\ES256;
 use Jose\Algorithm\Signature\ES384;
@@ -23,7 +25,7 @@ use PHPUnit\Framework\TestCase;
  *
  * The values of these tests come from the JWS specification
  */
-class ECDSASignatureTest extends TestCase
+final class ECDSASignatureTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Algorithm;
+
 use Base64Url\Base64Url;
 use Jose\Algorithm\KeyEncryption\PBES2HS256A128KW;
 use Jose\Algorithm\KeyEncryption\PBES2HS384A192KW;
@@ -17,12 +19,12 @@ use Jose\Object\JWK;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class PBES2_HS_AESKWKeyEncryptionTest.
+ * final class PBES2_HS_AESKWKeyEncryptionTest.
  *
  * @group PBES2HSAESKW
  * @group Unit
  */
-class PBES2_HS_AESKWKeyEncryptionTest extends TestCase
+final class PBES2_HS_AESKWKeyEncryptionTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7517#appendix-C

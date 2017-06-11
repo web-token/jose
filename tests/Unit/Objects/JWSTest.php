@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Objects;
+
 use Jose\Factory\CheckerManagerFactory;
 use Jose\Factory\JWSFactory;
 use Jose\Object\JWK;
@@ -16,12 +18,12 @@ use Jose\Object\Signature;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class JWSTest.
+ * final class JWSTest.
  *
  * @group JWS
  * @group Unit
  */
-class JWSTest extends TestCase
+final class JWSTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

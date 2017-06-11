@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Keys;
+
 use Jose\KeyConverter\ECKey;
 use Jose\KeyConverter\KeyConverter;
 use Jose\Test\TestCase;
@@ -17,7 +19,7 @@ use Jose\Test\TestCase;
  * @group ECKeys
  * @group Unit
  */
-class ECKeysTest extends TestCase
+final class ECKeysTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

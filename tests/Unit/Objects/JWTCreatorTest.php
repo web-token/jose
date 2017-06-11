@@ -9,21 +9,39 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Objects;
+
+use Jose\Algorithm\ContentEncryption\A128GCM;
+use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\KeyEncryption\A256GCMKW;
+use Jose\Algorithm\KeyEncryption\A256KW;
+use Jose\Compression\CompressionManager;
+use Jose\Compression\Deflate;
+use Jose\Compression\GZip;
+use Jose\Compression\ZLib;
+use Jose\Encrypter;
+use Jose\Factory\JWKFactory;
+use Jose\JWTCreator;
+use Jose\Signer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class JWETest.
+ * final class JWETest.
  *
  * @group JWTCreator
  * @group Unit
  */
-class JWTCreatorTest extends TestCase
+final class JWTCreatorTest extends TestCase
 {
     public function testMethods()
     {
-        $signer = \Jose\Signer::createSigner(['HS256']);
-        $encrypter = \Jose\Encrypter::createEncrypter(['A256GCMKW', 'A256KW'], ['A128GCM']);
-        $jwt_creator = new \Jose\JWTCreator($signer);
+        $signer = Signer::createSigner(['HS256']);
+
+        $keyEncryptionAlgorithmManager = JWAManager::create([new A256GCMKW(), new A256KW()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
+        $compressionManager = CompressionManager::create([new Deflate(), new ZLib(), new GZip()]);
+        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jwt_creator = new JWTCreator($signer);
         $jwt_creator->enableEncryptionSupport($encrypter);
 
         $this->assertEquals(['DEF', 'ZLIB', 'GZ'], $jwt_creator->getSupportedCompressionMethods());
@@ -33,8 +51,8 @@ class JWTCreatorTest extends TestCase
         $this->assertTrue($jwt_creator->isEncryptionSupportEnabled());
 
         $payload = 'Hello World!';
-        $signature_key = \Jose\Factory\JWKFactory::createKey(['kty' => 'oct', 'use' => 'sig', 'size' => 512]);
-        $encryption_key = \Jose\Factory\JWKFactory::createKey(['kty' => 'oct', 'use' => 'enc', 'size' => 256]);
+        $signature_key = JWKFactory::createKey(['kty' => 'oct', 'use' => 'sig', 'size' => 512]);
+        $encryption_key = JWKFactory::createKey(['kty' => 'oct', 'use' => 'enc', 'size' => 256]);
 
         $jwt = $jwt_creator->signAndEncrypt($payload, ['alg' => 'HS256'], $signature_key, ['alg' => 'A256GCMKW', 'enc' => 'A128GCM'], $encryption_key);
         $this->assertEquals(5, count(explode('.', $jwt)));

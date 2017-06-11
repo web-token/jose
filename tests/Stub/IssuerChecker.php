@@ -15,7 +15,7 @@ use Assert\Assertion;
 use Jose\Checker\ClaimCheckerInterface;
 use Jose\Object\JWTInterface;
 
-class IssuerChecker implements ClaimCheckerInterface
+final class IssuerChecker implements ClaimCheckerInterface
 {
     /**
      * {@inheritdoc}

@@ -34,7 +34,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC6979
  */
-class ECDSASignatureTest extends TestCase
+final class ECDSASignatureTest extends TestCase
 {
     /**
      * @param \Jose\Algorithm\SignatureAlgorithmInterface $algorithm

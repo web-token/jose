@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-class RSAPSSSignatureTest extends TestCase
+final class RSAPSSSignatureTest extends TestCase
 {
     /**
      * Please note that we cannot create the signature and get the same result as the example (RSA-PSS signatures are always different).

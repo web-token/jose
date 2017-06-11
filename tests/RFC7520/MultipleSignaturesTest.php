@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-class MultipleSignaturesTest extends TestCase
+final class MultipleSignaturesTest extends TestCase
 {
     public function testMultipleSignatures()
     {

@@ -43,6 +43,14 @@ If you need `ECDH-ES*` encryption algorithms, then you have to install it explic
 * `Jose\Checker\IssuerChecker` removed.
 * `Jose\Checker\SubjectChecker` removed.
 * `Jose\Checker\JtiChecker` removed.
+* The signature of the method `Jose\Decrypter::__construct` changed.
+* The method `Jose\Decrypter::createDecrypter` class removed.
+* The signature of the method `Jose\Encrypter::__construct` changed.
+* The method `Jose\Encrypter::createEncrypter` class removed.
+* The signature of the method `Jose\Signer::__construct` changed.
+* The method `Jose\Signer::createSigner` class removed.
+* The signature of the method `Jose\Verifier::__construct` changed.
+* The method `Jose\Verifier::createVerifier` class removed.
 
 ## Final classes
 

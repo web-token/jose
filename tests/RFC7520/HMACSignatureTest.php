@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  * @group HMAC
  * @group RFC7520
  */
-class HMACSignatureTest extends TestCase
+final class HMACSignatureTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7520#section-4.4

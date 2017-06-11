@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Compression;
+
 use Jose\Compression\CompressionInterface;
 use Jose\Compression\CompressionManager;
 use Jose\Compression\Deflate;
@@ -17,32 +19,32 @@ use Jose\Compression\ZLib;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class CompressionTest.
+ * final class CompressionTest.
  *
  * @group Unit
  */
-class CompressionTest extends TestCase
+final class CompressionTest extends TestCase
 {
     public function testGetValidCompressionAlgorithm()
     {
         $manager = new CompressionManager();
-        $manager->addCompressionAlgorithm(new Deflate());
-        $manager->addCompressionAlgorithm(new GZip());
-        $manager->addCompressionAlgorithm(new ZLib());
+        $manager->add(new Deflate());
+        $manager->add(new GZip());
+        $manager->add(new ZLib());
 
-        $compression = $manager->getCompressionAlgorithm('DEF');
+        $compression = $manager->get('DEF');
         $this->assertInstanceOf(CompressionInterface::class, $compression);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The compression method "FOO" is not supported.
+     */
     public function testGetInvalidCompressionAlgorithm()
     {
         $manager = new CompressionManager();
-        $manager->addCompressionAlgorithm(new Deflate());
-        $manager->addCompressionAlgorithm(new GZip());
-        $manager->addCompressionAlgorithm(new ZLib());
-
-        $compression = $manager->getCompressionAlgorithm('FOO');
-        $this->assertNull($compression);
+        $this->assertFalse($manager->has('FOO'));
+        $manager->get('FOO');
     }
 
     public function testDeflate()

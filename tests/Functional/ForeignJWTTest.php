@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Functional;
+
 use Jose\Factory\JWKFactory;
 use Jose\Loader;
 use Jose\Object\JWS;
@@ -18,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @group ForeignJWT
  * @group Functional
  */
-class ForeignJWTTest extends TestCase
+final class ForeignJWTTest extends TestCase
 {
     /*
      * The following test uses an assertion created with another library.

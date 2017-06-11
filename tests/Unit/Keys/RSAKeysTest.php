@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Keys;
+
 use Jose\Factory\JWKFactory;
 use Jose\KeyConverter\RSAKey;
 use Jose\Object\JWK;
@@ -18,7 +20,7 @@ use Jose\Test\TestCase;
  * @group RSAKeys
  * @group Unit
  */
-class RSAKeysTest extends TestCase
+final class RSAKeysTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7638#section-3.1

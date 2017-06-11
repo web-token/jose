@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Certificates;
+
 use Jose\KeyConverter\KeyConverter;
 use Jose\Object\JWK;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  * @group Certificate
  * @group Unit
  */
-class CertificateTest extends TestCase
+final class CertificateTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

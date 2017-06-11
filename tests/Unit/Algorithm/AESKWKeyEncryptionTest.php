@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Algorithm;
+
 use Base64Url\Base64Url;
 use Jose\Algorithm\KeyEncryption\A128KW;
 use Jose\Algorithm\KeyEncryption\A192KW;
@@ -20,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  * @group AESKW
  * @group Unit
  */
-class AESKWKeyEncryptionTest extends TestCase
+final class AESKWKeyEncryptionTest extends TestCase
 {
     public function testA128KW()
     {

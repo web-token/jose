@@ -21,7 +21,7 @@ use Jose\Test\Stub\SubjectChecker;
 use PHPUnit\Framework\TestCase as Base;
 
 /**
- * Class TestCase.
+ * final class TestCase.
  */
 class TestCase extends Base
 {

@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Objects;
+
 use Jose\Factory\JWKFactory;
 use Jose\Object\JWKInterface;
 use Jose\Object\JWKSetInterface;
@@ -16,12 +18,12 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class JWKFactoryTest.
+ * final class JWKFactoryTest.
  *
  * @group JWKFactory
  * @group Unit
  */
-class JWKFactoryTest extends TestCase
+final class JWKFactoryTest extends TestCase
 {
     public function testCreateFromECCertificateFileInDERFormat()
     {

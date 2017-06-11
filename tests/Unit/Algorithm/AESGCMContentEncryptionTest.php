@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Algorithm;
+
 use Base64Url\Base64Url;
 use Jose\Algorithm\ContentEncryption\A128GCM;
 use Jose\Algorithm\ContentEncryption\A192GCM;
@@ -16,11 +18,11 @@ use Jose\Algorithm\ContentEncryption\A256GCM;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class AESGCMContentEncryptionTest.
+ * final class AESGCMContentEncryptionTest.
  *
  * @group Unit
  */
-class AESGCMContentEncryptionTest extends TestCase
+final class AESGCMContentEncryptionTest extends TestCase
 {
     public function testA128GCMEncryptAndDecrypt()
     {

@@ -9,17 +9,19 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Algorithm;
+
 use Base64Url\Base64Url;
 use Jose\Algorithm\KeyEncryption\Dir;
 use Jose\Object\JWK;
 use Jose\Test\TestCase;
 
 /**
- * Class DirAlgorithmTest.
+ * final class DirAlgorithmTest.
  *
  * @group Unit
  */
-class DirAlgorithmTest extends TestCase
+final class DirAlgorithmTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

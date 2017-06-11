@@ -12,21 +12,46 @@
 namespace Jose\Compression;
 
 /**
- * Compression algorithm manager.
+ * Compression method manager.
  */
 final class CompressionManager
 {
     /**
      * @var CompressionInterface[]
      */
-    protected $compression_algorithms = [];
+    protected $compressionMethods = [];
 
     /**
-     * @param CompressionInterface $compression_algorithm
+     * @param CompressionInterface[] $methods
+     *
+     * @return CompressionManager
      */
-    public function addCompressionAlgorithm(CompressionInterface $compression_algorithm)
+    public static function create(array $methods): CompressionManager
     {
-        $this->compression_algorithms[$compression_algorithm->name()] = $compression_algorithm;
+        $manager = new self();
+        foreach ($methods as $method) {
+            $manager->add($method);
+        }
+
+        return $manager;
+    }
+
+    /**
+     * @param CompressionInterface $compressionMethod
+     */
+    public function add(CompressionInterface $compressionMethod)
+    {
+        $this->compressionMethods[$compressionMethod->name()] = $compressionMethod;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function has(string $name): bool
+    {
+        return array_key_exists($name, $this->compressionMethods);
     }
 
     /**
@@ -34,10 +59,22 @@ final class CompressionManager
      *
      * @param string $name The name of the compression method
      *
-     * @return CompressionInterface|null If the compression handler is supported, return CompressionInterface object, else null
+     * @return CompressionInterface
      */
-    public function getCompressionAlgorithm(string $name): ?CompressionInterface
+    public function get(string $name): CompressionInterface
     {
-        return array_key_exists($name, $this->compression_algorithms) ? $this->compression_algorithms[$name] : null;
+        if (!$this->has($name)) {
+            throw new \InvalidArgumentException(sprintf('The compression method "%s" is not supported.', $name));
+        }
+
+        return $this->compressionMethods[$name];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function list(): array
+    {
+        return array_keys($this->compressionMethods);
     }
 }

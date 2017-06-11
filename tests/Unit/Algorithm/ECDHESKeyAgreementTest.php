@@ -9,6 +9,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+namespace Jose\Test\Unit\Algorithm;
+
 use Base64Url\Base64Url;
 use Jose\Algorithm\KeyEncryption\ECDHES;
 use Jose\Algorithm\KeyEncryption\ECDHESA128KW;
@@ -19,12 +21,12 @@ use Jose\Object\JWK;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ECDHESKeyAgreementTest.
+ * final class ECDHESKeyAgreementTest.
  *
  * @group ECDHES
  * @group Unit
  */
-class ECDHESKeyAgreementTest extends TestCase
+final class ECDHESKeyAgreementTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7518#appendix-C

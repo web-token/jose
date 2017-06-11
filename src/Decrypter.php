@@ -14,8 +14,10 @@ namespace Jose;
 use Base64Url\Base64Url;
 use Jose\Algorithm\ContentEncryptionAlgorithmInterface;
 use Jose\Algorithm\JWAInterface;
+use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Compression\CompressionInterface;
+use Jose\Compression\CompressionManager;
 use Jose\Object\JWE;
 use Jose\Object\JWKInterface;
 use Jose\Object\JWKSetInterface;
@@ -24,38 +26,66 @@ use Jose\Object\Recipient;
 final class Decrypter
 {
     use Behaviour\HasKeyChecker;
-    use Behaviour\HasJWAManager;
-    use Behaviour\HasCompressionManager;
-    use Behaviour\CommonCipheringMethods;
 
     /**
-     * @param string[]|KeyEncryptionAlgorithmInterface[]     $key_encryption_algorithms
-     * @param string[]|ContentEncryptionAlgorithmInterface[] $content_encryption_algorithms
-     * @param string[]|CompressionInterface[]              $compression_methods
-     *
-     * @return Decrypter
+     * @var JWAManager
      */
-    public static function createDecrypter(array $key_encryption_algorithms, array $content_encryption_algorithms, array $compression_methods = ['DEF', 'ZLIB', 'GZ'])
-    {
-        $decrypter = new self($key_encryption_algorithms, $content_encryption_algorithms, $compression_methods);
+    private $keyEncryptionAlgorithmManager;
 
-        return $decrypter;
+    /**
+     * @var JWAManager
+     */
+    private $contentEncryptionAlgorithmManager;
+
+    /**
+     * @var CompressionManager
+     */
+    private $compressionManager;
+
+    /**
+     * @return CompressionManager
+     */
+    private function getCompressionManager(): CompressionManager
+    {
+        return $this->compressionManager;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSupportedCompressionMethods(): array
+    {
+        return $this->getCompressionManager()->list();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSupportedKeyEncryptionAlgorithms(): array
+    {
+        return $this->keyEncryptionAlgorithmManager->list();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSupportedContentEncryptionAlgorithms(): array
+    {
+        return $this->contentEncryptionAlgorithmManager->list();
     }
 
     /**
      * Decrypter constructor.
      *
-     * @param string[]|KeyEncryptionAlgorithmInterface[]     $key_encryption_algorithms
-     * @param string[]|ContentEncryptionAlgorithmInterface[] $content_encryption_algorithms
-     * @param string[]|CompressionInterface[]              $compression_methods
+     * @param JWAManager         $keyEncryptionAlgorithmManager
+     * @param JWAManager         $contentEncryptionAlgorithmManager
+     * @param CompressionManager $compressionManager
      */
-    public function __construct(array $key_encryption_algorithms, array $content_encryption_algorithms, array $compression_methods)
+    public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionManager $compressionManager)
     {
-        $this->setKeyEncryptionAlgorithms($key_encryption_algorithms);
-        $this->setContentEncryptionAlgorithms($content_encryption_algorithms);
-        $this->setCompressionMethods($compression_methods);
-        $this->setJWAManager(Factory\AlgorithmManagerFactory::createAlgorithmManager(array_merge($key_encryption_algorithms, $content_encryption_algorithms)));
-        $this->setCompressionManager(Factory\CompressionManagerFactory::createCompressionManager($compression_methods));
+        $this->keyEncryptionAlgorithmManager = $keyEncryptionAlgorithmManager;
+        $this->contentEncryptionAlgorithmManager = $contentEncryptionAlgorithmManager;
+        $this->compressionManager = $compressionManager;
     }
 
     /**
@@ -219,7 +249,7 @@ final class Decrypter
     private function decompressIfNeeded(&$payload, array $complete_headers)
     {
         if (array_key_exists('zip', $complete_headers)) {
-            $compression_method = $this->getCompressionMethod($complete_headers['zip']);
+            $compression_method = $this->getCompressionManager()->get($complete_headers['zip']);
             $payload = $compression_method->uncompress($payload);
             if (!is_string($payload)) {
                 throw new \InvalidArgumentException('Decompression failed');
@@ -248,7 +278,7 @@ final class Decrypter
      */
     private function getKeyEncryptionAlgorithm(array $complete_headers)
     {
-        $key_encryption_algorithm = $this->getJWAManager()->get($complete_headers['alg']);
+        $key_encryption_algorithm = $this->keyEncryptionAlgorithmManager->get($complete_headers['alg']);
         if (!$key_encryption_algorithm instanceof KeyEncryptionAlgorithmInterface) {
             throw new \InvalidArgumentException(sprintf('The key encryption algorithm "%s" is not supported or does not implement KeyEncryptionAlgorithmInterface.', $complete_headers['alg']));
         }
@@ -263,28 +293,11 @@ final class Decrypter
      */
     private function getContentEncryptionAlgorithm(array $complete_headers)
     {
-        $content_encryption_algorithm = $this->getJWAManager()->get($complete_headers['enc']);
+        $content_encryption_algorithm = $this->contentEncryptionAlgorithmManager->get($complete_headers['enc']);
         if (!$content_encryption_algorithm instanceof ContentEncryptionAlgorithmInterface) {
             throw new \InvalidArgumentException(sprintf('The key encryption algorithm "%s" is not supported or does not implement ContentEncryptionInterface.', $complete_headers['enc']));
         }
 
         return $content_encryption_algorithm;
-    }
-
-    /**
-     * @param string $method
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return CompressionInterface
-     */
-    private function getCompressionMethod($method)
-    {
-        $compression_method = $this->getCompressionManager()->getCompressionAlgorithm($method);
-        if (null === $compression_method) {
-            throw new \InvalidArgumentException(sprintf('Compression method "%s" not supported', $method));
-        }
-
-        return $compression_method;
     }
 }

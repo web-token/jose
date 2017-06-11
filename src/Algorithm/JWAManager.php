@@ -22,6 +22,21 @@ final class JWAManager
     protected $algorithms = [];
 
     /**
+     * @param JWAInterface[] $algorithms
+     *
+     * @return JWAManager
+     */
+    public static function create(array $algorithms): JWAManager
+    {
+        $manager = new self();
+        foreach ($algorithms as $algorithm) {
+            $manager->add($algorithm);
+        }
+
+        return $manager;
+    }
+
+    /**
      * @param string $algorithm The algorithm
      *
      * @return bool Returns true if the algorithm is supported
@@ -32,19 +47,11 @@ final class JWAManager
     }
 
     /**
-     * @return JWAInterface[] Returns the list of supported algorithms
-     */
-    public function all(): array
-    {
-        return $this->algorithms;
-    }
-
-    /**
      * @return string[] Returns the list of names of supported algorithms
      */
     public function list(): array
     {
-        return array_keys($this->all());
+        return array_keys($this->algorithms);
     }
 
     /**
