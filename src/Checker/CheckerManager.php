@@ -13,7 +13,6 @@ namespace Jose\Checker;
 
 use Assert\Assertion;
 use Jose\Object\JWS;
-use Jose\Object\JWTInterface;
 
 /**
  * Class CheckerManager.
@@ -31,18 +30,33 @@ final class CheckerManager
     private $header_checkers = [];
 
     /**
-     * @param JWTInterface $jwt
+     * @param JWS $jws
+     * @param int $signature
+     */
+    public function checkJWS(JWS $jws, int $signature)
+    {
+        Assertion::lessThan($signature, $jws->countSignatures());
+
+        $checked_claims = $this->checkClaims($jws);
+        $protected_headers = $jws->getSignature($signature)->getProtectedHeaders();
+        $headers = $jws->getSignature($signature)->getHeaders();
+
+        $this->checkHeaders($protected_headers, $headers, $checked_claims);
+    }
+
+    /**
+     * @param JWS $jws
      *
      * @return string[]
      */
-    private function checkJWT(JWTInterface $jwt): array
+    private function checkClaims(JWS $jws): array
     {
         $checked_claims = [];
 
         foreach ($this->claim_checkers as $claim_checker) {
             $checked_claims = array_merge(
                 $checked_claims,
-                $claim_checker->checkClaim($jwt)
+                $claim_checker->checkClaim($jws)
             );
         }
 
@@ -59,22 +73,6 @@ final class CheckerManager
         foreach ($this->header_checkers as $header_checker) {
             $header_checker->checkHeader($protected_headers, $headers, $checked_claims);
         }
-    }
-
-    /**
-     * @param JWS $jws
-     * @param int                       $signature
-     */
-    public function checkJWS(JWS $jws, int $signature)
-    {
-        Assertion::integer($signature);
-        Assertion::lessThan($signature, $jws->countSignatures());
-
-        $checked_claims = $this->checkJWT($jws);
-        $protected_headers = $jws->getSignature($signature)->getProtectedHeaders();
-        $headers = $jws->getSignature($signature)->getHeaders();
-
-        $this->checkHeaders($protected_headers, $headers, $checked_claims);
     }
 
     /**

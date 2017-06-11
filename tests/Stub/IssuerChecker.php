@@ -13,14 +13,14 @@ namespace Jose\Test\Stub;
 
 use Assert\Assertion;
 use Jose\Checker\ClaimCheckerInterface;
-use Jose\Object\JWTInterface;
+use Jose\Object\JWS;
 
 final class IssuerChecker implements ClaimCheckerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWTInterface $jwt): array
+    public function checkClaim(JWS $jwt): array
     {
         if (!$jwt->hasClaim('iss')) {
             return [];

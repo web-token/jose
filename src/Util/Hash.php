@@ -11,7 +11,7 @@
 
 namespace Jose\Util;
 
-class Hash
+final class Hash
 {
     /**
      * Hash Parameter.
