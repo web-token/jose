@@ -13,13 +13,13 @@ namespace Jose\Test\Unit\Algorithm;
 
 use Base64Url\Base64Url;
 use Jose\Algorithm\JWAManager;
-use Jose\Algorithm\Signature\EdDSA;
+use Jose\Component\Signature\Algorithm\EdDSA;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
-use Jose\Object\JWS;
+use Jose\Component\Signature\Object\JWS;
 use Jose\Test\TestCase;
-use Jose\Verifier;
+use Jose\Component\Signature\Verifier;
 
 /**
  * final class EdDSASignatureTest.

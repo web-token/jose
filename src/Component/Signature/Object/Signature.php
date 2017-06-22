@@ -9,10 +9,11 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Object;
+namespace Jose\Component\Signature\Object;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
+use Jose\Object\JWKInterface;
 
 /**
  * Class SignatureInstruction.
@@ -40,7 +41,7 @@ final class Signature
     private $signature;
 
     /**
-     * @var \Jose\Object\JWKInterface
+     * @var JWKInterface
      */
     private $signature_key;
 
@@ -49,7 +50,7 @@ final class Signature
      * @param string|null $encoded_protected_headers
      * @param array       $headers
      *
-     * @return \Jose\Object\Signature
+     * @return Signature
      */
     public static function createSignatureFromLoadedData($signature, $encoded_protected_headers, array $headers)
     {
@@ -67,11 +68,11 @@ final class Signature
     }
 
     /**
-     * @param \Jose\Object\JWKInterface $signature_key
+     * @param JWKInterface $signature_key
      * @param array                     $protected_headers
      * @param array                     $headers
      *
-     * @return \Jose\Object\Signature
+     * @return Signature
      */
     public static function createSignature(JWKInterface $signature_key, array $protected_headers, array $headers)
     {
@@ -191,7 +192,7 @@ final class Signature
     }
 
     /**
-     * @return \Jose\Object\JWKInterface
+     * @return JWKInterface
      */
     public function getSignatureKey()
     {

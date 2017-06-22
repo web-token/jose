@@ -9,10 +9,13 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Object;
+namespace Jose\Component\Signature\Object;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
+use Jose\Object\JWKInterface;
+use Jose\Object\JWT;
+use Jose\Object\JWTInterface;
 
 /**
  * Class JWS.

@@ -9,17 +9,14 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
-/**
- * Class PS384.
- */
-final class PS384 extends RSA
+final class ES384 extends ECDSA
 {
     /**
      * @return string
      */
-    protected function getAlgorithm(): string
+    protected function getHashAlgorithm()
     {
         return 'sha384';
     }
@@ -27,9 +24,9 @@ final class PS384 extends RSA
     /**
      * @return int
      */
-    protected function getSignatureMethod(): int
+    protected function getSignaturePartLength()
     {
-        return self::SIGNATURE_PSS;
+        return 96;
     }
 
     /**
@@ -37,6 +34,6 @@ final class PS384 extends RSA
      */
     public function name(): string
     {
-        return 'PS384';
+        return 'ES384';
     }
 }

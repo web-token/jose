@@ -9,23 +9,27 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
 /**
- * This class handles signatures using HMAC.
- * It supports HS384;.
+ * Class RS512.
  */
-/**
- * Class HS384.
- */
-final class HS384 extends HMAC
+final class RS512 extends RSA
 {
     /**
      * @return string
      */
-    protected function getHashAlgorithm(): string
+    protected function getAlgorithm(): string
     {
-        return 'sha384';
+        return 'sha512';
+    }
+
+    /**
+     * @return int
+     */
+    protected function getSignatureMethod(): int
+    {
+        return self::SIGNATURE_PKCS1;
     }
 
     /**
@@ -33,6 +37,6 @@ final class HS384 extends HMAC
      */
     public function name(): string
     {
-        return 'HS384';
+        return 'RS512';
     }
 }

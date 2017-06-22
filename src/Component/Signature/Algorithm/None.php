@@ -9,18 +9,16 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
 use Assert\Assertion;
-use Base64Url\Base64Url;
-use Jose\Algorithm\SignatureAlgorithmInterface;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Object\JWKInterface;
 
 /**
- * This class handles signatures using HMAC.
- * It supports algorithms HS256, HS384 and HS512;.
+ * This class is an abstract class that implements the none algorithm (plaintext).
  */
-abstract class HMAC implements SignatureAlgorithmInterface
+final class None implements SignatureAlgorithmInterface
 {
     /**
      * {@inheritdoc}
@@ -29,7 +27,7 @@ abstract class HMAC implements SignatureAlgorithmInterface
     {
         $this->checkKey($key);
 
-        return hash_hmac($this->getHashAlgorithm(), $input, Base64Url::decode($key->get('k')), true);
+        return '';
     }
 
     /**
@@ -37,7 +35,7 @@ abstract class HMAC implements SignatureAlgorithmInterface
      */
     public function verify(JWKInterface $key, string $input, string $signature): bool
     {
-        return hash_equals($this->sign($key, $input), $signature);
+        return $signature === '';
     }
 
     /**
@@ -45,12 +43,14 @@ abstract class HMAC implements SignatureAlgorithmInterface
      */
     protected function checkKey(JWKInterface $key)
     {
-        Assertion::eq($key->get('kty'), 'oct', 'Wrong key type.');
-        Assertion::true($key->has('k'), 'The key parameter "k" is missing.');
+        Assertion::eq($key->get('kty'), 'none', 'Wrong key type.');
     }
 
     /**
      * @return string
      */
-    abstract protected function getHashAlgorithm(): string;
+    public function name(): string
+    {
+        return 'none';
+    }
 }

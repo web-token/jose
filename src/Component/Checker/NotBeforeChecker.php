@@ -12,7 +12,7 @@
 namespace Jose\Component\Checker;
 
 use Assert\Assertion;
-use Jose\Object\JWS;
+use Jose\Component\Signature\Object\JWS;
 
 final class NotBeforeChecker implements ClaimCheckerInterface
 {

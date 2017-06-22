@@ -9,24 +9,23 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
-final class ES256 extends ECDSA
+/**
+ * This class handles signatures using HMAC.
+ * It supports HS384;.
+ */
+/**
+ * Class HS384.
+ */
+final class HS384 extends HMAC
 {
     /**
      * @return string
      */
-    protected function getHashAlgorithm()
+    protected function getHashAlgorithm(): string
     {
-        return 'sha256';
-    }
-
-    /**
-     * @return int
-     */
-    protected function getSignaturePartLength()
-    {
-        return 64;
+        return 'sha384';
     }
 
     /**
@@ -34,6 +33,6 @@ final class ES256 extends ECDSA
      */
     public function name(): string
     {
-        return 'ES256';
+        return 'HS384';
     }
 }

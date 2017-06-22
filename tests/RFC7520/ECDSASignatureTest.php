@@ -12,12 +12,12 @@
 namespace Jose\Test\RFC7520;
 
 use Jose\Algorithm\JWAManager;
-use Jose\Algorithm\Signature\ES512;
+use Jose\Component\Signature\Algorithm\ES512;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
-use Jose\Signer;
-use Jose\Verifier;
+use Jose\Component\Signature\Signer;
+use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -16,7 +16,7 @@ use Jose\Factory\JWKFactory;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWE;
-use Jose\Object\JWS;
+use Jose\Component\Signature\Object\JWS;
 use PHPUnit\Framework\TestCase;
 
 /**

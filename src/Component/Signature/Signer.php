@@ -9,19 +9,19 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose;
+namespace Jose\Component\Signature;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Algorithm\JWAManager;
-use Jose\Algorithm\SignatureAlgorithmInterface;
+use Jose\Behaviour\HasKeyChecker;
 use Jose\Object\JWKInterface;
-use Jose\Object\JWS;
-use Jose\Object\Signature;
+use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\Object\Signature;
 
 final class Signer
 {
-    use Behaviour\HasKeyChecker;
+    use HasKeyChecker;
 
     /**
      * @var JWAManager

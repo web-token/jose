@@ -9,11 +9,11 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Algorithm\SignatureAlgorithmInterface;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Object\JWKInterface;
 
 /**

@@ -14,8 +14,8 @@ namespace Jose\Test\Functional;
 use Jose\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\KeyEncryption\A256GCMKW;
-use Jose\Algorithm\Signature\HS512;
-use Jose\Algorithm\Signature\RS512;
+use Jose\Component\Signature\Algorithm\HS512;
+use Jose\Component\Signature\Algorithm\RS512;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
@@ -25,9 +25,9 @@ use Jose\JWTCreator;
 use Jose\JWTLoader;
 use Jose\Object\JWK;
 use Jose\Object\JWKSet;
-use Jose\Signer;
+use Jose\Component\Signature\Signer;
 use Jose\Test\TestCase;
-use Jose\Verifier;
+use Jose\Component\Signature\Verifier;
 
 /**
  * @group JWTLoader

@@ -14,13 +14,13 @@ namespace Jose\Test\RFC7520;
 use Jose\Algorithm\ContentEncryption\A128GCM;
 use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\KeyEncryption\RSAOAEP;
-use Jose\Algorithm\Signature\PS256;
+use Jose\Component\Signature\Algorithm\PS256;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Loader;
 use Jose\Object\JWK;
-use Jose\Verifier;
+use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
 /**

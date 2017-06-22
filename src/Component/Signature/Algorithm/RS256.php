@@ -9,24 +9,27 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
-final class ES384 extends ECDSA
+/**
+ * Class RS256.
+ */
+final class RS256 extends RSA
 {
     /**
      * @return string
      */
-    protected function getHashAlgorithm()
+    protected function getAlgorithm(): string
     {
-        return 'sha384';
+        return 'sha256';
     }
 
     /**
      * @return int
      */
-    protected function getSignaturePartLength()
+    protected function getSignatureMethod(): int
     {
-        return 96;
+        return self::SIGNATURE_PKCS1;
     }
 
     /**
@@ -34,6 +37,6 @@ final class ES384 extends ECDSA
      */
     public function name(): string
     {
-        return 'ES384';
+        return 'RS256';
     }
 }

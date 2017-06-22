@@ -9,27 +9,23 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
 /**
- * Class RS256.
+ * This class handles signatures using HMAC.
+ * It supports HS256;.
  */
-final class RS256 extends RSA
+/**
+ * Class HS256.
+ */
+final class HS256 extends HMAC
 {
     /**
      * @return string
      */
-    protected function getAlgorithm(): string
+    protected function getHashAlgorithm(): string
     {
         return 'sha256';
-    }
-
-    /**
-     * @return int
-     */
-    protected function getSignatureMethod(): int
-    {
-        return self::SIGNATURE_PKCS1;
     }
 
     /**
@@ -37,6 +33,6 @@ final class RS256 extends RSA
      */
     public function name(): string
     {
-        return 'RS256';
+        return 'HS256';
     }
 }

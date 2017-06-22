@@ -13,13 +13,14 @@ namespace Jose;
 
 use Assert\Assertion;
 use Jose\Component\Encryption\Decrypter;
+use Jose\Component\Signature\Verifier;
 use Jose\Factory\AlgorithmManagerFactory;
 use Jose\Factory\CompressionManagerFactory;
 use Jose\Object\JWE;
 use Jose\Object\JWKInterface;
 use Jose\Object\JWKSet;
 use Jose\Object\JWKSetInterface;
-use Jose\Object\JWS;
+use Jose\Component\Signature\Object\JWS;
 use Jose\Object\JWTInterface;
 
 /**

@@ -13,8 +13,8 @@ namespace Jose\Util;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Object\JWS;
-use Jose\Object\Signature;
+use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\Object\Signature;
 
 final class JWSLoader
 {

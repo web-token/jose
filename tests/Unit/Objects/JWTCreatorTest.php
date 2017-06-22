@@ -15,7 +15,7 @@ use Jose\Algorithm\ContentEncryption\A128GCM;
 use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\KeyEncryption\A256GCMKW;
 use Jose\Algorithm\KeyEncryption\A256KW;
-use Jose\Algorithm\Signature\HS256;
+use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Compression\GZip;
@@ -23,7 +23,7 @@ use Jose\Component\Encryption\Compression\ZLib;
 use Jose\Component\Encryption\Encrypter;
 use Jose\Factory\JWKFactory;
 use Jose\JWTCreator;
-use Jose\Signer;
+use Jose\Component\Signature\Signer;
 use PHPUnit\Framework\TestCase;
 
 /**

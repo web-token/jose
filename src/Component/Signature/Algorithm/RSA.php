@@ -9,10 +9,10 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
 use Assert\Assertion;
-use Jose\Algorithm\SignatureAlgorithmInterface;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Jose\Object\JWKInterface;
 use Jose\Util\RSA as JoseRSA;

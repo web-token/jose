@@ -9,13 +9,13 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
 use Assert\Assertion;
 use FG\ASN1\Object;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\Sequence;
-use Jose\Algorithm\SignatureAlgorithmInterface;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\KeyManagement\KeyConverter\ECKey;
 use Jose\Object\JWKInterface;
 use Mdanter\Ecc\EccFactory;

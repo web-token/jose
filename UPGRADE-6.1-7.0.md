@@ -57,6 +57,7 @@ If you need `ECDH-ES*` encryption algorithms, then you have to install it explic
 * `Jose\Compression` is now `Jose\Component\Encryption\Compression`
 * `Jose\Encrypter` is now `Jose\Component\Encryption\Encrypter`
 * `Jose\Decrypter` is now `Jose\Component\Encryption\Decrypter`
+* `Jose\Checker` is now `Jose\Component\Checker`
 
 ## Final classes
 

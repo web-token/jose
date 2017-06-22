@@ -11,21 +11,21 @@
 
 include_once __DIR__.'/../../vendor/autoload.php';
 
-use Jose\Algorithm\Signature\EdDSA;
-use Jose\Algorithm\Signature\ES256;
-use Jose\Algorithm\Signature\ES384;
-use Jose\Algorithm\Signature\ES512;
-use Jose\Algorithm\Signature\HS256;
-use Jose\Algorithm\Signature\HS384;
-use Jose\Algorithm\Signature\HS512;
-use Jose\Algorithm\Signature\None;
-use Jose\Algorithm\Signature\PS256;
-use Jose\Algorithm\Signature\PS384;
-use Jose\Algorithm\Signature\PS512;
-use Jose\Algorithm\Signature\RS256;
-use Jose\Algorithm\Signature\RS384;
-use Jose\Algorithm\Signature\RS512;
-use Jose\Algorithm\SignatureAlgorithmInterface;
+use Jose\Component\Signature\Algorithm\EdDSA;
+use Jose\Component\Signature\Algorithm\ES256;
+use Jose\Component\Signature\Algorithm\ES384;
+use Jose\Component\Signature\Algorithm\ES512;
+use Jose\Component\Signature\Algorithm\HS256;
+use Jose\Component\Signature\Algorithm\HS384;
+use Jose\Component\Signature\Algorithm\HS512;
+use Jose\Component\Signature\Algorithm\None;
+use Jose\Component\Signature\Algorithm\PS256;
+use Jose\Component\Signature\Algorithm\PS384;
+use Jose\Component\Signature\Algorithm\PS512;
+use Jose\Component\Signature\Algorithm\RS256;
+use Jose\Component\Signature\Algorithm\RS384;
+use Jose\Component\Signature\Algorithm\RS512;
+use Jose\Component\Signature\AlgorithmAlgorithmInterface;
 use Jose\Object\JWK;
 use Jose\Object\JWKInterface;
 

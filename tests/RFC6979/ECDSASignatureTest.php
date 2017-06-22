@@ -12,10 +12,10 @@
 namespace Jose\Test\RFC6979;
 
 use Base64Url\Base64Url;
-use Jose\Algorithm\Signature\ES256;
-use Jose\Algorithm\Signature\ES384;
-use Jose\Algorithm\Signature\ES512;
-use Jose\Algorithm\SignatureAlgorithmInterface;
+use Jose\Component\Signature\Algorithm\ES256;
+use Jose\Component\Signature\Algorithm\ES384;
+use Jose\Component\Signature\Algorithm\ES512;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Factory\JWKFactory;
 use Jose\Object\JWKInterface;
 use PHPUnit\Framework\TestCase;
@@ -37,7 +37,7 @@ use PHPUnit\Framework\TestCase;
 final class ECDSASignatureTest extends TestCase
 {
     /**
-     * @param \Jose\Algorithm\SignatureAlgorithmInterface $algorithm
+     * @param SignatureAlgorithmInterface $algorithm
      * @param string                                      $message
      * @param \Jose\Object\JWKInterface                   $key
      * @param string                                      $signature

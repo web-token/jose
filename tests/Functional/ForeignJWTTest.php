@@ -13,7 +13,7 @@ namespace Jose\Test\Functional;
 
 use Jose\Factory\JWKFactory;
 use Jose\Loader;
-use Jose\Object\JWS;
+use Jose\Component\Signature\Object\JWS;
 use PHPUnit\Framework\TestCase;
 
 /**

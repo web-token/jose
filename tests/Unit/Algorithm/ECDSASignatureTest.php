@@ -12,9 +12,9 @@
 namespace Jose\Test\Unit\Algorithm;
 
 use Base64Url\Base64Url;
-use Jose\Algorithm\Signature\ES256;
-use Jose\Algorithm\Signature\ES384;
-use Jose\Algorithm\Signature\ES512;
+use Jose\Component\Signature\Algorithm\ES256;
+use Jose\Component\Signature\Algorithm\ES384;
+use Jose\Component\Signature\Algorithm\ES512;
 use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use Jose\Object\JWK;
 use PHPUnit\Framework\TestCase;

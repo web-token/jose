@@ -9,8 +9,9 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm;
+namespace Jose\Component\Signature;
 
+use Jose\Algorithm\JWAInterface;
 use Jose\Object\JWKInterface;
 
 /**

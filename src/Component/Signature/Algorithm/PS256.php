@@ -9,24 +9,27 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
-final class ES512 extends ECDSA
+/**
+ * Class PS256.
+ */
+final class PS256 extends RSA
 {
     /**
      * @return string
      */
-    protected function getHashAlgorithm()
+    protected function getAlgorithm(): string
     {
-        return 'sha512';
+        return 'sha256';
     }
 
     /**
      * @return int
      */
-    protected function getSignaturePartLength()
+    protected function getSignatureMethod(): int
     {
-        return 132;
+        return self::SIGNATURE_PSS;
     }
 
     /**
@@ -34,6 +37,6 @@ final class ES512 extends ECDSA
      */
     public function name(): string
     {
-        return 'ES512';
+        return 'PS256';
     }
 }

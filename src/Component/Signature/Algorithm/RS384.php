@@ -9,19 +9,19 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
 /**
- * Class RS512.
+ * Class RS384.
  */
-final class RS512 extends RSA
+final class RS384 extends RSA
 {
     /**
      * @return string
      */
     protected function getAlgorithm(): string
     {
-        return 'sha512';
+        return 'sha384';
     }
 
     /**
@@ -37,6 +37,6 @@ final class RS512 extends RSA
      */
     public function name(): string
     {
-        return 'RS512';
+        return 'RS384';
     }
 }

@@ -9,21 +9,21 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose;
+namespace Jose\Component\Signature;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Algorithm\JWAManager;
-use Jose\Algorithm\SignatureAlgorithmInterface;
+use Jose\Behaviour\HasKeyChecker;
 use Jose\Object\JWKInterface;
 use Jose\Object\JWKSet;
 use Jose\Object\JWKSetInterface;
-use Jose\Object\JWS;
-use Jose\Object\Signature;
+use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\Object\Signature;
 
 final class Verifier
 {
-    use Behaviour\HasKeyChecker;
+    use HasKeyChecker;
 
     /**
      * @var JWAManager
@@ -205,7 +205,7 @@ final class Verifier
         Assertion::keyExists($complete_headers, 'alg', 'No "alg" parameter set in the header.');
 
         $algorithm = $this->signatureAlgorithmManager->get($complete_headers['alg']);
-        Assertion::isInstanceOf($algorithm, Algorithm\SignatureAlgorithmInterface::class, sprintf('The algorithm "%s" is not supported or is not a signature algorithm.', $complete_headers['alg']));
+        Assertion::isInstanceOf($algorithm, SignatureAlgorithmInterface::class, sprintf('The algorithm "%s" is not supported or is not a signature algorithm.', $complete_headers['alg']));
 
         return $algorithm;
     }

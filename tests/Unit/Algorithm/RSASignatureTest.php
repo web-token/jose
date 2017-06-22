@@ -16,13 +16,13 @@ use Jose\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\KeyEncryption\A128KW;
 use Jose\Algorithm\KeyEncryption\RSA15;
-use Jose\Algorithm\Signature\ES256;
-use Jose\Algorithm\Signature\PS256;
-use Jose\Algorithm\Signature\PS384;
-use Jose\Algorithm\Signature\PS512;
-use Jose\Algorithm\Signature\RS256;
-use Jose\Algorithm\Signature\RS384;
-use Jose\Algorithm\Signature\RS512;
+use Jose\Component\Signature\Algorithm\ES256;
+use Jose\Component\Signature\Algorithm\PS256;
+use Jose\Component\Signature\Algorithm\PS384;
+use Jose\Component\Signature\Algorithm\PS512;
+use Jose\Component\Signature\Algorithm\RS256;
+use Jose\Component\Signature\Algorithm\RS384;
+use Jose\Component\Signature\Algorithm\RS512;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
@@ -31,10 +31,10 @@ use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use Jose\Loader;
 use Jose\Object\JWE;
 use Jose\Object\JWK;
-use Jose\Object\JWS;
-use Jose\Signer;
+use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\Signer;
 use Jose\Test\TestCase;
-use Jose\Verifier;
+use Jose\Component\Signature\Verifier;
 
 /**
  * final class RSASignatureTest.

@@ -19,7 +19,7 @@ use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Loader;
 use Jose\Object\JWE;
-use Jose\Object\JWS;
+use Jose\Component\Signature\Object\JWS;
 use Jose\Test\TestCase;
 
 /**

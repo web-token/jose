@@ -13,7 +13,7 @@ namespace Jose\Test\Stub;
 
 use Assert\Assertion;
 use Jose\Component\Checker\ClaimCheckerInterface;
-use Jose\Object\JWS;
+use Jose\Component\Signature\Object\JWS;
 
 final class JtiChecker implements ClaimCheckerInterface
 {

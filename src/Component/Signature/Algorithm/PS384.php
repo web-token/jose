@@ -9,12 +9,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
 /**
- * Class RS384.
+ * Class PS384.
  */
-final class RS384 extends RSA
+final class PS384 extends RSA
 {
     /**
      * @return string
@@ -29,7 +29,7 @@ final class RS384 extends RSA
      */
     protected function getSignatureMethod(): int
     {
-        return self::SIGNATURE_PKCS1;
+        return self::SIGNATURE_PSS;
     }
 
     /**
@@ -37,6 +37,6 @@ final class RS384 extends RSA
      */
     public function name(): string
     {
-        return 'RS384';
+        return 'PS384';
     }
 }

@@ -9,17 +9,14 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Algorithm\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
-/**
- * Class PS512.
- */
-final class PS512 extends RSA
+final class ES512 extends ECDSA
 {
     /**
      * @return string
      */
-    protected function getAlgorithm(): string
+    protected function getHashAlgorithm()
     {
         return 'sha512';
     }
@@ -27,9 +24,9 @@ final class PS512 extends RSA
     /**
      * @return int
      */
-    protected function getSignatureMethod(): int
+    protected function getSignaturePartLength()
     {
-        return self::SIGNATURE_PSS;
+        return 132;
     }
 
     /**
@@ -37,6 +34,6 @@ final class PS512 extends RSA
      */
     public function name(): string
     {
-        return 'PS512';
+        return 'ES512';
     }
 }

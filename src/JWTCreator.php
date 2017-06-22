@@ -13,6 +13,7 @@ namespace Jose;
 
 use Assert\Assertion;
 use Jose\Component\Encryption\Encrypter;
+use Jose\Component\Signature\Signer;
 use Jose\Object\JWKInterface;
 
 final class JWTCreator

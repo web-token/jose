@@ -12,18 +12,18 @@
 namespace Jose\Test\Functional;
 
 use Jose\Algorithm\JWAManager;
-use Jose\Algorithm\Signature\HS256;
-use Jose\Algorithm\Signature\HS512;
-use Jose\Algorithm\Signature\PS512;
-use Jose\Algorithm\Signature\RS512;
+use Jose\Component\Signature\Algorithm\HS256;
+use Jose\Component\Signature\Algorithm\HS512;
+use Jose\Component\Signature\Algorithm\PS512;
+use Jose\Component\Signature\Algorithm\RS512;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Object\JWKSet;
-use Jose\Object\JWS;
-use Jose\Signer;
+use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\Signer;
 use Jose\Test\TestCase;
-use Jose\Verifier;
+use Jose\Component\Signature\Verifier;
 
 /**
  * @group Signer
