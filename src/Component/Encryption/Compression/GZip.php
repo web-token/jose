@@ -9,15 +9,15 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Compression;
+namespace Jose\Component\Encryption\Compression;
 
-use Assert\Assertion;
+
 
 /**
- * This class implements the compression algorithm DEF (defalte)
- * This compression algorithm is part of the specification.
+ * This class implements the compression algorithm GZ (GZip).
+ * This compression algorithm is not part of the specification.
  */
-final class Deflate implements CompressionInterface
+final class GZip implements CompressionInterface
 {
     /**
      * @var int
@@ -50,7 +50,7 @@ final class Deflate implements CompressionInterface
      */
     public function name(): string
     {
-        return 'DEF';
+        return 'GZ';
     }
 
     /**
@@ -58,7 +58,7 @@ final class Deflate implements CompressionInterface
      */
     public function compress(string $data): string
     {
-        $data = gzdeflate($data, $this->getCompressionLevel());
+        $data = gzencode($data, $this->getCompressionLevel());
         Assertion::false(false === $data, 'Unable to compress data');
 
         return $data;
@@ -69,7 +69,7 @@ final class Deflate implements CompressionInterface
      */
     public function uncompress(string $data): string
     {
-        $data = gzinflate($data);
+        $data = gzdecode($data);
         Assertion::false(false === $data, 'Unable to uncompress data');
 
         return $data;

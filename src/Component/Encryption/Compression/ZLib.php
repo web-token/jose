@@ -9,9 +9,9 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Compression;
+namespace Jose\Component\Encryption\Compression;
 
-use Assert\Assertion;
+
 
 /**
  * This class implements the compression algorithm ZLIB (ZLib).

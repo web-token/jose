@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Compression;
+namespace Jose\Component\Encryption\Compression;
 
 /**
  * Compression method manager.

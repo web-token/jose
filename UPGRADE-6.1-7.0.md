@@ -52,6 +52,10 @@ If you need `ECDH-ES*` encryption algorithms, then you have to install it explic
 * The signature of the method `Jose\Verifier::__construct` changed.
 * The method `Jose\Verifier::createVerifier` class removed.
 
+## Namesapce Oganization
+
+* `Jose\Compression` is now `Jose\Component\Encryption\Compression`
+
 ## Final classes
 
 The following classes are now marked as final.
