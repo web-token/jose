@@ -12,13 +12,13 @@
 namespace Jose\Test\Unit\Algorithm;
 
 use Base64Url\Base64Url;
-use Jose\Algorithm\ContentEncryption\A128CBCHS256;
-use Jose\Algorithm\ContentEncryption\A256GCM;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
 use Jose\Algorithm\JWAManager;
-use Jose\Algorithm\KeyEncryption\A128KW;
-use Jose\Algorithm\KeyEncryption\RSA15;
-use Jose\Algorithm\KeyEncryption\RSAOAEP;
-use Jose\Algorithm\KeyEncryption\RSAOAEP256;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;

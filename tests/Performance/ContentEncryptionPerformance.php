@@ -12,13 +12,13 @@
 include_once __DIR__.'/../../vendor/autoload.php';
 
 use Base64Url\Base64Url;
-use Jose\Algorithm\ContentEncryption\A128CBCHS256;
-use Jose\Algorithm\ContentEncryption\A128GCM;
-use Jose\Algorithm\ContentEncryption\A192CBCHS384;
-use Jose\Algorithm\ContentEncryption\A192GCM;
-use Jose\Algorithm\ContentEncryption\A256CBCHS512;
-use Jose\Algorithm\ContentEncryption\A256GCM;
-use Jose\Algorithm\ContentEncryptionAlgorithmInterface;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A192CBCHS384;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A192GCM;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A256CBCHS512;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
+use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
 
 function testContentEncryptionPerformance(ContentEncryptionAlgorithmInterface $alg)
 {

@@ -11,9 +11,9 @@
 
 namespace Jose\Test\RFC7520;
 
-use Jose\Algorithm\ContentEncryption\A128GCM;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Algorithm\JWAManager;
-use Jose\Algorithm\KeyEncryption\RSAOAEP;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
 use Jose\Component\Signature\Algorithm\PS256;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;

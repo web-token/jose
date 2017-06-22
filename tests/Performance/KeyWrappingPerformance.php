@@ -11,16 +11,16 @@
 
 include_once __DIR__.'/../../vendor/autoload.php';
 
-use Jose\Algorithm\KeyEncryption\A128GCMKW;
-use Jose\Algorithm\KeyEncryption\A128KW;
-use Jose\Algorithm\KeyEncryption\A192GCMKW;
-use Jose\Algorithm\KeyEncryption\A192KW;
-use Jose\Algorithm\KeyEncryption\A256GCMKW;
-use Jose\Algorithm\KeyEncryption\A256KW;
-use Jose\Algorithm\KeyEncryption\KeyWrappingInterface;
-use Jose\Algorithm\KeyEncryption\PBES2HS256A128KW;
-use Jose\Algorithm\KeyEncryption\PBES2HS384A192KW;
-use Jose\Algorithm\KeyEncryption\PBES2HS512A256KW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A128GCMKW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A192GCMKW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A192KW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A256GCMKW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A256KW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS256A128KW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS384A192KW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS512A256KW;
 use Jose\Object\JWK;
 use Jose\Object\JWKInterface;
 

@@ -12,10 +12,10 @@
 namespace Jose\Test\Unit\Algorithm;
 
 use Base64Url\Base64Url;
-use Jose\Algorithm\ContentEncryption\A128CBCHS256;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Algorithm\JWAManager;
-use Jose\Algorithm\KeyEncryption\A128KW;
-use Jose\Algorithm\KeyEncryption\RSA15;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
 use Jose\Component\Signature\Algorithm\ES256;
 use Jose\Component\Signature\Algorithm\PS256;
 use Jose\Component\Signature\Algorithm\PS384;

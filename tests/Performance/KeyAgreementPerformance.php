@@ -11,8 +11,8 @@
 
 include_once __DIR__.'/../../vendor/autoload.php';
 
-use Jose\Algorithm\KeyEncryption\ECDHES;
-use Jose\Algorithm\KeyEncryption\KeyAgreementInterface;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementInterface;
 use Jose\Factory\JWKFactory;
 use Jose\Object\JWK;
 use Jose\Object\JWKInterface;

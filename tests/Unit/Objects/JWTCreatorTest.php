@@ -11,10 +11,10 @@
 
 namespace Jose\Test\Unit\Objects;
 
-use Jose\Algorithm\ContentEncryption\A128GCM;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Algorithm\JWAManager;
-use Jose\Algorithm\KeyEncryption\A256GCMKW;
-use Jose\Algorithm\KeyEncryption\A256KW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A256GCMKW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A256KW;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;

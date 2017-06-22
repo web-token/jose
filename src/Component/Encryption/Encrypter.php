@@ -13,12 +13,12 @@ namespace Jose\Component\Encryption;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Algorithm\ContentEncryptionAlgorithmInterface;
+use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
 use Jose\Algorithm\JWAManager;
-use Jose\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
-use Jose\Algorithm\KeyEncryption\KeyEncryptionInterface;
-use Jose\Algorithm\KeyEncryption\KeyWrappingInterface;
-use Jose\Algorithm\KeyEncryptionAlgorithmInterface;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
+use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Behaviour\HasKeyChecker;
 use Jose\Component\Encryption\Compression\CompressionInterface;
 use Jose\Component\Encryption\Compression\CompressionManager;

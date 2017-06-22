@@ -11,10 +11,10 @@
 
 include_once __DIR__.'/../../vendor/autoload.php';
 
-use Jose\Algorithm\KeyEncryption\ECDHESA128KW;
-use Jose\Algorithm\KeyEncryption\ECDHESA192KW;
-use Jose\Algorithm\KeyEncryption\ECDHESA256KW;
-use Jose\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA192KW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
 use Jose\Object\JWK;
 use Jose\Object\JWKInterface;
 

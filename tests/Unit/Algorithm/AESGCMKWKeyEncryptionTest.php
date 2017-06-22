@@ -12,9 +12,9 @@
 namespace Jose\Test\Unit\Algorithm;
 
 use Base64Url\Base64Url;
-use Jose\Algorithm\KeyEncryption\A128GCMKW;
-use Jose\Algorithm\KeyEncryption\A192GCMKW;
-use Jose\Algorithm\KeyEncryption\A256GCMKW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A128GCMKW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A192GCMKW;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\A256GCMKW;
 use Jose\Object\JWK;
 use PHPUnit\Framework\TestCase;
 

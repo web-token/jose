@@ -11,8 +11,8 @@
 
 namespace Jose\Behaviour;
 
-use Jose\Algorithm\ContentEncryptionAlgorithmInterface;
-use Jose\Algorithm\KeyEncryptionAlgorithmInterface;
+use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
+use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Component\Encryption\Compression\CompressionInterface;
 
 trait CommonCipheringMethods

@@ -11,10 +11,10 @@
 
 include_once __DIR__.'/../../vendor/autoload.php';
 
-use Jose\Algorithm\KeyEncryption\KeyEncryptionInterface;
-use Jose\Algorithm\KeyEncryption\RSA15;
-use Jose\Algorithm\KeyEncryption\RSAOAEP;
-use Jose\Algorithm\KeyEncryption\RSAOAEP256;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256;
 use Jose\Object\JWK;
 use Jose\Object\JWKInterface;
 
