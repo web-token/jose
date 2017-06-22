@@ -29,7 +29,7 @@
         "lib-openssl": "*",
         "ext-mbstring": "*",
         "spomky-labs/base64url": "^1.0",
-        "spomky-labs/aes-key-wrap": "^3.0",
+        "spomky-labs/aes-key-wrap": "^4.0",
         "beberlei/assert": "^2.4",
         "fgrosse/phpasn1": "^1.5",
         "psr/cache": "^1.0"
