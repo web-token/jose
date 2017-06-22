@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Checker;
+namespace Jose\Component\Checker;
 
 use Jose\Object\JWS;
 

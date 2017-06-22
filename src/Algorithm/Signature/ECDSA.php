@@ -16,7 +16,7 @@ use FG\ASN1\Object;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\Sequence;
 use Jose\Algorithm\SignatureAlgorithmInterface;
-use Jose\KeyConverter\ECKey;
+use Jose\Component\KeyManagement\KeyConverter\ECKey;
 use Jose\Object\JWKInterface;
 use Mdanter\Ecc\EccFactory;
 

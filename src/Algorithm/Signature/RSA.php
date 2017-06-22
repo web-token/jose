@@ -13,7 +13,7 @@ namespace Jose\Algorithm\Signature;
 
 use Assert\Assertion;
 use Jose\Algorithm\SignatureAlgorithmInterface;
-use Jose\KeyConverter\RSAKey;
+use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Jose\Object\JWKInterface;
 use Jose\Util\RSA as JoseRSA;
 

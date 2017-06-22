@@ -11,8 +11,8 @@
 
 namespace Jose\Object;
 
-use Jose\KeyConverter\ECKey;
-use Jose\KeyConverter\RSAKey;
+use Jose\Component\KeyManagement\KeyConverter\ECKey;
+use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
 /**
  * Class JWKSetPEM.

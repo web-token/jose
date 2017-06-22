@@ -12,7 +12,7 @@
 namespace Jose\Object;
 
 use Assert\Assertion;
-use Jose\KeyConverter\KeyConverter;
+use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 
 /**
  * Class X5UJWKSet

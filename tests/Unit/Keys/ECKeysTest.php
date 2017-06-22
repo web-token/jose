@@ -11,8 +11,8 @@
 
 namespace Jose\Test\Unit\Keys;
 
-use Jose\KeyConverter\ECKey;
-use Jose\KeyConverter\KeyConverter;
+use Jose\Component\KeyManagement\KeyConverter\ECKey;
+use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use Jose\Test\TestCase;
 
 /**

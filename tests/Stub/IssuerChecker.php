@@ -12,7 +12,7 @@
 namespace Jose\Test\Stub;
 
 use Assert\Assertion;
-use Jose\Checker\ClaimCheckerInterface;
+use Jose\Component\Checker\ClaimCheckerInterface;
 use Jose\Object\JWS;
 
 final class IssuerChecker implements ClaimCheckerInterface

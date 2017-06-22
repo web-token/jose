@@ -12,7 +12,7 @@
 namespace Jose\Util;
 
 use Assert\Assertion;
-use Jose\KeyConverter\RSAKey;
+use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
 final class RSA
 {

@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\KeyConverter;
+namespace Jose\Component\KeyManagement\KeyConverter;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;

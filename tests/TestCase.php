@@ -12,7 +12,7 @@
 namespace Jose\Test;
 
 use Base64Url\Base64Url;
-use Jose\Checker\AudienceChecker;
+use Jose\Component\Checker\AudienceChecker;
 use Jose\Factory\CheckerManagerFactory;
 use Jose\Object\JWKSet;
 use Jose\Test\Stub\IssuerChecker;
@@ -26,12 +26,12 @@ use PHPUnit\Framework\TestCase as Base;
 class TestCase extends Base
 {
     /**
-     * @var \Jose\Checker\CheckerManager|null
+     * @var \Jose\Component\Checker\CheckerManager|null
      */
     private $checker_manager = null;
 
     /**
-     * @return \Jose\Checker\CheckerManager
+     * @return \Jose\Component\Checker\CheckerManager
      */
     protected function getCheckerManager()
     {

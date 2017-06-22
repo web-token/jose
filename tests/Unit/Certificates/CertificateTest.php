@@ -11,7 +11,7 @@
 
 namespace Jose\Test\Unit\Certificates;
 
-use Jose\KeyConverter\KeyConverter;
+use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use Jose\Object\JWK;
 use PHPUnit\Framework\TestCase;
 

@@ -13,9 +13,9 @@ namespace Jose\Factory;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\KeyConverter\ECKey;
-use Jose\KeyConverter\KeyConverter;
-use Jose\KeyConverter\RSAKey;
+use Jose\Component\KeyManagement\KeyConverter\ECKey;
+use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
+use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Jose\Object\JKUJWKSet;
 use Jose\Object\JWK;
 use Jose\Object\JWKInterface;

@@ -27,7 +27,7 @@ use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Factory\JWSFactory;
-use Jose\KeyConverter\KeyConverter;
+use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use Jose\Loader;
 use Jose\Object\JWE;
 use Jose\Object\JWK;

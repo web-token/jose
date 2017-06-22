@@ -12,7 +12,7 @@
 namespace Jose;
 
 use Assert\Assertion;
-use Jose\Checker\CheckerManager;
+use Jose\Component\Checker\CheckerManager;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Object\JWE;
 use Jose\Object\JWKSetInterface;
@@ -46,7 +46,7 @@ final class JWTLoader
      * @param CheckerManager $checker_manager
      * @param Verifier               $verifier
      */
-    public function __construct(Checker\CheckerManager $checker_manager, Verifier $verifier)
+    public function __construct(CheckerManager $checker_manager, Verifier $verifier)
     {
         $this->checker_manager = $checker_manager;
         $this->verifier = $verifier;
