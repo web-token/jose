@@ -13,7 +13,7 @@ namespace Jose\Behaviour;
 
 use Jose\Algorithm\ContentEncryptionAlgorithmInterface;
 use Jose\Algorithm\KeyEncryptionAlgorithmInterface;
-use Jose\Compression\CompressionInterface;
+use Jose\Component\Encryption\Compression\CompressionInterface;
 
 trait CommonCipheringMethods
 {

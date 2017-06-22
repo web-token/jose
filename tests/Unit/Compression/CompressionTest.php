@@ -11,11 +11,11 @@
 
 namespace Jose\Test\Unit\Compression;
 
-use Jose\Compression\CompressionInterface;
-use Jose\Compression\CompressionManager;
-use Jose\Compression\Deflate;
-use Jose\Compression\GZip;
-use Jose\Compression\ZLib;
+use Jose\Component\Encryption\Compression\CompressionInterface;
+use Jose\Component\Encryption\Compression\CompressionManager;
+use Jose\Component\Encryption\Compression\Deflate;
+use Jose\Component\Encryption\Compression\GZip;
+use Jose\Component\Encryption\Compression\ZLib;
 use PHPUnit\Framework\TestCase;
 
 /**

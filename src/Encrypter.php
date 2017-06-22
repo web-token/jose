@@ -19,8 +19,8 @@ use Jose\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
 use Jose\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Algorithm\KeyEncryptionAlgorithmInterface;
-use Jose\Compression\CompressionInterface;
-use Jose\Compression\CompressionManager;
+use Jose\Component\Encryption\Compression\CompressionInterface;
+use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Object\JWE;
 use Jose\Object\JWKInterface;
 use Jose\Object\Recipient;
@@ -150,7 +150,7 @@ final class Encrypter
      * @param string                                              $iv
      * @param CompressionInterface|null         $compression_method
      */
-    private function encryptJWE(Object\JWE &$jwe, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $cek, $iv, Compression\CompressionInterface $compression_method = null)
+    private function encryptJWE(Object\JWE &$jwe, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $cek, $iv, CompressionInterface $compression_method = null)
     {
         if (!empty($jwe->getSharedProtectedHeaders())) {
             $jwe = $jwe->withEncodedSharedProtectedHeaders(Base64Url::encode(json_encode($jwe->getSharedProtectedHeaders())));
@@ -174,7 +174,7 @@ final class Encrypter
      *
      * @return string
      */
-    private function preparePayload($payload, Compression\CompressionInterface $compression_method = null)
+    private function preparePayload($payload, CompressionInterface $compression_method = null)
     {
         $prepared = is_string($payload) ? $payload : json_encode($payload);
         Assertion::notNull($prepared, 'The payload is empty or cannot encoded into JSON.');

@@ -12,8 +12,8 @@
 namespace Jose\Factory;
 
 use Assert\Assertion;
-use Jose\Compression\CompressionInterface;
-use Jose\Compression\CompressionManager;
+use Jose\Component\Encryption\Compression\CompressionInterface;
+use Jose\Component\Encryption\Compression\CompressionManager;
 
 final class CompressionManagerFactory
 {
@@ -66,9 +66,9 @@ final class CompressionManagerFactory
     private static function getSupportedMethods(): array
     {
         return [
-            'DEF'  => '\Jose\Compression\Deflate',
-            'GZ'   => '\Jose\Compression\GZip',
-            'ZLIB' => '\Jose\Compression\ZLib',
+            'DEF'  => '\Jose\Component\Encryption\Compression\Deflate',
+            'GZ'   => '\Jose\Component\Encryption\Compression\GZip',
+            'ZLIB' => '\Jose\Component\Encryption\Compression\ZLib',
         ];
     }
 }

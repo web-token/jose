@@ -11,7 +11,7 @@
 
 namespace Jose\Component\Encryption\Compression;
 
-
+use Assert\Assertion;
 
 /**
  * This class implements the compression algorithm GZ (GZip).
