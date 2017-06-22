@@ -13,6 +13,7 @@ namespace Jose;
 
 use Assert\Assertion;
 use Jose\Checker\CheckerManager;
+use Jose\Component\Encryption\Decrypter;
 use Jose\Object\JWE;
 use Jose\Object\JWKSetInterface;
 use Jose\Object\JWS;

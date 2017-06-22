@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose;
+namespace Jose\Component\Encryption;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
@@ -19,6 +19,7 @@ use Jose\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
 use Jose\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Algorithm\KeyEncryptionAlgorithmInterface;
+use Jose\Behaviour\HasKeyChecker;
 use Jose\Component\Encryption\Compression\CompressionInterface;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Object\JWE;
@@ -27,7 +28,7 @@ use Jose\Object\Recipient;
 
 final class Encrypter
 {
-    use Behaviour\HasKeyChecker;
+    use HasKeyChecker;
 
     /**
      * @var JWAManager
@@ -93,7 +94,7 @@ final class Encrypter
     /**
      * @param JWE $jwe
      */
-    public function encrypt(Object\JWE &$jwe)
+    public function encrypt(JWE &$jwe)
     {
         Assertion::false($jwe->isEncrypted(), 'The JWE is already encrypted.');
         Assertion::greaterThan($jwe->countRecipients(), 0, 'The JWE does not contain recipient.');
@@ -125,7 +126,7 @@ final class Encrypter
      * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
      * @param array                                               $additional_headers
      */
-    private function processRecipient(Object\JWE $jwe, Object\Recipient &$recipient, $cek, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array &$additional_headers)
+    private function processRecipient(JWE $jwe, Recipient &$recipient, $cek, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array &$additional_headers)
     {
         if (null === $recipient->getRecipientKey()) {
             return;
@@ -140,7 +141,7 @@ final class Encrypter
             $additional_headers = [];
         }
 
-        $recipient = Object\Recipient::createRecipientFromLoadedJWE($recipient_headers, $encrypted_content_encryption_key);
+        $recipient = Recipient::createRecipientFromLoadedJWE($recipient_headers, $encrypted_content_encryption_key);
     }
 
     /**
@@ -150,7 +151,7 @@ final class Encrypter
      * @param string                                              $iv
      * @param CompressionInterface|null         $compression_method
      */
-    private function encryptJWE(Object\JWE &$jwe, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $cek, $iv, CompressionInterface $compression_method = null)
+    private function encryptJWE(JWE &$jwe, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $cek, $iv, CompressionInterface $compression_method = null)
     {
         if (!empty($jwe->getSharedProtectedHeaders())) {
             $jwe = $jwe->withEncodedSharedProtectedHeaders(Base64Url::encode(json_encode($jwe->getSharedProtectedHeaders())));
@@ -198,13 +199,13 @@ final class Encrypter
      *
      * @return string|null
      */
-    private function getEncryptedKey(array $complete_headers, $cek, Algorithm\KeyEncryptionAlgorithmInterface $key_encryption_algorithm, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array &$additional_headers, Object\JWKInterface $recipient_key)
+    private function getEncryptedKey(array $complete_headers, $cek, KeyEncryptionAlgorithmInterface $key_encryption_algorithm, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array &$additional_headers, JWKInterface $recipient_key)
     {
-        if ($key_encryption_algorithm instanceof Algorithm\KeyEncryption\KeyEncryptionInterface) {
+        if ($key_encryption_algorithm instanceof KeyEncryptionInterface) {
             return $this->getEncryptedKeyFromKeyEncryptionAlgorithm($complete_headers, $cek, $key_encryption_algorithm, $recipient_key, $additional_headers);
-        } elseif ($key_encryption_algorithm instanceof Algorithm\KeyEncryption\KeyWrappingInterface) {
+        } elseif ($key_encryption_algorithm instanceof KeyWrappingInterface) {
             return $this->getEncryptedKeyFromKeyWrappingAlgorithm($complete_headers, $cek, $key_encryption_algorithm, $recipient_key, $additional_headers);
-        } elseif ($key_encryption_algorithm instanceof Algorithm\KeyEncryption\KeyAgreementWrappingInterface) {
+        } elseif ($key_encryption_algorithm instanceof KeyAgreementWrappingInterface) {
             return $this->getEncryptedKeyFromKeyAgreementAndKeyWrappingAlgorithm($complete_headers, $cek, $key_encryption_algorithm, $content_encryption_algorithm, $additional_headers, $recipient_key);
         }
     }
@@ -219,7 +220,7 @@ final class Encrypter
      *
      * @return string
      */
-    private function getEncryptedKeyFromKeyAgreementAndKeyWrappingAlgorithm(array $complete_headers, $cek, Algorithm\KeyEncryption\KeyAgreementWrappingInterface $key_encryption_algorithm, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array &$additional_headers, Object\JWKInterface $recipient_key)
+    private function getEncryptedKeyFromKeyAgreementAndKeyWrappingAlgorithm(array $complete_headers, $cek, KeyAgreementWrappingInterface $key_encryption_algorithm, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array &$additional_headers, JWKInterface $recipient_key)
     {
         $jwt_cek = $key_encryption_algorithm->wrapAgreementKey($recipient_key, $cek, $content_encryption_algorithm->getCEKSize(), $complete_headers, $additional_headers);
 
@@ -235,7 +236,7 @@ final class Encrypter
      *
      * @return string
      */
-    private function getEncryptedKeyFromKeyEncryptionAlgorithm(array $complete_headers, $cek, Algorithm\KeyEncryption\KeyEncryptionInterface $key_encryption_algorithm, Object\JWKInterface $recipient_key, array &$additional_headers)
+    private function getEncryptedKeyFromKeyEncryptionAlgorithm(array $complete_headers, $cek, KeyEncryptionInterface $key_encryption_algorithm, JWKInterface $recipient_key, array &$additional_headers)
     {
         return $key_encryption_algorithm->encryptKey($recipient_key, $cek, $complete_headers, $additional_headers);
     }
@@ -249,7 +250,7 @@ final class Encrypter
      *
      * @return string
      */
-    private function getEncryptedKeyFromKeyWrappingAlgorithm(array $complete_headers, $cek, Algorithm\KeyEncryption\KeyWrappingInterface $key_encryption_algorithm, Object\JWKInterface $recipient_key, &$additional_headers)
+    private function getEncryptedKeyFromKeyWrappingAlgorithm(array $complete_headers, $cek, KeyWrappingInterface $key_encryption_algorithm, JWKInterface $recipient_key, &$additional_headers)
     {
         return $key_encryption_algorithm->wrapKey($recipient_key, $cek, $complete_headers, $additional_headers);
     }

@@ -20,7 +20,7 @@ use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Compression\GZip;
 use Jose\Component\Encryption\Compression\ZLib;
-use Jose\Encrypter;
+use Jose\Component\Encryption\Encrypter;
 use Jose\Factory\JWKFactory;
 use Jose\JWTCreator;
 use Jose\Signer;

@@ -21,7 +21,7 @@ use Jose\Algorithm\KeyEncryption\RSAOAEP;
 use Jose\Algorithm\KeyEncryption\RSAOAEP256;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
-use Jose\Decrypter;
+use Jose\Component\Encryption\Decrypter;
 use Jose\Loader;
 use Jose\Object\JWE;
 use Jose\Object\JWK;

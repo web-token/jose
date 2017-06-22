@@ -55,6 +55,8 @@ If you need `ECDH-ES*` encryption algorithms, then you have to install it explic
 ## Namesapce Oganization
 
 * `Jose\Compression` is now `Jose\Component\Encryption\Compression`
+* `Jose\Encrypter` is now `Jose\Component\Encryption\Encrypter`
+* `Jose\Decrypter` is now `Jose\Component\Encryption\Decrypter`
 
 ## Final classes
 

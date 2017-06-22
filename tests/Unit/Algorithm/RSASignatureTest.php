@@ -25,7 +25,7 @@ use Jose\Algorithm\Signature\RS384;
 use Jose\Algorithm\Signature\RS512;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
-use Jose\Decrypter;
+use Jose\Component\Encryption\Decrypter;
 use Jose\Factory\JWSFactory;
 use Jose\KeyConverter\KeyConverter;
 use Jose\Loader;

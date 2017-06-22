@@ -16,7 +16,7 @@ use Jose\Algorithm\JWAManager;
 use Jose\Algorithm\KeyEncryption\A128KW;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
-use Jose\Decrypter;
+use Jose\Component\Encryption\Decrypter;
 use Jose\Loader;
 use Jose\Object\JWE;
 use Jose\Object\JWS;

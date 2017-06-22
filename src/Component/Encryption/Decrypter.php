@@ -9,23 +9,30 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose;
+namespace Jose\Component\Encryption;
 
 use Base64Url\Base64Url;
 use Jose\Algorithm\ContentEncryptionAlgorithmInterface;
 use Jose\Algorithm\JWAInterface;
 use Jose\Algorithm\JWAManager;
+use Jose\Algorithm\KeyEncryption\DirectEncryptionInterface;
+use Jose\Algorithm\KeyEncryption\KeyAgreementInterface;
+use Jose\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
+use Jose\Algorithm\KeyEncryption\KeyEncryptionInterface;
+use Jose\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Algorithm\KeyEncryptionAlgorithmInterface;
+use Jose\Behaviour\HasKeyChecker;
 use Jose\Component\Encryption\Compression\CompressionInterface;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Object\JWE;
 use Jose\Object\JWKInterface;
+use Jose\Object\JWKSet;
 use Jose\Object\JWKSetInterface;
 use Jose\Object\Recipient;
 
 final class Decrypter
 {
-    use Behaviour\HasKeyChecker;
+    use HasKeyChecker;
 
     /**
      * @var JWAManager
@@ -95,7 +102,7 @@ final class Decrypter
      */
     public function decryptUsingKey(JWE &$jwe, JWKInterface $jwk, ?int &$recipient_index = null)
     {
-        $jwk_set = new Object\JWKSet();
+        $jwk_set = new JWKSet();
         $jwk_set->addKey($jwk);
 
         $this->decryptUsingKeySet($jwe, $jwk_set, $recipient_index);
@@ -132,7 +139,7 @@ final class Decrypter
      *
      * @return int|null
      */
-    private function decryptRecipientKey(Object\JWE &$jwe, Object\JWKSetInterface $jwk_set, $i): ?int
+    private function decryptRecipientKey(JWE &$jwe, JWKSetInterface $jwk_set, $i): ?int
     {
         $recipient = $jwe->getRecipient($i);
         $complete_headers = array_merge($jwe->getSharedProtectedHeaders(), $jwe->getSharedHeaders(), $recipient->getHeaders());
@@ -167,7 +174,7 @@ final class Decrypter
     /**
      * @param JWE $jwe
      */
-    private function checkRecipients(Object\JWE $jwe)
+    private function checkRecipients(JWE $jwe)
     {
         if (0 === $jwe->countRecipients()) {
             throw new \InvalidArgumentException('The JWE does not contain any recipient.');
@@ -177,7 +184,7 @@ final class Decrypter
     /**
      * @param JWE $jwe
      */
-    private function checkPayload(Object\JWE $jwe)
+    private function checkPayload(JWE $jwe)
     {
         if (null !== $jwe->getPayload()) {
             throw new \InvalidArgumentException('The JWE is already decrypted.');
@@ -187,7 +194,7 @@ final class Decrypter
     /**
      * @param JWKSetInterface $jwk_set
      */
-    private function checkJWKSet(Object\JWKSetInterface $jwk_set)
+    private function checkJWKSet(JWKSetInterface $jwk_set)
     {
         if (0 === $jwk_set->count()) {
             throw new \InvalidArgumentException('No key in the key set.');
@@ -203,17 +210,17 @@ final class Decrypter
      *
      * @return null|string
      */
-    private function decryptCEK(Algorithm\JWAInterface $key_encryption_algorithm, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, Object\JWKInterface $key, Object\Recipient $recipient, array $complete_headers): ?string
+    private function decryptCEK(JWAInterface $key_encryption_algorithm, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, JWKInterface $key, Recipient $recipient, array $complete_headers): ?string
     {
-        if ($key_encryption_algorithm instanceof Algorithm\KeyEncryption\DirectEncryptionInterface) {
+        if ($key_encryption_algorithm instanceof DirectEncryptionInterface) {
             return $key_encryption_algorithm->getCEK($key);
-        } elseif ($key_encryption_algorithm instanceof Algorithm\KeyEncryption\KeyAgreementInterface) {
+        } elseif ($key_encryption_algorithm instanceof KeyAgreementInterface) {
             return $key_encryption_algorithm->getAgreementKey($content_encryption_algorithm->getCEKSize(), $content_encryption_algorithm->name(), $key, $complete_headers);
-        } elseif ($key_encryption_algorithm instanceof Algorithm\KeyEncryption\KeyAgreementWrappingInterface) {
+        } elseif ($key_encryption_algorithm instanceof KeyAgreementWrappingInterface) {
             return $key_encryption_algorithm->unwrapAgreementKey($key, $recipient->getEncryptedKey(), $content_encryption_algorithm->getCEKSize(), $complete_headers);
-        } elseif ($key_encryption_algorithm instanceof Algorithm\KeyEncryption\KeyEncryptionInterface) {
+        } elseif ($key_encryption_algorithm instanceof KeyEncryptionInterface) {
             return $key_encryption_algorithm->decryptKey($key, $recipient->getEncryptedKey(), $complete_headers);
-        } elseif ($key_encryption_algorithm instanceof Algorithm\KeyEncryption\KeyWrappingInterface) {
+        } elseif ($key_encryption_algorithm instanceof KeyWrappingInterface) {
             return $key_encryption_algorithm->unwrapKey($key, $recipient->getEncryptedKey(), $complete_headers);
         } else {
             throw new \InvalidArgumentException('Unsupported CEK generation');
@@ -228,7 +235,7 @@ final class Decrypter
      *
      * @return bool
      */
-    private function decryptPayload(Object\JWE &$jwe, $cek, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array $complete_headers): bool
+    private function decryptPayload(JWE &$jwe, $cek, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array $complete_headers): bool
     {
         $payload = $content_encryption_algorithm->decryptContent($jwe->getCiphertext(), $cek, $jwe->getIV(), null === $jwe->getAAD() ? null : Base64Url::encode($jwe->getAAD()), $jwe->getEncodedSharedProtectedHeaders(), $jwe->getTag());
         if (null === $payload) {

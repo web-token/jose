@@ -12,7 +12,7 @@
 namespace Jose\Factory;
 
 use Assert\Assertion;
-use Jose\Encrypter;
+use Jose\Component\Encryption\Encrypter;
 use Jose\Object\JWE;
 use Jose\Object\JWKInterface;
 

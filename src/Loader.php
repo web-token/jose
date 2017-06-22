@@ -12,6 +12,7 @@
 namespace Jose;
 
 use Assert\Assertion;
+use Jose\Component\Encryption\Decrypter;
 use Jose\Factory\AlgorithmManagerFactory;
 use Jose\Factory\CompressionManagerFactory;
 use Jose\Object\JWE;
