@@ -9,12 +9,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Factory;
+namespace Jose\Component\Signature;
 
 use Assert\Assertion;
 use Jose\Component\Core\JWKInterface;
 use Jose\Component\Signature\Object\JWS;
-use Jose\Component\Signature\Signer;
+use Jose\Factory\AlgorithmManagerFactory;
 
 final class JWSFactory
 {
@@ -29,12 +29,10 @@ final class JWSFactory
         $jws = new JWS();
         $jws = $jws->withPayload($payload);
         if (true === $is_payload_detached) {
-            $jws = $jws->withDetachedPayload();
-        } else {
-            $jws = $jws->withAttachedPayload();
+            return $jws->withDetachedPayload();
         }
 
-        return $jws;
+        return $jws->withAttachedPayload();
     }
 
     /**

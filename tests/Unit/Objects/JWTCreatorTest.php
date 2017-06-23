@@ -21,7 +21,7 @@ use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Compression\GZip;
 use Jose\Component\Encryption\Compression\ZLib;
 use Jose\Component\Encryption\Encrypter;
-use Jose\Factory\JWKFactory;
+use Jose\Component\KeyManagement\JWKFactory;
 use Jose\JWTCreator;
 use Jose\Component\Signature\Signer;
 use PHPUnit\Framework\TestCase;

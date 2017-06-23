@@ -9,12 +9,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Factory;
+namespace Jose\Component\Encryption;
 
 use Assert\Assertion;
-use Jose\Component\Encryption\Encrypter;
-use Jose\Component\Encryption\JWE;
 use Jose\Component\Core\JWKInterface;
+use Jose\Factory\AlgorithmManagerFactory;
+use Jose\Factory\CompressionManagerFactory;
 
 final class JWEFactory
 {

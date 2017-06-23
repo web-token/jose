@@ -11,7 +11,7 @@
 
 namespace Jose\Test\Unit\Objects;
 
-use Jose\Factory\JWKFactory;
+use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Core\JWKInterface;
 use Jose\Component\Core\JWKSetInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;

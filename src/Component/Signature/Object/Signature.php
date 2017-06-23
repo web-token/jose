@@ -15,9 +15,6 @@ use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWKInterface;
 
-/**
- * Class SignatureInstruction.
- */
 final class Signature
 {
     /**

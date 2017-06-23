@@ -13,7 +13,7 @@ namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Factory\JWKFactory;
+use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKInterface;
 use Jose\Util\ConcatKDF;

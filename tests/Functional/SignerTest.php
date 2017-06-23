@@ -16,7 +16,7 @@ use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\Algorithm\HS512;
 use Jose\Component\Signature\Algorithm\PS512;
 use Jose\Component\Signature\Algorithm\RS512;
-use Jose\Factory\JWSFactory;
+use Jose\Component\Signature\JWSFactory;
 use Jose\Loader;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;

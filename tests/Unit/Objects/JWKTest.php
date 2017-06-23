@@ -202,7 +202,7 @@ final class JWKTest extends TestCase
 
     public function testLoadCertificateChain()
     {
-        $key = \Jose\Factory\JWKFactory::createFromCertificateFile(
+        $key = \Jose\Component\KeyManagement\JWKFactory::createFromCertificateFile(
             __DIR__.'/../Certificates/Chain/google.crt',
             [
                 'kid' => 'From www.google.com',

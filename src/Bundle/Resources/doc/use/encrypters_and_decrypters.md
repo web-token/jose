@@ -4,7 +4,7 @@ Encrypters and Decrypters Services
 # Encrypters
 
 ```php
-use Jose\Factory\JWEFactory;
+use Jose\Component\Encryption\JWEFactory;
 
 // We get the key of the recipient (we suppose that MY_KEY1 is a valid key)
 $key = $container->get('jose.key.MY_KEY1');

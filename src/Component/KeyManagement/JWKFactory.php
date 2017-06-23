@@ -9,24 +9,17 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Factory;
+namespace Jose\Component\KeyManagement;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\KeyManagement\KeyConverter\ECKey;
 use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
-use Jose\Component\KeyManagement\JKUJWKSet;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKInterface;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\JWKSetInterface;
-use Jose\Component\KeyManagement\JWKSets;
-use Jose\Component\KeyManagement\PublicJWKSet;
-use Jose\Component\KeyManagement\RotatableJWKSet;
-use Jose\Component\KeyManagement\StorableJWK;
-use Jose\Component\KeyManagement\StorableJWKSet;
-use Jose\Component\KeyManagement\X5UJWKSet;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\EccFactory;

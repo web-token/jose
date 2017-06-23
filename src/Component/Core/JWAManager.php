@@ -19,7 +19,7 @@ final class JWAManager
     /**
      * @var array
      */
-    protected $algorithms = [];
+    private $algorithms = [];
 
     /**
      * @param JWAInterface[] $algorithms

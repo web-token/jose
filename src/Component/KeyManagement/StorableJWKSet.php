@@ -17,7 +17,7 @@ use Jose\Component\Core\JWKInterface;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\JWKSetInterface;
 use Jose\Component\Core\JWKSetPEM;
-use Jose\Factory\JWKFactory;
+use Jose\Component\KeyManagement\JWKFactory;
 
 /**
  * Class StorableJWKSet.

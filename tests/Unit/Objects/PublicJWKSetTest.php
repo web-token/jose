@@ -11,7 +11,7 @@
 
 namespace Jose\Test\Unit\Objects;
 
-use Jose\Factory\JWKFactory;
+use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\KeyManagement\PublicJWKSet;
 use PHPUnit\Framework\TestCase;
 

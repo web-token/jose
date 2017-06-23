@@ -11,7 +11,7 @@
 
 namespace Jose\Test\Unit\Objects;
 
-use Jose\Factory\JWEFactory;
+use Jose\Component\Encryption\JWEFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -22,7 +22,7 @@ final class JWKSet implements JWKSetInterface
     /**
      * @var array
      */
-    protected $keys = [];
+    private $keys = [];
 
     public function __construct(array $keys = [])
     {

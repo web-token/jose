@@ -16,7 +16,7 @@ use Jose\Component\Signature\Algorithm\ES256;
 use Jose\Component\Signature\Algorithm\ES384;
 use Jose\Component\Signature\Algorithm\ES512;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
-use Jose\Factory\JWKFactory;
+use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Core\JWKInterface;
 use PHPUnit\Framework\TestCase;
 

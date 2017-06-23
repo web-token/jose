@@ -14,7 +14,7 @@ namespace Jose\Component\KeyManagement;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKInterface;
-use Jose\Factory\JWKFactory;
+use Jose\Component\KeyManagement\JWKFactory;
 
 /**
  * Class StorableJWK.

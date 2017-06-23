@@ -40,7 +40,7 @@ final class InvalidCurveAttackTest extends TestCase
 
         $loader = new Loader();
         $loaded_compact_json = $loader->load($maliciousJWE);
-        $privateKey = \Jose\Factory\JWKFactory::createECKey([
+        $privateKey = \Jose\Component\KeyManagement\JWKFactory::createECKey([
             'kty' => 'EC',
             'crv' => 'P-256',
             "x" => "weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ",
@@ -65,7 +65,7 @@ final class InvalidCurveAttackTest extends TestCase
 
         $loader = new Loader();
         $loaded_compact_json = $loader->load($maliciousJWE);
-        $privateKey = \Jose\Factory\JWKFactory::createECKey([
+        $privateKey = \Jose\Component\KeyManagement\JWKFactory::createECKey([
             'kty' => 'EC',
             'crv' => 'P-256',
             "x" => "weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ",

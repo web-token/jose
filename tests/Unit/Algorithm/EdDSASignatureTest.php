@@ -14,7 +14,7 @@ namespace Jose\Test\Unit\Algorithm;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Signature\Algorithm\EdDSA;
-use Jose\Factory\JWSFactory;
+use Jose\Component\Signature\JWSFactory;
 use Jose\Loader;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Object\JWS;

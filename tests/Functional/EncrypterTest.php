@@ -13,7 +13,6 @@ namespace Jose\Test\Functional;
 
 use Base64Url\Base64Url;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A192CBCHS384;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256CBCHS512;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
@@ -27,7 +26,7 @@ use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\Encrypter;
-use Jose\Factory\JWEFactory;
+use Jose\Component\Encryption\JWEFactory;
 use Jose\Loader;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Core\JWK;

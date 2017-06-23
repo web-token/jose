@@ -11,7 +11,7 @@
 
 namespace Jose\Test\Functional;
 
-use Jose\Factory\JWSFactory;
+use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Core\JWK;
 use Jose\Test\TestCase;
 
@@ -280,33 +280,6 @@ final class CheckerManagerTest extends TestCase
                 'nbf' => time() - 100,
                 'iss' => 'ISS1',
                 'sub' => 'SUB1',
-                'aud' => 'My Service',
-            ]
-        );
-        $jws = $jws->addSignatureInformation(
-            new JWK(['kty' => 'none']),
-            [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
-                'crit' => ['exp', 'iss', 'sub', 'aud', 'jti'],
-            ]
-
-        );
-
-        $this->getCheckerManager()->checkJWS($jws, 0);
-    }
-
-    public function testJWTSuccessfullyCheckedWithCriticalHeaders2()
-    {
-        $jws = JWSFactory::createJWS(
-            [
-                'jti' => 'JTI1',
-                'exp' => time() + 3600,
-                'iat' => time() - 100,
-                'nbf' => time() - 100,
-                'iss' => 'ISS1',
-                'sub' => 'SUB1',
                 'aud' => ['My Service'],
             ]
         );
@@ -334,7 +307,7 @@ final class CheckerManagerTest extends TestCase
                 'nbf' => time() - 100,
                 'iss' => 'ISS1',
                 'sub' => 'SUB1',
-                'aud' => 'My Service',
+                'aud' => ['My Service'],
             ]
         );
         $jws = $jws->addSignatureInformation(

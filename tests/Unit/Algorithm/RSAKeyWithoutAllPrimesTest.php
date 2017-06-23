@@ -11,9 +11,9 @@
 
 namespace Jose\Test\Unit\Algorithm;
 
-use Jose\Factory\JWEFactory;
-use Jose\Factory\JWKFactory;
-use Jose\Factory\JWSFactory;
+use Jose\Component\Encryption\JWEFactory;
+use Jose\Component\KeyManagement\JWKFactory;
+use Jose\Component\Signature\JWSFactory;
 use Jose\Loader;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Signature\Object\JWS;
