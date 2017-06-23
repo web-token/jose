@@ -36,9 +36,9 @@ trait BaseJWKSet
     /**
      * @param int $index
      *
-     * @return JWKInterface
+     * @return JWK
      */
-    public function getKey(int $index): JWKInterface
+    public function getKey(int $index): JWK
     {
         Assertion::greaterOrEqualThan($index, 0, 'The index must be a positive integer.');
         Assertion::true($this->hasKey($index), 'Undefined index.');
@@ -47,14 +47,14 @@ trait BaseJWKSet
     }
 
     /**
-     * @return JWKInterface[]
+     * @return JWK[]
      */
     abstract public function getKeys(): array;
 
     /**
-     * @param JWKInterface $key
+     * @param JWK $key
      */
-    abstract public function addKey(JWKInterface $key);
+    abstract public function addKey(JWK $key);
 
     /**
      * @param int $index
@@ -80,9 +80,9 @@ trait BaseJWKSet
     }
 
     /**
-     * @return JWKInterface|null
+     * @return JWK|null
      */
-    public function current(): ?JWKInterface
+    public function current(): ?JWK
     {
         return $this->hasKey($this->position) ? $this->getKey($this->position) : null;
     }
@@ -110,7 +110,7 @@ trait BaseJWKSet
      */
     public function valid(): bool
     {
-        return $this->current() instanceof JWKInterface;
+        return $this->current() instanceof JWK;
     }
 
     /**
@@ -134,9 +134,9 @@ trait BaseJWKSet
     /**
      * @param mixed $offset
      *
-     * @return JWKInterface
+     * @return JWK
      */
-    public function offsetGet($offset): JWKInterface
+    public function offsetGet($offset): JWK
     {
         return $this->getKey($offset);
     }
@@ -163,9 +163,9 @@ trait BaseJWKSet
      * @param null|string $algorithm
      * @param array       $restrictions
      *
-     * @return null|JWKInterface
+     * @return null|JWK
      */
-    public function selectKey(string $type, ?string $algorithm = null, array $restrictions = []): ?JWKInterface
+    public function selectKey(string $type, ?string $algorithm = null, array $restrictions = []): ?JWK
     {
         Assertion::inArray($type, ['enc', 'sig']);
         Assertion::nullOrString($algorithm);
@@ -209,12 +209,12 @@ trait BaseJWKSet
     }
 
     /**
-     * @param string       $type
-     * @param JWKInterface $key
+     * @param string $type
+     * @param JWK    $key
      *
      * @return bool|int
      */
-    private function canKeyBeUsedFor(string $type, JWKInterface $key)
+    private function canKeyBeUsedFor(string $type, JWK $key)
     {
         if ($key->has('use')) {
             return $type === $key->get('use') ? 1 : false;
@@ -227,12 +227,12 @@ trait BaseJWKSet
     }
 
     /**
-     * @param null|string  $algorithm
-     * @param JWKInterface $key
+     * @param null|string $algorithm
+     * @param JWK         $key
      *
      * @return bool|int
      */
-    private function canKeyBeUsedWithAlgorithm(?string $algorithm, JWKInterface $key)
+    private function canKeyBeUsedWithAlgorithm(?string $algorithm, JWK $key)
     {
         if (null === $algorithm) {
             return 0;
@@ -245,12 +245,12 @@ trait BaseJWKSet
     }
 
     /**
-     * @param array        $restrictions
-     * @param JWKInterface $key
+     * @param array $restrictions
+     * @param JWK   $key
      *
      * @return bool
      */
-    private function doesKeySatisfyRestrictions(array $restrictions, JWKInterface $key): bool
+    private function doesKeySatisfyRestrictions(array $restrictions, JWK $key): bool
     {
         foreach ($restrictions as $k => $v) {
             if (!$key->has($k) || $v !== $key->get($k)) {

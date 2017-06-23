@@ -13,7 +13,6 @@ namespace Jose\Component\KeyManagement;
 
 use Assert\Assertion;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKInterface;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 
@@ -23,7 +22,7 @@ use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 final class X5UJWKSet extends DownloadedJWKSet
 {
     /**
-     * @return JWKInterface[]
+     * @return JWK[]
      */
     public function getKeys(): array
     {

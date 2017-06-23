@@ -12,34 +12,34 @@
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 interface KeyWrappingInterface extends KeyEncryptionAlgorithmInterface
 {
     /**
      * Encrypt the CEK.
      *
-     * @param \Jose\Component\Core\JWKInterface $key                The key used to wrap the CEK
-     * @param string                            $cek                The CEK to encrypt
-     * @param array                             $complete_headers   The complete header of the JWT
-     * @param array                             $additional_headers The complete header of the JWT
+     * @param \Jose\Component\Core\JWK $key                The key used to wrap the CEK
+     * @param string                   $cek                The CEK to encrypt
+     * @param array                    $complete_headers   The complete header of the JWT
+     * @param array                    $additional_headers The complete header of the JWT
      *
      * @throws \Exception If key does not support the algorithm or if the key usage does not authorize the operation
      *
      * @return string The encrypted CEK
      */
-    public function wrapKey(JWKInterface $key, string $cek, array $complete_headers, array &$additional_headers): string;
+    public function wrapKey(JWK $key, string $cek, array $complete_headers, array &$additional_headers): string;
 
     /**
      * Decrypt de CEK.
      *
-     * @param \Jose\Component\Core\JWKInterface $key              The key used to wrap the CEK
-     * @param string                            $encrypted_cek    The CEK to decrypt
-     * @param array                             $complete_headers The complete header of the JWT
+     * @param \Jose\Component\Core\JWK $key              The key used to wrap the CEK
+     * @param string                   $encrypted_cek    The CEK to decrypt
+     * @param array                    $complete_headers The complete header of the JWT
      *
      * @throws \Exception If key does not support the algorithm or if the key usage does not authorize the operation
      *
      * @return string The decrypted CEK
      */
-    public function unwrapKey(JWKInterface $key, string $encrypted_cek, array $complete_headers): string;
+    public function unwrapKey(JWK $key, string $encrypted_cek, array $complete_headers): string;
 }

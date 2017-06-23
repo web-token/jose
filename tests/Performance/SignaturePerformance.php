@@ -27,9 +27,9 @@ use Jose\Component\Signature\Algorithm\RS384;
 use Jose\Component\Signature\Algorithm\RS512;
 use Jose\Component\Signature\AlgorithmAlgorithmInterface;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
-function testSignaturePerformance(SignatureAlgorithmInterface $alg, JWKInterface $key)
+function testSignaturePerformance(SignatureAlgorithmInterface $alg, JWK $key)
 {
     $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
 
@@ -44,7 +44,7 @@ function testSignaturePerformance(SignatureAlgorithmInterface $alg, JWKInterface
     printf('%s: %f milliseconds/signature'.PHP_EOL, $alg->name(), $time);
 }
 
-function testVerificationPerformance(SignatureAlgorithmInterface $alg, JWKInterface $key)
+function testVerificationPerformance(SignatureAlgorithmInterface $alg, JWK $key)
 {
     $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
     $signature = $alg->sign($key, $payload);

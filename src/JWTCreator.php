@@ -16,7 +16,7 @@ use Jose\Component\Encryption\Encrypter;
 use Jose\Component\Encryption\JWEFactory;
 use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Signature\Signer;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 final class JWTCreator
 {
@@ -49,13 +49,13 @@ final class JWTCreator
     }
 
     /**
-     * @param mixed        $payload
-     * @param array        $signature_protected_headers
-     * @param JWKInterface $signature_key
+     * @param mixed $payload
+     * @param array $signature_protected_headers
+     * @param JWK   $signature_key
      *
      * @return string
      */
-    public function sign($payload, array $signature_protected_headers, JWKInterface $signature_key): string
+    public function sign($payload, array $signature_protected_headers, JWK $signature_key): string
     {
         $jws = JWSFactory::createJWS($payload);
 
@@ -66,13 +66,13 @@ final class JWTCreator
     }
 
     /**
-     * @param string       $payload
-     * @param array        $encryption_protected_headers
-     * @param JWKInterface $encryption_key
+     * @param string $payload
+     * @param array  $encryption_protected_headers
+     * @param JWK    $encryption_key
      *
      * @return string
      */
-    public function encrypt(string $payload, array $encryption_protected_headers, JWKInterface $encryption_key): string
+    public function encrypt(string $payload, array $encryption_protected_headers, JWK $encryption_key): string
     {
         Assertion::true($this->isEncryptionSupportEnabled(), 'The encryption support is not enabled');
 
@@ -84,15 +84,15 @@ final class JWTCreator
     }
 
     /**
-     * @param mixed        $payload
-     * @param array        $signature_protected_headers
-     * @param JWKInterface $signature_key
-     * @param array        $encryption_protected_headers
-     * @param JWKInterface $encryption_key
+     * @param mixed $payload
+     * @param array $signature_protected_headers
+     * @param JWK   $signature_key
+     * @param array $encryption_protected_headers
+     * @param JWK   $encryption_key
      *
      * @return string
      */
-    public function signAndEncrypt($payload, array $signature_protected_headers, JWKInterface $signature_key, array $encryption_protected_headers, JWKInterface $encryption_key): string
+    public function signAndEncrypt($payload, array $signature_protected_headers, JWK $signature_key, array $encryption_protected_headers, JWK $encryption_key): string
     {
         $jws = $this->sign($payload, $signature_protected_headers, $signature_key);
         $jwe = $this->encrypt($jws, $encryption_protected_headers, $encryption_key);

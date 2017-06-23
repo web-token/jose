@@ -3,17 +3,17 @@ Feature: This bundle is able to use keys and key sets
   Key sets include keys and are available through services too
 
   Scenario: A Key is available through a service
-    When the service "jose.key.key1" should be an object that implements "\Jose\Component\Core\JWKInterface"
+    When the service "jose.key.key1" should be an object that implements "\Jose\Component\Core\JWK"
 
   Scenario: A Key is available through a service
-    When the service "jose.key.key6" should be an object that implements "\Jose\Component\Core\JWKInterface"
+    When the service "jose.key.key6" should be an object that implements "\Jose\Component\Core\JWK"
 
   Scenario: A Key is available through a service
     When the service "jose.key.key10" should be an object that implements "\Jose\Object\StorableInterface"
-    When the service "jose.key.key10" should be an object that implements "\Jose\Component\Core\JWKInterface"
+    When the service "jose.key.key10" should be an object that implements "\Jose\Component\Core\JWK"
 
   Scenario: A Key from a Key Set can be used as a service
-    When the service "jose.key.from_keyset" should be an object that implements "\Jose\Component\Core\JWKInterface"
+    When the service "jose.key.from_keyset" should be an object that implements "\Jose\Component\Core\JWK"
 
   Scenario: A Key Set is available through a service
     When the service "jose.key_set.jwkset1" should be an object that implements "\Jose\Component\Core\JWKSetInterface"

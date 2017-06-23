@@ -15,7 +15,7 @@ use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
 use Jose\Behaviour\HasKeyChecker;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\JWKSetInterface;
 use Jose\Component\Signature\Object\JWS;
@@ -49,12 +49,12 @@ final class Verifier
     }
 
     /**
-     * @param JWS          $jws
-     * @param JWKInterface $jwk
-     * @param null|string  $detached_payload
-     * @param int|null     $signature_index
+     * @param JWS         $jws
+     * @param JWK         $jwk
+     * @param null|string $detached_payload
+     * @param int|null    $signature_index
      */
-    public function verifyWithKey(JWS $jws, JWKInterface $jwk, ?string $detached_payload = null, ?int &$signature_index = null)
+    public function verifyWithKey(JWS $jws, JWK $jwk, ?string $detached_payload = null, ?int &$signature_index = null)
     {
         $jwk_set = new JWKSet();
         $jwk_set->addKey($jwk);
@@ -66,7 +66,7 @@ final class Verifier
      * Verify the signature of the input.
      * The input must be a valid JWS. This method is usually called after the "load" method.
      *
-     * @param JWS             $jws              A JWS object.
+     * @param JWS             $jws              a JWS object
      * @param JWKSetInterface $jwk_set          The signature will be verified using keys in the key set
      * @param null|string     $detached_payload If not null, the value must be the detached payload encoded in Base64 URL safe. If the input contains a payload, throws an exception.
      * @param null|int        $signature_index  If the JWS has been verified, an integer that represents the ID of the signature is set

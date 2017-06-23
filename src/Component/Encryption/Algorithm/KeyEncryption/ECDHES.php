@@ -15,7 +15,6 @@ use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKInterface;
 use Jose\Util\ConcatKDF;
 use Mdanter\Ecc\Crypto\EcDH\EcDH;
 use Mdanter\Ecc\EccFactory;
@@ -28,7 +27,7 @@ final class ECDHES implements KeyAgreementInterface
     /**
      * {@inheritdoc}
      */
-    public function getAgreementKey(int $encryption_key_length, string $algorithm, JWKInterface $recipient_key, array $complete_header = [], array &$additional_header_values = []): string
+    public function getAgreementKey(int $encryption_key_length, string $algorithm, JWK $recipient_key, array $complete_header = [], array &$additional_header_values = []): string
     {
         if ($recipient_key->has('d')) {
             $this->checkKey($recipient_key, true);
@@ -65,14 +64,14 @@ final class ECDHES implements KeyAgreementInterface
     }
 
     /**
-     * @param JWKInterface $private_key
-     * @param JWKInterface $public_key
+     * @param JWK $private_key
+     * @param JWK $public_key
      *
      * @throws \InvalidArgumentException
      *
      * @return int|string|void
      */
-    public function calculateAgreementKey(JWKInterface $private_key, JWKInterface $public_key)
+    public function calculateAgreementKey(JWK $private_key, JWK $public_key)
     {
         switch ($public_key->get('crv')) {
             case 'P-256':
@@ -121,7 +120,7 @@ final class ECDHES implements KeyAgreementInterface
     /**
      * @param array $complete_header
      *
-     * @return JWKInterface
+     * @return JWK
      */
     private function getPublicKey(array $complete_header)
     {
@@ -135,10 +134,10 @@ final class ECDHES implements KeyAgreementInterface
     }
 
     /**
-     * @param JWKInterface $key
-     * @param bool         $is_private
+     * @param JWK  $key
+     * @param bool $is_private
      */
-    private function checkKey(JWKInterface $key, $is_private)
+    private function checkKey(JWK $key, $is_private)
     {
         Assertion::true($key->has('x'), 'The key parameter "x" is missing.');
         Assertion::true($key->has('crv'), 'The key parameter "crv" is missing.');
@@ -162,13 +161,13 @@ final class ECDHES implements KeyAgreementInterface
     }
 
     /**
-     * @param JWKInterface $key
+     * @param JWK $key
      *
      * @throws \InvalidArgumentException
      *
      * @return \Mdanter\Ecc\Primitives\GeneratorPoint
      */
-    private function getGenerator(JWKInterface $key)
+    private function getGenerator(JWK $key)
     {
         $crv = $key->get('crv');
 

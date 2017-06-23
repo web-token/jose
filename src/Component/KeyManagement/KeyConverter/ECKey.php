@@ -21,7 +21,7 @@ use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\OctetString;
 use FG\ASN1\Universal\Sequence;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 final class ECKey extends Sequence
 {
@@ -36,13 +36,13 @@ final class ECKey extends Sequence
     private $values = [];
 
     /**
-     * @param JWKInterface|string|array $data
+     * @param JWK|string|array $data
      */
     public function __construct($data)
     {
         parent::__construct();
 
-        if ($data instanceof JWKInterface) {
+        if ($data instanceof JWK) {
             $this->loadJWK($data->getAll());
         } elseif (is_array($data)) {
             $this->loadJWK($data);

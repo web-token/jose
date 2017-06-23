@@ -13,14 +13,14 @@ namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 final class Dir implements DirectEncryptionInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getCEK(JWKInterface $key): string
+    public function getCEK(JWK $key): string
     {
         Assertion::eq($key->get('kty'), 'oct', 'Wrong key type.');
         Assertion::true($key->has('k'), 'The key parameter "k" is missing.');

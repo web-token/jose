@@ -12,7 +12,7 @@
 namespace Jose\Component\Signature;
 
 use Jose\Component\Core\JWAInterface;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 /**
  * This interface is used by algorithms that have capabilities to sign data and verify a signature.
@@ -22,25 +22,25 @@ interface SignatureAlgorithmInterface extends JWAInterface
     /**
      * Sign the input.
      *
-     * @param JWKInterface $key   The private key used to sign the data
-     * @param string       $input The input
+     * @param JWK    $key   The private key used to sign the data
+     * @param string $input The input
      *
      * @throws \Exception If key does not support the algorithm or if the key usage does not authorize the operation
      *
      * @return string
      */
-    public function sign(JWKInterface $key, string $input): string;
+    public function sign(JWK $key, string $input): string;
 
     /**
      * Verify the signature of data.
      *
-     * @param JWKInterface $key       The private key used to sign the data
-     * @param string       $input     The input
-     * @param string       $signature The signature to verify
+     * @param JWK    $key       The private key used to sign the data
+     * @param string $input     The input
+     * @param string $signature The signature to verify
      *
      * @throws \Exception If key does not support the algorithm or if the key usage does not authorize the operation
      *
      * @return bool
      */
-    public function verify(JWKInterface $key, string $input, string $signature): bool;
+    public function verify(JWK $key, string $input, string $signature): bool;
 }

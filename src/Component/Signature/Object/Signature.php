@@ -13,7 +13,7 @@ namespace Jose\Component\Signature\Object;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 final class Signature
 {
@@ -38,7 +38,7 @@ final class Signature
     private $signature;
 
     /**
-     * @var JWKInterface
+     * @var JWK
      */
     private $signature_key;
 
@@ -65,13 +65,13 @@ final class Signature
     }
 
     /**
-     * @param JWKInterface $signature_key
-     * @param array        $protected_headers
-     * @param array        $headers
+     * @param JWK   $signature_key
+     * @param array $protected_headers
+     * @param array $headers
      *
      * @return Signature
      */
-    public static function createSignature(JWKInterface $signature_key, array $protected_headers, array $headers)
+    public static function createSignature(JWK $signature_key, array $protected_headers, array $headers)
     {
         $object = new self();
         $object->protected_headers = $protected_headers;
@@ -189,7 +189,7 @@ final class Signature
     }
 
     /**
-     * @return JWKInterface
+     * @return JWK
      */
     public function getSignatureKey()
     {

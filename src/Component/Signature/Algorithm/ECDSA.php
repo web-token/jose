@@ -17,7 +17,7 @@ use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\Sequence;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\KeyManagement\KeyConverter\ECKey;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use Mdanter\Ecc\EccFactory;
 
 /**
@@ -38,7 +38,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function sign(JWKInterface $key, string $input): string
+    public function sign(JWK $key, string $input): string
     {
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The EC key is not private');
@@ -47,12 +47,12 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     }
 
     /**
-     * @param \Jose\Component\Core\JWKInterface $key
-     * @param string                            $data
+     * @param \Jose\Component\Core\JWK $key
+     * @param string                   $data
      *
      * @return string
      */
-    private function getOpenSSLSignature(JWKInterface $key, $data)
+    private function getOpenSSLSignature(JWK $key, $data)
     {
         $pem = (new ECKey($key))->toPEM();
         $result = openssl_sign($data, $signature, $pem, $this->getHashAlgorithm());
@@ -74,7 +74,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function verify(JWKInterface $key, string $input, string $signature): bool
+    public function verify(JWK $key, string $input, string $signature): bool
     {
         $this->checkKey($key);
 
@@ -90,14 +90,14 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     }
 
     /**
-     * @param \Jose\Component\Core\JWKInterface $key
-     * @param string                            $data
-     * @param string                            $R
-     * @param string                            $S
+     * @param \Jose\Component\Core\JWK $key
+     * @param string                   $data
+     * @param string                   $R
+     * @param string                   $S
      *
      * @return bool
      */
-    private function verifyOpenSSLSignature(JWKInterface $key, $data, $R, $S)
+    private function verifyOpenSSLSignature(JWK $key, $data, $R, $S)
     {
         $pem = ECKey::toPublic(new ECKey($key))->toPEM();
 
@@ -163,9 +163,9 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     }
 
     /**
-     * @param JWKInterface $key
+     * @param JWK $key
      */
-    private function checkKey(JWKInterface $key)
+    private function checkKey(JWK $key)
     {
         Assertion::eq($key->get('kty'), 'EC', 'Wrong key type.');
         Assertion::true($key->has('x'), 'The key parameter "x" is missing.');

@@ -41,12 +41,12 @@ trait JWTCreatorAndLoader
         $creator = $this->getContainer()->get($jwt_creator);
 
         /*
-         * @var \Jose\Component\Core\JWKInterface
+         * @var \Jose\Component\Core\JWK
          */
         $key1 = $this->getContainer()->get($signature_key);
 
         /*
-         * @var \Jose\Component\Core\JWKInterface
+         * @var \Jose\Component\Core\JWK
          */
         $key2 = $this->getContainer()->get($encryption_key);
 

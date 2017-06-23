@@ -13,7 +13,7 @@ namespace Jose\Component\Encryption;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWT;
 use Jose\Component\Core\JWTInterface;
 
@@ -83,12 +83,12 @@ final class JWE implements JWTInterface
     }
 
     /**
-     * @param JWKInterface $recipient_key
-     * @param array        $recipient_headers
+     * @param JWK   $recipient_key
+     * @param array $recipient_headers
      *
      * @return JWE
      */
-    public function addRecipientInformation(JWKInterface $recipient_key, array $recipient_headers = []): JWE
+    public function addRecipientInformation(JWK $recipient_key, array $recipient_headers = []): JWE
     {
         Assertion::true(null === $this->getCiphertext(), 'The JWE is encrypted. No additional recipient allowed.');
         $jwe = clone $this;

@@ -16,9 +16,9 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
-function testKeyEncryptionPerformance(KeyEncryptionInterface $alg, JWKInterface $recipient_key)
+function testKeyEncryptionPerformance(KeyEncryptionInterface $alg, JWK $recipient_key)
 {
     $header = [
         'alg' => $alg->name(),
@@ -40,7 +40,7 @@ function testKeyEncryptionPerformance(KeyEncryptionInterface $alg, JWKInterface 
     printf('%s: %f milliseconds/wrapping'.PHP_EOL, $alg->name(), $time);
 }
 
-function testKeyDecryptionPerformance(KeyEncryptionInterface $alg, JWKInterface $recipient_key)
+function testKeyDecryptionPerformance(KeyEncryptionInterface $alg, JWK $recipient_key)
 {
     $header = [
         'alg' => $alg->name(),

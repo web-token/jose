@@ -25,7 +25,7 @@ In our example, we implement the first one:
 namespace AppBundle\Algorithm;
 
 use Jose\Algorithm\SignatureAlgorithmInterface;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 final class DummySignatureAlgorithm implements SignatureAlgorithmInterface
 {
@@ -40,7 +40,7 @@ final class DummySignatureAlgorithm implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function sign(JWKInterface $key, $input)
+    public function sign(JWK $key, $input)
     {
         // Note that the key is not used in this example.
         // A real example should use it.
@@ -50,7 +50,7 @@ final class DummySignatureAlgorithm implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function verify(JWKInterface $key, $input, $signature)
+    public function verify(JWK $key, $input, $signature)
     {
         // We compare the signature and the computed one
         return hash_equals($signature, $this->computeSignature($input));

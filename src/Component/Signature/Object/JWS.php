@@ -13,7 +13,7 @@ namespace Jose\Component\Signature\Object;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWT;
 use Jose\Component\Core\JWTInterface;
 
@@ -126,13 +126,13 @@ final class JWS implements JWTInterface
     }
 
     /**
-     * @param JWKInterface $signature_key
-     * @param array        $protected_headers
-     * @param array        $headers
+     * @param JWK   $signature_key
+     * @param array $protected_headers
+     * @param array $headers
      *
      * @return JWS
      */
-    public function addSignatureInformation(JWKInterface $signature_key, array $protected_headers, array $headers = []): JWS
+    public function addSignatureInformation(JWK $signature_key, array $protected_headers, array $headers = []): JWS
     {
         $jws = clone $this;
         $jws->signatures[] = Signature::createSignature($signature_key, $protected_headers, $headers);

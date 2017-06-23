@@ -44,7 +44,7 @@ final class JWKSet implements JWKSetInterface
     /**
      * {@inheritdoc}
      */
-    public function addKey(JWKInterface $key)
+    public function addKey(JWK $key)
     {
         $this->keys[] = $key;
     }

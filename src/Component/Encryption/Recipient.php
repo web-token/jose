@@ -11,7 +11,7 @@
 
 namespace Jose\Component\Encryption;
 
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 /**
  * Class EncryptionInstruction.
@@ -29,7 +29,7 @@ final class Recipient
     private $encrypted_key = null;
 
     /**
-     * @var JWKInterface
+     * @var JWK
      */
     private $recipient_key = null;
 
@@ -49,12 +49,12 @@ final class Recipient
     }
 
     /**
-     * @param JWKInterface $recipient_key
-     * @param array        $headers
+     * @param JWK   $recipient_key
+     * @param array $headers
      *
      * @return Recipient
      */
-    public static function createRecipient(JWKInterface $recipient_key, array $headers = [])
+    public static function createRecipient(JWK $recipient_key, array $headers = [])
     {
         $recipient = new self();
         $recipient->headers = $headers;
@@ -105,7 +105,7 @@ final class Recipient
     }
 
     /**
-     * @return JWKInterface
+     * @return JWK
      */
     public function getRecipientKey()
     {

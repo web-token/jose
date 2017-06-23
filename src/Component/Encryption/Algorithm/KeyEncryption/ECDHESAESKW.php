@@ -11,7 +11,7 @@
 
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 /**
  * Class ECDHESAESKW.
@@ -21,7 +21,7 @@ abstract class ECDHESAESKW implements KeyAgreementWrappingInterface
     /**
      * {@inheritdoc}
      */
-    public function wrapAgreementKey(JWKInterface $receiver_key, string $cek, int $encryption_key_length, array $complete_header, array &$additional_header_values): string
+    public function wrapAgreementKey(JWK $receiver_key, string $cek, int $encryption_key_length, array $complete_header, array &$additional_header_values): string
     {
         $ecdh_es = new ECDHES();
 
@@ -34,7 +34,7 @@ abstract class ECDHESAESKW implements KeyAgreementWrappingInterface
     /**
      * {@inheritdoc}
      */
-    public function unwrapAgreementKey(JWKInterface $receiver_key, string $encrypted_cek, int $encryption_key_length, array $complete_header): string
+    public function unwrapAgreementKey(JWK $receiver_key, string $encrypted_cek, int $encryption_key_length, array $complete_header): string
     {
         $ecdh_es = new ECDHES();
 

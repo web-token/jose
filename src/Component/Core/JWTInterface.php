@@ -18,7 +18,7 @@ interface JWTInterface
      *
      * @return string          Payload
      * @return array           Payload
-     * @return JWKInterface    Payload
+     * @return JWK             Payload
      * @return JWKSetInterface Payload
      * @return mixed           Payload
      */

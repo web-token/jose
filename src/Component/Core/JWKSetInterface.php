@@ -16,9 +16,9 @@ interface JWKSetInterface extends \Countable, \Iterator, \JsonSerializable, \Arr
     /**
      * @param $index
      *
-     * @return JWKInterface
+     * @return JWK
      */
-    public function getKey(int $index): JWKInterface;
+    public function getKey(int $index): JWK;
 
     /**
      * @param $index
@@ -30,16 +30,16 @@ interface JWKSetInterface extends \Countable, \Iterator, \JsonSerializable, \Arr
     /**
      * Returns all keys in the key set.
      *
-     * @return JWKInterface[] An array of keys stored in the key set
+     * @return JWK[] An array of keys stored in the key set
      */
     public function getKeys(): array;
 
     /**
      * Add key in the key set.
      *
-     * @param JWKInterface $key A key to store in the key set
+     * @param JWK $key A key to store in the key set
      */
-    public function addKey(JWKInterface $key);
+    public function addKey(JWK $key);
 
     /**
      * Remove key from the key set.
@@ -58,9 +58,9 @@ interface JWKSetInterface extends \Countable, \Iterator, \JsonSerializable, \Arr
      * @param string|null $algorithm    Specifies the algorithm to be used
      * @param array       $restrictions More restrictions such as 'kid' or 'kty'
      *
-     * @return JWKInterface|null
+     * @return JWK|null
      */
-    public function selectKey(string $type, ?string $algorithm = null, array $restrictions = []): ?JWKInterface;
+    public function selectKey(string $type, ?string $algorithm = null, array $restrictions = []): ?JWK;
 
     /**
      * Returns RSA/EC keys in the key set into PEM format

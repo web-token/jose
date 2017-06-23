@@ -15,9 +15,9 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementInterface;
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
-function testKeyAgreementPerformance($message, KeyAgreementInterface $alg, JWKInterface $recipient_key)
+function testKeyAgreementPerformance($message, KeyAgreementInterface $alg, JWK $recipient_key)
 {
     $header = [
         'alg' => $alg->name(),

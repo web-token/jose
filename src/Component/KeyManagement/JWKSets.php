@@ -13,7 +13,7 @@ namespace Jose\Component\KeyManagement;
 
 use Assert\Assertion;
 use Jose\Component\Core\BaseJWKSet;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSetInterface;
 use Jose\Component\Core\JWKSetPEM;
 
@@ -70,7 +70,7 @@ final class JWKSets implements JWKSetsInterface
     /**
      * {@inheritdoc}
      */
-    public function addKey(JWKInterface $key)
+    public function addKey(JWK $key)
     {
         //Not available
     }

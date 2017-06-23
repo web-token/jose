@@ -12,7 +12,7 @@
 namespace Jose\Component\KeyManagement;
 
 use Jose\Component\Core\BaseJWKSet;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSetInterface;
 use Jose\Component\Core\JWKSetPEM;
 
@@ -59,7 +59,7 @@ final class PublicJWKSet implements JWKSetInterface
     /**
      * {@inheritdoc}
      */
-    public function addKey(JWKInterface $key)
+    public function addKey(JWK $key)
     {
         $this->jwkset->addKey($key);
     }

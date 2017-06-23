@@ -12,19 +12,19 @@
 namespace Jose\Behaviour;
 
 use Assert\Assertion;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 trait HasKeyChecker
 {
     /**
-     * @param JWKInterface $key
-     * @param string       $usage
+     * @param JWK    $key
+     * @param string $usage
      *
      * @throws \InvalidArgumentException
      *
      * @return bool
      */
-    protected function checkKeyUsage(JWKInterface $key, string $usage): bool
+    protected function checkKeyUsage(JWK $key, string $usage): bool
     {
         if ($key->has('use')) {
             return $this->checkUsage($key, $usage);
@@ -37,12 +37,12 @@ trait HasKeyChecker
     }
 
     /**
-     * @param JWKInterface $key
-     * @param string       $usage
+     * @param JWK    $key
+     * @param string $usage
      *
      * @return bool
      */
-    private function checkOperation(JWKInterface $key, string $usage): bool
+    private function checkOperation(JWK $key, string $usage): bool
     {
         $ops = $key->get('key_ops');
         if (!is_array($ops)) {
@@ -71,12 +71,12 @@ trait HasKeyChecker
     }
 
     /**
-     * @param JWKInterface $key
-     * @param string       $usage
+     * @param JWK    $key
+     * @param string $usage
      *
      * @return bool
      */
-    private function checkUsage(JWKInterface $key, string $usage): bool
+    private function checkUsage(JWK $key, string $usage): bool
     {
         $use = $key->get('use');
         switch ($usage) {
@@ -96,10 +96,10 @@ trait HasKeyChecker
     }
 
     /**
-     * @param JWKInterface $key
-     * @param string       $algorithm
+     * @param JWK    $key
+     * @param string $algorithm
      */
-    protected function checkKeyAlgorithm(JWKInterface $key, string $algorithm)
+    protected function checkKeyAlgorithm(JWK $key, string $algorithm)
     {
         if (!$key->has('alg')) {
             return;

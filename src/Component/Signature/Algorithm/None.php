@@ -13,7 +13,7 @@ namespace Jose\Component\Signature\Algorithm;
 
 use Assert\Assertion;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 /**
  * This class is an abstract class that implements the none algorithm (plaintext).
@@ -23,7 +23,7 @@ final class None implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function sign(JWKInterface $key, string $input): string
+    public function sign(JWK $key, string $input): string
     {
         $this->checkKey($key);
 
@@ -33,15 +33,15 @@ final class None implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function verify(JWKInterface $key, string $input, string $signature): bool
+    public function verify(JWK $key, string $input, string $signature): bool
     {
         return $signature === '';
     }
 
     /**
-     * @param JWKInterface $key
+     * @param JWK $key
      */
-    private function checkKey(JWKInterface $key)
+    private function checkKey(JWK $key)
     {
         Assertion::eq($key->get('kty'), 'none', 'Wrong key type.');
     }

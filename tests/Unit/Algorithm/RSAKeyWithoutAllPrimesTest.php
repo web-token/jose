@@ -132,7 +132,7 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWKInterface
+     * @return \Jose\Component\Core\JWK
      */
     private function getPrivateKey()
     {
@@ -150,7 +150,7 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWKInterface
+     * @return \Jose\Component\Core\JWK
      */
     private function getMinimalPrivateKey()
     {

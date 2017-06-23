@@ -722,7 +722,7 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWKInterface
+     * @return \Jose\Component\Core\JWK
      */
     protected function getKey1()
     {
@@ -735,7 +735,7 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWKInterface
+     * @return \Jose\Component\Core\JWK
      */
     protected function getKey2()
     {
@@ -757,7 +757,7 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWKInterface
+     * @return \Jose\Component\Core\JWK
      */
     protected function getKey3()
     {
@@ -775,7 +775,7 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWKInterface
+     * @return \Jose\Component\Core\JWK
      */
     protected function getKey4()
     {
@@ -797,7 +797,7 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWKInterface
+     * @return \Jose\Component\Core\JWK
      */
     protected function getKey5()
     {

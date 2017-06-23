@@ -12,7 +12,7 @@
 namespace Jose\Test\Unit\Objects;
 
 use Jose\Component\KeyManagement\JWKFactory;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,17 +37,17 @@ final class StorableJWKSetTest extends TestCase
         $this->assertEquals(3, $jwkset->count());
         $this->assertEquals(3, $jwkset->countKeys());
 
-        $this->assertInstanceOf(JWKInterface::class, $jwkset[0]);
-        $this->assertInstanceOf(JWKInterface::class, $jwkset[1]);
-        $this->assertInstanceOf(JWKInterface::class, $jwkset[2]);
+        $this->assertInstanceOf(JWK::class, $jwkset[0]);
+        $this->assertInstanceOf(JWK::class, $jwkset[1]);
+        $this->assertInstanceOf(JWK::class, $jwkset[2]);
         $this->assertFalse(isset($jwkset[3]));
         $this->assertTrue($jwkset->hasKey(0));
         $this->assertEquals($jwkset->getKey(0), $jwkset[0]);
         foreach ($jwkset->getKeys() as $key) {
-            $this->assertInstanceOf(JWKInterface::class, $key);
+            $this->assertInstanceOf(JWK::class, $key);
         }
         foreach ($jwkset as $key) {
-            $this->assertInstanceOf(JWKInterface::class, $key);
+            $this->assertInstanceOf(JWK::class, $key);
         }
 
         $actual_content = json_encode($jwkset);

@@ -13,7 +13,7 @@ namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Assert\Assertion;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use Jose\Util\RSA as JoseRSA;
 
 /**
@@ -34,7 +34,7 @@ abstract class RSA implements KeyEncryptionInterface
     /**
      * {@inheritdoc}
      */
-    public function encryptKey(JWKInterface $key, string $cek, array $complete_headers, array &$additional_headers): string
+    public function encryptKey(JWK $key, string $cek, array $complete_headers, array &$additional_headers): string
     {
         $this->checkKey($key);
 
@@ -56,7 +56,7 @@ abstract class RSA implements KeyEncryptionInterface
     /**
      * {@inheritdoc}
      */
-    public function decryptKey(JWKInterface $key, string $encrypted_cek, array $header): string
+    public function decryptKey(JWK $key, string $encrypted_cek, array $header): string
     {
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The key is not a private key');
@@ -85,9 +85,9 @@ abstract class RSA implements KeyEncryptionInterface
     }
 
     /**
-     * @param JWKInterface $key
+     * @param JWK $key
      */
-    protected function checkKey(JWKInterface $key)
+    protected function checkKey(JWK $key)
     {
         Assertion::eq($key->get('kty'), 'RSA', 'Wrong key type.');
     }

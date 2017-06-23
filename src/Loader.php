@@ -17,7 +17,7 @@ use Jose\Component\Signature\Verifier;
 use Jose\Factory\AlgorithmManagerFactory;
 use Jose\Factory\CompressionManagerFactory;
 use Jose\Component\Encryption\JWE;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\JWKSetInterface;
 use Jose\Component\Signature\Object\JWS;
@@ -30,15 +30,15 @@ use Jose\Component\Core\JWTInterface;
 final class Loader
 {
     /**
-     * @param string       $input
-     * @param JWKInterface $jwk
-     * @param string[]     $allowed_key_encryption_algorithms
-     * @param string[]     $allowed_content_encryption_algorithms
-     * @param null|int     $recipient_index
+     * @param string   $input
+     * @param JWK      $jwk
+     * @param string[] $allowed_key_encryption_algorithms
+     * @param string[] $allowed_content_encryption_algorithms
+     * @param null|int $recipient_index
      *
-     * @return JWS|JWE If the data has been loaded.
+     * @return JWS|JWE if the data has been loaded
      */
-    public static function loadAndDecryptUsingKey(string $input, JWKInterface $jwk, array $allowed_key_encryption_algorithms, array $allowed_content_encryption_algorithms, ?int &$recipient_index = null): JWTInterface
+    public static function loadAndDecryptUsingKey(string $input, JWK $jwk, array $allowed_key_encryption_algorithms, array $allowed_content_encryption_algorithms, ?int &$recipient_index = null): JWTInterface
     {
         $jwk_set = new JWKSet();
         $jwk_set->addKey($jwk);
@@ -53,7 +53,7 @@ final class Loader
      * @param string[]        $allowed_content_encryption_algorithms
      * @param null|int        $recipient_index
      *
-     * @return JWE If the data has been loaded.
+     * @return JWE if the data has been loaded
      */
     public static function loadAndDecryptUsingKeySet(string $input, JWKSetInterface $jwk_set, array $allowed_key_encryption_algorithms, array $allowed_content_encryption_algorithms, ?int &$recipient_index = null): JWE
     {
@@ -61,14 +61,14 @@ final class Loader
     }
 
     /**
-     * @param string       $input
-     * @param JWKInterface $jwk
-     * @param string[]     $allowed_algorithms
-     * @param null|int     $signature_index
+     * @param string   $input
+     * @param JWK      $jwk
+     * @param string[] $allowed_algorithms
+     * @param null|int $signature_index
      *
-     * @return JWS If the data has been loaded.
+     * @return JWS if the data has been loaded
      */
-    public static function loadAndVerifySignatureUsingKey($input, JWKInterface $jwk, array $allowed_algorithms, ?int &$signature_index = null): JWS
+    public static function loadAndVerifySignatureUsingKey($input, JWK $jwk, array $allowed_algorithms, ?int &$signature_index = null): JWS
     {
         $jwk_set = new JWKSet();
         $jwk_set->addKey($jwk);
@@ -82,7 +82,7 @@ final class Loader
      * @param string[]        $allowed_algorithms
      * @param null|int        $signature_index
      *
-     * @return JWS If the data has been loaded.
+     * @return JWS if the data has been loaded
      */
     public static function loadAndVerifySignatureUsingKeySet(string $input, JWKSetInterface $jwk_set, array $allowed_algorithms, ?int &$signature_index = null): JWS
     {
@@ -90,15 +90,15 @@ final class Loader
     }
 
     /**
-     * @param string       $input
-     * @param JWKInterface $jwk
-     * @param string[]     $allowed_algorithms
-     * @param string       $detached_payload
-     * @param null|int     $signature_index
+     * @param string   $input
+     * @param JWK      $jwk
+     * @param string[] $allowed_algorithms
+     * @param string   $detached_payload
+     * @param null|int $signature_index
      *
-     * @return JWS If the data has been loaded.
+     * @return JWS if the data has been loaded
      */
-    public static function loadAndVerifySignatureUsingKeyAndDetachedPayload(string $input, JWKInterface $jwk, array $allowed_algorithms, $detached_payload, ?int &$signature_index = null): JWS
+    public static function loadAndVerifySignatureUsingKeyAndDetachedPayload(string $input, JWK $jwk, array $allowed_algorithms, $detached_payload, ?int &$signature_index = null): JWS
     {
         $jwk_set = new JWKSet();
         $jwk_set->addKey($jwk);
@@ -113,7 +113,7 @@ final class Loader
      * @param string          $detached_payload
      * @param null|int        $signature_index
      *
-     * @return JWS If the data has been loaded.
+     * @return JWS if the data has been loaded
      */
     public static function loadAndVerifySignatureUsingKeySetAndDetachedPayload(string $input, JWKSetInterface $jwk_set, array $allowed_algorithms, string $detached_payload, ?int &$signature_index = null): JWS
     {
@@ -171,7 +171,7 @@ final class Loader
      *
      * @param string $input A string that represents a JSON Web Token message
      *
-     * @return JWS|JWE If the data has been loaded.
+     * @return JWS|JWE if the data has been loaded
      */
     public static function load(string $input): JWTInterface
     {

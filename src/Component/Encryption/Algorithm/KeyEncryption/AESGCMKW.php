@@ -13,7 +13,7 @@ namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 /**
  * Class AESGCMKW.
@@ -23,7 +23,7 @@ abstract class AESGCMKW implements KeyWrappingInterface
     /**
      * {@inheritdoc}
      */
-    public function wrapKey(JWKInterface $key, string $cek, array $complete_headers, array &$additional_headers): string
+    public function wrapKey(JWK $key, string $cek, array $complete_headers, array &$additional_headers): string
     {
         $this->checkKey($key);
         $kek = Base64Url::decode($key->get('k'));
@@ -45,7 +45,7 @@ abstract class AESGCMKW implements KeyWrappingInterface
     /**
      * {@inheritdoc}
      */
-    public function unwrapKey(JWKInterface $key, string $encrypted_cek, array $complete_headers): string
+    public function unwrapKey(JWK $key, string $encrypted_cek, array $complete_headers): string
     {
         $this->checkKey($key);
         $this->checkAdditionalParameters($complete_headers);
@@ -72,9 +72,9 @@ abstract class AESGCMKW implements KeyWrappingInterface
     }
 
     /**
-     * @param JWKInterface $key
+     * @param JWK $key
      */
-    protected function checkKey(JWKInterface $key)
+    protected function checkKey(JWK $key)
     {
         Assertion::eq($key->get('kty'), 'oct', 'Wrong key type.');
         Assertion::true($key->has('k'), 'The key parameter "k" is missing.');

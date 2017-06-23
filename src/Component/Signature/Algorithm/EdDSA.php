@@ -14,7 +14,7 @@ namespace Jose\Component\Signature\Algorithm;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
 /**
  * Class Ed25519.
@@ -24,7 +24,7 @@ final class EdDSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function sign(JWKInterface $key, string $input): string
+    public function sign(JWK $key, string $input): string
     {
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The key is not private');
@@ -43,7 +43,7 @@ final class EdDSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function verify(JWKInterface $key, string $input, string $signature): bool
+    public function verify(JWK $key, string $input, string $signature): bool
     {
         $this->checkKey($key);
 
@@ -58,9 +58,9 @@ final class EdDSA implements SignatureAlgorithmInterface
     }
 
     /**
-     * @param JWKInterface $key
+     * @param JWK $key
      */
-    private function checkKey(JWKInterface $key)
+    private function checkKey(JWK $key)
     {
         Assertion::eq($key->get('kty'), 'OKP', 'Wrong key type.');
         Assertion::true($key->has('x'), 'The key parameter "x" is missing.');

@@ -16,9 +16,9 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA192KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
-function testKeyAgreementWithKeyWrappingEncryptionPerformance($message, KeyAgreementWrappingInterface $alg, JWKInterface $recipient_key)
+function testKeyAgreementWithKeyWrappingEncryptionPerformance($message, KeyAgreementWrappingInterface $alg, JWK $recipient_key)
 {
     $header = [
         'alg' => $alg->name(),
@@ -41,7 +41,7 @@ function testKeyAgreementWithKeyWrappingEncryptionPerformance($message, KeyAgree
     printf('%s: %f milliseconds/wrapping of key agreement (%s)'.PHP_EOL, $alg->name(), $time, $message);
 }
 
-function testKeyAgreementWithKeyWrappingDecryptionPerformance($message, KeyAgreementWrappingInterface $alg, JWKInterface $recipient_key, array $ahv)
+function testKeyAgreementWithKeyWrappingDecryptionPerformance($message, KeyAgreementWrappingInterface $alg, JWK $recipient_key, array $ahv)
 {
     $header = [
         'alg' => $alg->name(),

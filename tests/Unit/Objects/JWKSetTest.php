@@ -12,7 +12,7 @@
 namespace Jose\Test\Unit\Objects;
 
 use Jose\Component\KeyManagement\JWKFactory;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSetInterface;
 use Jose\Test\TestCase;
 
@@ -29,7 +29,7 @@ final class JWKSetTest extends TestCase
         $jwkset = $this->getPublicKeySet();
 
         $jwk = $jwkset->selectKey('enc');
-        $this->assertInstanceOf(JWKInterface::class, $jwk);
+        $this->assertInstanceOf(JWK::class, $jwk);
     }
 
     public function testKeySelectionWithAlgorithm()
@@ -37,7 +37,7 @@ final class JWKSetTest extends TestCase
         $jwkset = $this->getPublicKeySet();
 
         $jwk = $jwkset->selectKey('sig', 'RS256');
-        $this->assertInstanceOf(JWKInterface::class, $jwk);
+        $this->assertInstanceOf(JWK::class, $jwk);
         $this->assertEquals([
                 'kid' => '71ee230371d19630bc17fb90ccf20ae632ad8cf8',
                 'kty' => 'RSA',
@@ -55,7 +55,7 @@ final class JWKSetTest extends TestCase
         $jwkset = $this->getPublicKeySet();
 
         $jwk = $jwkset->selectKey('sig', 'RS256', ['kid' => '02491f945c951adf156f370788e8ccdabf8877a8']);
-        $this->assertInstanceOf(JWKInterface::class, $jwk);
+        $this->assertInstanceOf(JWK::class, $jwk);
         $this->assertEquals([
                 'kid' => '02491f945c951adf156f370788e8ccdabf8877a8',
                 'kty' => 'RSA',
@@ -73,7 +73,7 @@ final class JWKSetTest extends TestCase
         $jwkset = $this->getPublicKeySet();
 
         $jwk = $jwkset->selectKey('sig', null, ['kid' => '02491f945c951adf156f370788e8ccdabf8877a8']);
-        $this->assertInstanceOf(JWKInterface::class, $jwk);
+        $this->assertInstanceOf(JWK::class, $jwk);
         $this->assertEquals([
                 'kid' => '02491f945c951adf156f370788e8ccdabf8877a8',
                 'kty' => 'RSA',

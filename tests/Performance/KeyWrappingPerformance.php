@@ -22,9 +22,9 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS256A128KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS384A192KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS512A256KW;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 
-function testKeyWrappinPerformance(KeyWrappingInterface $alg, JWKInterface $recipient_key)
+function testKeyWrappinPerformance(KeyWrappingInterface $alg, JWK $recipient_key)
 {
     $header = [
         'alg' => $alg->name(),
@@ -46,7 +46,7 @@ function testKeyWrappinPerformance(KeyWrappingInterface $alg, JWKInterface $reci
     printf('%s: %f milliseconds/wrapping'.PHP_EOL, $alg->name(), $time);
 }
 
-function testKeyUnwrappingPerformance(KeyWrappingInterface $alg, JWKInterface $recipient_key)
+function testKeyUnwrappingPerformance(KeyWrappingInterface $alg, JWK $recipient_key)
 {
     $header = [
         'alg' => $alg->name(),

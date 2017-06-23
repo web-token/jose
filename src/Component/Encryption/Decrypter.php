@@ -23,7 +23,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Behaviour\HasKeyChecker;
 use Jose\Component\Encryption\Compression\CompressionManager;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\JWKSetInterface;
 
@@ -93,11 +93,11 @@ final class Decrypter
     }
 
     /**
-     * @param JWE          $jwe             A JWE object to decrypt
-     * @param JWKInterface $jwk             The key used to decrypt the input
-     * @param null|int     $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
+     * @param JWE      $jwe             A JWE object to decrypt
+     * @param JWK      $jwk             The key used to decrypt the input
+     * @param null|int $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
      */
-    public function decryptUsingKey(JWE &$jwe, JWKInterface $jwk, ?int &$recipient_index = null)
+    public function decryptUsingKey(JWE &$jwe, JWK $jwk, ?int &$recipient_index = null)
     {
         $jwk_set = new JWKSet();
         $jwk_set->addKey($jwk);
@@ -201,13 +201,13 @@ final class Decrypter
     /**
      * @param JWAInterface                        $key_encryption_algorithm
      * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
-     * @param JWKInterface                        $key
+     * @param JWK                                 $key
      * @param Recipient                           $recipient
      * @param array                               $complete_headers
      *
      * @return null|string
      */
-    private function decryptCEK(JWAInterface $key_encryption_algorithm, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, JWKInterface $key, Recipient $recipient, array $complete_headers): ?string
+    private function decryptCEK(JWAInterface $key_encryption_algorithm, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, JWK $key, Recipient $recipient, array $complete_headers): ?string
     {
         if ($key_encryption_algorithm instanceof DirectEncryptionInterface) {
             return $key_encryption_algorithm->getCEK($key);

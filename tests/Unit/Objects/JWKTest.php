@@ -12,7 +12,6 @@
 namespace Jose\Test\Unit\Objects;
 
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKInterface;
 use Jose\Component\Core\JWKSet;
 use PHPUnit\Framework\TestCase;
 
@@ -128,8 +127,8 @@ final class JWKTest extends TestCase
 
         $this->assertEquals(1, count($jwkset));
         $this->assertEquals(1, $jwkset->count());
-        $this->assertInstanceOf(JWKInterface::class, $jwkset->getKey(0));
-        $this->assertInstanceOf(JWKInterface::class, $jwkset[0]);
+        $this->assertInstanceOf(JWK::class, $jwkset->getKey(0));
+        $this->assertInstanceOf(JWK::class, $jwkset[0]);
 
         unset($jwkset[0]);
         $this->assertEquals(0, count($jwkset));

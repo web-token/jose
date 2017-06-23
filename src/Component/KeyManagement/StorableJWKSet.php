@@ -13,7 +13,7 @@ namespace Jose\Component\KeyManagement;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\JWKSetInterface;
 use Jose\Component\Core\JWKSetPEM;
@@ -127,7 +127,7 @@ class StorableJWKSet implements StorableInterface, JWKSetInterface
     /**
      * {@inheritdoc}
      */
-    public function getKey(int $index): JWKInterface
+    public function getKey(int $index): JWK
     {
         return $this->getJWKSet()->getKey($index);
     }
@@ -151,7 +151,7 @@ class StorableJWKSet implements StorableInterface, JWKSetInterface
     /**
      * {@inheritdoc}
      */
-    public function addKey(JWKInterface $key)
+    public function addKey(JWK $key)
     {
         // Not available
     }
@@ -175,7 +175,7 @@ class StorableJWKSet implements StorableInterface, JWKSetInterface
     /**
      * {@inheritdoc}
      */
-    public function selectKey(string $type, ?string $algorithm = null, array $restrictions = []): ?JWKInterface
+    public function selectKey(string $type, ?string $algorithm = null, array $restrictions = []): ?JWK
     {
         return $this->getJWKSet()->selectKey($type, $algorithm, $restrictions);
     }
@@ -231,7 +231,7 @@ class StorableJWKSet implements StorableInterface, JWKSetInterface
     }
 
     /**
-     * @return \Jose\Component\Core\JWKInterface
+     * @return \Jose\Component\Core\JWK
      */
     protected function createJWK()
     {

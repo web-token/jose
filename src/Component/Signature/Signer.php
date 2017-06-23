@@ -15,7 +15,7 @@ use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
 use Jose\Behaviour\HasKeyChecker;
-use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Object\JWS;
 use Jose\Component\Signature\Object\Signature;
 
@@ -122,12 +122,12 @@ final class Signer
     }
 
     /**
-     * @param array        $complete_header The complete header
-     * @param JWKInterface $key
+     * @param array $complete_header The complete header
+     * @param JWK   $key
      *
      * @return SignatureAlgorithmInterface
      */
-    private function getSignatureAlgorithm(array $complete_header, JWKInterface $key): SignatureAlgorithmInterface
+    private function getSignatureAlgorithm(array $complete_header, JWK $key): SignatureAlgorithmInterface
     {
         Assertion::keyExists($complete_header, 'alg', 'No "alg" parameter set in the header.');
 
