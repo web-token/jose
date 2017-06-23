@@ -18,7 +18,7 @@ trait HasKeyChecker
 {
     /**
      * @param JWKInterface $key
-     * @param string                    $usage
+     * @param string       $usage
      *
      * @throws \InvalidArgumentException
      *
@@ -38,7 +38,7 @@ trait HasKeyChecker
 
     /**
      * @param JWKInterface $key
-     * @param string                    $usage
+     * @param string       $usage
      *
      * @return bool
      */
@@ -72,7 +72,7 @@ trait HasKeyChecker
 
     /**
      * @param JWKInterface $key
-     * @param string                    $usage
+     * @param string       $usage
      *
      * @return bool
      */
@@ -97,7 +97,7 @@ trait HasKeyChecker
 
     /**
      * @param JWKInterface $key
-     * @param string                    $algorithm
+     * @param string       $algorithm
      */
     protected function checkKeyAlgorithm(JWKInterface $key, string $algorithm)
     {

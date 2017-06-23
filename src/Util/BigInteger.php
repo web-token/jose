@@ -239,9 +239,9 @@ final class BigInteger
      */
     public static function random(BigInteger $y): BigInteger
     {
-        $zero = BigInteger::createFromDecimal(0);
+        $zero = self::createFromDecimal(0);
 
-        return BigInteger::createFromGMPResource(gmp_random_range($zero->value, $y->value));
+        return self::createFromGMPResource(gmp_random_range($zero->value, $y->value));
     }
 
     /**
@@ -251,7 +251,7 @@ final class BigInteger
      */
     public function gcd(BigInteger $y): BigInteger
     {
-        return BigInteger::createFromGMPResource(gmp_gcd($this->value, $y->value));
+        return self::createFromGMPResource(gmp_gcd($this->value, $y->value));
     }
 
     /**
@@ -299,8 +299,8 @@ final class BigInteger
      */
     public function isEven(): bool
     {
-        $zero = BigInteger::createFromDecimal(0);
-        $two  = BigInteger::createFromDecimal(2);
+        $zero = self::createFromDecimal(0);
+        $two = self::createFromDecimal(2);
 
         return $this->mod($two)->equals($zero);
     }

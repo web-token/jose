@@ -39,8 +39,8 @@ final class JWKSetLoader implements LoaderInterface
     {
         $controller_id = 'jose.controller.'.$name;
 
-        $defaults =['_controller' => $controller_id.':getAction', '_format' => 'json'];
-        $requirements =['_format' => 'json|pem'];
+        $defaults = ['_controller' => $controller_id.':getAction', '_format' => 'json'];
+        $requirements = ['_format' => 'json|pem'];
         $route = new Route($pattern.'.{_format}', $defaults, $requirements);
         $this->routes->add('jwkset_'.$name, $route);
     }

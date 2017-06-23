@@ -83,7 +83,6 @@ final class JWS implements JWTInterface
     /**
      * @param Signature $signature
      *
-     *
      * @return string|null
      */
     public function getEncodedPayload(Signature $signature): ?string
@@ -128,8 +127,8 @@ final class JWS implements JWTInterface
 
     /**
      * @param JWKInterface $signature_key
-     * @param array                     $protected_headers
-     * @param array                     $headers
+     * @param array        $protected_headers
+     * @param array        $headers
      *
      * @return JWS
      */
@@ -201,9 +200,9 @@ final class JWS implements JWTInterface
 
         $data = [];
         $values = [
-            'payload'   => $this->getEncodedPayload($signature),
+            'payload' => $this->getEncodedPayload($signature),
             'protected' => $signature->getEncodedProtectedHeaders(),
-            'header'    => $signature->getHeaders(),
+            'header' => $signature->getHeaders(),
         ];
 
         foreach ($values as $key => $value) {
@@ -235,7 +234,7 @@ final class JWS implements JWTInterface
             $tmp = ['signature' => Base64Url::encode($signature->getSignature())];
             $values = [
                 'protected' => $signature->getEncodedProtectedHeaders(),
-                'header'    => $signature->getHeaders(),
+                'header' => $signature->getHeaders(),
             ];
 
             foreach ($values as $key => $value) {

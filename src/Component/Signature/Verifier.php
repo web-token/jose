@@ -49,10 +49,10 @@ final class Verifier
     }
 
     /**
-     * @param JWS $jws
+     * @param JWS          $jws
      * @param JWKInterface $jwk
-     * @param null|string $detached_payload
-     * @param int|null $signature_index
+     * @param null|string  $detached_payload
+     * @param int|null     $signature_index
      */
     public function verifyWithKey(JWS $jws, JWKInterface $jwk, ?string $detached_payload = null, ?int &$signature_index = null)
     {
@@ -66,7 +66,7 @@ final class Verifier
      * Verify the signature of the input.
      * The input must be a valid JWS. This method is usually called after the "load" method.
      *
-     * @param JWS    $jws              A JWS object.
+     * @param JWS             $jws              A JWS object.
      * @param JWKSetInterface $jwk_set          The signature will be verified using keys in the key set
      * @param null|string     $detached_payload If not null, the value must be the detached payload encoded in Base64 URL safe. If the input contains a payload, throws an exception.
      * @param null|int        $signature_index  If the JWS has been verified, an integer that represents the ID of the signature is set
@@ -77,10 +77,10 @@ final class Verifier
     }
 
     /**
-     * @param JWS       $jws
-     * @param JWKSetInterface    $jwk_set
-     * @param Signature $signature
-     * @param string|null                     $detached_payload
+     * @param JWS             $jws
+     * @param JWKSetInterface $jwk_set
+     * @param Signature       $signature
+     * @param string|null     $detached_payload
      *
      * @return bool
      */
@@ -105,9 +105,9 @@ final class Verifier
     }
 
     /**
-     * @param JWS       $jws
-     * @param Signature $signature
-     * @param string|null                     $detached_payload
+     * @param JWS         $jws
+     * @param Signature   $signature
+     * @param string|null $detached_payload
      *
      * @return string
      */
@@ -132,10 +132,10 @@ final class Verifier
     }
 
     /**
-     * @param JWS    $jws
+     * @param JWS             $jws
      * @param JWKSetInterface $jwk_set
-     * @param string|null                  $detached_payload
-     * @param int|null                     $recipient_index
+     * @param string|null     $detached_payload
+     * @param int|null        $recipient_index
      */
     private function verifySignatures(JWS $jws, JWKSetInterface $jwk_set, ?string $detached_payload = null, ?int &$recipient_index = null)
     {
@@ -145,7 +145,7 @@ final class Verifier
 
         $nb_signatures = $jws->countSignatures();
 
-        for ($i = 0; $i < $nb_signatures; $i++) {
+        for ($i = 0; $i < $nb_signatures; ++$i) {
             $signature = $jws->getSignature($i);
             $result = $this->verifySignature($jws, $jwk_set, $signature, $detached_payload);
 
@@ -176,8 +176,8 @@ final class Verifier
     }
 
     /**
-     * @param JWS $jws
-     * @param null|string               $detached_payload
+     * @param JWS         $jws
+     * @param null|string $detached_payload
      */
     private function checkPayload(JWS $jws, ?string $detached_payload = null)
     {

@@ -243,11 +243,11 @@ final class RSAKey extends Sequence
 
         $this->values['kty'] = 'RSA';
         $keys = [
-            'n'  => 'n',
-            'e'  => 'e',
-            'd'  => 'd',
-            'p'  => 'p',
-            'q'  => 'q',
+            'n' => 'n',
+            'e' => 'e',
+            'd' => 'd',
+            'p' => 'p',
+            'q' => 'q',
             'dp' => 'dmp1',
             'dq' => 'dmq1',
             'qi' => 'iqmp',
@@ -406,13 +406,14 @@ final class RSAKey extends Sequence
      * @param BigInteger $d
      * @param BigInteger $e
      * @param BigInteger $n
+     *
      * @return BigInteger[]
      */
     private function findPrimeFactors(BigInteger $d, BigInteger $e, BigInteger $n): array
     {
         $zero = BigInteger::createFromDecimal(0);
-        $one  = BigInteger::createFromDecimal(1);
-        $two  = BigInteger::createFromDecimal(2);
+        $one = BigInteger::createFromDecimal(1);
+        $two = BigInteger::createFromDecimal(2);
 
         $k = $d->multiply($e)->subtract($one);
 
@@ -428,7 +429,7 @@ final class RSAKey extends Sequence
             $found = false;
             $y = null;
 
-            for($i = 1; $i <= 100; $i++) {
+            for ($i = 1; $i <= 100; ++$i) {
                 $g = BigInteger::random($n->subtract($one));
                 $y = $g->modPow($r, $n);
 

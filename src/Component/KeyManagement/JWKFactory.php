@@ -137,7 +137,7 @@ final class JWKFactory
         $curve = $values['crv'];
         if (function_exists('openssl_get_curve_names')) {
             $args = [
-                'curve_name'       => self::getOpensslName($curve),
+                'curve_name' => self::getOpensslName($curve),
                 'private_key_type' => OPENSSL_KEYTYPE_EC,
             ];
             $key = openssl_pkey_new($args);
@@ -161,9 +161,9 @@ final class JWKFactory
                 [
                     'kty' => 'EC',
                     'crv' => $curve,
-                    'x'   => self::encodeValue($private_key->getPublicKey()->getPoint()->getX()),
-                    'y'   => self::encodeValue($private_key->getPublicKey()->getPoint()->getY()),
-                    'd'   => self::encodeValue($private_key->getSecret()),
+                    'x' => self::encodeValue($private_key->getPublicKey()->getPoint()->getX()),
+                    'y' => self::encodeValue($private_key->getPublicKey()->getPoint()->getY()),
+                    'd' => self::encodeValue($private_key->getSecret()),
                 ]
             );
         }
@@ -186,7 +186,7 @@ final class JWKFactory
             $values,
             [
                 'kty' => 'oct',
-                'k'   => Base64Url::encode(random_bytes($size / 8)),
+                'k' => Base64Url::encode(random_bytes($size / 8)),
             ]
         );
 
@@ -222,8 +222,8 @@ final class JWKFactory
             [
                 'kty' => 'OKP',
                 'crv' => $curve,
-                'x'   => Base64Url::encode($x),
-                'd'   => Base64Url::encode($d),
+                'x' => Base64Url::encode($x),
+                'd' => Base64Url::encode($d),
             ]
         );
 
@@ -402,11 +402,11 @@ final class JWKFactory
     }
 
     /**
-     * @param string                                 $jku
-     * @param bool                                   $allow_unsecured_connection
+     * @param string                      $jku
+     * @param bool                        $allow_unsecured_connection
      * @param CacheItemPoolInterface|null $cache
-     * @param int|null                               $ttl
-     * @param bool                                   $allow_http_connection
+     * @param int|null                    $ttl
+     * @param bool                        $allow_http_connection
      *
      * @return JWKSetInterface
      */
@@ -416,11 +416,11 @@ final class JWKFactory
     }
 
     /**
-     * @param string                                 $x5u
-     * @param bool                                   $allow_unsecured_connection
+     * @param string                      $x5u
+     * @param bool                        $allow_unsecured_connection
      * @param CacheItemPoolInterface|null $cache
-     * @param int|null                               $ttl
-     * @param bool                                   $allow_http_connection
+     * @param int|null                    $ttl
+     * @param bool                        $allow_http_connection
      *
      * @return JWKSetInterface
      */
@@ -445,7 +445,7 @@ final class JWKFactory
 
     /**
      * @param JWKSetInterface $jwk_set
-     * @param int                          $key_index
+     * @param int             $key_index
      *
      * @return JWKInterface
      */

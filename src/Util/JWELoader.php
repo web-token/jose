@@ -43,8 +43,8 @@ final class JWELoader
     }
 
     /**
-     * @param JWE $jwe
-     * @param array                     $data
+     * @param JWE   $jwe
+     * @param array $data
      */
     private static function populateIV(JWE &$jwe, array $data)
     {
@@ -54,8 +54,8 @@ final class JWELoader
     }
 
     /**
-     * @param JWE $jwe
-     * @param array                     $data
+     * @param JWE   $jwe
+     * @param array $data
      */
     private static function populateAAD(JWE &$jwe, array $data)
     {
@@ -65,8 +65,8 @@ final class JWELoader
     }
 
     /**
-     * @param JWE $jwe
-     * @param array                     $data
+     * @param JWE   $jwe
+     * @param array $data
      */
     private static function populateTag(JWE &$jwe, array $data)
     {
@@ -76,8 +76,8 @@ final class JWELoader
     }
 
     /**
-     * @param JWE $jwe
-     * @param array                     $data
+     * @param JWE   $jwe
+     * @param array $data
      */
     private static function populateSharedProtectedHeaders(JWE &$jwe, array $data)
     {
@@ -88,8 +88,8 @@ final class JWELoader
     }
 
     /**
-     * @param JWE $jwe
-     * @param array                     $data
+     * @param JWE   $jwe
+     * @param array $data
      */
     private static function populateSharedHeaders(JWE &$jwe, array $data)
     {

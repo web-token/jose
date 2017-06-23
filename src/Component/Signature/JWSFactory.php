@@ -36,9 +36,9 @@ final class JWSFactory
     }
 
     /**
-     * @param mixed                     $payload
+     * @param mixed        $payload
      * @param JWKInterface $signature_key
-     * @param array                     $protected_headers
+     * @param array        $protected_headers
      *
      * @return string
      */
@@ -50,9 +50,9 @@ final class JWSFactory
     }
 
     /**
-     * @param mixed                     $payload
+     * @param mixed        $payload
      * @param JWKInterface $signature_key
-     * @param array                     $protected_headers
+     * @param array        $protected_headers
      *
      * @return string
      */
@@ -64,10 +64,10 @@ final class JWSFactory
     }
 
     /**
-     * @param mixed                     $payload
+     * @param mixed        $payload
      * @param JWKInterface $signature_key
-     * @param array                     $protected_headers
-     * @param array                     $headers
+     * @param array        $protected_headers
+     * @param array        $headers
      *
      * @return string
      */
@@ -79,10 +79,10 @@ final class JWSFactory
     }
 
     /**
-     * @param mixed                     $payload
+     * @param mixed        $payload
      * @param JWKInterface $signature_key
-     * @param array                     $protected_headers
-     * @param array                     $headers
+     * @param array        $protected_headers
+     * @param array        $headers
      *
      * @return string
      */
@@ -94,9 +94,9 @@ final class JWSFactory
     }
 
     /**
-     * @param mixed                     $payload
+     * @param mixed        $payload
      * @param JWKInterface $signature_key
-     * @param array                     $protected_headers
+     * @param array        $protected_headers
      *
      * @return JWS
      */
@@ -116,10 +116,10 @@ final class JWSFactory
     }
 
     /**
-     * @param mixed                     $payload
+     * @param mixed        $payload
      * @param JWKInterface $signature_key
-     * @param array                     $protected_headers
-     * @param array                     $headers
+     * @param array        $protected_headers
+     * @param array        $headers
      *
      * @return JWS
      */

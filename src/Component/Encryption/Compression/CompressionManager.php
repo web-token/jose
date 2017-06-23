@@ -19,7 +19,7 @@ final class CompressionManager
     /**
      * @var CompressionInterface[]
      */
-    protected $compressionMethods = [];
+    private $compressionMethods = [];
 
     /**
      * @param CompressionInterface[] $methods

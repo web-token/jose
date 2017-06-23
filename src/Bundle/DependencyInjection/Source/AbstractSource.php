@@ -24,9 +24,6 @@ abstract class AbstractSource
      */
     abstract protected function createDefinition(ContainerBuilder $container, array $config);
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(ContainerBuilder $container, $type, $name, array $config)
     {
         $service_id = sprintf('jose.%s.%s', $type, $name);

@@ -66,8 +66,8 @@ final class Signature
 
     /**
      * @param JWKInterface $signature_key
-     * @param array                     $protected_headers
-     * @param array                     $headers
+     * @param array        $protected_headers
+     * @param array        $headers
      *
      * @return Signature
      */

@@ -17,7 +17,6 @@ use Jose\Component\Core\JWKInterface;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\JWKSetInterface;
 use Jose\Component\Core\JWKSetPEM;
-use Jose\Component\KeyManagement\JWKFactory;
 
 /**
  * Class StorableJWKSet.
@@ -223,7 +222,7 @@ class StorableJWKSet implements StorableInterface, JWKSetInterface
     protected function createNewObject()
     {
         $jwkset = new JWKSet();
-        for ($i = 0; $i < $this->nb_keys; $i++) {
+        for ($i = 0; $i < $this->nb_keys; ++$i) {
             $key = $this->createJWK();
             $jwkset->addKey($key);
         }

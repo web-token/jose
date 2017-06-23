@@ -54,11 +54,11 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
     }
 
     /**
-     * @param string $encrypted_data
-     * @param string $cek
-     * @param string $iv
+     * @param string      $encrypted_data
+     * @param string      $cek
+     * @param string      $iv
      * @param null|string $aad
-     * @param string $encoded_header
+     * @param string      $encoded_header
      *
      * @return string
      */

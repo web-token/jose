@@ -49,8 +49,8 @@ final class JWTCreator
     }
 
     /**
-     * @param mixed                     $payload
-     * @param array                     $signature_protected_headers
+     * @param mixed        $payload
+     * @param array        $signature_protected_headers
      * @param JWKInterface $signature_key
      *
      * @return string
@@ -66,8 +66,8 @@ final class JWTCreator
     }
 
     /**
-     * @param string                    $payload
-     * @param array                     $encryption_protected_headers
+     * @param string       $payload
+     * @param array        $encryption_protected_headers
      * @param JWKInterface $encryption_key
      *
      * @return string
@@ -84,10 +84,10 @@ final class JWTCreator
     }
 
     /**
-     * @param mixed                     $payload
-     * @param array                     $signature_protected_headers
+     * @param mixed        $payload
+     * @param array        $signature_protected_headers
      * @param JWKInterface $signature_key
-     * @param array                     $encryption_protected_headers
+     * @param array        $encryption_protected_headers
      * @param JWKInterface $encryption_key
      *
      * @return string
@@ -108,9 +108,6 @@ final class JWTCreator
         return $this->signer->getSupportedSignatureAlgorithms();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSupportedKeyEncryptionAlgorithms(): array
     {
         return false === $this->isEncryptionSupportEnabled() ? [] : $this->encrypter->getSupportedKeyEncryptionAlgorithms();

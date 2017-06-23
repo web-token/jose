@@ -97,7 +97,7 @@ trait BaseJWKSet
 
     public function next()
     {
-        $this->position++;
+        ++$this->position;
     }
 
     public function rewind()
@@ -209,7 +209,7 @@ trait BaseJWKSet
     }
 
     /**
-     * @param string                    $type
+     * @param string       $type
      * @param JWKInterface $key
      *
      * @return bool|int
@@ -227,7 +227,7 @@ trait BaseJWKSet
     }
 
     /**
-     * @param null|string               $algorithm
+     * @param null|string  $algorithm
      * @param JWKInterface $key
      *
      * @return bool|int
@@ -245,7 +245,7 @@ trait BaseJWKSet
     }
 
     /**
-     * @param array                     $restrictions
+     * @param array        $restrictions
      * @param JWKInterface $key
      *
      * @return bool

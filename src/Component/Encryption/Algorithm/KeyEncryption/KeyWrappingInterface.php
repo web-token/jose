@@ -20,9 +20,9 @@ interface KeyWrappingInterface extends KeyEncryptionAlgorithmInterface
      * Encrypt the CEK.
      *
      * @param \Jose\Component\Core\JWKInterface $key                The key used to wrap the CEK
-     * @param string                    $cek                The CEK to encrypt
-     * @param array                     $complete_headers   The complete header of the JWT
-     * @param array                     $additional_headers The complete header of the JWT
+     * @param string                            $cek                The CEK to encrypt
+     * @param array                             $complete_headers   The complete header of the JWT
+     * @param array                             $additional_headers The complete header of the JWT
      *
      * @throws \Exception If key does not support the algorithm or if the key usage does not authorize the operation
      *
@@ -34,8 +34,8 @@ interface KeyWrappingInterface extends KeyEncryptionAlgorithmInterface
      * Decrypt de CEK.
      *
      * @param \Jose\Component\Core\JWKInterface $key              The key used to wrap the CEK
-     * @param string                    $encrypted_cek    The CEK to decrypt
-     * @param array                     $complete_headers The complete header of the JWT
+     * @param string                            $encrypted_cek    The CEK to decrypt
+     * @param array                             $complete_headers The complete header of the JWT
      *
      * @throws \Exception If key does not support the algorithm or if the key usage does not authorize the operation
      *

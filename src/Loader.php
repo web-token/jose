@@ -30,11 +30,11 @@ use Jose\Component\Core\JWTInterface;
 final class Loader
 {
     /**
-     * @param string                    $input
+     * @param string       $input
      * @param JWKInterface $jwk
-     * @param string[]                  $allowed_key_encryption_algorithms
-     * @param string[]                  $allowed_content_encryption_algorithms
-     * @param null|int                  $recipient_index
+     * @param string[]     $allowed_key_encryption_algorithms
+     * @param string[]     $allowed_content_encryption_algorithms
+     * @param null|int     $recipient_index
      *
      * @return JWS|JWE If the data has been loaded.
      */
@@ -47,11 +47,11 @@ final class Loader
     }
 
     /**
-     * @param string                       $input
+     * @param string          $input
      * @param JWKSetInterface $jwk_set
-     * @param string[]                     $allowed_key_encryption_algorithms
-     * @param string[]                     $allowed_content_encryption_algorithms
-     * @param null|int                     $recipient_index
+     * @param string[]        $allowed_key_encryption_algorithms
+     * @param string[]        $allowed_content_encryption_algorithms
+     * @param null|int        $recipient_index
      *
      * @return JWE If the data has been loaded.
      */
@@ -61,10 +61,10 @@ final class Loader
     }
 
     /**
-     * @param string                    $input
+     * @param string       $input
      * @param JWKInterface $jwk
-     * @param string[]                  $allowed_algorithms
-     * @param null|int                  $signature_index
+     * @param string[]     $allowed_algorithms
+     * @param null|int     $signature_index
      *
      * @return JWS If the data has been loaded.
      */
@@ -77,10 +77,10 @@ final class Loader
     }
 
     /**
-     * @param string                       $input
+     * @param string          $input
      * @param JWKSetInterface $jwk_set
-     * @param string[]                     $allowed_algorithms
-     * @param null|int                     $signature_index
+     * @param string[]        $allowed_algorithms
+     * @param null|int        $signature_index
      *
      * @return JWS If the data has been loaded.
      */
@@ -90,11 +90,11 @@ final class Loader
     }
 
     /**
-     * @param string                    $input
+     * @param string       $input
      * @param JWKInterface $jwk
-     * @param string[]                  $allowed_algorithms
-     * @param string                    $detached_payload
-     * @param null|int                  $signature_index
+     * @param string[]     $allowed_algorithms
+     * @param string       $detached_payload
+     * @param null|int     $signature_index
      *
      * @return JWS If the data has been loaded.
      */
@@ -107,11 +107,11 @@ final class Loader
     }
 
     /**
-     * @param string                       $input
+     * @param string          $input
      * @param JWKSetInterface $jwk_set
-     * @param string[]                     $allowed_algorithms
-     * @param string                       $detached_payload
-     * @param null|int                     $signature_index
+     * @param string[]        $allowed_algorithms
+     * @param string          $detached_payload
+     * @param null|int        $signature_index
      *
      * @return JWS If the data has been loaded.
      */
@@ -121,11 +121,11 @@ final class Loader
     }
 
     /**
-     * @param string                       $input
+     * @param string          $input
      * @param JWKSetInterface $jwk_set
-     * @param array                        $allowed_key_encryption_algorithms
-     * @param array                        $allowed_content_encryption_algorithms
-     * @param null|int                     $recipient_index
+     * @param array           $allowed_key_encryption_algorithms
+     * @param array           $allowed_content_encryption_algorithms
+     * @param null|int        $recipient_index
      *
      * @return JWE
      */
@@ -137,18 +137,18 @@ final class Loader
         $keyEncryptionAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName($allowed_key_encryption_algorithms);
         $contentEncryptionAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName($allowed_content_encryption_algorithms);
         $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF', 'ZLIB', 'GZ']);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager,$compressionManager);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter->decryptUsingKeySet($jwt, $jwk_set, $recipient_index);
 
         return $jwt;
     }
 
     /**
-     * @param string                       $input
+     * @param string          $input
      * @param JWKSetInterface $jwk_set
-     * @param array                        $allowed_algorithms
-     * @param string|null                  $detached_payload
-     * @param null|int                     $signature_index
+     * @param array           $allowed_algorithms
+     * @param string|null     $detached_payload
+     * @param null|int        $signature_index
      *
      * @return JWS
      */

@@ -22,9 +22,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Behaviour\HasKeyChecker;
 use Jose\Component\Encryption\Compression\CompressionInterface;
 use Jose\Component\Encryption\Compression\CompressionManager;
-use Jose\Component\Encryption\JWE;
 use Jose\Component\Core\JWKInterface;
-use Jose\Component\Encryption\Recipient;
 
 final class Encrypter
 {
@@ -105,7 +103,7 @@ final class Encrypter
         $key_management_mode = $this->getKeyManagementMode($jwe);
         $cek = $this->determineCEK($jwe, $content_encryption_algorithm, $key_management_mode, $additional_headers);
 
-        for ($i = 0; $i < $nb_recipients; $i++) {
+        for ($i = 0; $i < $nb_recipients; ++$i) {
             $this->processRecipient($jwe, $jwe->getRecipient($i), $cek, $content_encryption_algorithm, $additional_headers);
         }
 
@@ -120,11 +118,11 @@ final class Encrypter
     }
 
     /**
-     * @param JWE                           $jwe
-     * @param Recipient                     $recipient
-     * @param string                                              $cek
+     * @param JWE                                 $jwe
+     * @param Recipient                           $recipient
+     * @param string                              $cek
      * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
-     * @param array                                               $additional_headers
+     * @param array                               $additional_headers
      */
     private function processRecipient(JWE $jwe, Recipient &$recipient, $cek, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array &$additional_headers)
     {
@@ -145,11 +143,11 @@ final class Encrypter
     }
 
     /**
-     * @param JWE                           $jwe
+     * @param JWE                                 $jwe
      * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
-     * @param string                                              $cek
-     * @param string                                              $iv
-     * @param CompressionInterface|null         $compression_method
+     * @param string                              $cek
+     * @param string                              $iv
+     * @param CompressionInterface|null           $compression_method
      */
     private function encryptJWE(JWE &$jwe, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $cek, $iv, CompressionInterface $compression_method = null)
     {
@@ -170,7 +168,7 @@ final class Encrypter
     }
 
     /**
-     * @param string                                      $payload
+     * @param string                    $payload
      * @param CompressionInterface|null $compression_method
      *
      * @return string
@@ -190,12 +188,12 @@ final class Encrypter
     }
 
     /**
-     * @param array                                               $complete_headers
-     * @param string                                              $cek
+     * @param array                               $complete_headers
+     * @param string                              $cek
      * @param KeyEncryptionAlgorithmInterface     $key_encryption_algorithm
      * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
-     * @param JWKInterface                           $recipient_key
-     * @param array                                               $additional_headers
+     * @param JWKInterface                        $recipient_key
+     * @param array                               $additional_headers
      *
      * @return string|null
      */
@@ -211,12 +209,12 @@ final class Encrypter
     }
 
     /**
-     * @param array                                                       $complete_headers
-     * @param string                                                      $cek
-     * @param KeyAgreementWrappingInterface $key_encryption_algorithm
-     * @param ContentEncryptionAlgorithmInterface         $content_encryption_algorithm
-     * @param array                                                       $additional_headers
-     * @param JWKInterface                                   $recipient_key
+     * @param array                               $complete_headers
+     * @param string                              $cek
+     * @param KeyAgreementWrappingInterface       $key_encryption_algorithm
+     * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
+     * @param array                               $additional_headers
+     * @param JWKInterface                        $recipient_key
      *
      * @return string
      */
@@ -228,11 +226,11 @@ final class Encrypter
     }
 
     /**
-     * @param array                                                $complete_headers
-     * @param string                                               $cek
+     * @param array                  $complete_headers
+     * @param string                 $cek
      * @param KeyEncryptionInterface $key_encryption_algorithm
-     * @param JWKInterface                            $recipient_key
-     * @param array                                                $additional_headers
+     * @param JWKInterface           $recipient_key
+     * @param array                  $additional_headers
      *
      * @return string
      */
@@ -242,11 +240,11 @@ final class Encrypter
     }
 
     /**
-     * @param array                                              $complete_headers
-     * @param string                                             $cek
+     * @param array                $complete_headers
+     * @param string               $cek
      * @param KeyWrappingInterface $key_encryption_algorithm
-     * @param JWKInterface                          $recipient_key
-     * @param array                                              $additional_headers
+     * @param JWKInterface         $recipient_key
+     * @param array                $additional_headers
      *
      * @return string
      */
@@ -255,14 +253,12 @@ final class Encrypter
         return $key_encryption_algorithm->wrapKey($recipient_key, $cek, $complete_headers, $additional_headers);
     }
 
-
-
     ////////////////////////////
 
     /**
      * @param KeyEncryptionAlgorithmInterface     $key_encryption_algorithm
      * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
-     * @param JWKInterface                           $recipient_key
+     * @param JWKInterface                        $recipient_key
      */
     private function checkKeys(KeyEncryptionAlgorithmInterface $key_encryption_algorithm, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, JWKInterface $recipient_key)
     {
@@ -275,10 +271,10 @@ final class Encrypter
     }
 
     /**
-     * @param JWE                           $jwe
+     * @param JWE                                 $jwe
      * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
-     * @param string                                              $key_management_mode
-     * @param array                                               $additional_headers
+     * @param string                              $key_management_mode
+     * @param array                               $additional_headers
      *
      * @return string
      */
@@ -342,7 +338,7 @@ final class Encrypter
         $method = null;
         $nb_recipients = $jwe->countRecipients();
 
-        for ($i = 0; $i < $nb_recipients; $i++) {
+        for ($i = 0; $i < $nb_recipients; ++$i) {
             $complete_headers = array_merge($jwe->getSharedProtectedHeaders(), $jwe->getSharedHeaders(), $jwe->getRecipient($i)->getHeaders());
             if (array_key_exists('zip', $complete_headers)) {
                 if (null === $method) {
@@ -406,7 +402,7 @@ final class Encrypter
         $dir = KeyEncryptionAlgorithmInterface::MODE_DIRECT;
         $enc = KeyEncryptionAlgorithmInterface::MODE_ENCRYPT;
         $wrap = KeyEncryptionAlgorithmInterface::MODE_WRAP;
-        $supported_key_management_mode_combinations = [$enc.$enc     => true, $enc.$wrap    => true, $wrap.$enc    => true, $wrap.$wrap   => true, $agree.$agree => false, $agree.$dir   => false, $agree.$enc   => false, $agree.$wrap  => false, $dir.$agree   => false, $dir.$dir     => false, $dir.$enc     => false, $dir.$wrap    => false, $enc.$agree   => false, $enc.$dir     => false, $wrap.$agree  => false, $wrap.$dir    => false];
+        $supported_key_management_mode_combinations = [$enc.$enc => true, $enc.$wrap => true, $wrap.$enc => true, $wrap.$wrap => true, $agree.$agree => false, $agree.$dir => false, $agree.$enc => false, $agree.$wrap => false, $dir.$agree => false, $dir.$dir => false, $dir.$enc => false, $dir.$wrap => false, $enc.$agree => false, $enc.$dir => false, $wrap.$agree => false, $wrap.$dir => false];
 
         if (array_key_exists($current.$new, $supported_key_management_mode_combinations)) {
             return $supported_key_management_mode_combinations[$current.$new];

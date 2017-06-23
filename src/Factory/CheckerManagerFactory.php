@@ -36,7 +36,7 @@ final class CheckerManagerFactory
 
     /**
      * @param CheckerManager $checker_manager
-     * @param array                                 $claims
+     * @param array          $claims
      */
     private static function populateClaimCheckers(CheckerManager $checker_manager, array $claims)
     {
@@ -53,7 +53,7 @@ final class CheckerManagerFactory
 
     /**
      * @param CheckerManager $checker_manager
-     * @param array                                 $headers
+     * @param array          $headers
      */
     private static function populateHeaderCheckers(CheckerManager $checker_manager, array $headers)
     {

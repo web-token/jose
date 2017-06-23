@@ -24,11 +24,11 @@ trait JWT
     /**
      * Returns the payload of the JWT.
      *
-     * @return string                       Payload
-     * @return array                        Payload
+     * @return string          Payload
+     * @return array           Payload
      * @return JWKInterface    Payload
      * @return JWKSetInterface Payload
-     * @return mixed                        Payload
+     * @return mixed           Payload
      */
     public function getPayload()
     {
@@ -37,7 +37,6 @@ trait JWT
 
     /**
      * @param mixed $payload
-     *
      *
      * @return JWTInterface
      */

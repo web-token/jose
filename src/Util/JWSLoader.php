@@ -69,8 +69,8 @@ final class JWSLoader
     }
 
     /**
-     * @param JWS $jws
-     * @param array                     $data
+     * @param JWS   $jws
+     * @param array $data
      */
     private static function populatePayload(JWS &$jws, array $data)
     {

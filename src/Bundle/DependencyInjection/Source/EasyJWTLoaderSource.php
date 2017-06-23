@@ -128,7 +128,7 @@ final class EasyJWTLoaderSource implements SourceInterface
         $config['verifiers'] = array_merge(
             array_key_exists('verifiers', $config) ? $config['verifiers'] : [],
             [$id => [
-                'is_public'  => $section['is_public'],
+                'is_public' => $section['is_public'],
                 'algorithms' => $section['signature_algorithms'],
             ]]
         );
@@ -151,10 +151,10 @@ final class EasyJWTLoaderSource implements SourceInterface
         $config['decrypters'] = array_merge(
             array_key_exists('decrypters', $config) ? $config['decrypters'] : [],
             [$id => [
-                'is_public'                     => $section['is_public'],
-                'key_encryption_algorithms'     => $section['key_encryption_algorithms'],
+                'is_public' => $section['is_public'],
+                'key_encryption_algorithms' => $section['key_encryption_algorithms'],
                 'content_encryption_algorithms' => $section['content_encryption_algorithms'],
-                'compression_methods'           => $section['compression_methods'],
+                'compression_methods' => $section['compression_methods'],
             ]]
         );
 
@@ -174,8 +174,8 @@ final class EasyJWTLoaderSource implements SourceInterface
             array_key_exists('checkers', $config) ? $config['checkers'] : [],
             [$id => [
                 'is_public' => $section['is_public'],
-                'claims'    => $section['claim_checkers'],
-                'headers'   => $section['header_checkers'],
+                'claims' => $section['claim_checkers'],
+                'headers' => $section['header_checkers'],
             ]]
         );
 
@@ -193,8 +193,8 @@ final class EasyJWTLoaderSource implements SourceInterface
     {
         $service = [
             'is_public' => $section['is_public'],
-            'verifier'  => sprintf('jose.verifier.%s', $id),
-            'checker'   => sprintf('jose.checker.%s', $id),
+            'verifier' => sprintf('jose.verifier.%s', $id),
+            'checker' => sprintf('jose.checker.%s', $id),
         ];
         if (true === $this->isEncryptionSupportEnabled($section)) {
             $service['decrypter'] = sprintf('jose.decrypter.%s', $id);

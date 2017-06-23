@@ -41,9 +41,9 @@ final class JWEFactory
     }
 
     /**
-     * @param mixed                     $payload
+     * @param mixed        $payload
      * @param JWKInterface $recipient_key
-     * @param array                     $shared_protected_headers
+     * @param array        $shared_protected_headers
      *
      * @return string
      */
@@ -55,12 +55,12 @@ final class JWEFactory
     }
 
     /**
-     * @param mixed                     $payload
+     * @param mixed        $payload
      * @param JWKInterface $recipient_key
-     * @param array                     $shared_protected_headers
-     * @param array                     $shared_headers
-     * @param array                     $recipient_headers
-     * @param string|null               $aad
+     * @param array        $shared_protected_headers
+     * @param array        $shared_headers
+     * @param array        $recipient_headers
+     * @param string|null  $aad
      *
      * @return string
      */
@@ -72,12 +72,12 @@ final class JWEFactory
     }
 
     /**
-     * @param mixed                     $payload
+     * @param mixed        $payload
      * @param JWKInterface $recipient_key
-     * @param array                     $shared_protected_headers
-     * @param array                     $shared_headers
-     * @param array                     $recipient_headers
-     * @param string|null               $aad
+     * @param array        $shared_protected_headers
+     * @param array        $shared_headers
+     * @param array        $recipient_headers
+     * @param string|null  $aad
      *
      * @return JWE
      */
@@ -90,7 +90,7 @@ final class JWEFactory
         $keyEncryptionAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName([$complete_headers['alg']]);
         $contentEncryptionAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName([$complete_headers['enc']]);
         $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF', 'ZLIB', 'GZ']);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager,$compressionManager);
+        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = self::createJWE($payload, $shared_protected_headers, $shared_headers, $aad);
 

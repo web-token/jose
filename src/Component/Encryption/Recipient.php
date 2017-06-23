@@ -50,7 +50,7 @@ final class Recipient
 
     /**
      * @param JWKInterface $recipient_key
-     * @param array                     $headers
+     * @param array        $headers
      *
      * @return Recipient
      */

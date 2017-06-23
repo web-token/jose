@@ -41,7 +41,7 @@ interface ContentEncryptionAlgorithmInterface extends JWAInterface
      *
      * @return string
      */
-    public function decryptContent(string $data, string $cek, string $iv, ?string $aad, string $encoded_protected_header, string $tag): string ;
+    public function decryptContent(string $data, string $cek, string $iv, ?string $aad, string $encoded_protected_header, string $tag): string;
 
     /**
      * @return int

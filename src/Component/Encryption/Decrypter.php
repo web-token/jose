@@ -22,13 +22,10 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Behaviour\HasKeyChecker;
-use Jose\Component\Encryption\Compression\CompressionInterface;
 use Jose\Component\Encryption\Compression\CompressionManager;
-use Jose\Component\Encryption\JWE;
 use Jose\Component\Core\JWKInterface;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\JWKSetInterface;
-use Jose\Component\Encryption\Recipient;
 
 final class Decrypter
 {
@@ -96,9 +93,9 @@ final class Decrypter
     }
 
     /**
-     * @param JWE $jwe           A JWE object to decrypt
+     * @param JWE          $jwe             A JWE object to decrypt
      * @param JWKInterface $jwk             The key used to decrypt the input
-     * @param null|int                  $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
+     * @param null|int     $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
      */
     public function decryptUsingKey(JWE &$jwe, JWKInterface $jwk, ?int &$recipient_index = null)
     {
@@ -109,9 +106,9 @@ final class Decrypter
     }
 
     /**
-     * @param JWE    $jwe           A JWE object to decrypt
+     * @param JWE             $jwe             A JWE object to decrypt
      * @param JWKSetInterface $jwk_set         The key set used to decrypt the input
-     * @param null|int                     $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
+     * @param null|int        $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
      */
     public function decryptUsingKeySet(JWE &$jwe, JWKSetInterface $jwk_set, &$recipient_index = null)
     {
@@ -121,7 +118,7 @@ final class Decrypter
 
         $nb_recipients = $jwe->countRecipients();
 
-        for ($i = 0; $i < $nb_recipients; $i++) {
+        for ($i = 0; $i < $nb_recipients; ++$i) {
             if (is_int($result = $this->decryptRecipientKey($jwe, $jwk_set, $i))) {
                 $recipient_index = $result;
 
@@ -133,9 +130,9 @@ final class Decrypter
     }
 
     /**
-     * @param JWE    $jwe
+     * @param JWE             $jwe
      * @param JWKSetInterface $jwk_set
-     * @param int                          $i
+     * @param int             $i
      *
      * @return int|null
      */
@@ -204,9 +201,9 @@ final class Decrypter
     /**
      * @param JWAInterface                        $key_encryption_algorithm
      * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
-     * @param JWKInterface                           $key
-     * @param Recipient                     $recipient
-     * @param array                                               $complete_headers
+     * @param JWKInterface                        $key
+     * @param Recipient                           $recipient
+     * @param array                               $complete_headers
      *
      * @return null|string
      */
@@ -228,10 +225,10 @@ final class Decrypter
     }
 
     /**
-     * @param JWE                           $jwe
-     * @param string                                              $cek
+     * @param JWE                                 $jwe
+     * @param string                              $cek
      * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
-     * @param array                                               $complete_headers
+     * @param array                               $complete_headers
      *
      * @return bool
      */

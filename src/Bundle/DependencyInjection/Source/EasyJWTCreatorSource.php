@@ -117,7 +117,7 @@ final class EasyJWTCreatorSource implements SourceInterface
         $config['signers'] = array_merge(
             array_key_exists('signers', $config) ? $config['signers'] : [],
             [$id => [
-                'is_public'  => $section['is_public'],
+                'is_public' => $section['is_public'],
                 'algorithms' => $section['signature_algorithms'],
             ]]
         );
@@ -140,10 +140,10 @@ final class EasyJWTCreatorSource implements SourceInterface
         $config['encrypters'] = array_merge(
             array_key_exists('encrypters', $config) ? $config['encrypters'] : [],
             [$id => [
-                'is_public'                     => $section['is_public'],
-                'key_encryption_algorithms'     => $section['key_encryption_algorithms'],
+                'is_public' => $section['is_public'],
+                'key_encryption_algorithms' => $section['key_encryption_algorithms'],
                 'content_encryption_algorithms' => $section['content_encryption_algorithms'],
-                'compression_methods'           => $section['compression_methods'],
+                'compression_methods' => $section['compression_methods'],
             ]]
         );
 
@@ -161,7 +161,7 @@ final class EasyJWTCreatorSource implements SourceInterface
     {
         $service = [
             'is_public' => $section['is_public'],
-            'signer'    => sprintf('jose.signer.%s', $id),
+            'signer' => sprintf('jose.signer.%s', $id),
         ];
         if (true === $this->isEncryptionSupportEnabled($section)) {
             $service['encrypter'] = sprintf('jose.encrypter.%s', $id);

@@ -45,7 +45,7 @@ final class JWTLoader
      * JWTLoader constructor.
      *
      * @param CheckerManager $checker_manager
-     * @param Verifier               $verifier
+     * @param Verifier       $verifier
      */
     public function __construct(CheckerManager $checker_manager, Verifier $verifier)
     {
@@ -103,9 +103,9 @@ final class JWTLoader
     }
 
     /**
-     * @param string                            $assertion
+     * @param string               $assertion
      * @param JWKSetInterface|null $encryption_key_set
-     * @param bool                              $is_encryption_required
+     * @param bool                 $is_encryption_required
      *
      * @return JWS
      */
@@ -126,9 +126,9 @@ final class JWTLoader
     }
 
     /**
-     * @param JWS    $jws
+     * @param JWS             $jws
      * @param JWKSetInterface $signature_key_set
-     * @param string|null                  $detached_payload
+     * @param string|null     $detached_payload
      *
      * @return int
      */
@@ -145,7 +145,7 @@ final class JWTLoader
     }
 
     /**
-     * @param JWE    $jwe
+     * @param JWE             $jwe
      * @param JWKSetInterface $encryption_key_set
      *
      * @return JWS

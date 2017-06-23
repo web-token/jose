@@ -22,7 +22,7 @@ final class Deflate implements CompressionInterface
     /**
      * @var int
      */
-    protected $compression_level = -1;
+    private $compression_level = -1;
 
     /**
      * Deflate constructor.

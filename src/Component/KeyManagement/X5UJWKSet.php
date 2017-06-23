@@ -18,7 +18,7 @@ use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 
 /**
- * Class X5UJWKSet
+ * Class X5UJWKSet.
  */
 final class X5UJWKSet extends DownloadedJWKSet
 {

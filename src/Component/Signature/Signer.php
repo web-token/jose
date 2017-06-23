@@ -53,7 +53,7 @@ final class Signer
     {
         $nb_signatures = $jws->countSignatures();
 
-        for ($i = 0; $i < $nb_signatures; $i++) {
+        for ($i = 0; $i < $nb_signatures; ++$i) {
             $this->computeSignature($jws, $jws->getSignature($i));
         }
     }
@@ -122,7 +122,7 @@ final class Signer
     }
 
     /**
-     * @param array                     $complete_header The complete header
+     * @param array        $complete_header The complete header
      * @param JWKInterface $key
      *
      * @return SignatureAlgorithmInterface

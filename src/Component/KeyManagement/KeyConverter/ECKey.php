@@ -193,7 +193,7 @@ final class ECKey extends Sequence
     }
 
     /**
-     * @param Object $children
+     * @param object $children
      */
     private function verifyVersion(Object $children)
     {
@@ -202,9 +202,9 @@ final class ECKey extends Sequence
     }
 
     /**
-     * @param Object $children
-     * @param string|null     $x
-     * @param string|null     $y
+     * @param object      $children
+     * @param string|null $x
+     * @param string|null $y
      */
     private function getXAndY(Object $children, ?string &$x, ?string &$y)
     {
@@ -222,7 +222,7 @@ final class ECKey extends Sequence
     }
 
     /**
-     * @param Object $children
+     * @param object $children
      *
      * @return string
      */

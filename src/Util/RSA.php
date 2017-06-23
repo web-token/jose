@@ -50,8 +50,8 @@ final class RSA
      * Exponentiate with or without Chinese Remainder Theorem.
      * Operation with primes 'p' and 'q' is appox. 2x faster.
      *
-     * @param RSAKey $key
-     * @param BigInteger     $c
+     * @param RSAKey     $key
+     * @param BigInteger $c
      *
      * @return BigInteger
      */
@@ -78,8 +78,8 @@ final class RSA
     /**
      * RSA EP.
      *
-     * @param RSAKey $key
-     * @param BigInteger     $m
+     * @param RSAKey     $key
+     * @param BigInteger $m
      *
      * @return BigInteger|null
      */
@@ -95,8 +95,8 @@ final class RSA
     /**
      * RSA DP.
      *
-     * @param RSAKey $key
-     * @param BigInteger     $c
+     * @param RSAKey     $key
+     * @param BigInteger $c
      *
      * @return BigInteger|null
      */
@@ -112,8 +112,8 @@ final class RSA
     /**
      * RSA SP1.
      *
-     * @param RSAKey $key
-     * @param BigInteger     $m
+     * @param RSAKey     $key
+     * @param BigInteger $m
      *
      * @return BigInteger|null
      */
@@ -129,8 +129,8 @@ final class RSA
     /**
      * RSAVP1.
      *
-     * @param RSAKey $key
-     * @param BigInteger     $s
+     * @param RSAKey     $key
+     * @param BigInteger $s
      *
      * @return BigInteger|null
      */
@@ -146,9 +146,9 @@ final class RSA
     /**
      * MGF1.
      *
-     * @param string          $mgfSeed
-     * @param int             $maskLen
-     * @param Hash $mgfHash
+     * @param string $mgfSeed
+     * @param int    $maskLen
+     * @param Hash   $mgfHash
      *
      * @return string
      */
@@ -156,7 +156,7 @@ final class RSA
     {
         $t = '';
         $count = ceil($maskLen / $mgfHash->getLength());
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $c = pack('N', $i);
             $t .= $mgfHash->hash($mgfSeed.$c);
         }
@@ -168,8 +168,8 @@ final class RSA
      * RSAES-OAEP-ENCRYPT.
      *
      * @param RSAKey $key
-     * @param string                    $m
-     * @param Hash           $hash
+     * @param string $m
+     * @param Hash   $hash
      *
      * @return string
      */
@@ -197,8 +197,8 @@ final class RSA
      * RSAES-OAEP-DECRYPT.
      *
      * @param RSAKey $key
-     * @param string                    $c
-     * @param Hash           $hash
+     * @param string $c
+     * @param Hash   $hash
      *
      * @return string
      */
@@ -227,9 +227,9 @@ final class RSA
     /**
      * EMSA-PSS-ENCODE.
      *
-     * @param string          $m
-     * @param int             $emBits
-     * @param Hash $hash
+     * @param string $m
+     * @param int    $emBits
+     * @param Hash   $hash
      *
      * @return string|null
      */
@@ -255,10 +255,10 @@ final class RSA
     /**
      * EMSA-PSS-VERIFY.
      *
-     * @param string          $m
-     * @param string          $em
-     * @param int             $emBits
-     * @param Hash $hash
+     * @param string $m
+     * @param string $em
+     * @param int    $emBits
+     * @param Hash   $hash
      *
      * @return bool
      */
@@ -290,8 +290,8 @@ final class RSA
      * Encryption.
      *
      * @param RSAKey $key
-     * @param string                    $plaintext
-     * @param string                    $hash_algorithm
+     * @param string $plaintext
+     * @param string $hash_algorithm
      *
      * @return string
      */
@@ -316,8 +316,8 @@ final class RSA
      * Decryption.
      *
      * @param RSAKey $key
-     * @param string                    $ciphertext
-     * @param string                    $hash_algorithm
+     * @param string $ciphertext
+     * @param string $hash_algorithm
      *
      * @return string
      */
@@ -340,8 +340,8 @@ final class RSA
      * Create a signature.
      *
      * @param RSAKey $key
-     * @param string                    $message
-     * @param string                    $hash
+     * @param string $message
+     * @param string $hash
      *
      * @return string
      */
@@ -361,9 +361,9 @@ final class RSA
      * Verifies a signature.
      *
      * @param RSAKey $key
-     * @param string                    $message
-     * @param string                    $signature
-     * @param string                    $hash
+     * @param string $message
+     * @param string $signature
+     * @param string $hash
      *
      * @return bool
      */

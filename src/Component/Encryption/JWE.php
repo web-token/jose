@@ -84,7 +84,7 @@ final class JWE implements JWTInterface
 
     /**
      * @param JWKInterface $recipient_key
-     * @param array                     $recipient_headers
+     * @param array        $recipient_headers
      *
      * @return JWE
      */
@@ -134,7 +134,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     *
      * @return string|null The cyphertext
      */
     public function getCiphertext(): ?string
@@ -144,7 +143,6 @@ final class JWE implements JWTInterface
 
     /**
      * @param string $ciphertext
-     *
      *
      * @return JWE
      */
@@ -157,7 +155,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     *
      * @return string|null
      */
     public function getAAD(): ?string
@@ -166,7 +163,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     *
      * @param string $aad
      *
      * @return JWE
@@ -180,7 +176,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     *
      * @return string|null
      */
     public function getIV(): ?string
@@ -189,7 +184,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     *
      * @param string $iv
      *
      * @return JWE
@@ -203,7 +197,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     *
      * @return string|null
      */
     public function getTag(): ?string
@@ -212,7 +205,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     *
      * @param string $tag
      *
      * @return JWE
@@ -226,7 +218,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     *
      * @return string
      */
     public function getEncodedSharedProtectedHeaders(): string
@@ -235,7 +226,6 @@ final class JWE implements JWTInterface
     }
 
     /**
-     *
      * @param string $encoded_shared_protected_headers
      *
      * @return JWE

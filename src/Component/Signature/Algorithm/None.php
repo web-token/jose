@@ -41,7 +41,7 @@ final class None implements SignatureAlgorithmInterface
     /**
      * @param JWKInterface $key
      */
-    protected function checkKey(JWKInterface $key)
+    private function checkKey(JWKInterface $key)
     {
         Assertion::eq($key->get('kty'), 'none', 'Wrong key type.');
     }

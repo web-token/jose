@@ -10,6 +10,7 @@
  */
 
 namespace Jose\Component\KeyManagement;
+
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\JWKSetInterface;
 
