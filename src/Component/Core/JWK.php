@@ -17,7 +17,7 @@ use Base64Url\Base64Url;
 /**
  * Class JWK.
  */
-final class JWK implements JWKInterface
+final class JWK implements \JsonSerializable
 {
     /**
      * @var array
@@ -55,7 +55,13 @@ final class JWK implements JWKInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get the value with a specific key.
+     *
+     * @param string $key The key
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return mixed|null The value
      */
     public function get(string $key)
     {
@@ -66,7 +72,11 @@ final class JWK implements JWKInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns true if the JWK has the value identified by.
+     *
+     * @param string $key The key
+     *
+     * @return bool
      */
     public function has(string $key): bool
     {
@@ -74,7 +84,9 @@ final class JWK implements JWKInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get all values stored in the JWK object.
+     *
+     * @return array Values of the JWK object
      */
     public function getAll(): array
     {
@@ -82,7 +94,15 @@ final class JWK implements JWKInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the thumbprint of the key.
+     *
+     * @see https://tools.ietf.org/html/rfc7638
+     *
+     * @param string $hash_algorithm
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return string
      */
     public function thumbprint(string $hash_algorithm): string
     {
@@ -96,9 +116,9 @@ final class JWK implements JWKInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return JWK
      */
-    public function toPublic(): JWKInterface
+    public function toPublic(): JWK
     {
         $values = $this->getAll();
         $values = array_diff_key($values, array_flip(['p', 'd', 'q', 'dp', 'dq', 'qi']));
