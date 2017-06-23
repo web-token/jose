@@ -36,7 +36,7 @@ final class X5UJWKSet extends DownloadedJWKSet
             if (is_string($kid)) {
                 $jwk['kid'] = $kid;
             }
-            $jwkset->addKey(new JWK($jwk));
+            $jwkset->addKey(JWK::create($jwk));
         }
 
         return $jwkset->getKeys();

@@ -26,7 +26,7 @@ final class JWKTest extends TestCase
 {
     public function testKey()
     {
-        $jwk = new JWK([
+        $jwk = JWK::create([
             'kty'     => 'EC',
             'crv'     => 'P-256',
             'x'       => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',
@@ -58,7 +58,7 @@ final class JWKTest extends TestCase
      */
     public function testBadConstruction()
     {
-        new JWK([]);
+        JWK::create([]);
     }
 
     /**
@@ -67,7 +67,7 @@ final class JWKTest extends TestCase
      */
     public function testBadCall()
     {
-        $jwk = new JWK([
+        $jwk = JWK::create([
             'kty'     => 'EC',
             'crv'     => 'P-256',
             'x'       => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',
@@ -83,7 +83,7 @@ final class JWKTest extends TestCase
 
     public function testKeySet()
     {
-        $jwk1 = new JWK([
+        $jwk1 = JWK::create([
             'kty'     => 'EC',
             'crv'     => 'P-256',
             'x'       => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',
@@ -94,7 +94,7 @@ final class JWKTest extends TestCase
             'kid'     => '0123456789',
         ]);
 
-        $jwk2 = new JWK([
+        $jwk2 = JWK::create([
             'kty'     => 'EC',
             'crv'     => 'P-256',
             'x'       => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',
@@ -142,7 +142,7 @@ final class JWKTest extends TestCase
      */
     public function testKeySet2()
     {
-        $jwk1 = new JWK([
+        $jwk1 = JWK::create([
             'kty'     => 'EC',
             'crv'     => 'P-256',
             'x'       => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',
@@ -153,7 +153,7 @@ final class JWKTest extends TestCase
             'kid'     => '0123456789',
         ]);
 
-        $jwk2 = new JWK([
+        $jwk2 = JWK::create([
             'kty'     => 'EC',
             'crv'     => 'P-256',
             'x'       => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',
@@ -174,7 +174,7 @@ final class JWKTest extends TestCase
 
     public function testPrivateToPublic()
     {
-        $private = new JWK([
+        $private = JWK::create([
             'kty'     => 'EC',
             'crv'     => 'P-256',
             'x'       => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',

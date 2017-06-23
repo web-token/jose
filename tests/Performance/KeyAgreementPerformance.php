@@ -55,7 +55,7 @@ function dataKeyAgreementPerformance()
         [
             'With P-256 curve',
             new ECDHES(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-256',
                 'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
@@ -65,7 +65,7 @@ function dataKeyAgreementPerformance()
         [
             'With P-384 curve',
             new ECDHES(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-384',
                 'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
@@ -75,7 +75,7 @@ function dataKeyAgreementPerformance()
         [
             'With P-521 curve',
             new ECDHES(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-521',
                 'x'   => 'AekpBQ8ST8a8VcfVOTNl353vSrDCLLJXmPk06wTjxrrjcBpXp5EOnYG_NjFZ6OvLFV1jSfS9tsz4qUxcWceqwQGk',

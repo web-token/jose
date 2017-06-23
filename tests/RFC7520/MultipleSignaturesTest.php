@@ -38,7 +38,7 @@ final class MultipleSignaturesTest extends TestCase
         $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
         $jws = JWSFactory::createJWS($payload);
 
-        $rsa_private_key = new JWK([
+        $rsa_private_key = JWK::create([
             'kty' => 'RSA',
             'kid' => 'bilbo.baggins@hobbiton.example',
             'use' => 'sig',
@@ -66,7 +66,7 @@ final class MultipleSignaturesTest extends TestCase
             ]
         );
 
-        $ecdsa_private_key = new JWK([
+        $ecdsa_private_key = JWK::create([
             'kty' => 'EC',
             'kid' => 'bilbo.baggins@hobbiton.example',
             'use' => 'sig',
@@ -89,7 +89,7 @@ final class MultipleSignaturesTest extends TestCase
             ]
         );
 
-        $symmetric_key = new JWK([
+        $symmetric_key = JWK::create([
             'kty' => 'oct',
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
             'use' => 'sig',

@@ -33,7 +33,7 @@ final class ECDSASignatureTest extends TestCase
      */
     public function testInvalidKey()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'RSA',
         ]);
 
@@ -45,7 +45,7 @@ final class ECDSASignatureTest extends TestCase
 
     public function testES256Verify()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',
@@ -65,7 +65,7 @@ final class ECDSASignatureTest extends TestCase
 
     public function testES256SignVerify()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',
@@ -87,7 +87,7 @@ final class ECDSASignatureTest extends TestCase
      */
     public function testKeyNotPrivate()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',
@@ -102,8 +102,8 @@ final class ECDSASignatureTest extends TestCase
 
     public function testES256SignAndVerify()
     {
-        $public_key = new JWK(KeyConverter::loadFromKeyFile('file://'.__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Keys'.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'public.es256.key'));
-        $private_key = new JWK(KeyConverter::loadFromKeyFile('file://'.__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Keys'.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es256.key'));
+        $public_key = JWK::create(KeyConverter::loadFromKeyFile('file://'.__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Keys'.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'public.es256.key'));
+        $private_key = JWK::create(KeyConverter::loadFromKeyFile('file://'.__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Keys'.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es256.key'));
 
         $ecdsa = new ES256();
         $data = 'Live long and Prosper.';
@@ -114,8 +114,8 @@ final class ECDSASignatureTest extends TestCase
 
     public function testES384SignAndVerify()
     {
-        $public_key = new JWK(KeyConverter::loadFromKeyFile('file://'.__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Keys'.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'public.es384.key'));
-        $private_key = new JWK(KeyConverter::loadFromKeyFile('file://'.__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Keys'.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es384.key'));
+        $public_key = JWK::create(KeyConverter::loadFromKeyFile('file://'.__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Keys'.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'public.es384.key'));
+        $private_key = JWK::create(KeyConverter::loadFromKeyFile('file://'.__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Keys'.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es384.key'));
 
         $ecdsa = new ES384();
         $data = 'Live long and Prosper.';
@@ -126,8 +126,8 @@ final class ECDSASignatureTest extends TestCase
 
     public function testES512SignAndVerify()
     {
-        $public_key = new JWK(KeyConverter::loadFromKeyFile('file://'.__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Keys'.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'public.es512.key'));
-        $private_key = new JWK(KeyConverter::loadFromKeyFile('file://'.__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Keys'.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es512.key'));
+        $public_key = JWK::create(KeyConverter::loadFromKeyFile('file://'.__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Keys'.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'public.es512.key'));
+        $private_key = JWK::create(KeyConverter::loadFromKeyFile('file://'.__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Keys'.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es512.key'));
 
         $ecdsa = new ES512();
         $data = 'Live long and Prosper.';
@@ -138,7 +138,7 @@ final class ECDSASignatureTest extends TestCase
 
     public function testHS512Verify()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-521',
             'x'   => 'AekpBQ8ST8a8VcfVOTNl353vSrDCLLJXmPk06wTjxrrjcBpXp5EOnYG_NjFZ6OvLFV1jSfS9tsz4qUxcWceqwQGk',
@@ -158,7 +158,7 @@ final class ECDSASignatureTest extends TestCase
 
     public function testHS512SignVerify()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-521',
             'x'   => 'AekpBQ8ST8a8VcfVOTNl353vSrDCLLJXmPk06wTjxrrjcBpXp5EOnYG_NjFZ6OvLFV1jSfS9tsz4qUxcWceqwQGk',
@@ -176,7 +176,7 @@ final class ECDSASignatureTest extends TestCase
 
     public function testBadSignature()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',

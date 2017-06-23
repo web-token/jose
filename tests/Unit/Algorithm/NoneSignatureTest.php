@@ -29,7 +29,7 @@ final class NoneSignatureTest extends TestCase
 {
     public function testNoneSignAndVerifyAlgorithm()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'none',
         ]);
 
@@ -48,7 +48,7 @@ final class NoneSignatureTest extends TestCase
      */
     public function testInvalidKey()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'EC',
         ]);
 
@@ -60,7 +60,7 @@ final class NoneSignatureTest extends TestCase
 
     public function testNoneSignAndVerifyComplete()
     {
-        $jwk = new JWK([
+        $jwk = JWK::create([
             'kty' => 'none',
         ]);
 

@@ -59,7 +59,7 @@ final class LoaderAndCreatorTest extends TestCase
             [
                 'alg' => 'HS512',
             ],
-            new JWK([
+            JWK::create([
                 'kty' => 'oct',
                 'k'   => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
             ])
@@ -70,7 +70,7 @@ final class LoaderAndCreatorTest extends TestCase
                 'alg' => 'A256GCMKW',
                 'enc' => 'A128CBC-HS256',
             ],
-            new JWK([
+            JWK::create([
                 'kty' => 'oct',
                 'use' => 'enc',
                 'k'   => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',

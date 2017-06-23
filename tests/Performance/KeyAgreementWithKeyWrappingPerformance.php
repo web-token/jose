@@ -75,7 +75,7 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-256 curve',
             new ECDHESA128KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-256',
                 'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
@@ -94,7 +94,7 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-384 curve',
             new ECDHESA128KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-384',
                 'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
@@ -113,7 +113,7 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-521 curve',
             new ECDHESA128KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-521',
                 'x'   => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
@@ -132,7 +132,7 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-256 curve',
             new ECDHESA192KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-256',
                 'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
@@ -151,7 +151,7 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-384 curve',
             new ECDHESA192KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-384',
                 'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
@@ -170,7 +170,7 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-521 curve',
             new ECDHESA192KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-521',
                 'x'   => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
@@ -189,7 +189,7 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-256 curve',
             new ECDHESA256KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-256',
                 'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
@@ -208,7 +208,7 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-384 curve',
             new ECDHESA256KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-384',
                 'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
@@ -227,7 +227,7 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-521 curve',
             new ECDHESA256KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-521',
                 'x'   => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
@@ -252,7 +252,7 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-256 curve',
             new ECDHESA128KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-256',
                 'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
@@ -262,7 +262,7 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-384 curve',
             new ECDHESA128KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-384',
                 'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
@@ -272,7 +272,7 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-521 curve',
             new ECDHESA128KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-521',
                 'x'   => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
@@ -282,7 +282,7 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-256 curve',
             new ECDHESA192KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-256',
                 'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
@@ -292,7 +292,7 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-384 curve',
             new ECDHESA192KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-384',
                 'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
@@ -302,7 +302,7 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-521 curve',
             new ECDHESA192KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-521',
                 'x'   => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
@@ -312,7 +312,7 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-256 curve',
             new ECDHESA256KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-256',
                 'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
@@ -322,7 +322,7 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-384 curve',
             new ECDHESA256KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-384',
                 'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
@@ -332,7 +332,7 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
         [
             'With P-521 curve',
             new ECDHESA256KW(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-521',
                 'x'   => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',

@@ -29,11 +29,21 @@ final class JWK implements JWKInterface
      *
      * @param array $values
      */
-    public function __construct(array $values = [])
+    private function __construct(array $values = [])
     {
         Assertion::keyExists($values, 'kty', 'The parameter "kty" is mandatory.');
 
         $this->values = $values;
+    }
+
+    /**
+     * @param array $values
+     *
+     * @return JWK
+     */
+    public static function create(array $values = []): JWK
+    {
+        return new self($values);
     }
 
     /**

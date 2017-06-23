@@ -38,7 +38,7 @@ final class EdDSASignatureTest extends TestCase
             $this->markTestSkipped('EdDSA extension not available');
         }
 
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'OKP',
             'crv' => 'Ed25519',
             'd'   => 'nWGxne_9WmC6hEr0kuwsxERJxWl7MmkZcDusAxyuf2A',
@@ -63,7 +63,7 @@ final class EdDSASignatureTest extends TestCase
             $this->markTestSkipped('EdDSA extension not available');
         }
 
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'OKP',
             'crv' => 'Ed25519',
             'd'   => 'nWGxne_9WmC6hEr0kuwsxERJxWl7MmkZcDusAxyuf2A',

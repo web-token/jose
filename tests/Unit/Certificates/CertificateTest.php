@@ -239,7 +239,7 @@ final class CertificateTest extends TestCase
 
     public function testLoadX5CParameter()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'RSA',
             'use' => 'sig',
             'kid' => '1b94c',

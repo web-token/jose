@@ -28,7 +28,7 @@ final class JWKSet implements JWKSetInterface
     {
         if (array_key_exists('keys', $keys)) {
             foreach ($keys['keys'] as $value) {
-                $this->addKey(new JWK($value));
+                $this->addKey(JWK::create($value));
             }
         }
     }

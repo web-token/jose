@@ -128,7 +128,7 @@ final class ECDHES implements KeyAgreementInterface
         Assertion::keyExists($complete_header, 'epk', 'The header parameter "epk" is missing');
         Assertion::isArray($complete_header['epk'], 'The header parameter "epk" is not an array of parameter');
 
-        $public_key = new JWK($complete_header['epk']);
+        $public_key = JWK::create($complete_header['epk']);
         $this->checkKey($public_key, false);
 
         return $public_key;

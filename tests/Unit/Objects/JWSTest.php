@@ -49,7 +49,7 @@ final class JWSTest extends TestCase
         $this->assertEquals($claims, $jws->getClaims());
         $this->assertEquals(0, $jws->countSignatures());
 
-        $jws = $jws->addSignatureInformation(new JWK(['kty' => 'none']), ['crit' => ['nbf', 'iat', 'exp', 'iss']]);
+        $jws = $jws->addSignatureInformation(JWK::create(['kty' => 'none']), ['crit' => ['nbf', 'iat', 'exp', 'iss']]);
         $this->assertEquals(1, $jws->countSignatures());
 
         $checker_manager = CheckerManagerFactory::createClaimCheckerManager();
@@ -147,7 +147,7 @@ final class JWSTest extends TestCase
     {
         $jws = JWSFactory::createJWS('Hello');
 
-        $jws = $jws->addSignatureInformation(new JWK(['kty' => 'none']), [], ['foo' => 'bar']);
+        $jws = $jws->addSignatureInformation(JWK::create(['kty' => 'none']), [], ['foo' => 'bar']);
 
         $jws->toCompactJSON(0);
     }

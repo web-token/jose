@@ -65,7 +65,7 @@ function dataSignaturePerformance()
     return [
         [
             new HS256(),
-            new JWK([
+            JWK::create([
                 'kty' => 'oct',
                 'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
                 'use' => 'sig',
@@ -75,7 +75,7 @@ function dataSignaturePerformance()
         ],
         [
             new HS384(),
-            new JWK([
+            JWK::create([
                 'kty' => 'oct',
                 'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
                 'use' => 'sig',
@@ -85,7 +85,7 @@ function dataSignaturePerformance()
         ],
         [
             new HS512(),
-            new JWK([
+            JWK::create([
                 'kty' => 'oct',
                 'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
                 'use' => 'sig',
@@ -95,7 +95,7 @@ function dataSignaturePerformance()
         ],
         [
             new RS256(),
-            new JWK([
+            JWK::create([
                 'kty' => 'RSA',
                 'kid' => 'bilbo.baggins@hobbiton.example',
                 'use' => 'sig',
@@ -111,7 +111,7 @@ function dataSignaturePerformance()
         ],
         [
             new RS384(),
-            new JWK([
+            JWK::create([
                 'kty' => 'RSA',
                 'kid' => 'bilbo.baggins@hobbiton.example',
                 'use' => 'sig',
@@ -127,7 +127,7 @@ function dataSignaturePerformance()
         ],
         [
             new RS512(),
-            new JWK([
+            JWK::create([
                 'kty' => 'RSA',
                 'kid' => 'bilbo.baggins@hobbiton.example',
                 'use' => 'sig',
@@ -143,7 +143,7 @@ function dataSignaturePerformance()
         ],
         [
             new PS256(),
-            new JWK([
+            JWK::create([
                 'kty' => 'RSA',
                 'kid' => 'bilbo.baggins@hobbiton.example',
                 'use' => 'sig',
@@ -159,7 +159,7 @@ function dataSignaturePerformance()
         ],
         [
             new PS384(),
-            new JWK([
+            JWK::create([
                 'kty' => 'RSA',
                 'kid' => 'bilbo.baggins@hobbiton.example',
                 'use' => 'sig',
@@ -175,7 +175,7 @@ function dataSignaturePerformance()
         ],
         [
             new PS512(),
-            new JWK([
+            JWK::create([
                 'kty' => 'RSA',
                 'kid' => 'bilbo.baggins@hobbiton.example',
                 'use' => 'sig',
@@ -191,7 +191,7 @@ function dataSignaturePerformance()
         ],
         [
             new ES256(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'kid' => 'meriadoc.brandybuck@buckland.example',
                 'use' => 'sig',
@@ -203,7 +203,7 @@ function dataSignaturePerformance()
         ],
         [
             new ES384(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'kid' => 'peregrin.took@tuckborough.example',
                 'use' => 'sig',
@@ -215,7 +215,7 @@ function dataSignaturePerformance()
         ],
         [
             new ES512(),
-            new JWK([
+            JWK::create([
                 'kty' => 'EC',
                 'kid' => 'bilbo.baggins@hobbiton.example',
                 'use' => 'sig',
@@ -227,13 +227,13 @@ function dataSignaturePerformance()
         ],
         [
             new None(),
-            new JWK([
+            JWK::create([
                 'kty' => 'none',
             ]),
         ],
         [
             new EdDSA(),
-            new JWK([
+            JWK::create([
                 'kty' => 'OKP',
                 'crv' => 'Ed25519',
                 'd'   => 'nWGxne_9WmC6hEr0kuwsxERJxWl7MmkZcDusAxyuf2A',

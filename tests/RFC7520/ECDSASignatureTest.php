@@ -42,7 +42,7 @@ final class ECDSASignatureTest extends TestCase
          * @see https://tools.ietf.org/html/rfc7520#section-4.3.1
          */
         $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
-        $private_key = new JWK([
+        $private_key = JWK::create([
             'kty' => 'EC',
             'kid' => 'bilbo.baggins@hobbiton.example',
             'use' => 'sig',

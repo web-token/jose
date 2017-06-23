@@ -75,63 +75,63 @@ function dataKeyWrappinPerformance()
     return [
         [
             new A128KW(),
-            new JWK([
+            JWK::create([
             'kty' => 'oct',
             'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]),
         ],
         [
             new A192KW(),
-            new JWK([
+            JWK::create([
             'kty' => 'oct',
             'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
         ]),
         ],
         [
             new A256KW(),
-            new JWK([
+            JWK::create([
             'kty' => 'oct',
             'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
         ]),
         ],
         [
             new A128GCMKW(),
-            new JWK([
+            JWK::create([
             'kty' => 'oct',
             'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]),
         ],
         [
             new A192GCMKW(),
-            new JWK([
+            JWK::create([
             'kty' => 'oct',
             'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
         ]),
         ],
         [
             new A256GCMKW(),
-            new JWK([
+            JWK::create([
             'kty' => 'oct',
             'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
         ]),
         ],
         [
             new PBES2HS256A128KW(),
-            new JWK([
+            JWK::create([
             'kty' => 'oct',
             'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]),
         ],
         [
             new PBES2HS384A192KW(),
-            new JWK([
+            JWK::create([
             'kty' => 'oct',
             'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
         ]),
         ],
         [
             new PBES2HS512A256KW(),
-            new JWK([
+            JWK::create([
             'kty' => 'oct',
             'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
         ]),

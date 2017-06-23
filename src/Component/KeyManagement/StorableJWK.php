@@ -112,6 +112,6 @@ class StorableJWK implements StorableInterface, JWKInterface
      */
     protected function createObjectFromFileContent(array $file_content)
     {
-        return new JWK($file_content);
+        return JWK::create($file_content);
     }
 }

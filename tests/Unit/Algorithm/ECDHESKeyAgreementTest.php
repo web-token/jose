@@ -33,7 +33,7 @@ final class ECDHESKeyAgreementTest extends TestCase
      */
     public function testGetAgreementKey()
     {
-        $receiver = new JWK([
+        $receiver = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
@@ -60,14 +60,14 @@ final class ECDHESKeyAgreementTest extends TestCase
     {
         $header = ['enc' => 'A128GCM'];
 
-        $public = new JWK([
+        $public = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
             'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
         ]);
 
-        $private = new JWK([
+        $private = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
@@ -97,14 +97,14 @@ final class ECDHESKeyAgreementTest extends TestCase
     {
         $header = ['enc' => 'A192GCM'];
 
-        $public = new JWK([
+        $public = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
             'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
         ]);
 
-        $private = new JWK([
+        $private = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
@@ -134,14 +134,14 @@ final class ECDHESKeyAgreementTest extends TestCase
     {
         $header = ['enc' => 'A256GCM'];
 
-        $public = new JWK([
+        $public = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
             'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
         ]);
 
-        $private = new JWK([
+        $private = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
@@ -173,7 +173,7 @@ final class ECDHESKeyAgreementTest extends TestCase
      */
     public function testEPKParameterAreMissing()
     {
-        $sender = new JWK([
+        $sender = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0',
@@ -192,7 +192,7 @@ final class ECDHESKeyAgreementTest extends TestCase
     public function testBadEPKParameter()
     {
         $header = ['epk' => 'foo'];
-        $sender = new JWK([
+        $sender = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x'   => 'gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0',
@@ -210,7 +210,7 @@ final class ECDHESKeyAgreementTest extends TestCase
      */
     public function testECKeyHasMissingParameters()
     {
-        $receiver = new JWK([
+        $receiver = JWK::create([
             'kty' => 'EC',
             'dir' => Base64Url::encode('ABCD'),
         ]);
@@ -231,7 +231,7 @@ final class ECDHESKeyAgreementTest extends TestCase
             'apv' => 'Qm9i',
         ];
 
-        $receiver = new JWK([
+        $receiver = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-192',
             'x'   => 'm2Jmp98NRH83ramvp0VVIQJXK56ZEwuM',

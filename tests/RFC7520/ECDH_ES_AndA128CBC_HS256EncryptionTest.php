@@ -39,7 +39,7 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends TestCase
     {
         $expected_payload = "You can trust us to stick with you through thick and thin\xe2\x80\x93to the bitter end. And you can trust us to keep any secret of yours\xe2\x80\x93closer than you keep it yourself. But you cannot trust us to let you face trouble alone, and go off without a word. We are your friends, Frodo.";
 
-        $private_key = new JWK([
+        $private_key = JWK::create([
             'kty' => 'EC',
             'kid' => 'meriadoc.brandybuck@buckland.example',
             'use' => 'enc',
@@ -101,7 +101,7 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends TestCase
     {
         $expected_payload = "You can trust us to stick with you through thick and thin\xe2\x80\x93to the bitter end. And you can trust us to keep any secret of yours\xe2\x80\x93closer than you keep it yourself. But you cannot trust us to let you face trouble alone, and go off without a word. We are your friends, Frodo.";
 
-        $public_key = new JWK([
+        $public_key = JWK::create([
             'kty' => 'EC',
             'kid' => 'meriadoc.brandybuck@buckland.example',
             'use' => 'enc',
@@ -110,7 +110,7 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends TestCase
             'y'   => 'HlLtdXARY_f55A3fnzQbPcm6hgr34Mp8p-nuzQCE0Zw',
         ]);
 
-        $private_key = new JWK([
+        $private_key = JWK::create([
             'kty' => 'EC',
             'kid' => 'meriadoc.brandybuck@buckland.example',
             'use' => 'enc',

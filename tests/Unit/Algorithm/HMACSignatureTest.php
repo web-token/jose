@@ -31,7 +31,7 @@ final class HMACSignatureTest extends TestCase
      */
     public function testInvalidKey()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'EC',
         ]);
 
@@ -43,7 +43,7 @@ final class HMACSignatureTest extends TestCase
 
     public function testSignatureHasBadBadLength()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'oct',
             'k'   => 'foo',
         ]);
@@ -55,7 +55,7 @@ final class HMACSignatureTest extends TestCase
 
     public function testHS256SignAndVerify()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'oct',
             'k'   => 'foo',
         ]);
@@ -70,7 +70,7 @@ final class HMACSignatureTest extends TestCase
 
     public function testHS384SignAndVerify()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'oct',
             'k'   => 'foo',
         ]);
@@ -85,7 +85,7 @@ final class HMACSignatureTest extends TestCase
 
     public function testHS512SignAndVerify()
     {
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'oct',
             'k'   => 'foo',
         ]);

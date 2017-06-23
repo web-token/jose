@@ -59,7 +59,7 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends TestCase
             ],
         ]];
 
-        $private_key = new JWK([
+        $private_key = JWK::create([
             'kty' => 'oct',
             'use' => 'enc',
             'k'   => Base64Url::encode("entrap_o\xe2\x80\x93peter_long\xe2\x80\x93credit_tun"),
@@ -146,7 +146,7 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends TestCase
             ],
         ]];
 
-        $private_key = new JWK([
+        $private_key = JWK::create([
             'kty' => 'oct',
             'use' => 'enc',
             'k'   => Base64Url::encode("entrap_o\xe2\x80\x93peter_long\xe2\x80\x93credit_tun"),

@@ -123,7 +123,7 @@ final class JWKFactory
             $rsa->toArray()
         );
 
-        return new JWK($values);
+        return JWK::create($values);
     }
 
     /**
@@ -150,7 +150,7 @@ final class JWKFactory
                 $rsa->toArray()
             );
 
-            return new JWK($values);
+            return JWK::create($values);
         } else {
             $curve_name = self::getNistName($curve);
             $generator = CurveFactory::getGeneratorByName($curve_name);
@@ -168,7 +168,7 @@ final class JWKFactory
             );
         }
 
-        return new JWK($values);
+        return JWK::create($values);
     }
 
     /**
@@ -190,7 +190,7 @@ final class JWKFactory
             ]
         );
 
-        return new JWK($values);
+        return JWK::create($values);
     }
 
     /**
@@ -227,11 +227,11 @@ final class JWKFactory
             ]
         );
 
-        return new JWK($values);
+        return JWK::create($values);
     }
 
     /**
-     * @param array $values Values to configure the key.
+     * @param array $values values to configure the key
      *
      * @return JWKInterface
      */
@@ -246,7 +246,7 @@ final class JWKFactory
             ]
         );
 
-        return new JWK($values);
+        return JWK::create($values);
     }
 
     /**
@@ -326,7 +326,7 @@ final class JWKFactory
             return new JWKSet($values);
         }
 
-        return new JWK($values);
+        return JWK::create($values);
     }
 
     /**
@@ -340,7 +340,7 @@ final class JWKFactory
         $values = KeyConverter::loadKeyFromCertificateFile($file);
         $values = array_merge($values, $additional_values);
 
-        return new JWK($values);
+        return JWK::create($values);
     }
 
     /**
@@ -354,7 +354,7 @@ final class JWKFactory
         $values = KeyConverter::loadKeyFromCertificate($certificate);
         $values = array_merge($values, $additional_values);
 
-        return new JWK($values);
+        return JWK::create($values);
     }
 
     /**
@@ -368,7 +368,7 @@ final class JWKFactory
         $values = KeyConverter::loadKeyFromX509Resource($res);
         $values = array_merge($values, $additional_values);
 
-        return new JWK($values);
+        return JWK::create($values);
     }
 
     /**
@@ -383,7 +383,7 @@ final class JWKFactory
         $values = KeyConverter::loadFromKeyFile($file, $password);
         $values = array_merge($values, $additional_values);
 
-        return new JWK($values);
+        return JWK::create($values);
     }
 
     /**
@@ -398,7 +398,7 @@ final class JWKFactory
         $values = KeyConverter::loadFromKey($key, $password);
         $values = array_merge($values, $additional_values);
 
-        return new JWK($values);
+        return JWK::create($values);
     }
 
     /**
@@ -440,7 +440,7 @@ final class JWKFactory
         $values = KeyConverter::loadFromX5C($x5c);
         $values = array_merge($values, $additional_values);
 
-        return new JWK($values);
+        return JWK::create($values);
     }
 
     /**

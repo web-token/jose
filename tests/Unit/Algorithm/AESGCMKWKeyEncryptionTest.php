@@ -27,7 +27,7 @@ final class AESGCMKWKeyEncryptionTest extends TestCase
     public function testA128GCMKW()
     {
         $header = [];
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'oct',
             'k'   => Base64Url::encode(hex2bin('000102030405060708090A0B0C0D0E0F')),
         ]);
@@ -52,7 +52,7 @@ final class AESGCMKWKeyEncryptionTest extends TestCase
     public function testBadKey()
     {
         $header = [];
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'EC',
         ]);
 
@@ -70,7 +70,7 @@ final class AESGCMKWKeyEncryptionTest extends TestCase
     public function testMissingParameters()
     {
         $header = [];
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'oct',
             'k'   => Base64Url::encode(hex2bin('000102030405060708090A0B0C0D0E0F')),
         ]);
@@ -85,7 +85,7 @@ final class AESGCMKWKeyEncryptionTest extends TestCase
     public function testA192GCMKW()
     {
         $header = [];
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'oct',
             'k'   => Base64Url::encode(hex2bin('000102030405060708090A0B0C0D0E0F1011121314151617')),
         ]);
@@ -106,7 +106,7 @@ final class AESGCMKWKeyEncryptionTest extends TestCase
     public function testA256GCMKW()
     {
         $header = [];
-        $key = new JWK([
+        $key = JWK::create([
             'kty' => 'oct',
             'k'   => Base64Url::encode(hex2bin('000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F')),
         ]);
