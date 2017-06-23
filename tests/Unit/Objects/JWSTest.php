@@ -13,7 +13,7 @@ namespace Jose\Test\Unit\Objects;
 
 use Jose\Factory\CheckerManagerFactory;
 use Jose\Factory\JWSFactory;
-use Jose\Object\JWK;
+use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Object\Signature;
 use PHPUnit\Framework\TestCase;
 

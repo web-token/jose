@@ -16,12 +16,12 @@ use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Signature\Verifier;
 use Jose\Factory\AlgorithmManagerFactory;
 use Jose\Factory\CompressionManagerFactory;
-use Jose\Object\JWE;
-use Jose\Object\JWKInterface;
-use Jose\Object\JWKSet;
-use Jose\Object\JWKSetInterface;
+use Jose\Component\Encryption\JWE;
+use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWKSet;
+use Jose\Component\Core\JWKSetInterface;
 use Jose\Component\Signature\Object\JWS;
-use Jose\Object\JWTInterface;
+use Jose\Component\Core\JWTInterface;
 
 /**
  * Class able to load JWS or JWE.

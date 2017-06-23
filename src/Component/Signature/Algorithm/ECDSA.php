@@ -17,7 +17,7 @@ use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\Sequence;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\KeyManagement\KeyConverter\ECKey;
-use Jose\Object\JWKInterface;
+use Jose\Component\Core\JWKInterface;
 use Mdanter\Ecc\EccFactory;
 
 /**
@@ -47,7 +47,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     }
 
     /**
-     * @param \Jose\Object\JWKInterface $key
+     * @param \Jose\Component\Core\JWKInterface $key
      * @param string                    $data
      *
      * @return string
@@ -90,7 +90,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     }
 
     /**
-     * @param \Jose\Object\JWKInterface $key
+     * @param \Jose\Component\Core\JWKInterface $key
      * @param string                    $data
      * @param string                    $R
      * @param string                    $S

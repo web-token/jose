@@ -11,8 +11,8 @@
 
 namespace Jose\Component\Signature;
 
-use Jose\Algorithm\JWAInterface;
-use Jose\Object\JWKInterface;
+use Jose\Component\Core\JWAInterface;
+use Jose\Component\Core\JWKInterface;
 
 /**
  * This interface is used by algorithms that have capabilities to sign data and verify a signature.

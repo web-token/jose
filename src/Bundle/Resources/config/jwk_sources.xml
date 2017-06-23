@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="jose.jwk_source.file" class="SpomkyLabs\JoseBundle\DependencyInjection\Source\JWKSource\KeyFile" public="false">
+            <tag name="jose.jwk_source" />
+        </service>
+
+        <service id="jose.jwk_source.certificate" class="SpomkyLabs\JoseBundle\DependencyInjection\Source\JWKSource\CertificateFile" public="false">
+            <tag name="jose.jwk_source" />
+        </service>
+
+        <service id="jose.jwk_source.values" class="SpomkyLabs\JoseBundle\DependencyInjection\Source\JWKSource\Values" public="false">
+            <tag name="jose.jwk_source" />
+        </service>
+
+        <service id="jose.jwk_source.jwk" class="SpomkyLabs\JoseBundle\DependencyInjection\Source\JWKSource\JWK" public="false">
+            <tag name="jose.jwk_source" />
+        </service>
+
+        <service id="jose.jwk_source.x5c" class="SpomkyLabs\JoseBundle\DependencyInjection\Source\JWKSource\X5C" public="false">
+            <tag name="jose.jwk_source" />
+        </service>
+
+        <service id="jose.jwk_source.random.oct" class="SpomkyLabs\JoseBundle\DependencyInjection\Source\JWKSource\RandomOctKey" public="false">
+            <tag name="jose.jwk_source" />
+        </service>
+
+        <service id="jose.jwk_source.random.rsa" class="SpomkyLabs\JoseBundle\DependencyInjection\Source\JWKSource\RandomRSAKey" public="false">
+            <tag name="jose.jwk_source" />
+        </service>
+
+        <service id="jose.jwk_source.random.okp" class="SpomkyLabs\JoseBundle\DependencyInjection\Source\JWKSource\RandomOKPKey" public="false">
+            <tag name="jose.jwk_source" />
+        </service>
+
+        <service id="jose.jwk_source.random.ec" class="SpomkyLabs\JoseBundle\DependencyInjection\Source\JWKSource\RandomECKey" public="false">
+            <tag name="jose.jwk_source" />
+        </service>
+
+        <service id="jose.jwk_source.random.none" class="SpomkyLabs\JoseBundle\DependencyInjection\Source\JWKSource\RandomNoneKey" public="false">
+            <tag name="jose.jwk_source" />
+        </service>
+
+        <service id="jose.jwk_source.random.jwkset" class="SpomkyLabs\JoseBundle\DependencyInjection\Source\JWKSource\JWKSet" public="false">
+            <tag name="jose.jwk_source" />
+        </service>
+    </services>
+</container>

@@ -14,7 +14,7 @@ namespace Jose\Test\Unit\Algorithm;
 use Base64Url\Base64Url;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAManager;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
@@ -23,8 +23,8 @@ use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Loader;
-use Jose\Object\JWE;
-use Jose\Object\JWK;
+use Jose\Component\Encryption\JWE;
+use Jose\Component\Core\JWK;
 use Jose\Test\TestCase;
 
 /**

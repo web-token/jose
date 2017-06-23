@@ -13,8 +13,8 @@ namespace Jose\Factory;
 
 use Assert\Assertion;
 use Jose\Component\Encryption\Encrypter;
-use Jose\Object\JWE;
-use Jose\Object\JWKInterface;
+use Jose\Component\Encryption\JWE;
+use Jose\Component\Core\JWKInterface;
 
 final class JWEFactory
 {

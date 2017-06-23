@@ -11,7 +11,7 @@
 
 namespace Jose\Component\Encryption\Algorithm;
 
-use Jose\Algorithm\JWAInterface;
+use Jose\Component\Core\JWAInterface;
 
 interface KeyEncryptionAlgorithmInterface extends JWAInterface
 {

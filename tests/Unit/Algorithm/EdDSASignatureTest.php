@@ -12,11 +12,11 @@
 namespace Jose\Test\Unit\Algorithm;
 
 use Base64Url\Base64Url;
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAManager;
 use Jose\Component\Signature\Algorithm\EdDSA;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
-use Jose\Object\JWK;
+use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Object\JWS;
 use Jose\Test\TestCase;
 use Jose\Component\Signature\Verifier;

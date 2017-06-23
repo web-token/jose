@@ -1,0 +1,22 @@
+default:
+    autoload:
+        '': %paths.base%/Tests
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                env: test
+                debug: true
+                path: Tests/app/AppKernel.php
+                bootstrap: Tests/app/autoload.php
+        Behat\MinkExtension:
+            base_url: "https://www.example.com/"
+            sessions:
+                default:
+                    symfony2: ~
+    suites:
+        test_suite:
+            paths:
+                - %paths.base%/Features
+            type: symfony_bundle
+            mink_session: default
+            bundle: SpomkyLabsJoseBundle

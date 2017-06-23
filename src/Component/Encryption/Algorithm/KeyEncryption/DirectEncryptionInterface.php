@@ -12,12 +12,12 @@
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
-use Jose\Object\JWKInterface;
+use Jose\Component\Core\JWKInterface;
 
 interface DirectEncryptionInterface extends KeyEncryptionAlgorithmInterface
 {
     /**
-     * @param \Jose\Object\JWKInterface $key The key used to get the CEK
+     * @param \Jose\Component\Core\JWKInterface $key The key used to get the CEK
      *
      * @throws \Exception If key does not support the algorithm or if the key usage does not authorize the operation
      *

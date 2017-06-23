@@ -11,9 +11,9 @@
 
 namespace Jose\Test\Unit\Objects;
 
-use Jose\Object\JWK;
-use Jose\Object\JWKInterface;
-use Jose\Object\JWKSet;
+use Jose\Component\Core\JWK;
+use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWKSet;
 use PHPUnit\Framework\TestCase;
 
 /**

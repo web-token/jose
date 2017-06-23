@@ -20,7 +20,7 @@ use FG\ASN1\Universal\NullObject;
 use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\OctetString;
 use FG\ASN1\Universal\Sequence;
-use Jose\Object\JWKInterface;
+use Jose\Component\Core\JWKInterface;
 use Jose\Util\BigInteger;
 
 final class RSAKey extends Sequence

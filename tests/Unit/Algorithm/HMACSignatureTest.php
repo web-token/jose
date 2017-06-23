@@ -14,7 +14,7 @@ namespace Jose\Test\Unit\Algorithm;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\Algorithm\HS384;
 use Jose\Component\Signature\Algorithm\HS512;
-use Jose\Object\JWK;
+use Jose\Component\Core\JWK;
 use PHPUnit\Framework\TestCase;
 
 /**

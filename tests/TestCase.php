@@ -14,7 +14,7 @@ namespace Jose\Test;
 use Base64Url\Base64Url;
 use Jose\Component\Checker\AudienceChecker;
 use Jose\Factory\CheckerManagerFactory;
-use Jose\Object\JWKSet;
+use Jose\Component\Core\JWKSet;
 use Jose\Test\Stub\IssuerChecker;
 use Jose\Test\Stub\JtiChecker;
 use Jose\Test\Stub\SubjectChecker;
@@ -47,7 +47,7 @@ class TestCase extends Base
     }
 
     /**
-     * @return \Jose\Object\JWKSet
+     * @return \Jose\Component\Core\JWKSet
      */
     protected function getPrivateKeySet()
     {
@@ -139,7 +139,7 @@ class TestCase extends Base
     }
 
     /**
-     * @return \Jose\Object\JWKSet
+     * @return \Jose\Component\Core\JWKSet
      */
     protected function getPublicKeySet()
     {
@@ -193,7 +193,7 @@ class TestCase extends Base
     }
 
     /**
-     * @return \Jose\Object\JWKSet
+     * @return \Jose\Component\Core\JWKSet
      */
     protected function getSymmetricKeySet()
     {

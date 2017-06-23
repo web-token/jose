@@ -11,10 +11,10 @@
 
 namespace Jose\Test\Unit\Algorithm;
 
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAManager;
 use Jose\Component\Signature\Algorithm\None;
 use Jose\Loader;
-use Jose\Object\JWK;
+use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Object\JWS;
 use Jose\Component\Signature\Signer;
 use Jose\Test\TestCase;

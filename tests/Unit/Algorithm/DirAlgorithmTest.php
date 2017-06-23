@@ -13,7 +13,7 @@ namespace Jose\Test\Unit\Algorithm;
 
 use Base64Url\Base64Url;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\Dir;
-use Jose\Object\JWK;
+use Jose\Component\Core\JWK;
 use Jose\Test\TestCase;
 
 /**

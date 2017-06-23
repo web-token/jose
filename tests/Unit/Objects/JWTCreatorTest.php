@@ -12,7 +12,7 @@
 namespace Jose\Test\Unit\Objects;
 
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAManager;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A256GCMKW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A256KW;
 use Jose\Component\Signature\Algorithm\HS256;

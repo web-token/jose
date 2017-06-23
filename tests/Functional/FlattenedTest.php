@@ -12,13 +12,13 @@
 namespace Jose\Test\Functional;
 
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAManager;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Loader;
-use Jose\Object\JWE;
+use Jose\Component\Encryption\JWE;
 use Jose\Component\Signature\Object\JWS;
 use Jose\Test\TestCase;
 

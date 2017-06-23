@@ -15,7 +15,7 @@ use Jose\Factory\JWEFactory;
 use Jose\Factory\JWKFactory;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
-use Jose\Object\JWE;
+use Jose\Component\Encryption\JWE;
 use Jose\Component\Signature\Object\JWS;
 use PHPUnit\Framework\TestCase;
 
@@ -132,7 +132,7 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     }
 
     /**
-     * @return \Jose\Object\JWKInterface
+     * @return \Jose\Component\Core\JWKInterface
      */
     private function getPrivateKey()
     {
@@ -150,7 +150,7 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     }
 
     /**
-     * @return \Jose\Object\JWKInterface
+     * @return \Jose\Component\Core\JWKInterface
      */
     private function getMinimalPrivateKey()
     {

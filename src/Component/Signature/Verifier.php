@@ -13,11 +13,11 @@ namespace Jose\Component\Signature;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAManager;
 use Jose\Behaviour\HasKeyChecker;
-use Jose\Object\JWKInterface;
-use Jose\Object\JWKSet;
-use Jose\Object\JWKSetInterface;
+use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWKSet;
+use Jose\Component\Core\JWKSetInterface;
 use Jose\Component\Signature\Object\JWS;
 use Jose\Component\Signature\Object\Signature;
 

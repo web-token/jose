@@ -17,7 +17,7 @@ use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A192CBCHS384;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256CBCHS512;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAManager;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\Dir;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW;
@@ -29,9 +29,9 @@ use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\Encrypter;
 use Jose\Factory\JWEFactory;
 use Jose\Loader;
-use Jose\Object\JWE;
-use Jose\Object\JWK;
-use Jose\Object\JWKSet;
+use Jose\Component\Encryption\JWE;
+use Jose\Component\Core\JWK;
+use Jose\Component\Core\JWKSet;
 use Jose\Test\TestCase;
 
 /**

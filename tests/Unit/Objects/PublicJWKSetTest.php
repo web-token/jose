@@ -12,7 +12,7 @@
 namespace Jose\Test\Unit\Objects;
 
 use Jose\Factory\JWKFactory;
-use Jose\Object\PublicJWKSet;
+use Jose\Component\KeyManagement\PublicJWKSet;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -75,7 +75,7 @@ final class PublicJWKSetTest extends TestCase
             4
         );
 
-        $jwksets = new \Jose\Object\JWKSets([$jwkset1, $jwkset2, $jwkset3]);
+        $jwksets = new \Jose\Component\KeyManagement\JWKSets([$jwkset1, $jwkset2, $jwkset3]);
         $public_jwkset = new PublicJWKSet($jwksets);
 
         $this->assertEquals(7, $public_jwkset->countKeys());

@@ -11,11 +11,11 @@
 
 namespace Jose\Test\RFC7520;
 
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAManager;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
-use Jose\Object\JWK;
+use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Signer;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;

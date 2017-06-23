@@ -12,7 +12,7 @@
 namespace Jose\Test\Functional;
 
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAManager;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A256GCMKW;
 use Jose\Component\Signature\Algorithm\HS512;
 use Jose\Component\Signature\Algorithm\RS512;
@@ -23,8 +23,8 @@ use Jose\Component\Encryption\Encrypter;
 use Jose\Factory\CheckerManagerFactory;
 use Jose\JWTCreator;
 use Jose\JWTLoader;
-use Jose\Object\JWK;
-use Jose\Object\JWKSet;
+use Jose\Component\Core\JWK;
+use Jose\Component\Core\JWKSet;
 use Jose\Component\Signature\Signer;
 use Jose\Test\TestCase;
 use Jose\Component\Signature\Verifier;

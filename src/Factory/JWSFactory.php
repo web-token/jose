@@ -12,7 +12,7 @@
 namespace Jose\Factory;
 
 use Assert\Assertion;
-use Jose\Object\JWKInterface;
+use Jose\Component\Core\JWKInterface;
 use Jose\Component\Signature\Object\JWS;
 use Jose\Component\Signature\Signer;
 

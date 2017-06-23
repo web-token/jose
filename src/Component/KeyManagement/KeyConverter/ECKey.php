@@ -21,7 +21,7 @@ use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\OctetString;
 use FG\ASN1\Universal\Sequence;
-use Jose\Object\JWKInterface;
+use Jose\Component\Core\JWKInterface;
 
 final class ECKey extends Sequence
 {

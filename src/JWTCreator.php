@@ -14,7 +14,7 @@ namespace Jose;
 use Assert\Assertion;
 use Jose\Component\Encryption\Encrypter;
 use Jose\Component\Signature\Signer;
-use Jose\Object\JWKInterface;
+use Jose\Component\Core\JWKInterface;
 
 final class JWTCreator
 {
@@ -53,7 +53,7 @@ final class JWTCreator
      *
      * @return string
      */
-    public function sign($payload, array $signature_protected_headers, Object\JWKInterface $signature_key): string
+    public function sign($payload, array $signature_protected_headers, JWKInterface $signature_key): string
     {
         $jws = Factory\JWSFactory::createJWS($payload);
 
@@ -70,7 +70,7 @@ final class JWTCreator
      *
      * @return string
      */
-    public function encrypt(string $payload, array $encryption_protected_headers, Object\JWKInterface $encryption_key): string
+    public function encrypt(string $payload, array $encryption_protected_headers, JWKInterface $encryption_key): string
     {
         Assertion::true($this->isEncryptionSupportEnabled(), 'The encryption support is not enabled');
 
@@ -90,7 +90,7 @@ final class JWTCreator
      *
      * @return string
      */
-    public function signAndEncrypt($payload, array $signature_protected_headers, Object\JWKInterface $signature_key, array $encryption_protected_headers, Object\JWKInterface $encryption_key): string
+    public function signAndEncrypt($payload, array $signature_protected_headers, JWKInterface $signature_key, array $encryption_protected_headers, JWKInterface $encryption_key): string
     {
         $jws = $this->sign($payload, $signature_protected_headers, $signature_key);
         $jwe = $this->encrypt($jws, $encryption_protected_headers, $encryption_key);

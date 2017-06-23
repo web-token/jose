@@ -12,7 +12,7 @@
 namespace Jose\Util;
 
 use Base64Url\Base64Url;
-use Jose\Object\JWE;
+use Jose\Component\Encryption\JWE;
 
 final class JWELoader
 {

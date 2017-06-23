@@ -11,7 +11,7 @@
 
 namespace Jose\Behaviour;
 
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAManager;
 
 trait HasJWAManager
 {

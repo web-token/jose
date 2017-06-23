@@ -13,7 +13,7 @@ namespace Jose\Test\Unit\Keys;
 
 use Jose\Factory\JWKFactory;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
-use Jose\Object\JWK;
+use Jose\Component\Core\JWK;
 use Jose\Test\TestCase;
 
 /**

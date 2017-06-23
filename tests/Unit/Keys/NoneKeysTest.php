@@ -12,7 +12,7 @@
 namespace Jose\Test\Unit\Keys;
 
 use Jose\Factory\JWKFactory;
-use Jose\Object\JWK;
+use Jose\Component\Core\JWK;
 use Jose\Test\TestCase;
 
 /**

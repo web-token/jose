@@ -17,7 +17,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA192KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW;
 use Jose\Factory\JWKFactory;
-use Jose\Object\JWK;
+use Jose\Component\Core\JWK;
 use PHPUnit\Framework\TestCase;
 
 /**

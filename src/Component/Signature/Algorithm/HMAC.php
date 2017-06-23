@@ -14,7 +14,7 @@ namespace Jose\Component\Signature\Algorithm;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
-use Jose\Object\JWKInterface;
+use Jose\Component\Core\JWKInterface;
 
 /**
  * This class handles signatures using HMAC.

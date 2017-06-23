@@ -14,7 +14,7 @@ namespace Jose\Component\Encryption;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAManager;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
@@ -22,9 +22,9 @@ use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Behaviour\HasKeyChecker;
 use Jose\Component\Encryption\Compression\CompressionInterface;
 use Jose\Component\Encryption\Compression\CompressionManager;
-use Jose\Object\JWE;
-use Jose\Object\JWKInterface;
-use Jose\Object\Recipient;
+use Jose\Component\Encryption\JWE;
+use Jose\Component\Core\JWKInterface;
+use Jose\Component\Encryption\Recipient;
 
 final class Encrypter
 {

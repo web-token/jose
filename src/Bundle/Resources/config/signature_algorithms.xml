@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="jose.algorithm.none" class="Jose\Algorithm\Signature\None" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+
+        <service id="jose.algorithm.es256" class="Jose\Algorithm\Signature\ES256" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+        <service id="jose.algorithm.es384" class="Jose\Algorithm\Signature\ES384" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+        <service id="jose.algorithm.es512" class="Jose\Algorithm\Signature\ES512" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+
+        <service id="jose.algorithm.rs256" class="Jose\Algorithm\Signature\RS256" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+        <service id="jose.algorithm.rs384" class="Jose\Algorithm\Signature\RS384" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+        <service id="jose.algorithm.rs512" class="Jose\Algorithm\Signature\RS512" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+
+        <service id="jose.algorithm.ps256" class="Jose\Algorithm\Signature\PS256" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+        <service id="jose.algorithm.ps384" class="Jose\Algorithm\Signature\PS384" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+        <service id="jose.algorithm.ps512" class="Jose\Algorithm\Signature\PS512" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+
+        <service id="jose.algorithm.hs256" class="Jose\Algorithm\Signature\HS256" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+        <service id="jose.algorithm.hs384" class="Jose\Algorithm\Signature\HS384" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+        <service id="jose.algorithm.hs512" class="Jose\Algorithm\Signature\HS512" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+
+        <service id="jose.algorithm.eddsa" class="Jose\Algorithm\Signature\EdDSA" public="false">
+            <tag name="jose.algorithm" />
+        </service>
+    </services>
+</container>

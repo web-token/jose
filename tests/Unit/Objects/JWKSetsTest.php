@@ -12,7 +12,7 @@
 namespace Jose\Test\Unit\Objects;
 
 use Jose\Factory\JWKFactory;
-use Jose\Object\JWKSets;
+use Jose\Component\KeyManagement\JWKSets;
 use PHPUnit\Framework\TestCase;
 
 /**

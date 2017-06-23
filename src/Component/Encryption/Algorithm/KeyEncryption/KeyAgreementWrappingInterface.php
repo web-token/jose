@@ -12,7 +12,7 @@
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
-use Jose\Object\JWKInterface;
+use Jose\Component\Core\JWKInterface;
 
 interface KeyAgreementWrappingInterface extends KeyEncryptionAlgorithmInterface
 {

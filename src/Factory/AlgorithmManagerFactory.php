@@ -12,8 +12,8 @@
 namespace Jose\Factory;
 
 use Assert\Assertion;
-use Jose\Algorithm\JWAInterface;
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAInterface;
+use Jose\Component\Core\JWAManager;
 
 final class AlgorithmManagerFactory
 {

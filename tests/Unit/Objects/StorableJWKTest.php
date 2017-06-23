@@ -11,6 +11,7 @@
 
 namespace Jose\Test\Unit\Objects;
 
+use Jose\Component\Core\JWKInterface;
 use Jose\Factory\JWKFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -41,7 +42,7 @@ final class StorableJWKTest extends TestCase
         $this->assertEquals('P-256', $jwk->get('crv'));
         $this->assertTrue(is_string($jwk->thumbprint('sha256')));
         $this->assertTrue(is_string(json_encode($jwk)));
-        $this->assertInstanceOf(\Jose\Object\JWKInterface::class, $jwk->toPublic());
+        $this->assertInstanceOf(JWKInterface::class, $jwk->toPublic());
 
         $this->assertEquals($all, $jwk->getAll());
 

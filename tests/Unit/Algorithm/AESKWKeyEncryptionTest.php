@@ -15,7 +15,7 @@ use Base64Url\Base64Url;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A192KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A256KW;
-use Jose\Object\JWK;
+use Jose\Component\Core\JWK;
 use PHPUnit\Framework\TestCase;
 
 /**

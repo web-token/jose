@@ -11,15 +11,15 @@
 
 namespace Jose\Test\Functional;
 
-use Jose\Algorithm\JWAManager;
+use Jose\Component\Core\JWAManager;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\Algorithm\HS512;
 use Jose\Component\Signature\Algorithm\PS512;
 use Jose\Component\Signature\Algorithm\RS512;
 use Jose\Factory\JWSFactory;
 use Jose\Loader;
-use Jose\Object\JWK;
-use Jose\Object\JWKSet;
+use Jose\Component\Core\JWK;
+use Jose\Component\Core\JWKSet;
 use Jose\Component\Signature\Object\JWS;
 use Jose\Component\Signature\Signer;
 use Jose\Test\TestCase;
@@ -722,7 +722,7 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Object\JWKInterface
+     * @return \Jose\Component\Core\JWKInterface
      */
     protected function getKey1()
     {
@@ -735,7 +735,7 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Object\JWKInterface
+     * @return \Jose\Component\Core\JWKInterface
      */
     protected function getKey2()
     {
@@ -757,7 +757,7 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Object\JWKInterface
+     * @return \Jose\Component\Core\JWKInterface
      */
     protected function getKey3()
     {
@@ -775,7 +775,7 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Object\JWKInterface
+     * @return \Jose\Component\Core\JWKInterface
      */
     protected function getKey4()
     {
@@ -797,7 +797,7 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Object\JWKInterface
+     * @return \Jose\Component\Core\JWKInterface
      */
     protected function getKey5()
     {
@@ -819,7 +819,7 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Object\JWKSetInterface
+     * @return \Jose\Component\Core\JWKSetInterface
      */
     protected function getKeyset()
     {

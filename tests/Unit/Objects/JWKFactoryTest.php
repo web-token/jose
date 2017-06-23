@@ -12,8 +12,8 @@
 namespace Jose\Test\Unit\Objects;
 
 use Jose\Factory\JWKFactory;
-use Jose\Object\JWKInterface;
-use Jose\Object\JWKSetInterface;
+use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWKSetInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 

@@ -17,7 +17,7 @@ use Jose\Component\Signature\Algorithm\ES384;
 use Jose\Component\Signature\Algorithm\ES512;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Factory\JWKFactory;
-use Jose\Object\JWKInterface;
+use Jose\Component\Core\JWKInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -39,7 +39,7 @@ final class ECDSASignatureTest extends TestCase
     /**
      * @param SignatureAlgorithmInterface $algorithm
      * @param string                                      $message
-     * @param \Jose\Object\JWKInterface                   $key
+     * @param \Jose\Component\Core\JWKInterface                   $key
      * @param string                                      $signature
      *
      * @dataProvider dataWithVectors

@@ -12,7 +12,7 @@
 namespace Jose\Behaviour;
 
 use Assert\Assertion;
-use Jose\Object\JWKInterface;
+use Jose\Component\Core\JWKInterface;
 
 trait HasKeyChecker
 {

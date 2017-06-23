@@ -12,8 +12,8 @@
 namespace Jose\Test\Unit\Objects;
 
 use Jose\Factory\JWKFactory;
-use Jose\Object\JWKInterface;
-use Jose\Object\JWKSetInterface;
+use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWKSetInterface;
 use Jose\Test\TestCase;
 
 /**

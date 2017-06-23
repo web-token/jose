@@ -13,7 +13,7 @@ namespace Jose\Component\Signature\Object;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Object\JWKInterface;
+use Jose\Component\Core\JWKInterface;
 
 /**
  * Class SignatureInstruction.

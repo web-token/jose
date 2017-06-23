@@ -13,9 +13,9 @@ namespace Jose\Component\Signature\Object;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Object\JWKInterface;
-use Jose\Object\JWT;
-use Jose\Object\JWTInterface;
+use Jose\Component\Core\JWKInterface;
+use Jose\Component\Core\JWT;
+use Jose\Component\Core\JWTInterface;
 
 /**
  * Class JWS.

@@ -15,8 +15,8 @@ use Assert\Assertion;
 use Jose\Component\Checker\CheckerManager;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Signature\Verifier;
-use Jose\Object\JWE;
-use Jose\Object\JWKSetInterface;
+use Jose\Component\Encryption\JWE;
+use Jose\Component\Core\JWKSetInterface;
 use Jose\Component\Signature\Object\JWS;
 
 final class JWTLoader
