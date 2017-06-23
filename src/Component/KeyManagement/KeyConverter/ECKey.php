@@ -43,7 +43,7 @@ final class ECKey extends Sequence
         parent::__construct();
 
         if ($data instanceof JWK) {
-            $this->loadJWK($data->getAll());
+            $this->loadJWK($data->all());
         } elseif (is_array($data)) {
             $this->loadJWK($data);
         } elseif (is_string($data)) {

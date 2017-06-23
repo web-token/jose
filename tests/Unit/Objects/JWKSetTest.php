@@ -46,7 +46,7 @@ final class JWKSetTest extends TestCase
                 'n'   => 'vnMTRCMvsS04M1yaKR112aB8RxOkWHFixZO68wCRlVLxK4ugckXVD_Ebcq-kms1T2XpoWntVfBuX40r2GvcD9UsTFt_MZlgd1xyGwGV6U_tfQUll5mKxCPjr60h83LXKJ_zmLXIqkV8tAoIg78a5VRWoms_0Bn09DKT3-RBWFjk=',
                 'e'   => 'AQAB',
             ],
-            $jwk->getAll()
+            $jwk->all()
         );
     }
 
@@ -64,7 +64,7 @@ final class JWKSetTest extends TestCase
                 'n'   => 'rI67uHIDWDgCy_Ut-FhhjTCkEcqzoO80IRgdpk_fJHlDmXhMTJKPizxbIEMs0wRHRZpwH-4D20thpnQB5Mgx6-XM9kOvcYpHSdcYME77BwX6uQG-hw2w77NOhYiCSZCLzx-5ld5Wjy0dympL-ExqQw-wrWipMX7NQhIbJqVbZ18=',
                 'e'   => 'AQAB',
             ],
-            $jwk->getAll()
+            $jwk->all()
         );
     }
 
@@ -82,7 +82,7 @@ final class JWKSetTest extends TestCase
                 'n'   => 'rI67uHIDWDgCy_Ut-FhhjTCkEcqzoO80IRgdpk_fJHlDmXhMTJKPizxbIEMs0wRHRZpwH-4D20thpnQB5Mgx6-XM9kOvcYpHSdcYME77BwX6uQG-hw2w77NOhYiCSZCLzx-5ld5Wjy0dympL-ExqQw-wrWipMX7NQhIbJqVbZ18=',
                 'e'   => 'AQAB',
             ],
-            $jwk->getAll()
+            $jwk->all()
         );
     }
 
@@ -109,6 +109,6 @@ final class JWKSetTest extends TestCase
         $this->assertEquals(1, $jwkset->countKeys());
         $this->assertTrue(isset($jwkset[0]));
         $this->assertFalse(isset($jwkset[1]));
-        $this->assertEquals($values['keys'][0], $jwkset[0]->getAll());
+        $this->assertEquals($values['keys'][0], $jwkset[0]->all());
     }
 }

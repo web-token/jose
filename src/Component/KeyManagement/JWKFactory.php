@@ -22,54 +22,9 @@ use Jose\Component\Core\JWKSetInterface;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\EccFactory;
-use Psr\Cache\CacheItemPoolInterface;
 
 final class JWKFactory
 {
-    /**
-     * @param JWKSetInterface $jwkset
-     *
-     * @return JWKSetInterface
-     */
-    public static function createPublicKeySet(JWKSetInterface $jwkset): JWKSetInterface
-    {
-        return new PublicJWKSet($jwkset);
-    }
-
-    /**
-     * @param JWKSetInterface[] $jwksets
-     *
-     * @return JWKSetInterface
-     */
-    public static function createKeySets(array $jwksets = []): JWKSetInterface
-    {
-        return new JWKSets($jwksets);
-    }
-
-    /**
-     * @param string $filename
-     * @param array  $parameters
-     * @param int    $nb_keys
-     *
-     * @return JWKSetInterface
-     */
-    public static function createRotatableKeySet(string $filename, array $parameters, int $nb_keys): JWKSetInterface
-    {
-        return new RotatableJWKSet($filename, $parameters, $nb_keys);
-    }
-
-    /**
-     * @param string $filename
-     * @param array  $parameters
-     * @param int    $nb_keys
-     *
-     * @return JWKSetInterface
-     */
-    public static function createStorableKeySet(string $filename, array $parameters, $nb_keys): JWKSetInterface
-    {
-        return new StorableJWKSet($filename, $parameters, $nb_keys);
-    }
-
     /**
      * @param array $config
      *
@@ -387,34 +342,6 @@ final class JWKFactory
         $values = array_merge($values, $additional_values);
 
         return JWK::create($values);
-    }
-
-    /**
-     * @param string                      $jku
-     * @param bool                        $allow_unsecured_connection
-     * @param CacheItemPoolInterface|null $cache
-     * @param int|null                    $ttl
-     * @param bool                        $allow_http_connection
-     *
-     * @return JWKSetInterface
-     */
-    public static function createFromJKU(string $jku, bool $allow_unsecured_connection = false, ?CacheItemPoolInterface $cache = null, int $ttl = 86400, bool $allow_http_connection = false): JWKSetInterface
-    {
-        return new JKUJWKSet($jku, $cache, $ttl, $allow_unsecured_connection, $allow_http_connection);
-    }
-
-    /**
-     * @param string                      $x5u
-     * @param bool                        $allow_unsecured_connection
-     * @param CacheItemPoolInterface|null $cache
-     * @param int|null                    $ttl
-     * @param bool                        $allow_http_connection
-     *
-     * @return JWKSetInterface
-     */
-    public static function createFromX5U(string $x5u, bool $allow_unsecured_connection = false, ?CacheItemPoolInterface $cache = null, int $ttl = 86400, bool $allow_http_connection = false): JWKSetInterface
-    {
-        return new X5UJWKSet($x5u, $cache, $ttl, $allow_unsecured_connection, $allow_http_connection);
     }
 
     /**

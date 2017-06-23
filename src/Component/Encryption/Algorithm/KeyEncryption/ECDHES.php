@@ -48,7 +48,7 @@ final class ECDHES implements KeyAgreementInterface
                 default:
                     throw new \InvalidArgumentException(sprintf('The curve "%s" is not supported', $public_key->get('crv')));
             }
-            $epk = $private_key->toPublic()->getAll();
+            $epk = $private_key->toPublic()->all();
             $additional_header_values = array_merge($additional_header_values, [
                 'epk' => $epk,
             ]);
