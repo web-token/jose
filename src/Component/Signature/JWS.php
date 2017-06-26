@@ -27,12 +27,12 @@ final class JWS implements JWTInterface
     /**
      * @var bool
      */
-    private $is_payload_detached = false;
+    private $isPayloadDetached = false;
 
     /**
      * @var string|null
      */
-    private $encoded_payload = null;
+    private $encodedPayload = null;
 
     /**
      * @var Signature[]
@@ -44,7 +44,7 @@ final class JWS implements JWTInterface
      */
     public function isPayloadDetached(): bool
     {
-        return $this->is_payload_detached;
+        return $this->isPayloadDetached;
     }
 
     /**
@@ -53,7 +53,7 @@ final class JWS implements JWTInterface
     public function withDetachedPayload(): JWTInterface
     {
         $jwt = clone $this;
-        $jwt->is_payload_detached = true;
+        $jwt->isPayloadDetached = true;
 
         return $jwt;
     }
@@ -64,7 +64,7 @@ final class JWS implements JWTInterface
     public function withAttachedPayload(): JWTInterface
     {
         $jwt = clone $this;
-        $jwt->is_payload_detached = false;
+        $jwt->isPayloadDetached = false;
 
         return $jwt;
     }
@@ -75,7 +75,7 @@ final class JWS implements JWTInterface
     public function withEncodedPayload(string $encoded_payload): JWTInterface
     {
         $jwt = clone $this;
-        $jwt->encoded_payload = $encoded_payload;
+        $jwt->encodedPayload = $encoded_payload;
 
         return $jwt;
     }
@@ -90,8 +90,8 @@ final class JWS implements JWTInterface
         if (true === $this->isPayloadDetached()) {
             return null;
         }
-        if (null !== $this->encoded_payload) {
-            return $this->encoded_payload;
+        if (null !== $this->encodedPayload) {
+            return $this->encodedPayload;
         }
         $payload = $this->getPayload();
         if (!is_string($payload)) {

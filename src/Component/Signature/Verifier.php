@@ -17,8 +17,6 @@ use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\KeyChecker;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
-use Jose\Component\Signature\JWS;
-use Jose\Component\Signature\Signature;
 
 final class Verifier
 {

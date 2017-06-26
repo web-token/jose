@@ -13,10 +13,9 @@ namespace Jose\Test\RFC7520;
 
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Signature\Algorithm\ES512;
-use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\JWSLoader;
-use Jose\Component\Signature\Signer;
+use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
@@ -61,14 +60,14 @@ final class ECDSASignatureTest extends TestCase
             'kid' => 'bilbo.baggins@hobbiton.example',
         ];
 
-        $jws = JWSFactory::createJWS($payload);
-        $jws = $jws->addSignatureInformation($private_key, $headers);
-
         $signatureAlgorithmManager = JWAManager::create([new ES512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $signer = new Signer($signatureAlgorithmManager);
+        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $jwsBuilder
+            ->withPayload($payload)
+            ->addSignature($private_key, $headers);
 
-        $signer->sign($jws);
+        $jws = $jwsBuilder->build();
 
         $verifier->verifyWithKey($jws, $private_key);
 

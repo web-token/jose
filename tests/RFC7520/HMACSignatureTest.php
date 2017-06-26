@@ -16,7 +16,7 @@ use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\JWSLoader;
-use Jose\Component\Signature\Signer;
+use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
@@ -60,14 +60,13 @@ final class HMACSignatureTest extends TestCase
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
         ];
 
-        $jws = JWSFactory::createJWS($payload);
-        $jws = $jws->addSignatureInformation($key, $headers);
-
         $signatureAlgorithmManager = JWAManager::create([new HS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $signer = new Signer($signatureAlgorithmManager);
-        $signer->sign($jws);
-
+        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $jwsBuilder
+            ->withPayload($payload)
+            ->addSignature($key, $headers);
+        $jws = $jwsBuilder->build();
 
         /*
          * Header
@@ -122,13 +121,13 @@ final class HMACSignatureTest extends TestCase
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
         ];
 
-        $jws = JWSFactory::createJWS($payload, true);
-        $jws = $jws->addSignatureInformation($key, $headers);
-
         $signatureAlgorithmManager = JWAManager::create([new HS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $signer = new Signer($signatureAlgorithmManager);
-        $signer->sign($jws);
+        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $jwsBuilder
+            ->withPayload($payload, true)
+            ->addSignature($key, $headers);
+        $jws = $jwsBuilder->build();
 
 
         /*
@@ -187,13 +186,13 @@ final class HMACSignatureTest extends TestCase
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
         ];
 
-        $jws = JWSFactory::createJWS($payload);
-        $jws = $jws->addSignatureInformation($key, $protected_headers, $unprotected_headers);
-
         $signatureAlgorithmManager = JWAManager::create([new HS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $signer = new Signer($signatureAlgorithmManager);
-        $signer->sign($jws);
+        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $jwsBuilder
+            ->withPayload($payload)
+            ->addSignature($key, $protected_headers, $unprotected_headers);
+        $jws = $jwsBuilder->build();
 
 
         /*
@@ -243,13 +242,13 @@ final class HMACSignatureTest extends TestCase
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
         ];
 
-        $jws = JWSFactory::createJWS($payload);
-        $jws = $jws->addSignatureInformation($key, [], $unprotected_headers);
-
         $signatureAlgorithmManager = JWAManager::create([new HS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $signer = new Signer($signatureAlgorithmManager);
-        $signer->sign($jws);
+        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $jwsBuilder
+            ->withPayload($payload)
+            ->addSignature($key, [], $unprotected_headers);
+        $jws = $jwsBuilder->build();
 
 
         /*

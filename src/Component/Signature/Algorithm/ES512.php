@@ -16,7 +16,7 @@ final class ES512 extends ECDSA
     /**
      * @return string
      */
-    protected function getHashAlgorithm()
+    protected function getHashAlgorithm(): string
     {
         return 'sha512';
     }
@@ -24,7 +24,7 @@ final class ES512 extends ECDSA
     /**
      * @return int
      */
-    protected function getSignaturePartLength()
+    protected function getSignaturePartLength(): int
     {
         return 132;
     }

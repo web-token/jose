@@ -15,10 +15,9 @@ use Jose\Component\Core\JWAManager;
 use Jose\Component\Signature\Algorithm\ES512;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\Algorithm\RS256;
-use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\JWSLoader;
-use Jose\Component\Signature\Signer;
+use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
@@ -36,7 +35,7 @@ final class MultipleSignaturesTest extends TestCase
          * @see https://tools.ietf.org/html/rfc7520#section-4.8.1
          */
         $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
-        $jws = JWSFactory::createJWS($payload);
+        //$jws = JWSFactory::createJWS($payload);
 
         $rsa_private_key = JWK::create([
             'kty' => 'RSA',
@@ -52,20 +51,6 @@ final class MultipleSignaturesTest extends TestCase
             'qi'  => '3PiqvXQN0zwMeE-sBvZgi289XP9XCQF3VWqPzMKnIgQp7_Tugo6-NZBKCQsMf3HaEGBjTVJs_jcK8-TRXvaKe-7ZMaQj8VfBdYkssbu0NKDDhjJ-GtiseaDVWt7dcH0cfwxgFUHpQh7FoCrjFJ6h6ZEpMF6xmujs4qMpPz8aaI4',
         ]);
 
-        /*
-         * Header
-         * @see https://tools.ietf.org/html/rfc7520#section-4.8.2
-         */
-        $jws = $jws->addSignatureInformation(
-            $rsa_private_key,
-            [
-                'alg' => 'RS256',
-            ],
-            [
-                'kid' => 'bilbo.baggins@hobbiton.example',
-            ]
-        );
-
         $ecdsa_private_key = JWK::create([
             'kty' => 'EC',
             'kid' => 'bilbo.baggins@hobbiton.example',
@@ -76,19 +61,6 @@ final class MultipleSignaturesTest extends TestCase
             'd'   => 'AAhRON2r9cqXX1hg-RoI6R1tX5p2rUAYdmpHZoC1XNM56KtscrX6zbKipQrCW9CGZH3T4ubpnoTKLDYJ_fF3_rJt',
         ]);
 
-        /*
-         * Header
-         * @see https://tools.ietf.org/html/rfc7520#section-4.8.3
-         */
-        $jws = $jws->addSignatureInformation(
-            $ecdsa_private_key,
-            [],
-            [
-                'alg' => 'ES512',
-                'kid' => 'bilbo.baggins@hobbiton.example',
-            ]
-        );
-
         $symmetric_key = JWK::create([
             'kty' => 'oct',
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
@@ -97,11 +69,40 @@ final class MultipleSignaturesTest extends TestCase
             'k'   => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
         ]);
 
+
+        $signatureAlgorithmManager = JWAManager::create([new RS256(), new ES512(), new HS256()]);
+        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $jwsBuilder->withPayload($payload);
+
         /*
-         * Header
+         * @see https://tools.ietf.org/html/rfc7520#section-4.8.2
+         */
+        $jwsBuilder = $jwsBuilder->addSignature(
+                $ecdsa_private_key,
+                [],
+                [
+                    'alg' => 'ES512',
+                    'kid' => 'bilbo.baggins@hobbiton.example',
+                ]
+            );
+
+        /*
+         * @see https://tools.ietf.org/html/rfc7520#section-4.8.3
+         */
+        $jwsBuilder = $jwsBuilder->addSignature(
+            $rsa_private_key,
+            [
+                'alg' => 'RS256',
+            ],
+            [
+                'kid' => 'bilbo.baggins@hobbiton.example',
+            ]
+        );
+
+        /*
          * @see https://tools.ietf.org/html/rfc7520#section-4.8.4
          */
-        $jws = $jws->addSignatureInformation(
+        $jwsBuilder = $jwsBuilder->addSignature(
             $symmetric_key,
             [
                 'alg' => 'HS256',
@@ -109,9 +110,7 @@ final class MultipleSignaturesTest extends TestCase
             ]
         );
 
-        $signatureAlgorithmManager = JWAManager::create([new RS256(), new ES512(), new HS256()]);
-        $signer = new Signer($signatureAlgorithmManager);
-        $signer->sign($jws);
+        $jws = $jwsBuilder->build();
 
         $this->assertEquals(3, $jws->countSignatures());
         $verifier = new Verifier($signatureAlgorithmManager);
@@ -124,7 +123,6 @@ final class MultipleSignaturesTest extends TestCase
          * @see https://tools.ietf.org/html/rfc7520#section-4.8.5
          */
         $expected_json = '{"payload":"SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4","signatures":[{"protected":"eyJhbGciOiJSUzI1NiJ9","header":{"kid":"bilbo.baggins@hobbiton.example"},"signature":"MIsjqtVlOpa71KE-Mss8_Nq2YH4FGhiocsqrgi5NvyG53uoimic1tcMdSg-qptrzZc7CG6Svw2Y13TDIqHzTUrL_lR2ZFcryNFiHkSw129EghGpwkpxaTn_THJTCglNbADko1MZBCdwzJxwqZc-1RlpO2HibUYyXSwO97BSe0_evZKdjvvKSgsIqjytKSeAMbhMBdMma622_BG5t4sdbuCHtFjp9iJmkio47AIwqkZV1aIZsv33uPUqBBCXbYoQJwt7mxPftHmNlGoOSMxR_3thmXTCm4US-xiNOyhbm8afKK64jU6_TPtQHiJeQJxz9G3Tx-083B745_AfYOnlC9w"},{"header":{"alg":"ES512","kid":"bilbo.baggins@hobbiton.example"},"signature":"ARcVLnaJJaUWG8fG-8t5BREVAuTY8n8YHjwDO1muhcdCoFZFFjfISu0Cdkn9Ybdlmi54ho0x924DUz8sK7ZXkhc7AFM8ObLfTvNCrqcI3Jkl2U5IX3utNhODH6v7xgy1Qahsn0fyb4zSAkje8bAWz4vIfj5pCMYxxm4fgV3q7ZYhm5eD"},{"protected":"eyJhbGciOiJIUzI1NiIsImtpZCI6IjAxOGMwYWU1LTRkOWItNDcxYi1iZmQ2LWVlZjMxNGJjNzAzNyJ9","signature":"s0h6KThzkfBBBkLspW1h84VsJZFTsPPqMDA7g1Md7p0"}]}';
-
         $loaded_json = JWSLoader::load($expected_json);
 
         $this->assertEquals(3, $loaded_json->countSignatures());

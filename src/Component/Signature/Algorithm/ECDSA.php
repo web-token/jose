@@ -47,8 +47,8 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     }
 
     /**
-     * @param \Jose\Component\Core\JWK $key
-     * @param string                   $data
+     * @param JWK    $key
+     * @param string $data
      *
      * @return string
      */
@@ -90,10 +90,10 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     }
 
     /**
-     * @param \Jose\Component\Core\JWK $key
-     * @param string                   $data
-     * @param string                   $R
-     * @param string                   $S
+     * @param JWK    $key
+     * @param string $data
+     * @param string $R
+     * @param string $S
      *
      * @return bool
      */
@@ -113,12 +113,12 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     /**
      * @return string
      */
-    abstract protected function getHashAlgorithm();
+    abstract protected function getHashAlgorithm(): string;
 
     /**
      * @return int
      */
-    abstract protected function getSignaturePartLength();
+    abstract protected function getSignaturePartLength(): int;
 
     /**
      * @param string $value

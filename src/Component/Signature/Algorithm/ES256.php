@@ -16,7 +16,7 @@ final class ES256 extends ECDSA
     /**
      * @return string
      */
-    protected function getHashAlgorithm()
+    protected function getHashAlgorithm(): string
     {
         return 'sha256';
     }
@@ -24,7 +24,7 @@ final class ES256 extends ECDSA
     /**
      * @return int
      */
-    protected function getSignaturePartLength()
+    protected function getSignaturePartLength(): int
     {
         return 64;
     }

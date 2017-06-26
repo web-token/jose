@@ -13,7 +13,6 @@ namespace Jose\Component\Signature;
 
 use Assert\Assertion;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\JWS;
 use Jose\Component\Core\JWAManagerFactory;
 
 final class JWSFactory
@@ -97,22 +96,20 @@ final class JWSFactory
      * @param mixed $payload
      * @param JWK   $signature_key
      * @param array $protected_headers
+     * @param array $headers
      *
      * @return JWS
      */
     private static function createJWSAndSign($payload, JWK $signature_key, array $protected_headers = [], array $headers = []): JWS
     {
-        $jws = self::createJWS($payload);
-
-        $jws = $jws->addSignatureInformation($signature_key, $protected_headers, $headers);
-
         $complete_headers = array_merge($protected_headers, $headers);
         Assertion::keyExists($complete_headers, 'alg', 'No "alg" parameter set in the header');
         $signatureAlgorithmManager = JWAManagerFactory::createFromAlgorithmName([$complete_headers['alg']]);
-        $signer = new Signer($signatureAlgorithmManager);
-        $signer->sign($jws);
-
-        return $jws;
+        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $jwsBuilder
+            ->withPayload($payload)
+            ->addSignature($signature_key, $protected_headers, $headers);
+        return $jwsBuilder->build();
     }
 
     /**
@@ -125,16 +122,13 @@ final class JWSFactory
      */
     private static function createJWSWithDetachedPayloadAndSign($payload, JWK $signature_key, array $protected_headers = [], array $headers = []): JWS
     {
-        $jws = self::createJWS($payload, true);
-
-        $jws = $jws->addSignatureInformation($signature_key, $protected_headers, $headers);
-
         $complete_headers = array_merge($protected_headers, $headers);
         Assertion::keyExists($complete_headers, 'alg', 'No "alg" parameter set in the header');
         $signatureAlgorithmManager = JWAManagerFactory::createFromAlgorithmName([$complete_headers['alg']]);
-        $signer = new Signer($signatureAlgorithmManager);
-        $signer->sign($jws);
-
-        return $jws;
+        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $jwsBuilder
+            ->withPayload($payload, true)
+            ->addSignature($signature_key, $protected_headers, $headers);
+        return $jwsBuilder->build();
     }
 }
