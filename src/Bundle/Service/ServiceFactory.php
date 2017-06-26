@@ -16,7 +16,7 @@ use Jose\Decrypter;
 use Jose\DecrypterInterface;
 use Jose\Encrypter;
 use Jose\EncrypterInterface;
-use Jose\Factory\CheckerManagerFactory;
+use Jose\Component\Checker\CheckerManagerFactory;
 use Jose\JWTCreator;
 use Jose\JWTLoader;
 use Jose\Signer;

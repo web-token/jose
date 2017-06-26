@@ -9,11 +9,9 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Factory;
+namespace Jose\Component\Encryption\Compression;
 
 use Assert\Assertion;
-use Jose\Component\Encryption\Compression\CompressionInterface;
-use Jose\Component\Encryption\Compression\CompressionManager;
 
 final class CompressionManagerFactory
 {

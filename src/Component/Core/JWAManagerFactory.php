@@ -9,13 +9,11 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Factory;
+namespace Jose\Component\Core;
 
 use Assert\Assertion;
-use Jose\Component\Core\JWAInterface;
-use Jose\Component\Core\JWAManager;
 
-final class AlgorithmManagerFactory
+final class JWAManagerFactory
 {
     /**
      * @param JWAInterface[] $algorithms

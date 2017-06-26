@@ -5,8 +5,8 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="jose.factory.compression_manager" class="Jose\Factory\CompressionManagerFactory" public="false" />
-        <service id="jose.factory.checker_manager" class="Jose\Factory\CheckerManagerFactory" public="false" />
+        <service id="jose.factory.compression_manager" class="Jose\Component\Encryption\Compression\CompressionManagerFactory" public="false" />
+        <service id="jose.factory.checker_manager" class="Jose\Component\Checker\CheckerManagerFactory" public="false" />
         <service id="jose.factory.decrypter" class="Jose\Factory\DecrypterFactory" public="false" />
         <service id="jose.factory.encrypter" class="Jose\Factory\EncrypterFactory" public="false" />
 

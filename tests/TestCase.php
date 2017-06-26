@@ -13,7 +13,7 @@ namespace Jose\Test;
 
 use Base64Url\Base64Url;
 use Jose\Component\Checker\AudienceChecker;
-use Jose\Factory\CheckerManagerFactory;
+use Jose\Component\Checker\CheckerManagerFactory;
 use Jose\Component\Core\JWKSet;
 use Jose\Test\Stub\IssuerChecker;
 use Jose\Test\Stub\JtiChecker;

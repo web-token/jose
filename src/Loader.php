@@ -14,8 +14,8 @@ namespace Jose;
 use Assert\Assertion;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Signature\Verifier;
-use Jose\Factory\AlgorithmManagerFactory;
-use Jose\Factory\CompressionManagerFactory;
+use Jose\Component\Core\JWAManagerFactory;
+use Jose\Component\Encryption\Compression\CompressionManagerFactory;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
@@ -134,8 +134,8 @@ final class Loader
         $jwt = self::load($input);
         Assertion::isInstanceOf($jwt, JWE::class, 'The input is not a valid JWE');
 
-        $keyEncryptionAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName($allowed_key_encryption_algorithms);
-        $contentEncryptionAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName($allowed_content_encryption_algorithms);
+        $keyEncryptionAlgorithmManager = JWAManagerFactory::createFromAlgorithmName($allowed_key_encryption_algorithms);
+        $contentEncryptionAlgorithmManager = JWAManagerFactory::createFromAlgorithmName($allowed_content_encryption_algorithms);
         $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF', 'ZLIB', 'GZ']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter->decryptUsingKeySet($jwt, $jwk_set, $recipient_index);
@@ -156,7 +156,7 @@ final class Loader
     {
         $jwt = self::load($input);
         Assertion::isInstanceOf($jwt, JWS::class, 'The input is not a valid JWS.');
-        $signatureAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName($allowed_algorithms);
+        $signatureAlgorithmManager = JWAManagerFactory::createFromAlgorithmName($allowed_algorithms);
         $verifier = new Verifier($signatureAlgorithmManager);
 
         $verifier->verifyWithKeySet($jwt, $jwk_set, $detached_payload, $signature_index);

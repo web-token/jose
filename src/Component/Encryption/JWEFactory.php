@@ -13,8 +13,8 @@ namespace Jose\Component\Encryption;
 
 use Assert\Assertion;
 use Jose\Component\Core\JWK;
-use Jose\Factory\AlgorithmManagerFactory;
-use Jose\Factory\CompressionManagerFactory;
+use Jose\Component\Core\JWAManagerFactory;
+use Jose\Component\Encryption\Compression\CompressionManagerFactory;
 
 final class JWEFactory
 {
@@ -87,8 +87,8 @@ final class JWEFactory
         Assertion::keyExists($complete_headers, 'alg', 'No "alg" parameter set in the header');
         Assertion::keyExists($complete_headers, 'enc', 'No "enc" parameter set in the header');
 
-        $keyEncryptionAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName([$complete_headers['alg']]);
-        $contentEncryptionAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName([$complete_headers['enc']]);
+        $keyEncryptionAlgorithmManager = JWAManagerFactory::createFromAlgorithmName([$complete_headers['alg']]);
+        $contentEncryptionAlgorithmManager = JWAManagerFactory::createFromAlgorithmName([$complete_headers['enc']]);
         $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF', 'ZLIB', 'GZ']);
         $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 

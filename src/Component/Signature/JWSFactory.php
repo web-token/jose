@@ -14,7 +14,7 @@ namespace Jose\Component\Signature;
 use Assert\Assertion;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Object\JWS;
-use Jose\Factory\AlgorithmManagerFactory;
+use Jose\Component\Core\JWAManagerFactory;
 
 final class JWSFactory
 {
@@ -108,7 +108,7 @@ final class JWSFactory
 
         $complete_headers = array_merge($protected_headers, $headers);
         Assertion::keyExists($complete_headers, 'alg', 'No "alg" parameter set in the header');
-        $signatureAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName([$complete_headers['alg']]);
+        $signatureAlgorithmManager = JWAManagerFactory::createFromAlgorithmName([$complete_headers['alg']]);
         $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 
@@ -131,7 +131,7 @@ final class JWSFactory
 
         $complete_headers = array_merge($protected_headers, $headers);
         Assertion::keyExists($complete_headers, 'alg', 'No "alg" parameter set in the header');
-        $signatureAlgorithmManager = AlgorithmManagerFactory::createFromAlgorithmName([$complete_headers['alg']]);
+        $signatureAlgorithmManager = JWAManagerFactory::createFromAlgorithmName([$complete_headers['alg']]);
         $signer = new Signer($signatureAlgorithmManager);
         $signer->sign($jws);
 

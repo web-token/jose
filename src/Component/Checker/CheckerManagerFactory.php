@@ -9,12 +9,9 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Factory;
+namespace Jose\Component\Checker;
 
 use Assert\Assertion;
-use Jose\Component\Checker\CheckerManager;
-use Jose\Component\Checker\ClaimCheckerInterface;
-use Jose\Component\Checker\HeaderCheckerInterface;
 
 final class CheckerManagerFactory
 {

@@ -20,7 +20,7 @@ use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\Encrypter;
-use Jose\Factory\CheckerManagerFactory;
+use Jose\Component\Checker\CheckerManagerFactory;
 use Jose\JWTCreator;
 use Jose\JWTLoader;
 use Jose\Component\Core\JWK;
