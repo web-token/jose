@@ -3,15 +3,15 @@ Feature: The configuration helper allow developers to create services easily
   Scenario: A Rotatable Key Set created using the configuration helper contains the expected number of keys
     When the service "jose.key_set.from_configuration_helper" should be an object that implements "\Jose\Object\RotatableInterface"
     When the service "jose.key_set.from_configuration_helper" should be an object that implements "\Jose\Object\StorableInterface"
-    When the service "jose.key_set.from_configuration_helper" should be an object that implements "\Jose\Component\Core\JWKSetInterface"
+    When the service "jose.key_set.from_configuration_helper" should be an object that implements "\Jose\Component\Core\JWKSet"
     And the keyset in the service "jose.key_set.from_configuration_helper" contains 2 keys
 
   Scenario: A Rotatable Key Set created using the configuration helper contains the expected number of keys
-    When the service "jose.key_set.all_in_one_from_configuration_helper" should be an object that implements "\Jose\Component\Core\JWKSetInterface"
+    When the service "jose.key_set.all_in_one_from_configuration_helper" should be an object that implements "\Jose\Component\Core\JWKSet"
     And the keyset in the service "jose.key_set.all_in_one_from_configuration_helper" contains 2 keys
 
   Scenario: A Rotatable Key Set created using the configuration helper contains the expected number of keys
-    When the service "jose.key_set.all_in_one_public_from_configuration_helper" should be an object that implements "\Jose\Component\Core\JWKSetInterface"
+    When the service "jose.key_set.all_in_one_public_from_configuration_helper" should be an object that implements "\Jose\Component\Core\JWKSet"
     And the keyset in the service "jose.key_set.all_in_one_public_from_configuration_helper" contains 2 keys
 
   Scenario: Services are available

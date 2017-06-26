@@ -118,7 +118,7 @@ trait LoaderContext
          */
         $verifier_service = $this->getContainer()->get($verifier);
         /*
-         * @var \Jose\Component\Core\JWKSetInterface
+         * @var \Jose\Component\Core\JWKSet
          */
         $keyset_service = $this->getContainer()->get($keyset);
 
@@ -178,7 +178,7 @@ trait LoaderContext
          */
         $decrypter_service = $this->getContainer()->get($decrypter);
         /*
-         * @var \Jose\Component\Core\JWKSetInterface
+         * @var \Jose\Component\Core\JWKSet
          */
         $keyset_service = $this->getContainer()->get($keyset);
 

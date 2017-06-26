@@ -13,7 +13,7 @@ namespace Jose\Test\Unit\Objects;
 
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKSetInterface;
+use Jose\Component\Core\JWKSet;
 use Jose\Test\TestCase;
 
 /**
@@ -105,7 +105,7 @@ final class JWKSetTest extends TestCase
             'e'   => 'AQAB',
         ]]];
         $jwkset = JWKFactory::createFromValues($values);
-        $this->assertInstanceOf(JWKSetInterface::class, $jwkset);
+        $this->assertInstanceOf(JWKSet::class, $jwkset);
         $this->assertEquals(1, $jwkset->countKeys());
         $this->assertTrue(isset($jwkset[0]));
         $this->assertFalse(isset($jwkset[1]));

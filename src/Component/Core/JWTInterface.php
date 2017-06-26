@@ -16,11 +16,11 @@ interface JWTInterface
     /**
      * Returns the payload of the JWT.
      *
-     * @return string          Payload
-     * @return array           Payload
-     * @return JWK             Payload
-     * @return JWKSetInterface Payload
-     * @return mixed           Payload
+     * @return string Payload
+     * @return array  Payload
+     * @return JWK    Payload
+     * @return JWKSet Payload
+     * @return mixed  Payload
      */
     public function getPayload();
 

@@ -11,22 +11,22 @@
 
 namespace SpomkyLabs\JoseBundle\Controller;
 
-use Jose\Component\Core\JWKSetInterface;
+use Jose\Component\Core\JWKSet;
 use Symfony\Component\HttpFoundation\Response;
 
 final class JWKSetController
 {
     /**
-     * @var \Jose\Component\Core\JWKSetInterface
+     * @var \Jose\Component\Core\JWKSet
      */
     private $jwkset;
 
     /**
      * JWKSetController constructor.
      *
-     * @param \Jose\Component\Core\JWKSetInterface $jwkset
+     * @param \Jose\Component\Core\JWKSet $jwkset
      */
-    public function __construct(JWKSetInterface $jwkset)
+    public function __construct(JWKSet $jwkset)
     {
         $this->jwkset = $jwkset;
     }

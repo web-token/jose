@@ -11,16 +11,16 @@
 
 namespace SpomkyLabs\JoseBundle\Controller;
 
-use Jose\Component\Core\JWKSetInterface;
+use Jose\Component\Core\JWKSet;
 
 final class JWKSetControllerFactory
 {
     /**
-     * @param \Jose\Component\Core\JWKSetInterface $issuer_discovery
+     * @param \Jose\Component\Core\JWKSet $issuer_discovery
      *
      * @return \SpomkyLabs\JoseBundle\Controller\JWKSetController
      */
-    public function createJWKSetController(JWKSetInterface $jwkset)
+    public function createJWKSetController(JWKSet $jwkset)
     {
         return new JWKSetController($jwkset);
     }

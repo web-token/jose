@@ -830,7 +830,7 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWKSetInterface
+     * @return \Jose\Component\Core\JWKSet
      */
     protected function getKeyset()
     {

@@ -25,7 +25,6 @@ use Jose\Component\Core\KeyChecker;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
-use Jose\Component\Core\JWKSetInterface;
 
 final class Decrypter
 {
@@ -104,11 +103,11 @@ final class Decrypter
     }
 
     /**
-     * @param JWE             $jwe             A JWE object to decrypt
-     * @param JWKSetInterface $jwk_set         The key set used to decrypt the input
-     * @param null|int        $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
+     * @param JWE      $jwe             A JWE object to decrypt
+     * @param JWKSet   $jwk_set         The key set used to decrypt the input
+     * @param null|int $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
      */
-    public function decryptUsingKeySet(JWE &$jwe, JWKSetInterface $jwk_set, &$recipient_index = null)
+    public function decryptUsingKeySet(JWE &$jwe, JWKSet $jwk_set, &$recipient_index = null)
     {
         $this->checkJWKSet($jwk_set);
         $this->checkPayload($jwe);
@@ -128,13 +127,13 @@ final class Decrypter
     }
 
     /**
-     * @param JWE             $jwe
-     * @param JWKSetInterface $jwk_set
-     * @param int             $i
+     * @param JWE    $jwe
+     * @param JWKSet $jwk_set
+     * @param int    $i
      *
      * @return int|null
      */
-    private function decryptRecipientKey(JWE &$jwe, JWKSetInterface $jwk_set, $i): ?int
+    private function decryptRecipientKey(JWE &$jwe, JWKSet $jwk_set, $i): ?int
     {
         $recipient = $jwe->getRecipient($i);
         $complete_headers = array_merge($jwe->getSharedProtectedHeaders(), $jwe->getSharedHeaders(), $recipient->getHeaders());
@@ -187,9 +186,9 @@ final class Decrypter
     }
 
     /**
-     * @param JWKSetInterface $jwk_set
+     * @param JWKSet $jwk_set
      */
-    private function checkJWKSet(JWKSetInterface $jwk_set)
+    private function checkJWKSet(JWKSet $jwk_set)
     {
         if (0 === $jwk_set->count()) {
             throw new \InvalidArgumentException('No key in the key set.');

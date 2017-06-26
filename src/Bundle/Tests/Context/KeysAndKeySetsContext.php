@@ -12,7 +12,7 @@
 namespace SpomkyLabs\JoseBundle\Features\Context;
 
 use Assert\Assertion;
-use Jose\Component\Core\JWKSetInterface;
+use Jose\Component\Core\JWKSet;
 
 /**
  * Behat context trait.
@@ -48,7 +48,7 @@ trait KeysAndKeySetsContext
      */
     public function theKeysetInTheServiceContainsKeys($service, $number)
     {
-        $this->theServiceShouldBeAnObjectThatImplements($service, JWKSetInterface::class);
+        $this->theServiceShouldBeAnObjectThatImplements($service, JWKSet::class);
         if ((int) $number !== count($this->getContainer()->get($service))) {
             throw new \Exception(sprintf(
                 'The service "%s" contains %d key(s).',
@@ -67,7 +67,7 @@ trait KeysAndKeySetsContext
      */
     public function theKeysetInTheServiceContainsSomeKeys($service)
     {
-        $this->theServiceShouldBeAnObjectThatImplements($service, JWKSetInterface::class);
+        $this->theServiceShouldBeAnObjectThatImplements($service, JWKSet::class);
         if (0 === count($this->getContainer()->get($service))) {
             throw new \Exception(sprintf(
                 'The service "%s" does not contain keys.',

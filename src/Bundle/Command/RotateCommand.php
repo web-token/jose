@@ -11,7 +11,7 @@
 
 namespace SpomkyLabs\JoseBundle\Command;
 
-use Jose\Component\Core\JWKSetInterface;
+use Jose\Component\Core\JWKSet;
 use Jose\Object\RotatableInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -58,7 +58,7 @@ EOT
             return 1;
         }
         $service = $this->getContainer()->get($service_name);
-        if (!$service instanceof JWKSetInterface) {
+        if (!$service instanceof JWKSet) {
             $output->writeln(sprintf('<error>The service "%s" is not a key set.</error>', $service_name));
 
             return 2;

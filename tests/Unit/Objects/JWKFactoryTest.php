@@ -13,7 +13,7 @@ namespace Jose\Test\Unit\Objects;
 
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKSetInterface;
+use Jose\Component\Core\JWKSet;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 

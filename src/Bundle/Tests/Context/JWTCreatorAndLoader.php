@@ -76,7 +76,7 @@ trait JWTCreatorAndLoader
         $loader = $this->getContainer()->get($jwt_loader);
 
         /*
-         * @var \Jose\Component\Core\JWKSetInterface
+         * @var \Jose\Component\Core\JWKSet
          */
         $keyset = $this->getContainer()->get($decryption_key);
 

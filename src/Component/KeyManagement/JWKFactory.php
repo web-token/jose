@@ -18,7 +18,6 @@ use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
-use Jose\Component\Core\JWKSetInterface;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\EccFactory;
@@ -261,7 +260,7 @@ final class JWKFactory
     /**
      * @param array $values
      *
-     * @return JWK|JWKSetInterface
+     * @return JWK|JWKSet
      */
     public static function createFromValues(array $values)
     {
@@ -359,12 +358,12 @@ final class JWKFactory
     }
 
     /**
-     * @param JWKSetInterface $jwk_set
-     * @param int             $key_index
+     * @param JWKSet $jwk_set
+     * @param int    $key_index
      *
      * @return JWK
      */
-    public static function createFromKeySet(JWKSetInterface $jwk_set, int $key_index): JWK
+    public static function createFromKeySet(JWKSet $jwk_set, int $key_index): JWK
     {
         Assertion::integer($key_index);
 
