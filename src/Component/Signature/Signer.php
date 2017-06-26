@@ -14,15 +14,13 @@ namespace Jose\Component\Signature;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
-use Jose\Behaviour\HasKeyChecker;
+use Jose\Component\Core\KeyChecker;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Object\JWS;
 use Jose\Component\Signature\Object\Signature;
 
 final class Signer
 {
-    use HasKeyChecker;
-
     /**
      * @var JWAManager
      */
@@ -67,7 +65,7 @@ final class Signer
         if (null === $signature->getSignatureKey()) {
             return;
         }
-        $this->checkKeyUsage($signature->getSignatureKey(), 'signature');
+        KeyChecker::checkKeyUsage($signature->getSignatureKey(), 'signature');
 
         $signature_algorithm = $this->getSignatureAlgorithm($signature->getAllHeaders(), $signature->getSignatureKey());
 

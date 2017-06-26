@@ -22,18 +22,25 @@ final class JWAManager
     private $algorithms = [];
 
     /**
+     * JWAManager constructor.
+     *
+     * @param JWAInterface[] $algorithms
+     */
+    public function __construct(array $algorithms = [])
+    {
+        foreach ($algorithms as $algorithm) {
+            $this->add($algorithm);
+        }
+    }
+
+    /**
      * @param JWAInterface[] $algorithms
      *
      * @return JWAManager
      */
     public static function create(array $algorithms): JWAManager
     {
-        $manager = new self();
-        foreach ($algorithms as $algorithm) {
-            $manager->add($algorithm);
-        }
-
-        return $manager;
+        return new self($algorithms);
     }
 
     /**

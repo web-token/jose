@@ -9,12 +9,11 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Behaviour;
+namespace Jose\Component\Core;
 
 use Assert\Assertion;
-use Jose\Component\Core\JWK;
 
-trait HasKeyChecker
+final class KeyChecker
 {
     /**
      * @param JWK    $key
@@ -24,13 +23,13 @@ trait HasKeyChecker
      *
      * @return bool
      */
-    protected function checkKeyUsage(JWK $key, string $usage): bool
+    public static function checkKeyUsage(JWK $key, string $usage): bool
     {
         if ($key->has('use')) {
-            return $this->checkUsage($key, $usage);
+            return self::checkUsage($key, $usage);
         }
         if ($key->has('key_ops')) {
-            return $this->checkOperation($key, $usage);
+            return self::checkOperation($key, $usage);
         }
 
         return true;
@@ -42,7 +41,7 @@ trait HasKeyChecker
      *
      * @return bool
      */
-    private function checkOperation(JWK $key, string $usage): bool
+    private static function checkOperation(JWK $key, string $usage): bool
     {
         $ops = $key->get('key_ops');
         if (!is_array($ops)) {
@@ -76,7 +75,7 @@ trait HasKeyChecker
      *
      * @return bool
      */
-    private function checkUsage(JWK $key, string $usage): bool
+    private static function checkUsage(JWK $key, string $usage): bool
     {
         $use = $key->get('use');
         switch ($usage) {
@@ -99,7 +98,7 @@ trait HasKeyChecker
      * @param JWK    $key
      * @param string $algorithm
      */
-    protected function checkKeyAlgorithm(JWK $key, string $algorithm)
+    public static function checkKeyAlgorithm(JWK $key, string $algorithm)
     {
         if (!$key->has('alg')) {
             return;

@@ -14,7 +14,7 @@ namespace Jose\Component\Signature;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
-use Jose\Behaviour\HasKeyChecker;
+use Jose\Component\Core\KeyChecker;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\JWKSetInterface;
@@ -23,8 +23,6 @@ use Jose\Component\Signature\Object\Signature;
 
 final class Verifier
 {
-    use HasKeyChecker;
-
     /**
      * @var JWAManager
      */
@@ -90,8 +88,8 @@ final class Verifier
         foreach ($jwk_set->getKeys() as $jwk) {
             $algorithm = $this->getAlgorithm($signature);
             try {
-                $this->checkKeyUsage($jwk, 'verification');
-                $this->checkKeyAlgorithm($jwk, $algorithm->name());
+                KeyChecker::checkKeyUsage($jwk, 'verification');
+                KeyChecker::checkKeyAlgorithm($jwk, $algorithm->name());
                 if (true === $algorithm->verify($jwk, $input, $signature->getSignature())) {
                     return true;
                 }

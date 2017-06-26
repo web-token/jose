@@ -20,12 +20,12 @@ final class Signature
     /**
      * @var null|string
      */
-    private $encoded_protected_headers = null;
+    private $encodedProtectedHeaders = null;
 
     /**
      * @var array
      */
-    private $protected_headers = [];
+    private $protectedHeaders = [];
 
     /**
      * @var array
@@ -52,11 +52,11 @@ final class Signature
     public static function createSignatureFromLoadedData($signature, $encoded_protected_headers, array $headers)
     {
         $object = new self();
-        $object->encoded_protected_headers = $encoded_protected_headers;
+        $object->encodedProtectedHeaders = $encoded_protected_headers;
         if (null !== $encoded_protected_headers) {
             $protected_headers = json_decode(Base64Url::decode($encoded_protected_headers), true);
             Assertion::isArray($protected_headers, 'Unable to decode the protected headers.');
-            $object->protected_headers = $protected_headers;
+            $object->protectedHeaders = $protected_headers;
         }
         $object->signature = $signature;
         $object->headers = $headers;
@@ -74,9 +74,9 @@ final class Signature
     public static function createSignature(JWK $signature_key, array $protected_headers, array $headers)
     {
         $object = new self();
-        $object->protected_headers = $protected_headers;
+        $object->protectedHeaders = $protected_headers;
         if (!empty($protected_headers)) {
-            $object->encoded_protected_headers = Base64Url::encode(json_encode($protected_headers));
+            $object->encodedProtectedHeaders = Base64Url::encode(json_encode($protected_headers));
         }
         $object->signature_key = $signature_key;
         $object->headers = $headers;
@@ -91,7 +91,7 @@ final class Signature
      */
     public function getProtectedHeaders()
     {
-        return $this->protected_headers;
+        return $this->protectedHeaders;
     }
 
     /**
@@ -112,7 +112,7 @@ final class Signature
      */
     public function getEncodedProtectedHeaders()
     {
-        return $this->encoded_protected_headers;
+        return $this->encodedProtectedHeaders;
     }
 
     /**

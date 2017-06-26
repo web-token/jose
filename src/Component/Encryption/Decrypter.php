@@ -21,7 +21,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementWrappingInterf
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
-use Jose\Behaviour\HasKeyChecker;
+use Jose\Component\Core\KeyChecker;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
@@ -29,8 +29,6 @@ use Jose\Component\Core\JWKSetInterface;
 
 final class Decrypter
 {
-    use HasKeyChecker;
-
     /**
      * @var JWAManager
      */
@@ -147,11 +145,11 @@ final class Decrypter
 
         foreach ($jwk_set as $jwk) {
             try {
-                $this->checkKeyUsage($jwk, 'decryption');
+                KeyChecker::checkKeyUsage($jwk, 'decryption');
                 if ('dir' !== $key_encryption_algorithm->name()) {
-                    $this->checkKeyAlgorithm($jwk, $key_encryption_algorithm->name());
+                    KeyChecker::checkKeyAlgorithm($jwk, $key_encryption_algorithm->name());
                 } else {
-                    $this->checkKeyAlgorithm($jwk, $content_encryption_algorithm->name());
+                    KeyChecker::checkKeyAlgorithm($jwk, $content_encryption_algorithm->name());
                 }
                 $cek = $this->decryptCEK($key_encryption_algorithm, $content_encryption_algorithm, $jwk, $recipient, $complete_headers);
                 if (null !== $cek) {

@@ -19,15 +19,13 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementWrappingInterf
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
-use Jose\Behaviour\HasKeyChecker;
+use Jose\Component\Core\KeyChecker;
 use Jose\Component\Encryption\Compression\CompressionInterface;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Core\JWK;
 
 final class Encrypter
 {
-    use HasKeyChecker;
-
     /**
      * @var JWAManager
      */
@@ -262,11 +260,11 @@ final class Encrypter
      */
     private function checkKeys(KeyEncryptionAlgorithmInterface $key_encryption_algorithm, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, JWK $recipient_key)
     {
-        $this->checkKeyUsage($recipient_key, 'encryption');
+        KeyChecker::checkKeyUsage($recipient_key, 'encryption');
         if ('dir' !== $key_encryption_algorithm->name()) {
-            $this->checkKeyAlgorithm($recipient_key, $key_encryption_algorithm->name());
+            KeyChecker::checkKeyAlgorithm($recipient_key, $key_encryption_algorithm->name());
         } else {
-            $this->checkKeyAlgorithm($recipient_key, $content_encryption_algorithm->name());
+            KeyChecker::checkKeyAlgorithm($recipient_key, $content_encryption_algorithm->name());
         }
     }
 

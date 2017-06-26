@@ -16,6 +16,7 @@ use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\Algorithm\HS512;
 use Jose\Component\Signature\Algorithm\PS512;
 use Jose\Component\Signature\Algorithm\RS512;
+use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSFactory;
 use Jose\Loader;
 use Jose\Component\Core\JWK;
@@ -112,6 +113,40 @@ final class SignerTest extends TestCase
         $this->assertEquals(2, $jws->countSignatures());
         $this->assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
         $this->assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
+    }
+
+    /**
+     * @group JWSBuilder
+     */
+    public function testSignMultipleInstructionWithCompactRepresentationUsingBuilder()
+    {
+        $jwaManager = JWAManager::create([new HS512(), new RS512()]);
+        $jwsBuilder = new JWSBuilder($jwaManager);
+        $jwsBuilder = $jwsBuilder->withPayload('Live long and Prosper.');
+        $jwsBuilder = $jwsBuilder->addSignature($this->getKey1(), ['alg' => 'HS512']);
+        $jwsBuilder = $jwsBuilder->addSignature($this->getKey2(), ['alg' => 'RS512']);
+        $jws = $jwsBuilder->build();
+
+        $this->assertEquals(2, $jws->countSignatures());
+        $this->assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
+        $this->assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
+    }
+
+    /**
+     * @group JWSBuilder
+     */
+    public function testSignMultipleInstructionWithCompactRepresentationUsingBuilderAndDetachedPayload()
+    {
+        $jwaManager = JWAManager::create([new HS512(), new RS512()]);
+        $jwsBuilder = new JWSBuilder($jwaManager);
+        $jwsBuilder = $jwsBuilder->withPayload('Live long and Prosper.', true);
+        $jwsBuilder = $jwsBuilder->addSignature($this->getKey1(), ['alg' => 'HS512']);
+        $jwsBuilder = $jwsBuilder->addSignature($this->getKey2(), ['alg' => 'RS512']);
+        $jws = $jwsBuilder->build();
+
+        $this->assertEquals(2, $jws->countSignatures());
+        $this->assertEquals('eyJhbGciOiJIUzUxMiJ9..TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
+        $this->assertEquals('eyJhbGciOiJSUzUxMiJ9..cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
     }
 
     public function testCreateCompactJWSUsingFactory()
