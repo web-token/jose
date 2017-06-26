@@ -79,9 +79,9 @@ final class JWSBuilder
     }
 
     /**
-     * @param JWK                         $signatureKey
-     * @param array                       $protectedHeaders
-     * @param array                       $headers
+     * @param JWK   $signatureKey
+     * @param array $protectedHeaders
+     * @param array $headers
      *
      * @return JWSBuilder
      */
@@ -167,7 +167,8 @@ final class JWSBuilder
     /**
      * @param array $protectedHeader
      * @param array $headers
-     * @param JWK $key
+     * @param JWK   $key
+     *
      * @return SignatureAlgorithmInterface
      */
     private function findSignatureAlgorithm(JWK $key, array $protectedHeader, array $headers): SignatureAlgorithmInterface

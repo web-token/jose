@@ -213,20 +213,18 @@ final class Loader
     private static function fromFlattenedSerializationRecipientToSerialization(array $input): array
     {
         $recipient = [];
-        foreach (['header', 'encrypted_key'] as $key) {
-            if (array_key_exists($key, $input)) {
-                $recipient[$key] = $input[$key];
-            }
-        }
+        $recipient = array_merge(
+            $recipient,
+            array_intersect_key($input, array_flip(['header', 'encrypted_key']))
+        );
         $recipients = [
             'ciphertext' => $input['ciphertext'],
             'recipients' => [$recipient],
         ];
-        foreach (['protected', 'unprotected', 'iv', 'aad', 'tag'] as $key) {
-            if (array_key_exists($key, $input)) {
-                $recipients[$key] = $input[$key];
-            }
-        }
+        $recipients = array_merge(
+            $recipients,
+            array_intersect_key($input, array_flip(['protected', 'unprotected', 'iv', 'aad', 'tag']))
+        );
 
         return $recipients;
     }
@@ -241,11 +239,10 @@ final class Loader
         $signature = [
             'signature' => $input['signature'],
         ];
-        foreach (['protected', 'header'] as $key) {
-            if (array_key_exists($key, $input)) {
-                $signature[$key] = $input[$key];
-            }
-        }
+        $signature = array_merge(
+            $signature,
+            array_intersect_key($input, array_flip(['protected', 'header']))
+        );
 
         $temp = [];
         if (!empty($input['payload'])) {
