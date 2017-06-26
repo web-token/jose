@@ -14,7 +14,7 @@ namespace Jose\Test\Unit\Objects;
 use Jose\Component\Checker\CheckerManagerFactory;
 use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\Object\Signature;
+use Jose\Component\Signature\Signature;
 use PHPUnit\Framework\TestCase;
 
 /**

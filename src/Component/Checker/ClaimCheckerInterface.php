@@ -11,7 +11,7 @@
 
 namespace Jose\Component\Checker;
 
-use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\JWS;
 
 /**
  * Interface ClaimCheckerInterface.

@@ -15,7 +15,7 @@ use Jose\Component\Core\JWAManager;
 use Jose\Component\Signature\Algorithm\None;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\JWSLoader;
-use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\Signer;
 use Jose\Test\TestCase;
 

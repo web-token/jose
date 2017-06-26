@@ -14,7 +14,7 @@ namespace Jose\Test\Functional;
 use Jose\Component\Core\JWAManagerFactory;
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\JWSLoader;
-use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 

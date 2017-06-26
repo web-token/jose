@@ -12,7 +12,7 @@
 namespace Jose\Component\Checker;
 
 use Assert\Assertion;
-use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\JWS;
 
 final class AudienceChecker implements ClaimCheckerInterface
 {

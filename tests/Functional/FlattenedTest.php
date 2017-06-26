@@ -20,7 +20,7 @@ use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Encryption\JWELoader;
 use Jose\Component\Signature\JWSLoader;
-use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\JWS;
 use Jose\Test\TestCase;
 
 /**

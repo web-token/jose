@@ -13,7 +13,7 @@ namespace Jose\Component\Signature;
 
 use Assert\Assertion;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\JWS;
 use Jose\Component\Core\JWAManagerFactory;
 
 final class JWSFactory

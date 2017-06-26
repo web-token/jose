@@ -13,8 +13,6 @@ namespace Jose\Component\Signature;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Component\Signature\Object\JWS;
-use Jose\Component\Signature\Object\Signature;
 
 /**
  * Class able to load JWS.

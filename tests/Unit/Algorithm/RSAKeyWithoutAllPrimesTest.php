@@ -20,7 +20,7 @@ use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Signature\JWSLoader;
-use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
