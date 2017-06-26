@@ -27,10 +27,10 @@ use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\Encrypter;
 use Jose\Component\Encryption\JWEFactory;
-use Jose\Loader;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
+use Jose\Component\Encryption\JWELoader;
 use Jose\Test\TestCase;
 
 /**
@@ -66,8 +66,7 @@ final class EncrypterTest extends TestCase
 
         $encrypted = $jwe->toFlattenedJSON(0);
 
-        $loader = new Loader();
-        $loaded = $loader->load($encrypted);
+        $loaded = JWELoader::load($encrypted);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
@@ -93,8 +92,7 @@ final class EncrypterTest extends TestCase
             ]
         );
 
-        $loader = new Loader();
-        $loaded = $loader->load($jwe);
+        $loaded = JWELoader::load($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
@@ -131,8 +129,7 @@ final class EncrypterTest extends TestCase
             'A,B,C,D'
         );
 
-        $loader = new Loader();
-        $loaded = $loader->load($jwe);
+        $loaded = JWELoader::load($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
@@ -178,8 +175,7 @@ final class EncrypterTest extends TestCase
 
         $encrypted = $jwe->toFlattenedJSON(0);
 
-        $loader = new Loader();
-        $loaded = $loader->load($encrypted);
+        $loaded = JWELoader::load($encrypted);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
@@ -374,8 +370,7 @@ final class EncrypterTest extends TestCase
 
         $encrypted = $jwe->toCompactJSON(0);
 
-        $loader = new Loader();
-        $loaded = $loader->load($encrypted);
+        $loaded = JWELoader::load($encrypted);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
@@ -515,8 +510,7 @@ final class EncrypterTest extends TestCase
 
         $encrypted = $jwe->toFlattenedJSON(0);
 
-        $loader = new Loader();
-        $loaded = $loader->load($encrypted);
+        $loaded = JWELoader::load($encrypted);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('dir', $loaded->getSharedProtectedHeader('alg'));
@@ -552,8 +546,7 @@ final class EncrypterTest extends TestCase
 
         $encrypter->encrypt($jwe);
 
-        $loader = new Loader();
-        $loaded = $loader->load($jwe->toFlattenedJSON(0));
+        $loaded = JWELoader::load($jwe->toFlattenedJSON(0));
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('ECDH-ES', $loaded->getSharedProtectedHeader('alg'));
@@ -590,8 +583,7 @@ final class EncrypterTest extends TestCase
 
         $encrypter->encrypt($jwe);
 
-        $loader = new Loader();
-        $loaded = $loader->load($jwe->toFlattenedJSON(0));
+        $loaded = JWELoader::load($jwe->toFlattenedJSON(0));
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('ECDH-ES+A256KW', $loaded->getSharedProtectedHeader('alg'));
@@ -632,8 +624,7 @@ final class EncrypterTest extends TestCase
 
         $encrypter->encrypt($jwe);
 
-        $loader = new Loader();
-        $loaded = $loader->load($jwe->toFlattenedJSON(0));
+        $loaded = JWELoader::load($jwe->toFlattenedJSON(0));
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
@@ -676,8 +667,7 @@ final class EncrypterTest extends TestCase
 
         $encrypter->encrypt($jwe);
 
-        $loader = new Loader();
-        $loaded = $loader->load($jwe->toJSON());
+        $loaded = JWELoader::load($jwe->toJSON());
 
         $this->assertEquals(2, $loaded->countRecipients());
 

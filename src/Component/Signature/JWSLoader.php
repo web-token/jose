@@ -174,14 +174,14 @@ final class JWSLoader
      */
     private static function populatePayload(JWS &$jws, array $data)
     {
-        $isPayloadEncoded = null;
-        foreach ($jws->getSignatures() as $signature) {
-            if (null === $isPayloadEncoded) {
-                $isPayloadEncoded = self::isPayloadEncoded($signature);
-            }
-            Assertion::eq($isPayloadEncoded, self::isPayloadEncoded($signature), 'Foreign payload encoding detected. The JWS cannot be loaded.');
-        }
         if (array_key_exists('payload', $data)) {
+            $isPayloadEncoded = null;
+            foreach ($jws->getSignatures() as $signature) {
+                if (null === $isPayloadEncoded) {
+                    $isPayloadEncoded = self::isPayloadEncoded($signature);
+                }
+                Assertion::eq($isPayloadEncoded, self::isPayloadEncoded($signature), 'Foreign payload encoding detected. The JWS cannot be loaded.');
+            }
             $payload = $data['payload'];
             $jws = $jws->withAttachedPayload();
             $jws = $jws->withEncodedPayload($payload);

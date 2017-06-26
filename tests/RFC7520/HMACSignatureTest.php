@@ -14,8 +14,8 @@ namespace Jose\Test\RFC7520;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\JWSFactory;
-use Jose\Loader;
 use Jose\Component\Core\JWK;
+use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Signer;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
@@ -83,14 +83,13 @@ final class HMACSignatureTest extends TestCase
         $this->assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
         $this->assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
-        $loader = new Loader();
-        $loaded_compact_json = $loader->load($expected_compact_json);
+        $loaded_compact_json = JWSLoader::load($expected_compact_json);
         $verifier->verifyWithKey($loaded_compact_json, $key);
 
-        $loaded_flattened_json = $loader->load($expected_flattened_json);
+        $loaded_flattened_json = JWSLoader::load($expected_flattened_json);
         $verifier->verifyWithKey($loaded_flattened_json, $key);
 
-        $loaded_json = $loader->load($expected_json);
+        $loaded_json = JWSLoader::load($expected_json);
         $verifier->verifyWithKey($loaded_json, $key);
     }
 
@@ -147,14 +146,13 @@ final class HMACSignatureTest extends TestCase
 
         $this->assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
-        $loader = new Loader();
-        $loaded_compact_json = $loader->load($expected_compact_json);
+        $loaded_compact_json = JWSLoader::load($expected_compact_json);
         $verifier->verifyWithKey($loaded_compact_json, $key, $payload);
 
-        $loaded_flattened_json = $loader->load($expected_flattened_json);
+        $loaded_flattened_json = JWSLoader::load($expected_flattened_json);
         $verifier->verifyWithKey($loaded_flattened_json, $key, $payload);
 
-        $loaded_json = $loader->load($expected_json);
+        $loaded_json = JWSLoader::load($expected_json);
         $verifier->verifyWithKey($loaded_json, $key, $payload);
     }
 
@@ -209,11 +207,10 @@ final class HMACSignatureTest extends TestCase
         $this->assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
         $this->assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
-        $loader = new Loader();
-        $loaded_flattened_json = $loader->load($expected_flattened_json);
+        $loaded_flattened_json = JWSLoader::load($expected_flattened_json);
         $verifier->verifyWithKey($loaded_flattened_json, $key);
 
-        $loaded_json = $loader->load($expected_json);
+        $loaded_json = JWSLoader::load($expected_json);
         $verifier->verifyWithKey($loaded_json, $key);
     }
 
@@ -266,11 +263,10 @@ final class HMACSignatureTest extends TestCase
         $this->assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
         $this->assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
-        $loader = new Loader();
-        $loaded_flattened_json = $loader->load($expected_flattened_json);
+        $loaded_flattened_json = JWSLoader::load($expected_flattened_json);
         $verifier->verifyWithKey($loaded_flattened_json, $key);
 
-        $loaded_json = $loader->load($expected_json);
+        $loaded_json = JWSLoader::load($expected_json);
         $verifier->verifyWithKey($loaded_json, $key);
     }
 }

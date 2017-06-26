@@ -15,8 +15,8 @@ use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Signature\Algorithm\EdDSA;
 use Jose\Component\Signature\JWSFactory;
-use Jose\Loader;
 use Jose\Component\Core\JWK;
+use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Object\JWS;
 use Jose\Test\TestCase;
 use Jose\Component\Signature\Verifier;
@@ -77,8 +77,7 @@ final class EdDSASignatureTest extends TestCase
 
         $this->assertEquals('eyJhbGciOiJFZERTQSJ9.RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc.hgyY0il_MGCjP0JzlnLWG1PPOt7-09PGcvMg3AIbQR6dWbhijcNR4ki4iylGjg5BhVsPt9g7sVvpAr_MuM0KAg', $jws);
 
-        $loader = new Loader();
-        $loaded = $loader->load($jws);
+        $loaded = JWSLoader::load($jws);
         $signatureAlgorithmManager = JWAManager::create([new EdDSA()]);
         $verifier = new Verifier($signatureAlgorithmManager);
 

@@ -17,7 +17,8 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
-use Jose\Loader;
+use Jose\Component\Encryption\JWELoader;
+use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Test\TestCase;
 
 /**
@@ -38,9 +39,8 @@ final class InvalidCurveAttackTest extends TestCase
         $compressionManager = CompressionManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $loader = new Loader();
-        $loaded_compact_json = $loader->load($maliciousJWE);
-        $privateKey = \Jose\Component\KeyManagement\JWKFactory::createECKey([
+        $loaded_compact_json = JWELoader::load($maliciousJWE);
+        $privateKey = JWKFactory::createECKey([
             'kty' => 'EC',
             'crv' => 'P-256',
             "x" => "weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ",
@@ -63,9 +63,8 @@ final class InvalidCurveAttackTest extends TestCase
         $compressionManager = CompressionManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $loader = new Loader();
-        $loaded_compact_json = $loader->load($maliciousJWE);
-        $privateKey = \Jose\Component\KeyManagement\JWKFactory::createECKey([
+        $loaded_compact_json = JWELoader::load($maliciousJWE);
+        $privateKey = JWKFactory::createECKey([
             'kty' => 'EC',
             'crv' => 'P-256',
             "x" => "weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ",

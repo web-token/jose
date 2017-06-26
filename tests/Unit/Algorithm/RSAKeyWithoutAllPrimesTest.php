@@ -11,12 +11,17 @@
 
 namespace Jose\Test\Unit\Algorithm;
 
+use Jose\Component\Core\JWAManagerFactory;
+use Jose\Component\Encryption\Compression\CompressionManagerFactory;
+use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWEFactory;
+use Jose\Component\Encryption\JWELoader;
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\JWSFactory;
-use Jose\Loader;
 use Jose\Component\Encryption\JWE;
+use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Object\JWS;
+use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,9 +45,12 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
 
         $jwt = JWSFactory::createJWSToCompactJSON($claims, $key, ['alg' => $signature_algorithm]);
 
-        $loader = new Loader();
+        $loaded = JWSLoader::load($jwt);
+        $this->assertInstanceOf(JWS::class, $loaded);
 
-        $this->assertInstanceOf(JWS::class, $loader->loadAndVerifySignatureUsingKey($jwt, $key, [$signature_algorithm]));
+        $algorithmManager = JWAManagerFactory::createFromAlgorithmName([$signature_algorithm]);
+        $verifier = new Verifier($algorithmManager);
+        $verifier->verifyWithKey($loaded, $key);
     }
 
     /**
@@ -85,9 +93,14 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
 
         $jwt = JWEFactory::createJWEToCompactJSON($claims, $key, ['alg' => $encryption_algorithm, 'enc' => 'A256GCM']);
 
-        $loader = new Loader();
+        $loaded = JWELoader::load($jwt);
+        $this->assertInstanceOf(JWE::class, $loaded);
 
-        $this->assertInstanceOf(JWE::class, $loader->loadAndDecryptUsingKey($jwt, $key, [$encryption_algorithm], ['A256GCM']));
+        $keyEncryptionAlgorithmManager = JWAManagerFactory::createFromAlgorithmName([$encryption_algorithm]);
+        $contentEncryptionAlgorithmManager = JWAManagerFactory::createFromAlgorithmName(['A256GCM']);
+        $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF']);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $decrypter->decryptUsingKey($loaded, $key);
     }
 
     /**
@@ -103,9 +116,14 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
 
         $jwt = JWEFactory::createJWEToCompactJSON($claims, $key, ['alg' => $encryption_algorithm, 'enc' => 'A256GCM']);
 
-        $loader = new Loader();
+        $loaded = JWELoader::load($jwt);
+        $this->assertInstanceOf(JWE::class, $loaded);
 
-        $this->assertInstanceOf(JWE::class, $loader->loadAndDecryptUsingKey($jwt, $key, [$encryption_algorithm], ['A256GCM']));
+        $keyEncryptionAlgorithmManager = JWAManagerFactory::createFromAlgorithmName([$encryption_algorithm]);
+        $contentEncryptionAlgorithmManager = JWAManagerFactory::createFromAlgorithmName(['A256GCM']);
+        $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF']);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $decrypter->decryptUsingKey($loaded, $key);
     }
 
     /**

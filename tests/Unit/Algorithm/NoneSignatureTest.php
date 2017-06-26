@@ -13,8 +13,8 @@ namespace Jose\Test\Unit\Algorithm;
 
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Signature\Algorithm\None;
-use Jose\Loader;
 use Jose\Component\Core\JWK;
+use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Object\JWS;
 use Jose\Component\Signature\Signer;
 use Jose\Test\TestCase;
@@ -76,8 +76,7 @@ final class NoneSignatureTest extends TestCase
         $compact = $jws->toCompactJSON(0);
         $this->assertTrue(is_string($compact));
 
-        $loader = new Loader();
-        $result = $loader->load($compact);
+        $result = JWSLoader::load($compact);
 
         $this->assertInstanceOf(JWS::class, $result);
 
