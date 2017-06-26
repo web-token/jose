@@ -12,9 +12,7 @@
     colors="true">
     <testsuites>
         <testsuite name="Test Suite">
-            <directory>./src/Component/*/Tests/</directory>
-            <directory>./src/Component/*/*/Tests/</directory>
-            <directory>./tests/</directory>
+            <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>
 
@@ -22,8 +20,7 @@
         <whitelist>
             <directory suffix=".php">./</directory>
             <exclude>
-                <directory>./tests</directory>
-                <directory>./vendor</directory>
+                <directory>./Tests</directory>
             </exclude>
         </whitelist>
     </filter>

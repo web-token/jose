@@ -11,11 +11,19 @@
 
 namespace Jose\Test\Unit\Objects;
 
-use Jose\Component\Checker\CheckerManagerFactory;
 use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Signature;
-use PHPUnit\Framework\TestCase;
+use Jose\Test\TestCase;
+use Jose\Component\Checker\AudienceChecker;
+use Jose\Component\Checker\CheckerManager;
+use Jose\Component\Checker\CriticalHeaderChecker;
+use Jose\Component\Checker\ExpirationTimeChecker;
+use Jose\Component\Checker\IssuedAtChecker;
+use Jose\Component\Checker\NotBeforeChecker;
+use Jose\Test\Stub\IssuerChecker;
+use Jose\Test\Stub\JtiChecker;
+use Jose\Test\Stub\SubjectChecker;
 
 /**
  * final class JWSTest.
@@ -52,7 +60,12 @@ final class JWSTest extends TestCase
         $jws = $jws->addSignatureInformation(JWK::create(['kty' => 'none']), ['crit' => ['nbf', 'iat', 'exp', 'iss']]);
         $this->assertEquals(1, $jws->countSignatures());
 
-        $checker_manager = CheckerManagerFactory::createClaimCheckerManager();
+        $checker_manager = new CheckerManager();
+        $checker_manager->addClaimChecker(new ExpirationTimeChecker());
+        $checker_manager->addClaimChecker(new IssuedAtChecker());
+        $checker_manager->addClaimChecker(new NotBeforeChecker());
+        $checker_manager->addClaimChecker(new JtiChecker());
+        $checker_manager->addHeaderChecker(new CriticalHeaderChecker());
         $checker_manager->checkJWS($jws, 0);
     }
 
@@ -173,34 +186,4 @@ final class JWSTest extends TestCase
 
         $signature->getProtectedHeader('foo');
     }
-
-    /*
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The argument does not contain valid encoded protected headers.
-     */
-    /*public function testBadEncodedProtectedHeader()
-    {
-        $signature = new Signature();
-
-        $signature->withEncodedProtectedHeaders('foo');
-    }*/
-
-    /*public function testEmptyEncodedProtectedHeader()
-    {
-        $signature = new Signature();
-
-        $signature->withEncodedProtectedHeaders('');
-
-        $this->assertEquals([], $signature->getProtectedHeaders());
-    }*/
-
-    /*public function testEncodedProtectedHeader()
-    {
-        $signature = new Signature();
-
-        $signature = $signature->withEncodedProtectedHeaders(Base64Url::encode(json_encode(['foo' => 'bar'])));
-        $signature = $signature->withProtectedHeader('plic', 'ploc');
-
-        $this->assertEquals(['foo' => 'bar', 'plic' => 'ploc'], $signature->getProtectedHeaders());
-    }*/
 }

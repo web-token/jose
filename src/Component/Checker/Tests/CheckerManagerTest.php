@@ -9,11 +9,20 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Test\Functional;
+namespace Jose\Component\Checker\Tests;
 
+use Jose\Component\Checker\AudienceChecker;
+use Jose\Component\Checker\CheckerManager;
+use Jose\Component\Checker\CriticalHeaderChecker;
+use Jose\Component\Checker\ExpirationTimeChecker;
+use Jose\Component\Checker\IssuedAtChecker;
+use Jose\Component\Checker\NotBeforeChecker;
 use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Core\JWK;
-use Jose\Test\TestCase;
+use Jose\Test\Stub\IssuerChecker;
+use Jose\Test\Stub\JtiChecker;
+use Jose\Test\Stub\SubjectChecker;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group CheckerManager
@@ -175,9 +184,9 @@ final class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss'],
             ]
         );
@@ -202,9 +211,9 @@ final class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss'],
             ]
         );
@@ -230,12 +239,11 @@ final class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud'],
             ]
-
         );
 
         $this->getCheckerManager()->checkJWS($jws, 0);
@@ -260,9 +268,9 @@ final class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud', 'jti'],
             ]
         );
@@ -286,12 +294,11 @@ final class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud', 'jti'],
             ]
-
         );
 
         $this->getCheckerManager()->checkJWS($jws, 0);
@@ -313,9 +320,9 @@ final class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
             ]
         );
 
@@ -332,12 +339,37 @@ final class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
             ]
         );
 
         $this->getCheckerManager()->checkJWS($jws, 0);
+    }
+
+    /**
+     * @var \Jose\Component\Checker\CheckerManager|null
+     */
+    private $checker_manager = null;
+
+    /**
+     * @return \Jose\Component\Checker\CheckerManager
+     */
+    private function getCheckerManager()
+    {
+        if (null === $this->checker_manager) {
+            $this->checker_manager = new CheckerManager();
+            $this->checker_manager->addClaimChecker(new ExpirationTimeChecker());
+            $this->checker_manager->addClaimChecker(new IssuedAtChecker());
+            $this->checker_manager->addClaimChecker(new NotBeforeChecker());
+            $this->checker_manager->addClaimChecker(new AudienceChecker('My Service'));
+            $this->checker_manager->addClaimChecker(new SubjectChecker());
+            $this->checker_manager->addClaimChecker(new IssuerChecker());
+            $this->checker_manager->addClaimChecker(new JtiChecker());
+            $this->checker_manager->addHeaderChecker(new CriticalHeaderChecker());
+        }
+
+        return $this->checker_manager;
     }
 }

@@ -12,12 +12,7 @@
 namespace Jose\Test;
 
 use Base64Url\Base64Url;
-use Jose\Component\Checker\AudienceChecker;
-use Jose\Component\Checker\CheckerManagerFactory;
 use Jose\Component\Core\JWKSet;
-use Jose\Test\Stub\IssuerChecker;
-use Jose\Test\Stub\JtiChecker;
-use Jose\Test\Stub\SubjectChecker;
 use PHPUnit\Framework\TestCase as Base;
 
 /**
@@ -25,27 +20,6 @@ use PHPUnit\Framework\TestCase as Base;
  */
 class TestCase extends Base
 {
-    /**
-     * @var \Jose\Component\Checker\CheckerManager|null
-     */
-    private $checker_manager = null;
-
-    /**
-     * @return \Jose\Component\Checker\CheckerManager
-     */
-    protected function getCheckerManager()
-    {
-        if (null === $this->checker_manager) {
-            $this->checker_manager = CheckerManagerFactory::createClaimCheckerManager();
-            $this->checker_manager->addClaimChecker(new AudienceChecker('My Service'));
-            $this->checker_manager->addClaimChecker(new SubjectChecker());
-            $this->checker_manager->addClaimChecker(new IssuerChecker());
-            $this->checker_manager->addClaimChecker(new JtiChecker());
-        }
-
-        return $this->checker_manager;
-    }
-
     /**
      * @return \Jose\Component\Core\JWKSet
      */

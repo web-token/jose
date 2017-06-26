@@ -1,0 +1,40 @@
+{
+    "name": "spomky-labs/jose-checker",
+    "description": "JWT Checker for the Spomoky-Labs Jose library.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["JWS", "JWT", "JWE", "JWA", "JWK", "JWKSet", "Jot", "Jose", "RFC7515", "RFC7516", "RFC7517", "RFC7518", "RFC7519", "RFC7520"],
+    "homepage": "https://github.com/Spomky-Labs/Jose",
+    "authors": [
+        {
+            "name": "Florent Morselli",
+            "homepage": "https://github.com/Spomky"
+        },{
+            "name": "All contributors",
+            "homepage": "https://github.com/Spomky-Labs/jose/contributors"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Jose\\Component\\Checker\\":  "./"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jose\\Component\\Checker\\Test\\":  "./Tests/"
+        }
+    },
+    "require": {
+        "php": "^7.1",
+        "spomky-labs/jose-checker": "self-version"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0",
+        "satooshi/php-coveralls": "^1.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "7.0.x-dev"
+        }
+    }
+}

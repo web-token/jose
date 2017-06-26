@@ -109,6 +109,7 @@ final class JWSFactory
         $jwsBuilder = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($signature_key, $protected_headers, $headers);
+
         return $jwsBuilder->build();
     }
 
@@ -129,6 +130,7 @@ final class JWSFactory
         $jwsBuilder = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($signature_key, $protected_headers, $headers);
+
         return $jwsBuilder->build();
     }
 }
