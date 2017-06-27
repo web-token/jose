@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Test\Functional;
+namespace Jose\Component\Encryption\Tests;
 
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Core\JWAManager;
@@ -19,8 +19,6 @@ use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Encryption\JWELoader;
-use Jose\Component\Signature\JWSLoader;
-use Jose\Component\Signature\JWS;
 use Jose\Test\TestCase;
 
 /**
@@ -28,7 +26,7 @@ use Jose\Test\TestCase;
  *
  * @group Functional
  */
-final class FlattenedTest extends TestCase
+final class JWEFlattenedTest extends TestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7516#appendix-A.5
@@ -51,17 +49,5 @@ final class FlattenedTest extends TestCase
 
         $this->assertEquals(0, $index);
         $this->assertEquals('Live long and prosper.', $loaded->getPayload());
-    }
-
-    /**
-     * @see https://tools.ietf.org/html/rfc7516#appendix-A.5
-     */
-    public function testLoadFlattenedJWS()
-    {
-        $loaded = JWSLoader::load('{"payload":"eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ","protected":"eyJhbGciOiJFUzI1NiJ9","header":{"kid":"e9bc097a-ce51-4036-9562-d2ade882db0d"},"signature":"DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q"}');
-
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals('ES256', $loaded->getSignature(0)->getProtectedHeader('alg'));
-        $this->assertEquals(['iss' => 'joe', 'exp' => 1300819380, 'http://example.com/is_root' => true], $loaded->getPayload());
     }
 }

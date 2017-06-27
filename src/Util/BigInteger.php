@@ -16,7 +16,7 @@ final class BigInteger
     /**
      * Holds the BigInteger's value.
      *
-     * @var resource
+     * @var \GMP
      */
     private $value;
 

@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Test\Functional;
+namespace Jose\Component\Encryption\Tests;
 
 use Base64Url\Base64Url;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
@@ -136,7 +136,7 @@ final class EncrypterTest extends TestCase
         $this->assertEquals('A256CBC-HS512', $loaded->getSharedProtectedHeader('enc'));
         $this->assertEquals('DEF', $loaded->getSharedProtectedHeader('zip'));
         $this->assertEquals('bar', $loaded->getSharedHeader('foo'));
-        $this->assertEquals('A,B,C,D', $loaded->getAAD('foo'));
+        $this->assertEquals('A,B,C,D', $loaded->getAAD());
         $this->assertEquals('ploc', $loaded->getRecipient(0)->getHeader('plic'));
         $this->assertNull($loaded->getPayload());
 
@@ -186,8 +186,8 @@ final class EncrypterTest extends TestCase
         $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
-        $this->assertTrue(is_array($loaded->getPayload()));
-        $this->assertEquals($this->getKeyToEncrypt(), JWK::create($loaded->getPayload()));
+        $this->assertTrue($loaded->hasClaims());
+        $this->assertEquals($this->getKeyToEncrypt(), JWK::create($loaded->getClaims()));
     }
 
     /**

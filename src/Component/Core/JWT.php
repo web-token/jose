@@ -70,10 +70,11 @@ trait JWT
      */
     public function getClaims(): array
     {
-        if (is_array($this->payload)) {
-            return $this->payload;
+        if (!$this->hasClaims()) {
+            throw new \InvalidArgumentException('The payload does not contain claims.');
         }
-        throw new \InvalidArgumentException('The payload does not contain claims.');
+
+        return $this->payload;
     }
 
     /**
