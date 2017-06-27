@@ -19,9 +19,9 @@ use Jose\Component\Checker\IssuedAtChecker;
 use Jose\Component\Checker\NotBeforeChecker;
 use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Core\JWK;
-use Jose\Test\Stub\IssuerChecker;
-use Jose\Test\Stub\JtiChecker;
-use Jose\Test\Stub\SubjectChecker;
+use Jose\Component\Checker\Tests\Stub\IssuerChecker;
+use Jose\Component\Checker\Tests\Stub\JtiChecker;
+use Jose\Component\Checker\Tests\Stub\SubjectChecker;
 use PHPUnit\Framework\TestCase;
 
 /**

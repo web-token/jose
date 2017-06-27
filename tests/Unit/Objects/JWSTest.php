@@ -15,15 +15,11 @@ use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Signature;
 use Jose\Test\TestCase;
-use Jose\Component\Checker\AudienceChecker;
 use Jose\Component\Checker\CheckerManager;
 use Jose\Component\Checker\CriticalHeaderChecker;
 use Jose\Component\Checker\ExpirationTimeChecker;
 use Jose\Component\Checker\IssuedAtChecker;
 use Jose\Component\Checker\NotBeforeChecker;
-use Jose\Test\Stub\IssuerChecker;
-use Jose\Test\Stub\JtiChecker;
-use Jose\Test\Stub\SubjectChecker;
 
 /**
  * final class JWSTest.
@@ -64,7 +60,6 @@ final class JWSTest extends TestCase
         $checker_manager->addClaimChecker(new ExpirationTimeChecker());
         $checker_manager->addClaimChecker(new IssuedAtChecker());
         $checker_manager->addClaimChecker(new NotBeforeChecker());
-        $checker_manager->addClaimChecker(new JtiChecker());
         $checker_manager->addHeaderChecker(new CriticalHeaderChecker());
         $checker_manager->checkJWS($jws, 0);
     }

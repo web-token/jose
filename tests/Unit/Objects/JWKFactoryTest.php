@@ -99,7 +99,7 @@ final class JWKFactoryTest extends TestCase
 
     public function testCreateFromPublicEC256KeyFile()
     {
-        $result = JWKFactory::createFromKeyFile(__DIR__.'/../Keys/EC/public.es256.key');
+        $result = JWKFactory::createFromKeyFile(__DIR__ . '/../Keys/EC/public.es256.key');
 
         $this->assertInstanceOf(JWK::class, $result);
         $this->assertEquals('{"kty":"EC","crv":"P-256","x":"vuYsP-QnrqAbM7Iyhzjt08hFSuzapyojCB_gFsBt65U","y":"oq-E2K-X0kPeqGuKnhlXkxc5fnxomRSC6KLby7Ij8AE"}', json_encode($result));
@@ -107,7 +107,7 @@ final class JWKFactoryTest extends TestCase
 
     public function testCreateFromPublicEC384KeyFile()
     {
-        $result = JWKFactory::createFromKeyFile(__DIR__.'/../Keys/EC/public.es384.key');
+        $result = JWKFactory::createFromKeyFile(__DIR__ . '/../Keys/EC/public.es384.key');
 
         $this->assertInstanceOf(JWK::class, $result);
         $this->assertEquals('{"kty":"EC","crv":"P-384","x":"6f-XZsg2Tvn0EoEapQ-ylMYNtsm8CPf0cb8HI2EkfY9Bqpt3QMzwlM7mVsFRmaMZ","y":"b8nOnRwmpmEnvA2U8ydS-dbnPv7bwYl-q1qNeh8Wpjor3VO-RTt4ce0Pn25oGGWU"}', json_encode($result));
@@ -115,7 +115,7 @@ final class JWKFactoryTest extends TestCase
 
     public function testCreateFromPublicEC512KeyFile()
     {
-        $result = JWKFactory::createFromKeyFile(__DIR__.'/../Keys/EC/public.es512.key');
+        $result = JWKFactory::createFromKeyFile(__DIR__ . '/../Keys/EC/public.es512.key');
 
         $this->assertInstanceOf(JWK::class, $result);
         $this->assertEquals('{"kty":"EC","crv":"P-521","x":"AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS","y":"AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC"}', json_encode($result));
