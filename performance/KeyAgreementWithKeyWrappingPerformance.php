@@ -9,13 +9,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include_once __DIR__.'/../../vendor/autoload.php';
+include_once __DIR__ . '/../vendor/autoload.php';
 
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA192KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
-use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWK;
 
 function testKeyAgreementWithKeyWrappingEncryptionPerformance($message, KeyAgreementWrappingInterface $alg, JWK $recipient_key)

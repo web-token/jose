@@ -1,5 +1,6 @@
 * text=auto
 
+/performance export-ignore
 /doc export-ignore
 /examples export-ignore
 /tests export-ignore

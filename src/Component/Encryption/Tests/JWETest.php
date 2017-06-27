@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Test\Unit\Objects;
+namespace Jose\Component\Encryption\Tests;
 
 use Jose\Component\Encryption\JWEFactory;
 use PHPUnit\Framework\TestCase;
@@ -139,7 +139,7 @@ final class JWETest extends TestCase
     {
         $jwe = JWEFactory::createJWE([]);
         $jwe = $jwe->addRecipientWithEncryptedKey(null, [
-            'foo'  => 'bar',
+            'foo' => 'bar',
             'plic' => 'ploc',
         ]);
 

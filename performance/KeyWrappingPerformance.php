@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include_once __DIR__.'/../../vendor/autoload.php';
+include_once __DIR__ . '/../vendor/autoload.php';
 
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A128GCMKW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
@@ -21,7 +21,6 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS256A128KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS384A192KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS512A256KW;
-use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWK;
 
 function testKeyWrappinPerformance(KeyWrappingInterface $alg, JWK $recipient_key)

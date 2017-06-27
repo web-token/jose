@@ -9,13 +9,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include_once __DIR__.'/../../vendor/autoload.php';
+include_once __DIR__ . '/../vendor/autoload.php';
 
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256;
-use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWK;
 
 function testKeyEncryptionPerformance(KeyEncryptionInterface $alg, JWK $recipient_key)

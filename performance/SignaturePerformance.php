@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include_once __DIR__.'/../../vendor/autoload.php';
+include_once __DIR__ . '/../vendor/autoload.php';
 
 use Jose\Component\Signature\Algorithm\EdDSA;
 use Jose\Component\Signature\Algorithm\ES256;
@@ -25,8 +25,7 @@ use Jose\Component\Signature\Algorithm\PS512;
 use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\Algorithm\RS384;
 use Jose\Component\Signature\Algorithm\RS512;
-use Jose\Component\Signature\AlgorithmAlgorithmInterface;
-use Jose\Component\Core\JWK;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\Core\JWK;
 
 function testSignaturePerformance(SignatureAlgorithmInterface $alg, JWK $key)

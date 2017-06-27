@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include_once __DIR__.'/../../vendor/autoload.php';
+include_once __DIR__ . '/../vendor/autoload.php';
 
 use Base64Url\Base64Url;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;

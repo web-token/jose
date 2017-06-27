@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Test\Unit\Objects;
+namespace Jose\Component\Signature\Tests;
 
 use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Core\JWK;

@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Test\Unit\Objects;
+namespace Jose\Component\KeyManagement\Tests;
 
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Core\JWK;
@@ -43,8 +43,8 @@ final class JWKSetTest extends TestCase
                 'kty' => 'RSA',
                 'alg' => 'RS256',
                 'use' => 'sig',
-                'n'   => 'vnMTRCMvsS04M1yaKR112aB8RxOkWHFixZO68wCRlVLxK4ugckXVD_Ebcq-kms1T2XpoWntVfBuX40r2GvcD9UsTFt_MZlgd1xyGwGV6U_tfQUll5mKxCPjr60h83LXKJ_zmLXIqkV8tAoIg78a5VRWoms_0Bn09DKT3-RBWFjk=',
-                'e'   => 'AQAB',
+                'n' => 'vnMTRCMvsS04M1yaKR112aB8RxOkWHFixZO68wCRlVLxK4ugckXVD_Ebcq-kms1T2XpoWntVfBuX40r2GvcD9UsTFt_MZlgd1xyGwGV6U_tfQUll5mKxCPjr60h83LXKJ_zmLXIqkV8tAoIg78a5VRWoms_0Bn09DKT3-RBWFjk=',
+                'e' => 'AQAB',
             ],
             $jwk->all()
         );
@@ -61,8 +61,8 @@ final class JWKSetTest extends TestCase
                 'kty' => 'RSA',
                 'alg' => 'RS256',
                 'use' => 'sig',
-                'n'   => 'rI67uHIDWDgCy_Ut-FhhjTCkEcqzoO80IRgdpk_fJHlDmXhMTJKPizxbIEMs0wRHRZpwH-4D20thpnQB5Mgx6-XM9kOvcYpHSdcYME77BwX6uQG-hw2w77NOhYiCSZCLzx-5ld5Wjy0dympL-ExqQw-wrWipMX7NQhIbJqVbZ18=',
-                'e'   => 'AQAB',
+                'n' => 'rI67uHIDWDgCy_Ut-FhhjTCkEcqzoO80IRgdpk_fJHlDmXhMTJKPizxbIEMs0wRHRZpwH-4D20thpnQB5Mgx6-XM9kOvcYpHSdcYME77BwX6uQG-hw2w77NOhYiCSZCLzx-5ld5Wjy0dympL-ExqQw-wrWipMX7NQhIbJqVbZ18=',
+                'e' => 'AQAB',
             ],
             $jwk->all()
         );
@@ -79,8 +79,8 @@ final class JWKSetTest extends TestCase
                 'kty' => 'RSA',
                 'alg' => 'RS256',
                 'use' => 'sig',
-                'n'   => 'rI67uHIDWDgCy_Ut-FhhjTCkEcqzoO80IRgdpk_fJHlDmXhMTJKPizxbIEMs0wRHRZpwH-4D20thpnQB5Mgx6-XM9kOvcYpHSdcYME77BwX6uQG-hw2w77NOhYiCSZCLzx-5ld5Wjy0dympL-ExqQw-wrWipMX7NQhIbJqVbZ18=',
-                'e'   => 'AQAB',
+                'n' => 'rI67uHIDWDgCy_Ut-FhhjTCkEcqzoO80IRgdpk_fJHlDmXhMTJKPizxbIEMs0wRHRZpwH-4D20thpnQB5Mgx6-XM9kOvcYpHSdcYME77BwX6uQG-hw2w77NOhYiCSZCLzx-5ld5Wjy0dympL-ExqQw-wrWipMX7NQhIbJqVbZ18=',
+                'e' => 'AQAB',
             ],
             $jwk->all()
         );
@@ -101,8 +101,8 @@ final class JWKSetTest extends TestCase
             'kty' => 'RSA',
             'alg' => 'RS256',
             'use' => 'sig',
-            'n'   => 'vnMTRCMvsS04M1yaKR112aB8RxOkWHFixZO68wCRlVLxK4ugckXVD_Ebcq-kms1T2XpoWntVfBuX40r2GvcD9UsTFt_MZlgd1xyGwGV6U_tfQUll5mKxCPjr60h83LXKJ_zmLXIqkV8tAoIg78a5VRWoms_0Bn09DKT3-RBWFjk=',
-            'e'   => 'AQAB',
+            'n' => 'vnMTRCMvsS04M1yaKR112aB8RxOkWHFixZO68wCRlVLxK4ugckXVD_Ebcq-kms1T2XpoWntVfBuX40r2GvcD9UsTFt_MZlgd1xyGwGV6U_tfQUll5mKxCPjr60h83LXKJ_zmLXIqkV8tAoIg78a5VRWoms_0Bn09DKT3-RBWFjk=',
+            'e' => 'AQAB',
         ]]];
         $jwkset = JWKFactory::createFromValues($values);
         $this->assertInstanceOf(JWKSet::class, $jwkset);
