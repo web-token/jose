@@ -14,9 +14,9 @@
         <service id="jose.factory.verifier" class="Jose\Factory\VerifierFactory" public="false" />
 
 
-        <service id="jose.factory.jwe" class="Jose\Component\Encryption\JWEFactory" public="true" />
+        <service id="jose.factory.jwe" class="Jose\Component\Factory\JWEFactory" public="true" />
         <service id="jose.factory.jwk" class="Jose\Component\KeyManagement\JWKFactory" public="true" />
-        <service id="jose.factory.jws" class="Jose\Component\Signature\JWSFactory" public="true" />
+        <service id="jose.factory.jws" class="Jose\Component\Factory\JWSFactory" public="true" />
         <service id="jose.loader" class="Jose\Loader" public="true" />
 
         <service id="jose.compression_manager" class="SpomkyLabs\JoseBundle\Service\CompressionManager" public="false" />

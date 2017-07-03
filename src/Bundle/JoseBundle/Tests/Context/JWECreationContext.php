@@ -101,7 +101,7 @@ trait JWECreationContext
     public function iTryToCreateAJweInJsonCompactSerializationModeWithRecipientKeyAndIStoreTheResultInTheVariable($key_service, $variable)
     {
         /*
-         * @var \Jose\Component\Encryption\JWEFactory
+         * @var \Jose\Component\Factory\JWEFactory
          */
         $jwe_creator = $this->getContainer()->get('jose.factory.jwe');
         $key = $this->getContainer()->get($key_service);
@@ -117,7 +117,7 @@ trait JWECreationContext
     public function iTryToCreateAJweInJsonFlattenedSerializationModeWithRecipientKeyAndIStoreTheResultInTheVariable($key_service, $variable)
     {
         /*
-         * @var \Jose\Component\Encryption\JWEFactory
+         * @var \Jose\Component\Factory\JWEFactory
          */
         $jwe_creator = $this->getContainer()->get('jose.factory.jwe');
         $key = $this->getContainer()->get($key_service);

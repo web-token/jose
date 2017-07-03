@@ -4,7 +4,7 @@ Signers and Verifiers Services
 # Signers
 
 ```php
-use Jose\Component\Signature\JWSFactory;
+use Jose\Component\Factory\JWSFactory;
 
 // We get the key and the signer (we suppose that MY_KEY1 is a valid key)
 $key = $container->get('jose.key.MY_KEY1');

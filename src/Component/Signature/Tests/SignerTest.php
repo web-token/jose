@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Tests;
 
 use Jose\Component\Core\JWAManager;
-use Jose\Component\Core\JWAManagerFactory;
+use Jose\Component\Factory\JWAManagerFactory;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Signature\Algorithm\HS256;
@@ -23,7 +23,7 @@ use Jose\Component\Signature\Algorithm\PS512;
 use Jose\Component\Signature\Algorithm\RS512;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
-use Jose\Component\Signature\JWSFactory;
+use Jose\Component\Factory\JWSFactory;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
 use Jose\Test\TestCase;
@@ -304,7 +304,7 @@ final class SignerTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The algorithm "RS512" is not supported or is not a signature algorithm.
+     * @expectedExceptionMessage The algorithm "RS512" is not supported.
      */
     public function testSignAndLoadWithUnsupportedAlgorithm()
     {

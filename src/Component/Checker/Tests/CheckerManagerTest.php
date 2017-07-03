@@ -23,7 +23,7 @@ use Jose\Component\Checker\Tests\Stub\IssuerChecker;
 use Jose\Component\Checker\Tests\Stub\JtiChecker;
 use Jose\Component\Checker\Tests\Stub\SubjectChecker;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\JWSFactory;
+use Jose\Component\Factory\JWSFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

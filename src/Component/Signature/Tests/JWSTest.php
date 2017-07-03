@@ -19,7 +19,7 @@ use Jose\Component\Checker\ExpirationTimeChecker;
 use Jose\Component\Checker\IssuedAtChecker;
 use Jose\Component\Checker\NotBeforeChecker;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\JWSFactory;
+use Jose\Component\Factory\JWSFactory;
 use Jose\Component\Signature\Signature;
 use Jose\Test\TestCase;
 

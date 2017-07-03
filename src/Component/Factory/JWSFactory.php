@@ -11,11 +11,12 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Signature;
+namespace Jose\Component\Factory;
 
 use Assert\Assertion;
-use Jose\Component\Core\JWAManagerFactory;
 use Jose\Component\Core\JWK;
+use Jose\Component\Signature\JWS;
+use Jose\Component\Signature\JWSBuilder;
 
 final class JWSFactory
 {

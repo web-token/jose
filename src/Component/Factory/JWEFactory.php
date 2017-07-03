@@ -11,12 +11,13 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Encryption;
+namespace Jose\Component\Factory;
 
 use Assert\Assertion;
-use Jose\Component\Core\JWAManagerFactory;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Compression\CompressionManagerFactory;
+use Jose\Component\Encryption\Encrypter;
+use Jose\Component\Encryption\JWE;
 
 final class JWEFactory
 {

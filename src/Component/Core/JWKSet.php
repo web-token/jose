@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Core;
 
-use Assert\Assertion;
 use Jose\Component\KeyManagement\KeyConverter\ECKey;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
@@ -145,7 +144,9 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
      */
     public function getKey($index): JWK
     {
-        Assertion::true($this->hasKey($index), 'Undefined index.');
+        if (!$this->hasKey($index)) {
+            throw new \InvalidArgumentException('Undefined index.');
+        }
 
         return $this->keys[$index];
     }
@@ -216,8 +217,9 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
      */
     public function selectKey(string $type, ?string $algorithm = null, array $restrictions = []): ?JWK
     {
-        Assertion::inArray($type, ['enc', 'sig']);
-        Assertion::nullOrString($algorithm);
+        if (!in_array($type, ['enc', 'sig'])) {
+            throw new \InvalidArgumentException('Allowed key types are "sig" or "enc".');
+        }
 
         $result = [];
         foreach ($this->keys as $key) {

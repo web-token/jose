@@ -11,9 +11,10 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Core;
+namespace Jose\Component\Factory;
 
 use Assert\Assertion;
+use Jose\Component\Core\JWAManager;
 
 final class JWAManagerFactory
 {
@@ -25,11 +26,11 @@ final class JWAManagerFactory
     public static function createFromAlgorithmName(array $algorithms): JWAManager
     {
         Assertion::allString($algorithms, 'The list must only contains algorithm names.');
-        $jwa_manager = new JWAManager();
+        $jwa_manager = JWAManager::create([]);
 
         foreach ($algorithms as $algorithm) {
             $class = self::getAlgorithmClass($algorithm);
-            $jwa_manager->add(new $class());
+            $jwa_manager = $jwa_manager->add(new $class());
         }
 
         return $jwa_manager;

@@ -42,7 +42,9 @@ final class AudienceChecker implements ClaimCheckerInterface
         }
 
         $audience = $jwt->getClaim('aud');
-        if (! is_array($audience) || ! in_array($this->getAudience(), $audience)) {
+        if (is_string($audience) && $audience !== $this->getAudience()) {
+            throw new \InvalidArgumentException('Bad audience.');
+        } elseif (!is_array($audience) || !in_array($this->getAudience(), $audience)) {
             throw new \InvalidArgumentException('Bad audience.');
         }
 
