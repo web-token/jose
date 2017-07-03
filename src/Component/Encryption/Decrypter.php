@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,19 +14,19 @@
 namespace Jose\Component\Encryption;
 
 use Base64Url\Base64Url;
-use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
 use Jose\Component\Core\JWAInterface;
 use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\JWK;
+use Jose\Component\Core\JWKSet;
+use Jose\Component\Core\KeyChecker;
+use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\DirectEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
-use Jose\Component\Core\KeyChecker;
 use Jose\Component\Encryption\Compression\CompressionManager;
-use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKSet;
 
 final class Decrypter
 {
@@ -96,27 +98,26 @@ final class Decrypter
      */
     public function decryptUsingKey(JWE &$jwe, JWK $jwk, ?int &$recipient_index = null)
     {
-        $jwk_set = new JWKSet();
-        $jwk_set->addKey($jwk);
+        $jwkset = JWKSet::createFromKeys([$jwk]);
 
-        $this->decryptUsingKeySet($jwe, $jwk_set, $recipient_index);
+        $this->decryptUsingKeySet($jwe, $jwkset, $recipient_index);
     }
 
     /**
      * @param JWE      $jwe             A JWE object to decrypt
-     * @param JWKSet   $jwk_set         The key set used to decrypt the input
+     * @param JWKSet   $jwkset          The key set used to decrypt the input
      * @param null|int $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
      */
-    public function decryptUsingKeySet(JWE &$jwe, JWKSet $jwk_set, &$recipient_index = null)
+    public function decryptUsingKeySet(JWE &$jwe, JWKSet $jwkset, &$recipient_index = null)
     {
-        $this->checkJWKSet($jwk_set);
+        $this->checkJWKSet($jwkset);
         $this->checkPayload($jwe);
         $this->checkRecipients($jwe);
 
         $nb_recipients = $jwe->countRecipients();
 
         for ($i = 0; $i < $nb_recipients; ++$i) {
-            if (is_int($result = $this->decryptRecipientKey($jwe, $jwk_set, $i))) {
+            if (is_int($result = $this->decryptRecipientKey($jwe, $jwkset, $i))) {
                 $recipient_index = $result;
 
                 return;
@@ -128,12 +129,12 @@ final class Decrypter
 
     /**
      * @param JWE    $jwe
-     * @param JWKSet $jwk_set
+     * @param JWKSet $jwkset
      * @param int    $i
      *
      * @return int|null
      */
-    private function decryptRecipientKey(JWE &$jwe, JWKSet $jwk_set, $i): ?int
+    private function decryptRecipientKey(JWE &$jwe, JWKSet $jwkset, $i): ?int
     {
         $recipient = $jwe->getRecipient($i);
         $complete_headers = array_merge($jwe->getSharedProtectedHeaders(), $jwe->getSharedHeaders(), $recipient->getHeaders());
@@ -142,7 +143,7 @@ final class Decrypter
         $key_encryption_algorithm = $this->getKeyEncryptionAlgorithm($complete_headers);
         $content_encryption_algorithm = $this->getContentEncryptionAlgorithm($complete_headers);
 
-        foreach ($jwk_set as $jwk) {
+        foreach ($jwkset as $jwk) {
             try {
                 KeyChecker::checkKeyUsage($jwk, 'decryption');
                 if ('dir' !== $key_encryption_algorithm->name()) {
@@ -186,11 +187,11 @@ final class Decrypter
     }
 
     /**
-     * @param JWKSet $jwk_set
+     * @param JWKSet $jwkset
      */
-    private function checkJWKSet(JWKSet $jwk_set)
+    private function checkJWKSet(JWKSet $jwkset)
     {
-        if (0 === $jwk_set->count()) {
+        if (0 === $jwkset->count()) {
             throw new \InvalidArgumentException('No key in the key set.');
         }
     }
@@ -252,7 +253,7 @@ final class Decrypter
         if (array_key_exists('zip', $complete_headers)) {
             $compression_method = $this->getCompressionManager()->get($complete_headers['zip']);
             $payload = $compression_method->uncompress($payload);
-            if (!is_string($payload)) {
+            if (! is_string($payload)) {
                 throw new \InvalidArgumentException('Decompression failed');
             }
         }
@@ -266,7 +267,7 @@ final class Decrypter
     private function checkCompleteHeader(array $complete_headers)
     {
         foreach (['enc', 'alg'] as $key) {
-            if (!array_key_exists($key, $complete_headers)) {
+            if (! array_key_exists($key, $complete_headers)) {
                 throw new \InvalidArgumentException(sprintf("Parameters '%s' is missing.", $key));
             }
         }
@@ -280,7 +281,7 @@ final class Decrypter
     private function getKeyEncryptionAlgorithm(array $complete_headers)
     {
         $key_encryption_algorithm = $this->keyEncryptionAlgorithmManager->get($complete_headers['alg']);
-        if (!$key_encryption_algorithm instanceof KeyEncryptionAlgorithmInterface) {
+        if (! $key_encryption_algorithm instanceof KeyEncryptionAlgorithmInterface) {
             throw new \InvalidArgumentException(sprintf('The key encryption algorithm "%s" is not supported or does not implement KeyEncryptionAlgorithmInterface.', $complete_headers['alg']));
         }
 
@@ -295,7 +296,7 @@ final class Decrypter
     private function getContentEncryptionAlgorithm(array $complete_headers)
     {
         $content_encryption_algorithm = $this->contentEncryptionAlgorithmManager->get($complete_headers['enc']);
-        if (!$content_encryption_algorithm instanceof ContentEncryptionAlgorithmInterface) {
+        if (! $content_encryption_algorithm instanceof ContentEncryptionAlgorithmInterface) {
             throw new \InvalidArgumentException(sprintf('The key encryption algorithm "%s" is not supported or does not implement ContentEncryptionInterface.', $complete_headers['enc']));
         }
 

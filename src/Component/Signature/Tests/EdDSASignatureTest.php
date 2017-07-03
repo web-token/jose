@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -13,13 +15,13 @@ namespace Jose\Component\Signature\Tests;
 
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
-use Jose\Component\Signature\Algorithm\EdDSA;
-use Jose\Component\Signature\JWSFactory;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\Algorithm\EdDSA;
 use Jose\Component\Signature\JWS;
-use Jose\Test\TestCase;
+use Jose\Component\Signature\JWSFactory;
+use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
+use Jose\Test\TestCase;
 
 /**
  * final class EdDSASignatureTest.
@@ -34,15 +36,15 @@ final class EdDSASignatureTest extends TestCase
      */
     public function testEdDSAVerifyAlgorithm()
     {
-        if (!function_exists('ed25519_sign')) {
+        if (! function_exists('ed25519_sign')) {
             $this->markTestSkipped('EdDSA extension not available');
         }
 
         $key = JWK::create([
             'kty' => 'OKP',
             'crv' => 'Ed25519',
-            'd' => 'nWGxne_9WmC6hEr0kuwsxERJxWl7MmkZcDusAxyuf2A',
-            'x' => '11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo',
+            'd'   => 'nWGxne_9WmC6hEr0kuwsxERJxWl7MmkZcDusAxyuf2A',
+            'x'   => '11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo',
         ]);
 
         $eddsa = new EdDSA();
@@ -59,15 +61,15 @@ final class EdDSASignatureTest extends TestCase
      */
     public function testEdDSASignAndVerifyAlgorithm()
     {
-        if (!function_exists('ed25519_sign')) {
+        if (! function_exists('ed25519_sign')) {
             $this->markTestSkipped('EdDSA extension not available');
         }
 
         $key = JWK::create([
             'kty' => 'OKP',
             'crv' => 'Ed25519',
-            'd' => 'nWGxne_9WmC6hEr0kuwsxERJxWl7MmkZcDusAxyuf2A',
-            'x' => '11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo',
+            'd'   => 'nWGxne_9WmC6hEr0kuwsxERJxWl7MmkZcDusAxyuf2A',
+            'x'   => '11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo',
         ]);
 
         $header = ['alg' => 'EdDSA'];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -9,12 +11,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include_once __DIR__ . '/../vendor/autoload.php';
+include_once __DIR__.'/../vendor/autoload.php';
 
+use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementInterface;
 use Jose\Component\KeyManagement\JWKFactory;
-use Jose\Component\Core\JWK;
 
 function testKeyAgreementPerformance($message, KeyAgreementInterface $alg, JWK $recipient_key)
 {
@@ -29,7 +31,7 @@ function testKeyAgreementPerformance($message, KeyAgreementInterface $alg, JWK $
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->getAgreementKey(512 / 8, 'A256GCM', $recipient_key, $header, $ahv);
     }
 

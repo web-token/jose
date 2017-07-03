@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -11,8 +13,8 @@
 
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
-use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Component\Core\JWK;
+use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 
 interface KeyWrappingInterface extends KeyEncryptionAlgorithmInterface
 {

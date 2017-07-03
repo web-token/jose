@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -17,11 +19,11 @@ use Jose\Component\Checker\CriticalHeaderChecker;
 use Jose\Component\Checker\ExpirationTimeChecker;
 use Jose\Component\Checker\IssuedAtChecker;
 use Jose\Component\Checker\NotBeforeChecker;
-use Jose\Component\Signature\JWSFactory;
-use Jose\Component\Core\JWK;
 use Jose\Component\Checker\Tests\Stub\IssuerChecker;
 use Jose\Component\Checker\Tests\Stub\JtiChecker;
 use Jose\Component\Checker\Tests\Stub\SubjectChecker;
+use Jose\Component\Core\JWK;
+use Jose\Component\Signature\JWSFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,19 +38,19 @@ final class CheckerManagerTest extends TestCase
      */
     public function testExpiredJWT()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'exp' => time() - 1,
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
                 'alg' => 'HS512',
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     /**
@@ -57,20 +59,20 @@ final class CheckerManagerTest extends TestCase
      */
     public function testJWTIssuedInTheFuture()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'exp' => time() + 3600,
                 'iat' => time() + 100,
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
                 'alg' => 'HS512',
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     /**
@@ -79,21 +81,21 @@ final class CheckerManagerTest extends TestCase
      */
     public function testJWTNotNow()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'exp' => time() + 3600,
                 'iat' => time() - 100,
                 'nbf' => time() + 100,
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
                 'alg' => 'HS512',
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     /**
@@ -102,7 +104,7 @@ final class CheckerManagerTest extends TestCase
      */
     public function testJWTNotForAudience()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'exp' => time() + 3600,
                 'iat' => time() - 100,
@@ -110,14 +112,14 @@ final class CheckerManagerTest extends TestCase
                 'aud' => 'Other Service',
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
                 'alg' => 'HS512',
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     /**
@@ -126,7 +128,7 @@ final class CheckerManagerTest extends TestCase
      */
     public function testJWTNotForAudience2()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'exp' => time() + 3600,
                 'iat' => time() - 100,
@@ -134,14 +136,14 @@ final class CheckerManagerTest extends TestCase
                 'aud' => ['Other Service'],
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
                 'alg' => 'HS512',
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     /**
@@ -150,7 +152,7 @@ final class CheckerManagerTest extends TestCase
      */
     public function testJWTNotForAudience3()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'exp' => time() + 3600,
                 'iat' => time() - 100,
@@ -158,14 +160,14 @@ final class CheckerManagerTest extends TestCase
                 'aud' => ['Other Service'],
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
                 'alg' => 'HS512',
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     /**
@@ -174,24 +176,24 @@ final class CheckerManagerTest extends TestCase
      */
     public function testJWTHasCriticalClaimsNotSatisfied()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'exp' => time() + 3600,
                 'iat' => time() - 100,
                 'nbf' => time() - 100,
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc' => 'A256CBC-HS512',
-                'alg' => 'HS512',
-                'zip' => 'DEF',
+                'enc'  => 'A256CBC-HS512',
+                'alg'  => 'HS512',
+                'zip'  => 'DEF',
                 'crit' => ['exp', 'iss'],
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     /**
@@ -200,7 +202,7 @@ final class CheckerManagerTest extends TestCase
      */
     public function testJWTBadIssuer()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'exp' => time() + 3600,
                 'iat' => time() - 100,
@@ -208,17 +210,17 @@ final class CheckerManagerTest extends TestCase
                 'iss' => 'foo',
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc' => 'A256CBC-HS512',
-                'alg' => 'HS512',
-                'zip' => 'DEF',
+                'enc'  => 'A256CBC-HS512',
+                'alg'  => 'HS512',
+                'zip'  => 'DEF',
                 'crit' => ['exp', 'iss'],
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     /**
@@ -227,7 +229,7 @@ final class CheckerManagerTest extends TestCase
      */
     public function testJWTBadSubject()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'exp' => time() + 3600,
                 'iat' => time() - 100,
@@ -236,17 +238,17 @@ final class CheckerManagerTest extends TestCase
                 'sub' => 'foo',
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc' => 'A256CBC-HS512',
-                'alg' => 'HS512',
-                'zip' => 'DEF',
+                'enc'  => 'A256CBC-HS512',
+                'alg'  => 'HS512',
+                'zip'  => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud'],
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     /**
@@ -255,7 +257,7 @@ final class CheckerManagerTest extends TestCase
      */
     public function testJWTBadTokenID()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'jti' => 'bad jti',
                 'exp' => time() + 3600,
@@ -265,22 +267,22 @@ final class CheckerManagerTest extends TestCase
                 'sub' => 'SUB1',
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc' => 'A256CBC-HS512',
-                'alg' => 'HS512',
-                'zip' => 'DEF',
+                'enc'  => 'A256CBC-HS512',
+                'alg'  => 'HS512',
+                'zip'  => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud', 'jti'],
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     public function testJWTSuccessfullyCheckedWithCriticalHeaders()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'jti' => 'JTI1',
                 'exp' => time() + 3600,
@@ -291,22 +293,22 @@ final class CheckerManagerTest extends TestCase
                 'aud' => ['My Service'],
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc' => 'A256CBC-HS512',
-                'alg' => 'HS512',
-                'zip' => 'DEF',
+                'enc'  => 'A256CBC-HS512',
+                'alg'  => 'HS512',
+                'zip'  => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud', 'jti'],
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     public function testJWTSuccessfullyCheckedWithoutCriticalHeaders()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'jti' => 'JTI1',
                 'exp' => time() + 3600,
@@ -317,7 +319,7 @@ final class CheckerManagerTest extends TestCase
                 'aud' => ['My Service'],
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
                 'enc' => 'A256CBC-HS512',
@@ -326,17 +328,17 @@ final class CheckerManagerTest extends TestCase
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     public function testJWTSuccessfullyCheckedWithUnsupportedClaims()
     {
-        $jws = JWSFactory::createJWS(
+        $jwt = JWSFactory::createJWS(
             [
                 'foo' => 'bar',
             ]
         );
-        $jws = $jws->addSignatureInformation(
+        $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
                 'enc' => 'A256CBC-HS512',
@@ -345,7 +347,7 @@ final class CheckerManagerTest extends TestCase
             ]
         );
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getCheckerManager()->checkJWS($jwt, 0);
     }
 
     /**

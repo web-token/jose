@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,10 +14,10 @@
 namespace Jose\Component\Signature\Tests\RFC7520;
 
 use Jose\Component\Core\JWAManager;
-use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\JWSBuilder;
+use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
@@ -47,7 +49,7 @@ final class HMACSignatureTest extends TestCase
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
             'use' => 'sig',
             'alg' => 'HS256',
-            'k' => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
+            'k'   => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
         ]);
 
         /*
@@ -108,7 +110,7 @@ final class HMACSignatureTest extends TestCase
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
             'use' => 'sig',
             'alg' => 'HS256',
-            'k' => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
+            'k'   => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
         ]);
 
         /*
@@ -170,7 +172,7 @@ final class HMACSignatureTest extends TestCase
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
             'use' => 'sig',
             'alg' => 'HS256',
-            'k' => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
+            'k'   => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
         ]);
 
         /*
@@ -227,7 +229,7 @@ final class HMACSignatureTest extends TestCase
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
             'use' => 'sig',
             'alg' => 'HS256',
-            'k' => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
+            'k'   => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
         ]);
 
         /*

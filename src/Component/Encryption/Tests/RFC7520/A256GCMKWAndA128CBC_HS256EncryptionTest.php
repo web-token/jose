@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,15 +14,15 @@
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\JWK;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A256GCMKW;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\Encrypter;
 use Jose\Component\Encryption\JWEFactory;
-use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\JWELoader;
 use PHPUnit\Framework\TestCase;
 
@@ -44,14 +46,14 @@ final class A256GCMKWAndA128CBC_HS256EncryptionTest extends TestCase
             'kid' => '18ec08e1-bfa9-4d95-b205-2b4dd1d4321d',
             'use' => 'enc',
             'alg' => 'A256GCMKW',
-            'k' => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
+            'k'   => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
         ]);
 
         $protected_headers = [
             'alg' => 'A256GCMKW',
             'kid' => '18ec08e1-bfa9-4d95-b205-2b4dd1d4321d',
             'tag' => 'kfPduVQ3T3H6vnewt--ksw',
-            'iv' => 'KkYT0GX_2jHlfqN_',
+            'iv'  => 'KkYT0GX_2jHlfqN_',
             'enc' => 'A128CBC-HS256',
         ];
 
@@ -118,7 +120,7 @@ final class A256GCMKWAndA128CBC_HS256EncryptionTest extends TestCase
             'kid' => '18ec08e1-bfa9-4d95-b205-2b4dd1d4321d',
             'use' => 'enc',
             'alg' => 'A256GCMKW',
-            'k' => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
+            'k'   => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
         ]);
 
         $protected_headers = [

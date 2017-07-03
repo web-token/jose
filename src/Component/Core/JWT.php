@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -14,7 +16,7 @@ namespace Jose\Component\Core;
 /**
  * Class JWT.
  */
-trait JWT
+abstract class JWT
 {
     /**
      * @var mixed|null
@@ -24,11 +26,7 @@ trait JWT
     /**
      * Returns the payload of the JWT.
      *
-     * @return string Payload
-     * @return array  Payload
-     * @return JWK    Payload
-     * @return JWKSet Payload
-     * @return mixed  Payload
+     * @return mixed|null
      */
     public function getPayload()
     {
@@ -38,9 +36,9 @@ trait JWT
     /**
      * @param mixed $payload
      *
-     * @return JWTInterface
+     * @return JWT
      */
-    public function withPayload($payload): JWTInterface
+    public function withPayload($payload): JWT
     {
         $jwt = clone $this;
         $jwt->payload = $payload;
@@ -49,7 +47,7 @@ trait JWT
     }
 
     /**
-     * Returns the value of the payload of the specified key.
+     * Returns the value of the claim at index $key.
      *
      * @param string $key The key
      *
@@ -70,7 +68,7 @@ trait JWT
      */
     public function getClaims(): array
     {
-        if (!$this->hasClaims()) {
+        if (! $this->hasClaims()) {
             throw new \InvalidArgumentException('The payload does not contain claims.');
         }
 

@@ -20,7 +20,7 @@ Depending on the algorithm, you have to implement one of the following interface
 In our example, we implement the first one:
 
 ```php
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\Algorithm;
 
@@ -100,7 +100,7 @@ jose:
 ```
 
 ```php
-<?php
+<?php declare(strict_types=1);
 
 // We suppose the key is a valid key
 $jwt = $container->get('jose.jwt_creator.custom')->createJWSToCompactJSON('Hello', ['alg' => 'Dummy']);

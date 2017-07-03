@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,15 +14,15 @@
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\JWK;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS512A256KW;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\Encrypter;
 use Jose\Component\Encryption\JWEFactory;
-use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\JWELoader;
 use PHPUnit\Framework\TestCase;
 
@@ -43,26 +45,26 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends TestCase
                 'kid' => '77c7e2b8-6e13-45cf-8672-617b5b45243a',
                 'use' => 'enc',
                 'alg' => 'A128GCM',
-                'k' => 'XctOhJAkA-pD9Lh7ZgW_2A',
+                'k'   => 'XctOhJAkA-pD9Lh7ZgW_2A',
             ], [
                 'kty' => 'oct',
                 'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
                 'use' => 'enc',
                 'alg' => 'A128KW',
-                'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+                'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
             ], [
                 'kty' => 'oct',
                 'kid' => '18ec08e1-bfa9-4d95-b205-2b4dd1d4321d',
                 'use' => 'enc',
                 'alg' => 'A256GCMKW',
-                'k' => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
+                'k'   => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
             ],
         ]];
 
         $private_key = JWK::create([
             'kty' => 'oct',
             'use' => 'enc',
-            'k' => Base64Url::encode("entrap_o\xe2\x80\x93peter_long\xe2\x80\x93credit_tun"),
+            'k'   => Base64Url::encode("entrap_o\xe2\x80\x93peter_long\xe2\x80\x93credit_tun"),
         ]);
 
         $protected_headers = [
@@ -129,26 +131,26 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends TestCase
                 'kid' => '77c7e2b8-6e13-45cf-8672-617b5b45243a',
                 'use' => 'enc',
                 'alg' => 'A128GCM',
-                'k' => 'XctOhJAkA-pD9Lh7ZgW_2A',
+                'k'   => 'XctOhJAkA-pD9Lh7ZgW_2A',
             ], [
                 'kty' => 'oct',
                 'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
                 'use' => 'enc',
                 'alg' => 'A128KW',
-                'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+                'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
             ], [
                 'kty' => 'oct',
                 'kid' => '18ec08e1-bfa9-4d95-b205-2b4dd1d4321d',
                 'use' => 'enc',
                 'alg' => 'A256GCMKW',
-                'k' => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
+                'k'   => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
             ],
         ]];
 
         $private_key = JWK::create([
             'kty' => 'oct',
             'use' => 'enc',
-            'k' => Base64Url::encode("entrap_o\xe2\x80\x93peter_long\xe2\x80\x93credit_tun"),
+            'k'   => Base64Url::encode("entrap_o\xe2\x80\x93peter_long\xe2\x80\x93credit_tun"),
         ]);
 
         $protected_headers = [

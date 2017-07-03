@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -11,15 +13,15 @@
 
 namespace Jose\Component\Signature\Tests;
 
-use Jose\Component\Signature\JWSFactory;
-use Jose\Component\Core\JWK;
-use Jose\Component\Signature\Signature;
-use Jose\Test\TestCase;
 use Jose\Component\Checker\CheckerManager;
 use Jose\Component\Checker\CriticalHeaderChecker;
 use Jose\Component\Checker\ExpirationTimeChecker;
 use Jose\Component\Checker\IssuedAtChecker;
 use Jose\Component\Checker\NotBeforeChecker;
+use Jose\Component\Core\JWK;
+use Jose\Component\Signature\JWSFactory;
+use Jose\Component\Signature\Signature;
+use Jose\Test\TestCase;
 
 /**
  * final class JWSTest.

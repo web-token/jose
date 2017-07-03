@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,11 +14,13 @@
 namespace Jose\Component\Encryption\Tests;
 
 use Base64Url\Base64Url;
+use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\JWK;
+use Jose\Component\Core\JWKSet;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A192CBCHS384;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256CBCHS512;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
-use Jose\Component\Core\JWAManager;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\Dir;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW;
@@ -26,10 +30,8 @@ use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\Encrypter;
-use Jose\Component\Encryption\JWEFactory;
 use Jose\Component\Encryption\JWE;
-use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKSet;
+use Jose\Component\Encryption\JWEFactory;
 use Jose\Component\Encryption\JWELoader;
 use Jose\Test\TestCase;
 
@@ -73,7 +75,6 @@ final class EncrypterTest extends TestCase
         $this->assertEquals('A256CBC-HS512', $loaded->getSharedProtectedHeader('enc'));
         $this->assertEquals('DEF', $loaded->getSharedProtectedHeader('zip'));
         $this->assertNull($loaded->getPayload());
-
         $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
@@ -382,7 +383,7 @@ final class EncrypterTest extends TestCase
 
         $this->assertEquals(0, $index);
         $this->assertTrue(is_array($loaded->getPayload()));
-        $this->assertEquals($this->getKeySetToEncrypt(), new JWKSet($loaded->getPayload()));
+        $this->assertEquals($this->getKeySetToEncrypt(), JWKSet::createFromKeyData($loaded->getPayload()));
     }
 
     /**
@@ -391,7 +392,6 @@ final class EncrypterTest extends TestCase
      */
     public function testAlgParameterIsMissing()
     {
-
         $keyEncryptionAlgorithmManager = JWAManager::create([]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
@@ -416,7 +416,6 @@ final class EncrypterTest extends TestCase
      */
     public function testEncParameterIsMissing()
     {
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([]);
         $compressionManager = CompressionManager::create([new Deflate()]);
@@ -441,7 +440,6 @@ final class EncrypterTest extends TestCase
      */
     public function testNotAKeyEncryptionAlgorithm()
     {
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
@@ -467,7 +465,6 @@ final class EncrypterTest extends TestCase
      */
     public function testNotAContentEncryptionAlgorithm()
     {
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
@@ -601,7 +598,6 @@ final class EncrypterTest extends TestCase
 
     public function testEncryptAndLoadWithGCMAndAAD()
     {
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
@@ -717,8 +713,7 @@ final class EncrypterTest extends TestCase
             'd'   => 'jpsQnnGQmL-YBIffH1136cspYG6-0iY7X1fCE9-E9LI',
         ]);
 
-        $key_set = new JWKSet();
-        $key_set->addKey($key);
+        $key_set = JWKSet::createFromKeys([$key]);
 
         return $key_set;
     }

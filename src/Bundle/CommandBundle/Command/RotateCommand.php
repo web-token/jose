@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -52,19 +54,19 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $service_name = $input->getArgument('service');
-        if (!$this->getContainer()->has($service_name)) {
+        if (! $this->getContainer()->has($service_name)) {
             $output->writeln(sprintf('<error>The service "%s" does not exist.</error>', $service_name));
 
             return 1;
         }
         $service = $this->getContainer()->get($service_name);
-        if (!$service instanceof JWKSet) {
+        if (! $service instanceof JWKSet) {
             $output->writeln(sprintf('<error>The service "%s" is not a key set.</error>', $service_name));
 
             return 2;
         }
 
-        if (!$service instanceof RotatableInterface) {
+        if (! $service instanceof RotatableInterface) {
             $output->writeln(sprintf('<error>The service "%s" is not a rotatable key set.</error>', $service_name));
 
             return 3;

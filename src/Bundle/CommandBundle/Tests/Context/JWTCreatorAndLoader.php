@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -88,7 +90,7 @@ trait JWTCreatorAndLoader
      */
     public function theVariableShouldContainAJws($variable)
     {
-        if (!$this->$variable instanceof JWSInterface) {
+        if (! $this->$variable instanceof JWSInterface) {
             throw new \Exception(sprintf('The variable "%s" does not contain a JWS object', $variable));
         }
     }

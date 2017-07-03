@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -110,7 +112,7 @@ final class ECKey extends Sequence
 
         $classes = [0 => Integer::class, 1 => Sequence::class, 2 => OctetString::class];
         foreach ($classes as $k => $class) {
-            if (!$children[$k] instanceof $class) {
+            if (! $children[$k] instanceof $class) {
                 return false;
             }
         }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,10 +14,10 @@
 namespace Jose\Component\Encryption\Tests;
 
 use Base64Url\Base64Url;
+use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A192KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A256KW;
-use Jose\Component\Core\JWK;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,7 +31,7 @@ final class AESKWKeyEncryptionTest extends TestCase
         $header = [];
         $key = JWK::create([
             'kty' => 'oct',
-            'k' => Base64Url::encode(hex2bin('000102030405060708090A0B0C0D0E0F')),
+            'k'   => Base64Url::encode(hex2bin('000102030405060708090A0B0C0D0E0F')),
         ]);
 
         $cek = hex2bin('00112233445566778899AABBCCDDEEFF000102030405060708090A0B0C0D0E0F');
@@ -65,7 +67,7 @@ final class AESKWKeyEncryptionTest extends TestCase
         $header = [];
         $key = JWK::create([
             'kty' => 'oct',
-            'k' => Base64Url::encode(hex2bin('000102030405060708090A0B0C0D0E0F1011121314151617')),
+            'k'   => Base64Url::encode(hex2bin('000102030405060708090A0B0C0D0E0F1011121314151617')),
         ]);
 
         $cek = hex2bin('00112233445566778899AABBCCDDEEFF000102030405060708090A0B0C0D0E0F');
@@ -83,7 +85,7 @@ final class AESKWKeyEncryptionTest extends TestCase
         $header = [];
         $key = JWK::create([
             'kty' => 'oct',
-            'k' => Base64Url::encode(hex2bin('000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F')),
+            'k'   => Base64Url::encode(hex2bin('000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F')),
         ]);
 
         $cek = hex2bin('00112233445566778899AABBCCDDEEFF000102030405060708090A0B0C0D0E0F');
@@ -105,7 +107,7 @@ final class AESKWKeyEncryptionTest extends TestCase
         $header = [];
         $key = JWK::create([
             'kty' => 'oct',
-            'k' => Base64Url::encode(hex2bin('000102030405060708090A0B0C0D0E0F')),
+            'k'   => Base64Url::encode(hex2bin('000102030405060708090A0B0C0D0E0F')),
         ]);
 
         $cek = hex2bin('00112233445566778899AABBCCDDEEFF000102030405060708090A0B0C0D0E0F');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -33,7 +35,7 @@ abstract class AESGCMKW implements KeyWrappingInterface
         $key_length = mb_strlen($kek, '8bit') * 8;
         $mode = 'aes-'.($key_length).'-gcm';
         $tag = null;
-        $encrypted_cek = openssl_encrypt($cek, $mode, $kek, OPENSSL_RAW_DATA, $iv, $tag, null);
+        $encrypted_cek = openssl_encrypt($cek, $mode, $kek, OPENSSL_RAW_DATA, $iv, $tag, '');
         Assertion::true(false !== $encrypted_cek, 'Unable to encrypt the data.');
 
         //list($encrypted_cek, $tag) = AESGCM::encrypt($kek, $iv, $cek, null);
@@ -57,7 +59,7 @@ abstract class AESGCMKW implements KeyWrappingInterface
         $key_length = mb_strlen($kek, '8bit') * 8;
 
         $mode = sprintf('aes-%d-gcm', $key_length);
-        $cek = openssl_decrypt($encrypted_cek, $mode, $kek, OPENSSL_RAW_DATA, $iv, $tag, null);
+        $cek = openssl_decrypt($encrypted_cek, $mode, $kek, OPENSSL_RAW_DATA, $iv, $tag, '');
         Assertion::true(false !== $cek, 'Unable to decrypt or to verify the tag.');
 
         return $cek;

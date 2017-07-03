@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -11,7 +13,7 @@
 
 namespace Jose\Component\Checker;
 
-use Jose\Component\Signature\JWS;
+use Jose\Component\Core\JWT;
 
 /**
  * Interface ClaimCheckerInterface.
@@ -19,11 +21,11 @@ use Jose\Component\Signature\JWS;
 interface ClaimCheckerInterface
 {
     /**
-     * @param JWS $jwt
+     * @param JWT $jwt
      *
      * @throws \InvalidArgumentException
      *
      * @return string[]
      */
-    public function checkClaim(JWS $jws): array;
+    public function checkClaim(JWT $jwt): array;
 }

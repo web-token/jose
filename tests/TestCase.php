@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -21,7 +23,7 @@ use PHPUnit\Framework\TestCase as Base;
 class TestCase extends Base
 {
     /**
-     * @return \Jose\Component\Core\JWKSet
+     * @return JWKSet
      */
     protected function getPrivateKeySet()
     {
@@ -109,11 +111,11 @@ class TestCase extends Base
             ],
         ]];
 
-        return new JWKSet($keys);
+        return JWKSet::createFromKeyData($keys);
     }
 
     /**
-     * @return \Jose\Component\Core\JWKSet
+     * @return JWKSet
      */
     protected function getPublicKeySet()
     {
@@ -163,13 +165,13 @@ class TestCase extends Base
             ],
         ]];
 
-        return new JWKSet($keys);
+        return JWKSet::createFromKeyData($keys);
     }
 
     /**
-     * @return \Jose\Component\Core\JWKSet
+     * @return JWKSet
      */
-    protected function getSymmetricKeySet()
+    protected function getSymmetricKeySet(): JWKSet
     {
         $keys = ['keys' => [
             [
@@ -191,6 +193,6 @@ class TestCase extends Base
             ],
         ]];
 
-        return new JWKSet($keys);
+        return JWKSet::createFromKeyData($keys);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -18,20 +20,63 @@ use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 /**
  * Class JWKSet.
  */
-final class JWKSet implements \Countable, \Iterator, \JsonSerializable, \ArrayAccess
+final class JWKSet implements \Countable, \Iterator, \JsonSerializable
 {
     /**
      * @var array
      */
     private $keys = [];
 
-    public function __construct(array $keys = [])
+    /**
+     * JWKSet constructor.
+     *
+     * @param JWK[] $keys
+     */
+    private function __construct(array $keys)
     {
-        if (array_key_exists('keys', $keys)) {
-            foreach ($keys['keys'] as $value) {
-                $this->addKey(JWK::create($value));
+        $this->keys = $keys;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return JWKSet
+     */
+    public static function createFromKeyData(array $data): JWKSet
+    {
+        if (! array_key_exists('keys', $data) || ! is_array($data['keys'])) {
+            throw new \InvalidArgumentException('Invalid data.');
+        }
+
+        $keys = [];
+        foreach ($data['keys'] as $key) {
+            $jwk = JWK::create($key);
+            if ($jwk->has('kid')) {
+                $keys[$jwk->get('kid')] = $jwk;
+                continue;
+            }
+            $keys[] = $jwk;
+        }
+
+        return new self($keys);
+    }
+
+    /**
+     * @param JWK[] $keys
+     *
+     * @return JWKSet
+     */
+    public static function createFromKeys(array $keys): JWKSet
+    {
+        $keys = array_filter($keys, function (JWK $jwk) {return true; });
+        foreach ($keys as $k => $v) {
+            if ($v->has('kid')) {
+                $keys[$v->get('kid')] = $v;
+                unset($keys[$k]);
             }
         }
+
+        return new self($keys);
     }
 
     /**
@@ -47,51 +92,62 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable, \ArrayAc
     /**
      * Add key in the key set.
      *
-     * @param JWK $key A key to store in the key set
+     * @param JWK $jwk A key to store in the key set
+     *
+     * @return JWKSet
      */
-    public function addKey(JWK $key)
+    public function withKey(JWK $jwk): JWKSet
     {
-        $this->keys[] = $key;
+        $clone = clone $this;
+
+        if ($jwk->has('kid')) {
+            $clone->keys[$jwk->get('kid')] = $jwk;
+        } else {
+            $clone->keys[] = $jwk;
+        }
+
+        return $clone;
     }
 
     /**
      * Remove key from the key set.
      *
-     * @param int $key Key to remove from the key set
+     * @param int|string $key Key to remove from the key set
+     *
+     * @return JWKSet
      */
-    public function removeKey(int $key)
+    public function withoutKey($key): JWKSet
     {
-        if (isset($this->keys[$key])) {
-            unset($this->keys[$key]);
+        if (! $this->hasKey($key)) {
+            return $this;
         }
+
+        $clone = clone $this;
+        unset($clone->keys[$key]);
+
+        return $clone;
     }
 
     /**
-     * @var int
-     */
-    private $position = 0;
-
-    /**
-     * @param int $index
+     * @param int|string $index
      *
      * @return bool
      */
-    public function hasKey(int $index): bool
+    public function hasKey($index): bool
     {
-        return array_key_exists($index, $this->getKeys());
+        return array_key_exists($index, $this->keys);
     }
 
     /**
-     * @param int $index
+     * @param int|string $index
      *
      * @return JWK
      */
-    public function getKey(int $index): JWK
+    public function getKey($index): JWK
     {
-        Assertion::greaterOrEqualThan($index, 0, 'The index must be a positive integer.');
         Assertion::true($this->hasKey($index), 'Undefined index.');
 
-        return $this->getKeys()[$index];
+        return $this->keys[$index];
     }
 
     /**
@@ -99,7 +155,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable, \ArrayAc
      */
     public function jsonSerialize(): array
     {
-        return ['keys' => array_values($this->getKeys())];
+        return ['keys' => $this->keys];
     }
 
     /**
@@ -109,7 +165,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable, \ArrayAc
      */
     public function count($mode = COUNT_NORMAL): int
     {
-        return count($this->getKeys(), $mode);
+        return count($this->keys, $mode);
     }
 
     /**
@@ -117,25 +173,30 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable, \ArrayAc
      */
     public function current(): ?JWK
     {
-        return $this->hasKey($this->position) ? $this->getKey($this->position) : null;
+        $key = $this->key();
+        if (null === $key) {
+            return null;
+        }
+
+        return $this->hasKey($key) ? $this->getKey($key) : null;
     }
 
     /**
-     * @return int
+     * @return int|string|null
      */
-    public function key(): int
+    public function key()
     {
-        return $this->position;
+        return key($this->keys);
     }
 
     public function next()
     {
-        ++$this->position;
+        next($this->keys);
     }
 
     public function rewind()
     {
-        $this->position = 0;
+        reset($this->keys);
     }
 
     /**
@@ -144,51 +205,6 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable, \ArrayAc
     public function valid(): bool
     {
         return $this->current() instanceof JWK;
-    }
-
-    /**
-     * @return int
-     */
-    public function countKeys(): int
-    {
-        return count($this->getKeys());
-    }
-
-    /**
-     * @param mixed $offset
-     *
-     * @return bool
-     */
-    public function offsetExists($offset): bool
-    {
-        return $this->hasKey($offset);
-    }
-
-    /**
-     * @param mixed $offset
-     *
-     * @return JWK
-     */
-    public function offsetGet($offset): JWK
-    {
-        return $this->getKey($offset);
-    }
-
-    /**
-     * @param mixed $offset
-     * @param mixed $value
-     */
-    public function offsetSet($offset, $value)
-    {
-        $this->addKey($value);
-    }
-
-    /**
-     * @param int $offset
-     */
-    public function offsetUnset($offset)
-    {
-        $this->removeKey($offset);
     }
 
     /**
@@ -204,7 +220,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable, \ArrayAc
         Assertion::nullOrString($algorithm);
 
         $result = [];
-        foreach ($this->getKeys() as $key) {
+        foreach ($this->keys as $key) {
             $ind = 0;
 
             // Check usage
@@ -286,7 +302,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable, \ArrayAc
     private function doesKeySatisfyRestrictions(array $restrictions, JWK $key): bool
     {
         foreach ($restrictions as $k => $v) {
-            if (!$key->has($k) || $v !== $key->get($k)) {
+            if (! $key->has($k) || $v !== $key->get($k)) {
                 return false;
             }
         }
@@ -339,11 +355,11 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable, \ArrayAc
      */
     public function toPEM(): array
     {
-        $keys = $this->getKeys();
+        $keys = $this->keys;
         $result = [];
 
         foreach ($keys as $key) {
-            if (!in_array($key->get('kty'), ['RSA', 'EC'])) {
+            if (! in_array($key->get('kty'), ['RSA', 'EC'])) {
                 continue;
             }
 

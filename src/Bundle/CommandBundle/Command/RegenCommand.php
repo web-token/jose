@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -45,13 +47,13 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $service_name = $input->getArgument('service');
-        if (!$this->getContainer()->has($service_name)) {
+        if (! $this->getContainer()->has($service_name)) {
             $output->writeln(sprintf('<error>The service "%s" does not exist.</error>', $service_name));
 
             return 1;
         }
         $service = $this->getContainer()->get($service_name);
-        if (!$service instanceof StorableInterface) {
+        if (! $service instanceof StorableInterface) {
             $output->writeln(sprintf('<error>The service "%s" is not a storable object.</error>', $service_name));
 
             return 2;

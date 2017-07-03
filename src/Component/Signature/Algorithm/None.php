@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,8 +14,8 @@
 namespace Jose\Component\Signature\Algorithm;
 
 use Assert\Assertion;
-use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\Core\JWK;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
  * This class is an abstract class that implements the none algorithm (plaintext).

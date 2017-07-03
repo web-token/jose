@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -90,7 +92,7 @@ final class RSAKey extends Sequence
      */
     public function isPublic(): bool
     {
-        return !$this->isPrivate();
+        return ! $this->isPrivate();
     }
 
     /**
@@ -243,11 +245,11 @@ final class RSAKey extends Sequence
 
         $this->values['kty'] = 'RSA';
         $keys = [
-            'n' => 'n',
-            'e' => 'e',
-            'd' => 'd',
-            'p' => 'p',
-            'q' => 'q',
+            'n'  => 'n',
+            'e'  => 'e',
+            'd'  => 'd',
+            'p'  => 'p',
+            'q'  => 'q',
             'dp' => 'dmp1',
             'dq' => 'dmq1',
             'qi' => 'iqmp',
@@ -282,7 +284,7 @@ final class RSAKey extends Sequence
      */
     private function populateCRT()
     {
-        if (!array_key_exists('p', $this->values) && !array_key_exists('q', $this->values)) {
+        if (! array_key_exists('p', $this->values) && ! array_key_exists('q', $this->values)) {
             $d = BigInteger::createFromBinaryString(Base64Url::decode($this->values['d']));
             $e = BigInteger::createFromBinaryString(Base64Url::decode($this->values['e']));
             $n = BigInteger::createFromBinaryString(Base64Url::decode($this->values['n']));

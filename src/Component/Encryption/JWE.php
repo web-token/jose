@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -15,15 +17,12 @@ use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWT;
-use Jose\Component\Core\JWTInterface;
 
 /**
  * Class JWE.
  */
-final class JWE implements JWTInterface
+final class JWE extends JWT
 {
-    use JWT;
-
     /**
      * @var Recipient[]
      */
@@ -412,10 +411,10 @@ final class JWE implements JWTInterface
 
         $json = $this->getJSONBase();
 
-        if (!empty($recipient->getHeaders())) {
+        if (! empty($recipient->getHeaders())) {
             $json['header'] = $recipient->getHeaders();
         }
-        if (!empty($recipient->getEncryptedKey())) {
+        if (! empty($recipient->getEncryptedKey())) {
             $json['encrypted_key'] = Base64Url::encode($recipient->getEncryptedKey());
         }
 
@@ -432,10 +431,10 @@ final class JWE implements JWTInterface
 
         foreach ($this->getRecipients() as $recipient) {
             $temp = [];
-            if (!empty($recipient->getHeaders())) {
+            if (! empty($recipient->getHeaders())) {
                 $temp['header'] = $recipient->getHeaders();
             }
-            if (!empty($recipient->getEncryptedKey())) {
+            if (! empty($recipient->getEncryptedKey())) {
                 $temp['encrypted_key'] = Base64Url::encode($recipient->getEncryptedKey());
             }
             $json['recipients'][] = $temp;
@@ -461,10 +460,10 @@ final class JWE implements JWTInterface
         if (null !== $this->getAAD()) {
             $json['aad'] = Base64Url::encode($this->getAAD());
         }
-        if (!empty($this->getSharedProtectedHeaders())) {
+        if (! empty($this->getSharedProtectedHeaders())) {
             $json['protected'] = $this->getEncodedSharedProtectedHeaders();
         }
-        if (!empty($this->getSharedHeaders())) {
+        if (! empty($this->getSharedHeaders())) {
             $json['unprotected'] = $this->getSharedHeaders();
         }
 

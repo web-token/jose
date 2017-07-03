@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,9 +14,9 @@
 namespace Jose\Component\Signature\Algorithm;
 
 use Assert\Assertion;
-use Jose\Component\Signature\SignatureAlgorithmInterface;
-use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Jose\Component\Core\JWK;
+use Jose\Component\KeyManagement\KeyConverter\RSAKey;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Util\RSA as JoseRSA;
 
 /**

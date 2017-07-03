@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -9,8 +11,9 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include_once __DIR__ . '/../vendor/autoload.php';
+include_once __DIR__.'/../vendor/autoload.php';
 
+use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\EdDSA;
 use Jose\Component\Signature\Algorithm\ES256;
 use Jose\Component\Signature\Algorithm\ES384;
@@ -26,7 +29,6 @@ use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\Algorithm\RS384;
 use Jose\Component\Signature\Algorithm\RS512;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
-use Jose\Component\Core\JWK;
 
 function testSignaturePerformance(SignatureAlgorithmInterface $alg, JWK $key)
 {
@@ -34,7 +36,7 @@ function testSignaturePerformance(SignatureAlgorithmInterface $alg, JWK $key)
 
     $time_start = microtime(true);
     $nb = 100;
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->sign($key, $payload);
     }
 
@@ -50,7 +52,7 @@ function testVerificationPerformance(SignatureAlgorithmInterface $alg, JWK $key)
 
     $time_start = microtime(true);
     $nb = 100;
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->verify($key, $payload, $signature);
     }
 

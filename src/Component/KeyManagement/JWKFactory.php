@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -13,33 +15,17 @@ namespace Jose\Component\KeyManagement;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
+use Jose\Component\Core\JWK;
+use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\KeyConverter\ECKey;
 use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
-use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKSet;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\EccFactory;
 
 final class JWKFactory
 {
-    /**
-     * @param array $config
-     *
-     * @return JWK
-     */
-    public static function createKey(array $config): JWK
-    {
-        Assertion::keyExists($config, 'kty', 'The key "kty" must be set');
-        $supported_types = ['RSA' => 'RSA', 'OKP' => 'OKP', 'EC' => 'EC', 'oct' => 'Oct', 'none' => 'None'];
-        $kty = $config['kty'];
-        Assertion::keyExists($supported_types, $kty, sprintf('The key type "%s" is not supported. Please use one of %s', $kty, json_encode(array_keys($supported_types))));
-        $method = sprintf('create%sKey', $supported_types[$kty]);
-
-        return self::$method($config);
-    }
-
     /**
      * @param array $values Values to configure the key. Must contain at least the index 'size' with the key size in bits
      *
@@ -79,7 +65,7 @@ final class JWKFactory
         $curve = $values['crv'];
         if (function_exists('openssl_get_curve_names')) {
             $args = [
-                'curve_name' => self::getOpensslName($curve),
+                'curve_name'       => self::getOpensslName($curve),
                 'private_key_type' => OPENSSL_KEYTYPE_EC,
             ];
             $key = openssl_pkey_new($args);
@@ -103,9 +89,9 @@ final class JWKFactory
                 [
                     'kty' => 'EC',
                     'crv' => $curve,
-                    'x' => self::encodeValue($private_key->getPublicKey()->getPoint()->getX()),
-                    'y' => self::encodeValue($private_key->getPublicKey()->getPoint()->getY()),
-                    'd' => self::encodeValue($private_key->getSecret()),
+                    'x'   => self::encodeValue($private_key->getPublicKey()->getPoint()->getX()),
+                    'y'   => self::encodeValue($private_key->getPublicKey()->getPoint()->getY()),
+                    'd'   => self::encodeValue($private_key->getSecret()),
                 ]
             );
         }
@@ -128,7 +114,7 @@ final class JWKFactory
             $values,
             [
                 'kty' => 'oct',
-                'k' => Base64Url::encode(random_bytes($size / 8)),
+                'k'   => Base64Url::encode(random_bytes($size / 8)),
             ]
         );
 
@@ -164,8 +150,8 @@ final class JWKFactory
             [
                 'kty' => 'OKP',
                 'crv' => $curve,
-                'x' => Base64Url::encode($x),
-                'd' => Base64Url::encode($d),
+                'x'   => Base64Url::encode($x),
+                'd'   => Base64Url::encode($d),
             ]
         );
 
@@ -265,7 +251,7 @@ final class JWKFactory
     public static function createFromValues(array $values)
     {
         if (array_key_exists('keys', $values) && is_array($values['keys'])) {
-            return new JWKSet($values);
+            return JWKSet::createFromKeyData($values);
         }
 
         return JWK::create($values);

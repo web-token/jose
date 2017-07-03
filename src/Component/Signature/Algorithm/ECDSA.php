@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -15,9 +17,9 @@ use Assert\Assertion;
 use FG\ASN1\Object;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\Sequence;
-use Jose\Component\Signature\SignatureAlgorithmInterface;
-use Jose\Component\KeyManagement\KeyConverter\ECKey;
 use Jose\Component\Core\JWK;
+use Jose\Component\KeyManagement\KeyConverter\ECKey;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Mdanter\Ecc\EccFactory;
 
 /**
@@ -30,7 +32,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
      */
     public function __construct()
     {
-        if (!defined('OPENSSL_KEYTYPE_EC')) {
+        if (! defined('OPENSSL_KEYTYPE_EC')) {
             throw new \RuntimeException('Elliptic Curve key type not supported by your environment.');
         }
     }
@@ -43,19 +45,8 @@ abstract class ECDSA implements SignatureAlgorithmInterface
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The EC key is not private');
 
-        return $this->getOpenSSLSignature($key, $input);
-    }
-
-    /**
-     * @param JWK    $key
-     * @param string $data
-     *
-     * @return string
-     */
-    private function getOpenSSLSignature(JWK $key, $data)
-    {
         $pem = (new ECKey($key))->toPEM();
-        $result = openssl_sign($data, $signature, $pem, $this->getHashAlgorithm());
+        $result = openssl_sign($input, $signature, $pem, $this->getHashAlgorithm());
 
         Assertion::true($result, 'Signature failed');
 
@@ -86,19 +77,6 @@ abstract class ECDSA implements SignatureAlgorithmInterface
         $R = mb_substr($signature, 0, $part_length, '8bit');
         $S = mb_substr($signature, $part_length, null, '8bit');
 
-        return $this->verifyOpenSSLSignature($key, $input, $R, $S);
-    }
-
-    /**
-     * @param JWK    $key
-     * @param string $data
-     * @param string $R
-     * @param string $S
-     *
-     * @return bool
-     */
-    private function verifyOpenSSLSignature(JWK $key, $data, $R, $S)
-    {
         $pem = ECKey::toPublic(new ECKey($key))->toPEM();
 
         $oid_sequence = new Sequence();
@@ -107,7 +85,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
             new Integer(gmp_strval($this->convertHexToGmp($S), 10)),
         ]);
 
-        return 1 === openssl_verify($data, $oid_sequence->getBinary(), $pem, $this->getHashAlgorithm());
+        return 1 === openssl_verify($input, $oid_sequence->getBinary(), $pem, $this->getHashAlgorithm());
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -139,7 +141,7 @@ final class JWETest extends TestCase
     {
         $jwe = JWEFactory::createJWE([]);
         $jwe = $jwe->addRecipientWithEncryptedKey(null, [
-            'foo' => 'bar',
+            'foo'  => 'bar',
             'plic' => 'ploc',
         ]);
 

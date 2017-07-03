@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -9,13 +11,13 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include_once __DIR__ . '/../vendor/autoload.php';
+include_once __DIR__.'/../vendor/autoload.php';
 
+use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256;
-use Jose\Component\Core\JWK;
 
 function testKeyEncryptionPerformance(KeyEncryptionInterface $alg, JWK $recipient_key)
 {
@@ -30,7 +32,7 @@ function testKeyEncryptionPerformance(KeyEncryptionInterface $alg, JWK $recipien
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->encryptKey($recipient_key, $cek, $header, $header);
     }
     $time_end = microtime(true);
@@ -54,7 +56,7 @@ function testKeyDecryptionPerformance(KeyEncryptionInterface $alg, JWK $recipien
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->decryptKey($recipient_key, $encrypted_cek, $header);
     }
     $time_end = microtime(true);

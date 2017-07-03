@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -11,7 +13,7 @@
 
 namespace Jose\Component\Checker;
 
-use Jose\Component\Signature\JWS;
+use Jose\Component\Core\JWT;
 
 final class AudienceChecker implements ClaimCheckerInterface
 {
@@ -33,14 +35,14 @@ final class AudienceChecker implements ClaimCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWS $jwt): array
+    public function checkClaim(JWT $jwt): array
     {
-        if (!$jwt->hasClaim('aud')) {
+        if (! $jwt->hasClaim('aud')) {
             return [];
         }
 
         $audience = $jwt->getClaim('aud');
-        if (!is_array($audience) || !in_array($this->getAudience(), $audience)) {
+        if (! is_array($audience) || ! in_array($this->getAudience(), $audience)) {
             throw new \InvalidArgumentException('Bad audience.');
         }
 

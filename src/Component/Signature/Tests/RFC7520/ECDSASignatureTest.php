@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,10 +14,10 @@
 namespace Jose\Component\Signature\Tests\RFC7520;
 
 use Jose\Component\Core\JWAManager;
-use Jose\Component\Signature\Algorithm\ES512;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\Algorithm\ES512;
 use Jose\Component\Signature\JWSBuilder;
+use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
@@ -46,9 +48,9 @@ final class ECDSASignatureTest extends TestCase
             'kid' => 'bilbo.baggins@hobbiton.example',
             'use' => 'sig',
             'crv' => 'P-521',
-            'x' => 'AHKZLLOsCOzz5cY97ewNUajB957y-C-U88c3v13nmGZx6sYl_oJXu9A5RkTKqjqvjyekWF-7ytDyRXYgCF5cj0Kt',
-            'y' => 'AdymlHvOiLxXkEhayXQnNCvDX4h9htZaCJN34kfmC6pV5OhQHiraVySsUdaQkAgDPrwQrJmbnX9cwlGfP-HqHZR1',
-            'd' => 'AAhRON2r9cqXX1hg-RoI6R1tX5p2rUAYdmpHZoC1XNM56KtscrX6zbKipQrCW9CGZH3T4ubpnoTKLDYJ_fF3_rJt',
+            'x'   => 'AHKZLLOsCOzz5cY97ewNUajB957y-C-U88c3v13nmGZx6sYl_oJXu9A5RkTKqjqvjyekWF-7ytDyRXYgCF5cj0Kt',
+            'y'   => 'AdymlHvOiLxXkEhayXQnNCvDX4h9htZaCJN34kfmC6pV5OhQHiraVySsUdaQkAgDPrwQrJmbnX9cwlGfP-HqHZR1',
+            'd'   => 'AAhRON2r9cqXX1hg-RoI6R1tX5p2rUAYdmpHZoC1XNM56KtscrX6zbKipQrCW9CGZH3T4ubpnoTKLDYJ_fF3_rJt',
         ]);
 
         /*

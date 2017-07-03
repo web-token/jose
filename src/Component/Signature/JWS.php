@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -15,15 +17,12 @@ use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWT;
-use Jose\Component\Core\JWTInterface;
 
 /**
  * Class JWS.
  */
-final class JWS implements JWTInterface
+final class JWS extends JWT
 {
-    use JWT;
-
     /**
      * @var bool
      */
@@ -48,9 +47,9 @@ final class JWS implements JWTInterface
     }
 
     /**
-     * @return JWTInterface
+     * @return JWT
      */
-    public function withDetachedPayload(): JWTInterface
+    public function withDetachedPayload(): JWT
     {
         $jwt = clone $this;
         $jwt->isPayloadDetached = true;
@@ -59,9 +58,9 @@ final class JWS implements JWTInterface
     }
 
     /**
-     * @return JWTInterface
+     * @return JWT
      */
-    public function withAttachedPayload(): JWTInterface
+    public function withAttachedPayload(): JWT
     {
         $jwt = clone $this;
         $jwt->isPayloadDetached = false;
@@ -72,7 +71,7 @@ final class JWS implements JWTInterface
     /**
      * {@inheritdoc}
      */
-    public function withEncodedPayload(string $encoded_payload): JWTInterface
+    public function withEncodedPayload(string $encoded_payload): JWT
     {
         $jwt = clone $this;
         $jwt->encodedPayload = $encoded_payload;
@@ -94,7 +93,7 @@ final class JWS implements JWTInterface
             return $this->encodedPayload;
         }
         $payload = $this->getPayload();
-        if (!is_string($payload)) {
+        if (! is_string($payload)) {
             $payload = json_encode($payload);
         }
         Assertion::notNull($payload, 'Unsupported payload.');
@@ -200,13 +199,13 @@ final class JWS implements JWTInterface
 
         $data = [];
         $values = [
-            'payload' => $this->getEncodedPayload($signature),
+            'payload'   => $this->getEncodedPayload($signature),
             'protected' => $signature->getEncodedProtectedHeaders(),
-            'header' => $signature->getHeaders(),
+            'header'    => $signature->getHeaders(),
         ];
 
         foreach ($values as $key => $value) {
-            if (!empty($value)) {
+            if (! empty($value)) {
                 $data[$key] = $value;
             }
         }
@@ -234,11 +233,11 @@ final class JWS implements JWTInterface
             $tmp = ['signature' => Base64Url::encode($signature->getSignature())];
             $values = [
                 'protected' => $signature->getEncodedProtectedHeaders(),
-                'header' => $signature->getHeaders(),
+                'header'    => $signature->getHeaders(),
             ];
 
             foreach ($values as $key => $value) {
-                if (!empty($value)) {
+                if (! empty($value)) {
                     $tmp[$key] = $value;
                 }
             }
@@ -255,7 +254,7 @@ final class JWS implements JWTInterface
      */
     private function isPayloadEncoded(Signature $signature): bool
     {
-        return !$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
+        return ! $signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
     }
 
     private function checkPayloadEncoding()

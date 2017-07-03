@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -14,8 +16,8 @@ namespace Jose\Component\Signature;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
-use Jose\Component\Core\KeyChecker;
 use Jose\Component\Core\JWK;
+use Jose\Component\Core\KeyChecker;
 
 final class Signer
 {
@@ -92,7 +94,7 @@ final class Signer
         $this->checkB64HeaderAndCrit($signature);
         $encoded_protected_headers = $signature->getEncodedProtectedHeaders();
         $payload = $jws->getPayload();
-        if (!$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64')) {
+        if (! $signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64')) {
             $encoded_payload = Base64Url::encode(is_string($payload) ? $payload : json_encode($payload));
 
             return sprintf('%s.%s', $encoded_protected_headers, $encoded_payload);
@@ -108,7 +110,7 @@ final class Signer
      */
     private function checkB64HeaderAndCrit(Signature $signature)
     {
-        if (!$signature->hasProtectedHeader('b64')) {
+        if (! $signature->hasProtectedHeader('b64')) {
             return;
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -9,7 +11,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include_once __DIR__ . '/../vendor/autoload.php';
+include_once __DIR__.'/../vendor/autoload.php';
 
 use Base64Url\Base64Url;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
@@ -36,7 +38,7 @@ function testContentEncryptionPerformance(ContentEncryptionAlgorithmInterface $a
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->encryptContent($data, $cek, $iv, $aad, $header, $tag);
     }
     $time_end = microtime(true);
@@ -62,7 +64,7 @@ function testContentDecryptionPerformance(ContentEncryptionAlgorithmInterface $a
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->decryptContent($encrypted_content, $cek, $iv, $aad, $header, $tag);
     }
     $time_end = microtime(true);

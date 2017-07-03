@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -14,9 +16,9 @@ namespace Jose\Component\Signature;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
-use Jose\Component\Core\KeyChecker;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
+use Jose\Component\Core\KeyChecker;
 
 final class Verifier
 {
@@ -51,8 +53,7 @@ final class Verifier
      */
     public function verifyWithKey(JWS $jws, JWK $jwk, ?string $detached_payload = null, ?int &$signature_index = null)
     {
-        $jwk_set = new JWKSet();
-        $jwk_set->addKey($jwk);
+        $jwk_set = JWKSet::createFromKeys([$jwk]);
 
         $this->verifySignatures($jws, $jwk_set, $detached_payload, $signature_index);
     }
@@ -109,7 +110,7 @@ final class Verifier
     private function getInputToVerify(JWS $jws, Signature $signature, ?string $detached_payload): string
     {
         $encoded_protected_headers = $signature->getEncodedProtectedHeaders();
-        if (!$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64')) {
+        if (! $signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64')) {
             if (null !== $jws->getEncodedPayload($signature)) {
                 return sprintf('%s.%s', $encoded_protected_headers, $jws->getEncodedPayload($signature));
             }
@@ -167,7 +168,7 @@ final class Verifier
      */
     private function checkJWKSet(JWKSet $jwk_set)
     {
-        Assertion::greaterThan($jwk_set->countKeys(), 0, 'There is no key in the key set.');
+        Assertion::greaterThan(count($jwk_set), 0, 'There is no key in the key set.');
     }
 
     /**
@@ -177,11 +178,11 @@ final class Verifier
     private function checkPayload(JWS $jws, ?string $detached_payload = null)
     {
         Assertion::false(
-            null !== $detached_payload && !empty($jws->getPayload()),
+            null !== $detached_payload && ! empty($jws->getPayload()),
             'A detached payload is set, but the JWS already has a payload.'
         );
         Assertion::true(
-            !empty($jws->getPayload()) || null !== $detached_payload,
+            ! empty($jws->getPayload()) || null !== $detached_payload,
             'No payload.'
         );
     }

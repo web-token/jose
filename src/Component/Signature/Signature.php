@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -75,7 +77,7 @@ final class Signature
     {
         $object = new self();
         $object->protectedHeaders = $protected_headers;
-        if (!empty($protected_headers)) {
+        if (! empty($protected_headers)) {
             $object->encodedProtectedHeaders = Base64Url::encode(json_encode($protected_headers));
         }
         $object->signature_key = $signature_key;

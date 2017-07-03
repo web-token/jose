@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -30,7 +32,6 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
         $mode = sprintf('aes-%d-gcm', $key_length);
         $C = openssl_encrypt($data, $mode, $cek, OPENSSL_RAW_DATA, $iv, $tag, $calculated_aad);
         Assertion::true(false !== $C, 'Unable to encrypt the data.');
-        //list($cyphertext, $tag) = GCM::encrypt($cek, $iv, $data, $calculated_aad);
 
         return $C;
     }
@@ -45,8 +46,6 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
             $calculated_aad .= '.'.$aad;
         }
 
-        // $K,   $IV, $C,    $A,              $T
-        // $cek, $iv, $data, $calculated_aad, $tag
         $key_length = mb_strlen($cek, '8bit') * 8;
 
         $mode = 'aes-'.($key_length).'-gcm';

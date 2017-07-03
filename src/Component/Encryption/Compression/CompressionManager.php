@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -63,7 +65,7 @@ final class CompressionManager
      */
     public function get(string $name): CompressionInterface
     {
-        if (!$this->has($name)) {
+        if (! $this->has($name)) {
             throw new \InvalidArgumentException(sprintf('The compression method "%s" is not supported.', $name));
         }
 

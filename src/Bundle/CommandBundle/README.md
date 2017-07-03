@@ -55,7 +55,7 @@ composer require spomky-labs/jose-bundle
 Then, add the bundle into your kernel:
 
 ```php
-<?php
+<?php declare(strict_types=1);
 
 use Symfony\Component\HttpKernel\Kernel;
 

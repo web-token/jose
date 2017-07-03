@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,10 +14,11 @@
 namespace Jose\Component\Signature\Tests;
 
 use Jose\Component\Core\JWAManager;
-use Jose\Component\Signature\Algorithm\None;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\Algorithm\None;
 use Jose\Component\Signature\JWS;
+use Jose\Component\Signature\JWSFactory;
+use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Signer;
 use Jose\Test\TestCase;
 
@@ -64,7 +67,7 @@ final class NoneSignatureTest extends TestCase
             'kty' => 'none',
         ]);
 
-        $jws = \Jose\Component\Signature\JWSFactory::createJWS('Live long and Prosper.');
+        $jws = JWSFactory::createJWS('Live long and Prosper.');
         $jws = $jws->addSignatureInformation($jwk, ['alg' => 'none']);
 
         $signatureAlgorithmManager = JWAManager::create([new None()]);

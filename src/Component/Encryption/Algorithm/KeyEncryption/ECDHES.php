@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -13,8 +15,8 @@ namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Core\JWK;
+use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Util\ConcatKDF;
 use Mdanter\Ecc\Crypto\EcDH\EcDH;
 use Mdanter\Ecc\EccFactory;

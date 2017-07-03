@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,8 +14,8 @@
 namespace Jose\Component\Encryption\Tests;
 
 use Base64Url\Base64Url;
-use Jose\Component\Encryption\Algorithm\KeyEncryption\Dir;
 use Jose\Component\Core\JWK;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\Dir;
 use Jose\Test\TestCase;
 
 /**
@@ -42,7 +44,7 @@ final class DirAlgorithmTest extends TestCase
     {
         $key = JWK::create([
             'kty' => 'oct',
-            'k' => Base64Url::encode('ABCD'),
+            'k'   => Base64Url::encode('ABCD'),
         ]);
 
         $dir = new Dir();

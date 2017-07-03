@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -86,7 +88,7 @@ trait KeysAndKeySetsContext
      */
     public function theServiceShouldBeAnObjectThatImplements($service, $interface)
     {
-        if (!$this->getContainer()->get($service) instanceof $interface) {
+        if (! $this->getContainer()->get($service) instanceof $interface) {
             throw new \Exception(sprintf(
                 'The service "%s" is not an instance of "%s". Its class is "%s".',
                 $this->getContainer()->get($service),

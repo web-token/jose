@@ -15,7 +15,7 @@ In the following example, we will create a custom method that uses a (non-existe
 First, you have to implement the interface `Jose\Compression\CompressionInterface`.
 
 ```php
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\Compression;
 

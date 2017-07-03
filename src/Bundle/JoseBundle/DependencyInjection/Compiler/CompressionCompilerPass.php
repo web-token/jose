@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -22,7 +24,7 @@ final class CompressionCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('jose.compression_manager')) {
+        if (! $container->hasDefinition('jose.compression_manager')) {
             return;
         }
 

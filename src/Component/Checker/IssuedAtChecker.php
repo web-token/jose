@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,16 +14,16 @@
 namespace Jose\Component\Checker;
 
 use Assert\Assertion;
-use Jose\Component\Signature\JWS;
+use Jose\Component\Core\JWT;
 
 final class IssuedAtChecker implements ClaimCheckerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWS $jwt): array
+    public function checkClaim(JWT $jwt): array
     {
-        if (!$jwt->hasClaim('iat')) {
+        if (! $jwt->hasClaim('iat')) {
             return [];
         }
 

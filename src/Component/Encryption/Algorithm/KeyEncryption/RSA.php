@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,8 +14,8 @@
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Assert\Assertion;
-use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Jose\Component\Core\JWK;
+use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Jose\Util\RSA as JoseRSA;
 
 /**

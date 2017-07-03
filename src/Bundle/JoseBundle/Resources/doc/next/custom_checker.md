@@ -23,13 +23,13 @@ Every claim checkers have to implement the `Jose\Checker\ClaimCheckerInterface` 
 For header checkers, you have to implement `Jose\Checker\HeaderCheckerInterface`
 
 ```php
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\Checker;
 
 use Assert\Assertion;
 use Jose\Checker\ClaimCheckerInterface;
-use Jose\Component\Core\JWTInterface;
+use Jose\Component\Core\JWT;
 
 class JtiChecker implements  ClaimCheckerInterface
 {
@@ -44,7 +44,7 @@ class JtiChecker implements  ClaimCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWTInterface $jwt)
+    public function checkClaim(JWT $jwt)
     {
         // We verify the claim is available (mandatory)
         Assertion::true($jwt->hasClaim('jti'), 'The claim "jti" is missing.');

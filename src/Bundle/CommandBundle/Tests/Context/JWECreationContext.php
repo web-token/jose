@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -41,7 +43,7 @@ trait JWECreationContext
     /**
      * Returns HttpKernel service container.
      *
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     * @return ContainerInterface
      */
     abstract protected function getContainer();
 

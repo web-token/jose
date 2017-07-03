@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -71,14 +73,14 @@ trait ApplicationContext
     /**
      * Returns HttpKernel service container.
      *
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     * @return ContainerInterface
      */
     abstract public function getContainer();
 
     /**
      * Returns the kernel.
      *
-     * @return \Symfony\Component\HttpKernel\KernelInterface
+     * @return KernelInterface
      */
     abstract public function getKernel();
 
@@ -123,7 +125,7 @@ trait ApplicationContext
     }
 
     /**
-     * @return \Symfony\Bundle\FrameworkBundle\Console\Application
+     * @return Application
      */
     protected function getApplication()
     {
@@ -219,7 +221,7 @@ trait ApplicationContext
      */
     public function theCommandExceptionShouldBeThrown($exception)
     {
-        if (!$this->getCommandException() instanceof $exception) {
+        if (! $this->getCommandException() instanceof $exception) {
             throw new \Exception('The expected exception was not thrown.');
         }
     }

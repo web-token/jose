@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -71,7 +73,7 @@ final class SpomkyLabsJoseBundleExtension extends Extension implements PrependEx
             $configs
         );
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $services = ['services', 'compression_methods', 'checkers', 'signature_algorithms', 'encryption_algorithms', 'checkers', 'jwkset_controller'];
         foreach ($services as $basename) {
             $loader->load(sprintf('%s.xml', $basename));

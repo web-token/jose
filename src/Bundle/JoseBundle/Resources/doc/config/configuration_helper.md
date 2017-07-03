@@ -67,7 +67,7 @@ Let's shrink all to lines.
 To allow your bundle to get the advantages of the Configuration Helper, you have to implement the `Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface` in your bundle extension class.
 
 ```php
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\DependencyInjection;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,8 +14,8 @@
 namespace Jose\Component\Encryption;
 
 use Assert\Assertion;
-use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWAManagerFactory;
+use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Compression\CompressionManagerFactory;
 
 final class JWEFactory

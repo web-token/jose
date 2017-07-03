@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -27,7 +29,7 @@ final class CompressionManager
     public function addCompressionMethod(CompressionInterface $compression_method)
     {
         $name = $compression_method->getMethodName();
-        if (!array_key_exists($name, $this->compression_methods)) {
+        if (! array_key_exists($name, $this->compression_methods)) {
             $this->compression_methods[$name] = $compression_method;
         }
     }

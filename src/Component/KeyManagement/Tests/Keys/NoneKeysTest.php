@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -11,8 +13,8 @@
 
 namespace Jose\Test\Unit\Keys;
 
-use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Core\JWK;
+use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Test\TestCase;
 
 /**
@@ -42,20 +44,6 @@ final class NoneKeysTest extends TestCase
     public function testCreateNoneKey()
     {
         $key = JWKFactory::createNoneKey(['kid' => 'NONE_KEY']);
-
-        $this->assertEquals('none', $key->get('kty'));
-        $this->assertEquals('none', $key->get('alg'));
-        $this->assertEquals('sig', $key->get('use'));
-        $this->assertEquals('NONE_KEY', $key->get('kid'));
-
-        $this->assertEquals('BC69Ls25CLRh1KQrXvQAAB22oyuW3eQabDSMdv9xMNk', $key->thumbprint('sha256'));
-        $this->assertEquals('hCnBo6v87V-Gz5Bp7eoFTrdvkGA', $key->thumbprint('sha1'));
-        $this->assertEquals('JI3gujreJtPt2gzxlbGnLQ', $key->thumbprint('md5'));
-    }
-
-    public function testCreateNoneKey2()
-    {
-        $key = JWKFactory::createKey(['kty' => 'none', 'kid' => 'NONE_KEY']);
 
         $this->assertEquals('none', $key->get('kty'));
         $this->assertEquals('none', $key->get('alg'));

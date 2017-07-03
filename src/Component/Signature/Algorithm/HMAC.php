@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -13,8 +15,8 @@ namespace Jose\Component\Signature\Algorithm;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\Core\JWK;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
  * This class handles signatures using HMAC.

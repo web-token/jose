@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -78,7 +80,7 @@ final class JWAManager
      */
     public function add(JWAInterface $algorithm): JWAManager
     {
-        if (!$this->has($algorithm->name())) {
+        if (! $this->has($algorithm->name())) {
             $this->algorithms[$algorithm->name()] = $algorithm;
         }
 

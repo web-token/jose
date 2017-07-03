@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -33,7 +35,7 @@ final class CheckerManager
      */
     public function addClaimChecker(ClaimCheckerInterface $checker, $alias)
     {
-        if (!array_key_exists($alias, $this->claim_checkers)) {
+        if (! array_key_exists($alias, $this->claim_checkers)) {
             $this->claim_checkers[$alias] = $checker;
         }
     }
@@ -44,7 +46,7 @@ final class CheckerManager
      */
     public function addHeaderChecker(HeaderCheckerInterface $checker, $alias)
     {
-        if (!array_key_exists($alias, $this->header_checkers)) {
+        if (! array_key_exists($alias, $this->header_checkers)) {
             $this->header_checkers[$alias] = $checker;
         }
     }

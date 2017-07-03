@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -64,8 +66,8 @@ final class CompressionManagerFactory
     private static function getSupportedMethods(): array
     {
         return [
-            'DEF' => '\Jose\Component\Encryption\Compression\Deflate',
-            'GZ' => '\Jose\Component\Encryption\Compression\GZip',
+            'DEF'  => '\Jose\Component\Encryption\Compression\Deflate',
+            'GZ'   => '\Jose\Component\Encryption\Compression\GZip',
             'ZLIB' => '\Jose\Component\Encryption\Compression\ZLib',
         ];
     }

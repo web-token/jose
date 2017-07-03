@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -257,7 +259,7 @@ final class KeyConverter
         $key = preg_replace('#^(?:Proc-Type|DEK-Info): .*#m', '', $pem);
         $ciphertext = base64_decode(preg_replace('#-.*-|\r|\n#', '', $key));
 
-        $decoded = openssl_decrypt($ciphertext, strtolower($matches[1]), $symkey, true, $iv);
+        $decoded = openssl_decrypt($ciphertext, strtolower($matches[1]), $symkey, OPENSSL_RAW_DATA, $iv);
 
         $number = preg_match_all('#-{5}.*-{5}#', $pem, $result);
         Assertion::eq($number, 2, 'Unable to load the key');

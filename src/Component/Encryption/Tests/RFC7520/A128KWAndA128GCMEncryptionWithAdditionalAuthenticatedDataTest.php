@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,15 +14,15 @@
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\JWK;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\Encrypter;
 use Jose\Component\Encryption\JWEFactory;
-use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\JWELoader;
 use PHPUnit\Framework\TestCase;
 
@@ -44,7 +46,7 @@ final class A128KWAndA128GCMEncryptionWithAdditionalAuthenticatedDataTest extend
             'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
             'use' => 'enc',
             'alg' => 'A128KW',
-            'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+            'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]);
 
         $protected_headers = [
@@ -103,7 +105,7 @@ final class A128KWAndA128GCMEncryptionWithAdditionalAuthenticatedDataTest extend
             'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
             'use' => 'enc',
             'alg' => 'A128KW',
-            'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+            'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]);
 
         $protected_headers = [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -9,13 +11,13 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include_once __DIR__ . '/../vendor/autoload.php';
+include_once __DIR__.'/../vendor/autoload.php';
 
+use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA192KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementWrappingInterface;
-use Jose\Component\Core\JWK;
 
 function testKeyAgreementWithKeyWrappingEncryptionPerformance($message, KeyAgreementWrappingInterface $alg, JWK $recipient_key)
 {
@@ -31,7 +33,7 @@ function testKeyAgreementWithKeyWrappingEncryptionPerformance($message, KeyAgree
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->wrapAgreementKey($recipient_key, $cek, 128, $header, $ahv);
     }
     $time_end = microtime(true);
@@ -59,7 +61,7 @@ function testKeyAgreementWithKeyWrappingDecryptionPerformance($message, KeyAgree
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->unwrapAgreementKey($recipient_key, $encrypted_cek, 128, $header);
     }
     $time_end = microtime(true);

@@ -32,13 +32,15 @@
         "spomky-labs/aes-key-wrap": "^4.0",
         "beberlei/assert": "^2.4",
         "fgrosse/phpasn1": "^1.5",
-        "psr/cache": "^1.0"
+        "psr/cache": "^1.0",
+        "php-http/httplug": "^1.1",
+        "php-http/message-factory": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0",
-        "satooshi/php-coveralls": "^1.0",
         "mdanter/ecc": "0.4.*",
-        "symfony/cache": "^2.0|^3.0"
+        "symfony/cache": "^2.0|^3.0",
+        "friendsofphp/php-cs-fixer": "^2.3"
     },
    "suggest":{
         "mdanter/ecc": "For ECDH-ES algorithms support.",

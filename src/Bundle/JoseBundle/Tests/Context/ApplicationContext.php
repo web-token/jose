@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -219,7 +221,7 @@ trait ApplicationContext
      */
     public function theCommandExceptionShouldBeThrown($exception)
     {
-        if (!$this->getCommandException() instanceof $exception) {
+        if (! $this->getCommandException() instanceof $exception) {
             throw new \Exception('The expected exception was not thrown.');
         }
     }

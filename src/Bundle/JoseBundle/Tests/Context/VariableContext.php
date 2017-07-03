@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -35,7 +37,7 @@ trait VariableContext
      */
     public function theVariableShouldBeAString($variable)
     {
-        if (!is_string($this->$variable)) {
+        if (! is_string($this->$variable)) {
             throw new \Exception(sprintf(
                 'The variable "%s" is not a string. Its class is "%s"',
                 $variable,

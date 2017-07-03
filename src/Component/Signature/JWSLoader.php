@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -72,7 +74,7 @@ final class JWSLoader
         }
 
         $temp = [];
-        if (!empty($input['payload'])) {
+        if (! empty($input['payload'])) {
             $temp['payload'] = $input['payload'];
         }
         $temp['signatures'] = [$signature];
@@ -105,7 +107,7 @@ final class JWSLoader
     {
         $temp = [];
 
-        if (!empty($parts[1])) {
+        if (! empty($parts[1])) {
             $temp['payload'] = $parts[1];
         }
         $temp['signatures'] = [[
@@ -187,7 +189,7 @@ final class JWSLoader
                 $payload = Base64Url::decode($payload);
             }
             $json = json_decode($payload, true);
-            if (null !== $json && !empty($payload)) {
+            if (null !== $json && ! empty($payload)) {
                 $payload = $json;
             }
             $jws = $jws->withPayload($payload);
@@ -203,6 +205,6 @@ final class JWSLoader
      */
     private static function isPayloadEncoded(Signature $signature): bool
     {
-        return !$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
+        return ! $signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
     }
 }

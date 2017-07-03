@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,15 +14,15 @@
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\JWK;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\Encrypter;
 use Jose\Component\Encryption\JWEFactory;
-use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\JWELoader;
 use PHPUnit\Framework\TestCase;
 
@@ -44,9 +46,9 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends TestCase
             'kid' => 'meriadoc.brandybuck@buckland.example',
             'use' => 'enc',
             'crv' => 'P-256',
-            'x' => 'Ze2loSV3wrroKUN_4zhwGhCqo3Xhu1td4QjeQ5wIVR0',
-            'y' => 'HlLtdXARY_f55A3fnzQbPcm6hgr34Mp8p-nuzQCE0Zw',
-            'd' => 'r_kHyZ-a06rmxM3yESK84r1otSg-aQcVStkRhA-iCM8',
+            'x'   => 'Ze2loSV3wrroKUN_4zhwGhCqo3Xhu1td4QjeQ5wIVR0',
+            'y'   => 'HlLtdXARY_f55A3fnzQbPcm6hgr34Mp8p-nuzQCE0Zw',
+            'd'   => 'r_kHyZ-a06rmxM3yESK84r1otSg-aQcVStkRhA-iCM8',
         ]);
 
         $protected_headers = [
@@ -55,8 +57,8 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends TestCase
             'epk' => [
                 'kty' => 'EC',
                 'crv' => 'P-256',
-                'x' => 'mPUKT_bAWGHIhg0TpjjqVsP1rXWQu_vwVOHHtNkdYoA',
-                'y' => '8BQAsImGeAS46fyWw5MhYfGTT0IjBpFw2SS34Dv4Irs',
+                'x'   => 'mPUKT_bAWGHIhg0TpjjqVsP1rXWQu_vwVOHHtNkdYoA',
+                'y'   => '8BQAsImGeAS46fyWw5MhYfGTT0IjBpFw2SS34Dv4Irs',
             ],
             'enc' => 'A128CBC-HS256',
         ];
@@ -105,8 +107,8 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends TestCase
             'kid' => 'meriadoc.brandybuck@buckland.example',
             'use' => 'enc',
             'crv' => 'P-256',
-            'x' => 'Ze2loSV3wrroKUN_4zhwGhCqo3Xhu1td4QjeQ5wIVR0',
-            'y' => 'HlLtdXARY_f55A3fnzQbPcm6hgr34Mp8p-nuzQCE0Zw',
+            'x'   => 'Ze2loSV3wrroKUN_4zhwGhCqo3Xhu1td4QjeQ5wIVR0',
+            'y'   => 'HlLtdXARY_f55A3fnzQbPcm6hgr34Mp8p-nuzQCE0Zw',
         ]);
 
         $private_key = JWK::create([
@@ -114,9 +116,9 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends TestCase
             'kid' => 'meriadoc.brandybuck@buckland.example',
             'use' => 'enc',
             'crv' => 'P-256',
-            'x' => 'Ze2loSV3wrroKUN_4zhwGhCqo3Xhu1td4QjeQ5wIVR0',
-            'y' => 'HlLtdXARY_f55A3fnzQbPcm6hgr34Mp8p-nuzQCE0Zw',
-            'd' => 'r_kHyZ-a06rmxM3yESK84r1otSg-aQcVStkRhA-iCM8',
+            'x'   => 'Ze2loSV3wrroKUN_4zhwGhCqo3Xhu1td4QjeQ5wIVR0',
+            'y'   => 'HlLtdXARY_f55A3fnzQbPcm6hgr34Mp8p-nuzQCE0Zw',
+            'd'   => 'r_kHyZ-a06rmxM3yESK84r1otSg-aQcVStkRhA-iCM8',
         ]);
 
         $protected_headers = [

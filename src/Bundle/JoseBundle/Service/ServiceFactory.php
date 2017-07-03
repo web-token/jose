@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,11 +14,11 @@
 namespace SpomkyLabs\JoseBundle\Service;
 
 use Jose\Checker\CheckerManagerInterface;
+use Jose\Component\Checker\CheckerManagerFactory;
 use Jose\Decrypter;
 use Jose\DecrypterInterface;
 use Jose\Encrypter;
 use Jose\EncrypterInterface;
-use Jose\Component\Checker\CheckerManagerFactory;
 use Jose\JWTCreator;
 use Jose\JWTLoader;
 use Jose\Signer;

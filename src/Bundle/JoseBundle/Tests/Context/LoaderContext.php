@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -44,7 +46,7 @@ trait LoaderContext
      */
     public function theVariableShouldBeAnObjectThatImplements($variable, $interface)
     {
-        if (!$this->$variable instanceof $interface) {
+        if (! $this->$variable instanceof $interface) {
             throw new \Exception(sprintf(
                 'The variable "%s" is not an instance of "%s". Its class is "%s".',
                 $variable,
@@ -141,7 +143,7 @@ trait LoaderContext
          * @var \Jose\Checker\CheckerManagerInterface
          */
         $checker_service = $this->getContainer()->get($checker);
-        $checker_service->checkJWS($this->$variable, (int) $number);
+        $checker_service->checkJWT($this->$variable, (int) $number);
     }
 
     /**

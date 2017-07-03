@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -27,7 +29,7 @@ final class AlgorithmManager
     public function addAlgorithm(JWAInterface $algorithm)
     {
         $name = $algorithm->getAlgorithmName();
-        if (!array_key_exists($name, $this->algorithms)) {
+        if (! array_key_exists($name, $this->algorithms)) {
             $this->algorithms[$name] = $algorithm;
         }
     }

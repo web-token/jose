@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -24,7 +26,7 @@ final class CheckerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('jose.checker_manager')) {
+        if (! $container->hasDefinition('jose.checker_manager')) {
             return;
         }
 

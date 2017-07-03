@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -215,7 +217,7 @@ final class BigInteger
      *
      * @param BigInteger $y
      *
-     * @return int < 0 if $this is less than $y; > 0 if $this is greater than $y, and 0 if they are equal.
+     * @return int < 0 if $this is less than $y; > 0 if $this is greater than $y, and 0 if they are equal
      */
     public function compare(BigInteger $y): int
     {
@@ -310,6 +312,6 @@ final class BigInteger
      */
     public function isOdd(): bool
     {
-        return !$this->isEven();
+        return ! $this->isEven();
     }
 }

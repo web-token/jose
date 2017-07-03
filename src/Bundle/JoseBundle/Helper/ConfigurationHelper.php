@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -173,8 +175,8 @@ final class ConfigurationHelper
                 'checkers' => [
                     $name => [
                         'is_public' => $is_public,
-                        'claims' => $claim_checkers,
-                        'headers' => $header_checkers,
+                        'claims'    => $claim_checkers,
+                        'headers'   => $header_checkers,
                     ],
                 ],
             ],
@@ -200,8 +202,8 @@ final class ConfigurationHelper
             self::BUNDLE_ALIAS => [
                 'signers' => [
                     $name => [
-                        'is_public' => $is_public,
-                        'algorithms' => $signature_algorithms,
+                        'is_public'       => $is_public,
+                        'algorithms'      => $signature_algorithms,
                         'create_verifier' => $create_verifier,
                     ],
                 ],
@@ -226,7 +228,7 @@ final class ConfigurationHelper
             self::BUNDLE_ALIAS => [
                 'verifiers' => [
                     $name => [
-                        'is_public' => $is_public,
+                        'is_public'  => $is_public,
                         'algorithms' => $signature_algorithms,
                     ],
                 ],
@@ -257,11 +259,11 @@ final class ConfigurationHelper
             self::BUNDLE_ALIAS => [
                 'encrypters' => [
                     $name => [
-                        'is_public' => $is_public,
-                        'key_encryption_algorithms' => $key_encryption_algorithms,
+                        'is_public'                     => $is_public,
+                        'key_encryption_algorithms'     => $key_encryption_algorithms,
                         'content_encryption_algorithms' => $content_encryption_algorithms,
-                        'compression_methods' => $compression_methods,
-                        'create_decrypter' => $create_decrypter,
+                        'compression_methods'           => $compression_methods,
+                        'create_decrypter'              => $create_decrypter,
                     ],
                 ],
             ],
@@ -289,10 +291,10 @@ final class ConfigurationHelper
             self::BUNDLE_ALIAS => [
                 'decrypters' => [
                     $name => [
-                        'is_public' => $is_public,
-                        'key_encryption_algorithms' => $key_encryption_algorithms,
+                        'is_public'                     => $is_public,
+                        'key_encryption_algorithms'     => $key_encryption_algorithms,
                         'content_encryption_algorithms' => $content_encryption_algorithms,
-                        'compression_methods' => $compression_methods,
+                        'compression_methods'           => $compression_methods,
                     ],
                 ],
             ],
@@ -319,7 +321,7 @@ final class ConfigurationHelper
                 'jwt_creators' => [
                     $name => [
                         'is_public' => $is_public,
-                        'signer' => $signer,
+                        'signer'    => $signer,
                         'encrypter' => $encrypter,
                     ],
                 ],
@@ -350,8 +352,8 @@ final class ConfigurationHelper
                 'jwt_loaders' => [
                     $name => [
                         'is_public' => $is_public,
-                        'verifier' => $verifier,
-                        'checker' => $checker,
+                        'verifier'  => $verifier,
+                        'checker'   => $checker,
                         'decrypter' => $decrypter,
                     ],
                 ],
@@ -383,11 +385,11 @@ final class ConfigurationHelper
                 'key_sets' => [
                     $name => [
                         'auto' => [
-                            'is_rotatable' => $is_rotatable,
-                            'is_public' => $is_public,
-                            'nb_keys' => $nb_keys,
+                            'is_rotatable'      => $is_rotatable,
+                            'is_public'         => $is_public,
+                            'nb_keys'           => $nb_keys,
                             'key_configuration' => $key_configuration,
-                            'storage_path' => $storage_path,
+                            'storage_path'      => $storage_path,
                         ],
                     ],
                 ],
@@ -414,7 +416,7 @@ final class ConfigurationHelper
                     $name => [
                         'public_jwkset' => [
                             'is_public' => $is_public,
-                            'id' => $jwkset,
+                            'id'        => $jwkset,
                         ],
                     ],
                 ],
@@ -442,7 +444,7 @@ final class ConfigurationHelper
                     $name => [
                         'jwksets' => [
                             'is_public' => $is_public,
-                            'id' => $jwksets,
+                            'id'        => $jwksets,
                         ],
                     ],
                 ],
@@ -470,7 +472,7 @@ final class ConfigurationHelper
     {
         self::checkJoseBundleEnabled($container);
         $jose_config = current($container->getExtensionConfig(self::BUNDLE_ALIAS));
-        if (!isset($jose_config[$element])) {
+        if (! isset($jose_config[$element])) {
             $jose_config[$element] = [];
         }
         $jose_config[$element] = array_merge($jose_config[$element], $config[self::BUNDLE_ALIAS][$element]);

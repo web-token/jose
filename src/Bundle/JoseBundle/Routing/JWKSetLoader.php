@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -19,7 +21,7 @@ use Symfony\Component\Routing\RouteCollection;
 final class JWKSetLoader implements LoaderInterface
 {
     /**
-     * @var \Symfony\Component\Routing\RouteCollection
+     * @var RouteCollection
      */
     private $routes;
 

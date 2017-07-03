@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -59,7 +61,7 @@ final class RandomECKey extends RandomKey
     private static function checkCurve()
     {
         return function ($v) {
-            return !in_array($v, ['P-256', 'P-384', 'P-521']);
+            return ! in_array($v, ['P-256', 'P-384', 'P-521']);
         };
     }
 }
