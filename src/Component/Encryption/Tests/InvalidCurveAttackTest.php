@@ -21,7 +21,7 @@ use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWELoader;
 use Jose\Component\KeyManagement\JWKFactory;
-use Jose\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group CVE

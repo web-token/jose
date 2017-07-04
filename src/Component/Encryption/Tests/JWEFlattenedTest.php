@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Tests;
 
+use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\JWKSet;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
 use Jose\Component\Encryption\Compression\CompressionManager;
@@ -21,7 +23,7 @@ use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Encryption\JWELoader;
-use Jose\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * final class FlattenedTest.
@@ -51,5 +53,33 @@ final class JWEFlattenedTest extends TestCase
 
         $this->assertEquals(0, $index);
         $this->assertEquals('Live long and prosper.', $loaded->getPayload());
+    }
+
+    /**
+     * @return JWKSet
+     */
+    private function getSymmetricKeySet(): JWKSet
+    {
+        $keys = ['keys' => [
+            [
+                'kid' => 'DIR_1',
+                'kty' => 'oct',
+                'k'   => Base64Url::encode(hex2bin('00112233445566778899AABBCCDDEEFF000102030405060708090A0B0C0D0E0F')),
+            ],
+            [
+                'kty' => 'oct',
+                'k'   => 'f5aN5V6iihwQVqP-tPNNtkIJNCwUb9-JukCIKkF0rNfxqxA771RJynYAT2xtzAP0MYaR7U5fMP_wvbRQq5l38Q',
+            ],
+            [
+                'kty' => 'oct',
+                'k'   => 'GawgguFyGrWKav7AX4VKUg',
+            ],
+            [
+                'kty' => 'oct',
+                'k'   => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
+            ],
+        ]];
+
+        return JWKSet::createFromKeyData($keys);
     }
 }

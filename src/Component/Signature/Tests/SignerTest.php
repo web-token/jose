@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Tests;
 
+use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Factory\JWAManagerFactory;
 use Jose\Component\Core\JWK;
@@ -26,7 +27,7 @@ use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Factory\JWSFactory;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
-use Jose\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group Signer
@@ -679,9 +680,9 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWK
+     * @return JWK
      */
-    protected function getKey1()
+    private function getKey1(): JWK
     {
         $key = JWK::create([
             'kty' => 'oct',
@@ -692,9 +693,9 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWK
+     * @return JWK
      */
-    protected function getKey2()
+    private function getKey2(): JWK
     {
         $key = JWK::create([
             'kty'     => 'RSA',
@@ -714,9 +715,9 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWK
+     * @return JWK
      */
-    protected function getKey3()
+    private function getKey3(): JWK
     {
         $key = JWK::create([
             'kty'     => 'EC',
@@ -732,9 +733,9 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWK
+     * @return JWK
      */
-    protected function getKey4()
+    private function getKey4(): JWK
     {
         $key = JWK::create([
             'kty'     => 'RSA',
@@ -754,9 +755,9 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWK
+     * @return JWK
      */
-    protected function getKey5()
+    private function getKey5(): JWK
     {
         $key = JWK::create([
             'kty' => 'RSA',
@@ -776,12 +777,94 @@ final class SignerTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWKSet
+     * @return JWKSet
      */
-    protected function getKeyset()
+    private function getKeyset(): JWKSet
     {
         $keyset = JWKSet::createFromKeys([$this->getKey1(), $this->getKey2()]);
 
         return $keyset;
+    }
+
+    /**
+     * @return JWKSet
+     */
+    private function getPublicKeySet(): JWKSet
+    {
+        $keys = ['keys' => [
+            [
+                'kid' => '71ee230371d19630bc17fb90ccf20ae632ad8cf8',
+                'kty' => 'RSA',
+                'alg' => 'RS256',
+                'use' => 'sig',
+                'n'   => 'vnMTRCMvsS04M1yaKR112aB8RxOkWHFixZO68wCRlVLxK4ugckXVD_Ebcq-kms1T2XpoWntVfBuX40r2GvcD9UsTFt_MZlgd1xyGwGV6U_tfQUll5mKxCPjr60h83LXKJ_zmLXIqkV8tAoIg78a5VRWoms_0Bn09DKT3-RBWFjk=',
+                'e'   => 'AQAB',
+            ],
+            [
+                'kid' => '02491f945c951adf156f370788e8ccdabf8877a8',
+                'kty' => 'RSA',
+                'alg' => 'RS256',
+                'use' => 'sig',
+                'n'   => 'rI67uHIDWDgCy_Ut-FhhjTCkEcqzoO80IRgdpk_fJHlDmXhMTJKPizxbIEMs0wRHRZpwH-4D20thpnQB5Mgx6-XM9kOvcYpHSdcYME77BwX6uQG-hw2w77NOhYiCSZCLzx-5ld5Wjy0dympL-ExqQw-wrWipMX7NQhIbJqVbZ18=',
+                'e'   => 'AQAB',
+            ],
+            [
+                'kty' => 'RSA',
+                'n'   => 'oahUIoWw0K0usKNuOR6H4wkf4oBUXHTxRvgb48E-BVvxkeDNjbC4he8rUWcJoZmds2h7M70imEVhRU5djINXtqllXI4DFqcI1DgjT9LewND8MW2Krf3Spsk_ZkoFnilakGygTwpZ3uesH-PFABNIUYpOiN15dsQRkgr0vEhxN92i2asbOenSZeyaxziK72UwxrrKoExv6kc5twXTq4h-QChLOln0_mtUZwfsRaMStPs6mS6XrgxnxbWhojf663tuEQueGC-FCMfra36C9knDFGzKsNa7LZK2djYgyD3JR_MB_4NUJW_TqOQtwHYbxevoJArm-L5StowjzGy-_bq6Gw',
+                'e'   => 'AQAB',
+            ],
+            [
+                'kty' => 'RSA',
+                'n'   => 'sXchDaQebHnPiGvyDOAT4saGEUetSyo9MKLOoWFsueri23bOdgWp4Dy1WlUzewbgBHod5pcM9H95GQRV3JDXboIRROSBigeC5yjU1hGzHHyXss8UDprecbAYxknTcQkhslANGRUZmdTOQ5qTRsLAt6BTYuyvVRdhS8exSZEy_c4gs_7svlJJQ4H9_NxsiIoLwAEk7-Q3UXERGYw_75IDrGA84-lA_-Ct4eTlXHBIY2EaV7t7LjJaynVJCpkv4LKjTTAumiGUIuQhrNhZLuF_RJLqHpM2kgWFLU7-VTdL1VbC2tejvcI2BlMkEpk1BzBZI0KQB0GaDWFLN-aEAw3vRw',
+                'e'   => 'AQAB',
+            ],
+            [
+                'kty' => 'RSA',
+                'n'   => 'ofgWCuLjybRlzo0tZWJjNiuSfb4p4fAkd_wWJcyQoTbji9k0l8W26mPddxHmfHQp-Vaw-4qPCJrcS2mJPMEzP1Pt0Bm4d4QlL-yRT-SFd2lZS-pCgNMsD1W_YpRPEwOWvG6b32690r2jZ47soMZo9wGzjb_7OMg0LOL-bSf63kpaSHSXndS5z5rexMdbBYUsLA9e-KXBdQOS-UTo7WTBEMa2R2CapHg665xsmtdVMTBQY4uDZlxvb3qCo5ZwKh9kG4LT6_I5IhlJH7aGhyxXFvUK-DWNmoudF8NAco9_h9iaGNj8q2ethFkMLs91kzk2PAcDTW9gb54h4FRWyuXpoQ',
+                'e'   => 'AQAB',
+            ],
+            [
+                'kty' => 'EC',
+                'crv' => 'P-256',
+                'x'   => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',
+                'y'   => 'x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0',
+            ],
+            [
+                'kty' => 'EC',
+                'crv' => 'P-521',
+                'x'   => 'AekpBQ8ST8a8VcfVOTNl353vSrDCLLJXmPk06wTjxrrjcBpXp5EOnYG_NjFZ6OvLFV1jSfS9tsz4qUxcWceqwQGk',
+                'y'   => 'ADSmRA43Z1DSNx_RvcLI87cdL07l6jQyyBXMoxVg_l2Th-x3S1WDhjDly79ajL4Kkd0AZMaZmh9ubmf63e3kyMj2',
+            ],
+        ]];
+
+        return JWKSet::createFromKeyData($keys);
+    }
+
+    /**
+     * @return JWKSet
+     */
+    private function getSymmetricKeySet(): JWKSet
+    {
+        $keys = ['keys' => [
+            [
+                'kid' => 'DIR_1',
+                'kty' => 'oct',
+                'k'   => Base64Url::encode(hex2bin('00112233445566778899AABBCCDDEEFF000102030405060708090A0B0C0D0E0F')),
+            ],
+            [
+                'kty' => 'oct',
+                'k'   => 'f5aN5V6iihwQVqP-tPNNtkIJNCwUb9-JukCIKkF0rNfxqxA771RJynYAT2xtzAP0MYaR7U5fMP_wvbRQq5l38Q',
+            ],
+            [
+                'kty' => 'oct',
+                'k'   => 'GawgguFyGrWKav7AX4VKUg',
+            ],
+            [
+                'kty' => 'oct',
+                'k'   => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
+            ],
+        ]];
+
+        return JWKSet::createFromKeyData($keys);
     }
 }

@@ -21,7 +21,7 @@ use Jose\Component\Checker\NotBeforeChecker;
 use Jose\Component\Core\JWK;
 use Jose\Component\Factory\JWSFactory;
 use Jose\Component\Signature\Signature;
-use Jose\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * final class JWSTest.

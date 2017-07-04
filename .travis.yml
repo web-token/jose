@@ -15,8 +15,8 @@ matrix:
 before_script:
     - composer self-update
     - mkdir -p build/logs
-    - chmod +x tests/ci/install_php_ext.sh
-    - ./tests/ci/install_php_ext.sh
+    - chmod +x ./install_php_ext.sh
+    - ./install_php_ext.sh
     - if [[ $deps = low ]]; then composer update --no-interaction --prefer-lowest ; fi
     - if [[ !$deps ]]; then composer install --no-interaction ; fi
 

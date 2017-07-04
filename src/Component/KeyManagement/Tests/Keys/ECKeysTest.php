@@ -15,7 +15,7 @@ namespace Jose\Test\Unit\Keys;
 
 use Jose\Component\KeyManagement\KeyConverter\ECKey;
 use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
-use Jose\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group ECKeys

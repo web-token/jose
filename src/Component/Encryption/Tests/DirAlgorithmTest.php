@@ -16,7 +16,7 @@ namespace Jose\Component\Encryption\Tests;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\Dir;
-use Jose\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * final class DirAlgorithmTest.

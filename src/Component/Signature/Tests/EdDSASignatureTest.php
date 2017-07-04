@@ -21,7 +21,7 @@ use Jose\Component\Signature\JWS;
 use Jose\Component\Factory\JWSFactory;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
-use Jose\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * final class EdDSASignatureTest.

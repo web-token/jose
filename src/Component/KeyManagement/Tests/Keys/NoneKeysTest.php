@@ -15,7 +15,7 @@ namespace Jose\Test\Unit\Keys;
 
 use Jose\Component\Core\JWK;
 use Jose\Component\KeyManagement\JWKFactory;
-use Jose\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group NoneKeys

@@ -15,7 +15,7 @@ namespace Jose\Component\Signature\Tests;
 
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSLoader;
-use Jose\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * final class JWSFlattenedTest.
