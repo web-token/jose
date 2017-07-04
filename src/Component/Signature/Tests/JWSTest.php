@@ -27,7 +27,6 @@ final class JWSTest extends TestCase
 {
     public function testJWS()
     {
-        $jws = new JWS();
         $claims = [
             'nbf' => time(),
             'iat' => time(),
@@ -37,8 +36,8 @@ final class JWSTest extends TestCase
             'sub' => 'My friend',
         ];
         $headers = ['alg' => 'none'];
-        $jws = $jws->addSignatureFromLoadedData('', Base64Url::encode(json_encode($headers)), []);
-        $jws = $jws->withPayload($claims);
+        $jws = JWS::create($claims)
+            ->addSignature('', Base64Url::encode(json_encode($headers)));
 
         $this->assertTrue($jws->hasClaims());
         $this->assertTrue($jws->hasClaim('nbf'));
@@ -59,7 +58,6 @@ final class JWSTest extends TestCase
      */
     public function testToCompactJSONFailed()
     {
-        $jws = new JWS();
         $claims = [
             'nbf' => time(),
             'iat' => time(),
@@ -68,8 +66,7 @@ final class JWSTest extends TestCase
             'aud' => 'You',
             'sub' => 'My friend',
         ];
-        $jws = $jws->withPayload($claims);
-        $jws->toCompactJSON(0);
+        JWS::create($claims)->toCompactJSON(0);
     }
 
     /**
@@ -78,7 +75,6 @@ final class JWSTest extends TestCase
      */
     public function testToFlattenedJSONFailed()
     {
-        $jws = new JWS();
         $claims = [
             'nbf' => time(),
             'iat' => time(),
@@ -87,8 +83,7 @@ final class JWSTest extends TestCase
             'aud' => 'You',
             'sub' => 'My friend',
         ];
-        $jws = $jws->withPayload($claims);
-        $jws->toFlattenedJSON(0);
+        JWS::create($claims)->toFlattenedJSON(0);
     }
 
     /**
@@ -97,7 +92,6 @@ final class JWSTest extends TestCase
      */
     public function testToJSONFailed()
     {
-        $jws = new JWS();
         $claims = [
             'nbf' => time(),
             'iat' => time(),
@@ -106,8 +100,7 @@ final class JWSTest extends TestCase
             'aud' => 'You',
             'sub' => 'My friend',
         ];
-        $jws = $jws->withPayload($claims);
-        $jws->toJSON();
+        JWS::create($claims)->toJSON();
     }
 
     /**
@@ -116,9 +109,9 @@ final class JWSTest extends TestCase
      */
     public function testNoClaims()
     {
-        $jws = new JWS();
         $payload = 'Hello World!';
-        $jws = $jws->withPayload($payload);
+        $jws = JWS::create($payload)
+            ->withPayload($payload);
         $jws->getClaims();
     }
 
@@ -128,7 +121,6 @@ final class JWSTest extends TestCase
      */
     public function testClaimDoesNotExist()
     {
-        $jws = new JWS();
         $claims = [
             'nbf' => time(),
             'iat' => time(),
@@ -137,8 +129,7 @@ final class JWSTest extends TestCase
             'aud' => 'You',
             'sub' => 'My friend',
         ];
-        $jws = $jws->withPayload($claims);
-        $jws->getClaim('foo');
+        JWS::create($claims)->getClaim('foo');
     }
 
     /**
@@ -147,7 +138,6 @@ final class JWSTest extends TestCase
      */
     public function testSignatureContainsUnprotectedHeaders()
     {
-        $jws = new JWS();
         $claims = [
             'nbf' => time(),
             'iat' => time(),
@@ -157,8 +147,8 @@ final class JWSTest extends TestCase
             'sub' => 'My friend',
         ];
         $headers = ['alg' => 'none'];
-        $jws = $jws->addSignatureFromLoadedData('', Base64Url::encode(json_encode($headers)), ['foo' => 'bar']);
-        $jws = $jws->withPayload($claims);
+        $jws = JWS::create($claims)
+            ->addSignature('', Base64Url::encode(json_encode($headers)), ['foo' => 'bar']);
 
         $jws->toCompactJSON(0);
     }
@@ -169,7 +159,6 @@ final class JWSTest extends TestCase
      */
     public function testSignatureDoesNotContainHeader()
     {
-        $jws = new JWS();
         $claims = [
             'nbf' => time(),
             'iat' => time(),
@@ -179,8 +168,8 @@ final class JWSTest extends TestCase
             'sub' => 'My friend',
         ];
         $headers = ['alg' => 'none'];
-        $jws = $jws->addSignatureFromLoadedData('', Base64Url::encode(json_encode($headers)), []);
-        $jws = $jws->withPayload($claims);
+        $jws = JWS::create($claims)
+            ->addSignature('', Base64Url::encode(json_encode($headers)));
         $jws->getSignature(0)->getHeader('foo');
     }
 
@@ -190,7 +179,6 @@ final class JWSTest extends TestCase
      */
     public function testSignatureDoesNotContainProtectedHeader()
     {
-        $jws = new JWS();
         $claims = [
             'nbf' => time(),
             'iat' => time(),
@@ -200,8 +188,8 @@ final class JWSTest extends TestCase
             'sub' => 'My friend',
         ];
         $headers = ['alg' => 'none'];
-        $jws = $jws->addSignatureFromLoadedData('', Base64Url::encode(json_encode($headers)), []);
-        $jws = $jws->withPayload($claims);
+        $jws = JWS::create($claims)
+            ->addSignature('', Base64Url::encode(json_encode($headers)));
         $jws->getSignature(0)->getProtectedHeader('foo');
     }
 }

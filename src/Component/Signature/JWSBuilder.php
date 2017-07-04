@@ -101,11 +101,7 @@ final class JWSBuilder
      */
     public function build(): JWS
     {
-        $jws = new JWS();
-        $jws = $jws->withPayload($this->payload);
-        if ($this->isPayloadDetached) {
-            $jws = $jws->withDetachedPayload();
-        }
+        $jws = JWS::create($this->payload, $this->isPayloadDetached);
         foreach ($this->signatures as $signature) {
             /** @var SignatureAlgorithmInterface $signatureAlgorithm */
             $signatureAlgorithm = $signature['signature_algorithm'];
@@ -119,7 +115,7 @@ final class JWSBuilder
             $input = $this->getInputToSign($protectedHeaders, $encodedProtectedHeaders);
 
             $s = $signatureAlgorithm->sign($signatureKey, $input);
-            $jws = $jws->addSignatureFromLoadedData($s, $encodedProtectedHeaders, $headers);
+            $jws = $jws->addSignature($s, $encodedProtectedHeaders, $headers);
         }
 
         return $jws;

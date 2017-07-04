@@ -33,27 +33,17 @@ final class JWSLoader
     {
         $json = JWSConverter::convert($input);
 
-        return self::loadSerializedJson($json);
-    }
+        $jws = JWS::create();
 
-    /**
-     * @param array $data
-     *
-     * @return JWS
-     */
-    private static function loadSerializedJson(array $data): JWS
-    {
-        $jws = new JWS();
-
-        foreach ($data['signatures'] as $signature) {
+        foreach ($json['signatures'] as $signature) {
             $bin_signature = Base64Url::decode($signature['signature']);
             $protected_headers = self::getProtectedHeaders($signature);
             $headers = self::getHeaders($signature);
 
-            $jws = $jws->addSignatureFromLoadedData($bin_signature, $protected_headers, $headers);
+            $jws = $jws->addSignature($bin_signature, $protected_headers, $headers);
         }
 
-        self::populatePayload($jws, $data);
+        self::populatePayload($jws, $json);
 
         return $jws;
     }

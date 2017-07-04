@@ -15,7 +15,6 @@ namespace Jose\Component\Signature;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWTInterface;
 
 /**
@@ -42,6 +41,29 @@ final class JWS implements JWTInterface
      * @var mixed|null
      */
     private $payload = null;
+
+    /**
+     * JWS constructor.
+     *
+     * @param mixed|null $payload
+     * @param bool       $isPayloadDetached
+     */
+    private function __construct($payload = null, bool $isPayloadDetached = false)
+    {
+        $this->payload = $payload;
+        $this->isPayloadDetached = $isPayloadDetached;
+    }
+
+    /**
+     * @param mixed|null $payload
+     * @param bool       $isPayloadDetached
+     *
+     * @return JWS
+     */
+    public static function create($payload = null, bool $isPayloadDetached = false): JWS
+    {
+        return new self($payload, $isPayloadDetached);
+    }
 
     /**
      * {@inheritdoc}
@@ -190,31 +212,16 @@ final class JWS implements JWTInterface
     }
 
     /**
-     * @param JWK   $signature_key
-     * @param array $protected_headers
-     * @param array $headers
-     *
-     * @return JWS
-     */
-    public function addSignatureInformation(JWK $signature_key, array $protected_headers, array $headers = []): JWS
-    {
-        $jws = clone $this;
-        $jws->signatures[] = Signature::createSignature($signature_key, $protected_headers, $headers);
-
-        return $jws;
-    }
-
-    /**
      * @param string      $signature
      * @param string|null $encoded_protected_headers
      * @param array       $headers
      *
      * @return JWS
      */
-    public function addSignatureFromLoadedData(string $signature, ?string $encoded_protected_headers, array $headers): JWS
+    public function addSignature(string $signature, ?string $encoded_protected_headers, array $headers = []): JWS
     {
         $jws = clone $this;
-        $jws->signatures[] = Signature::createSignatureFromLoadedData($signature, $encoded_protected_headers, $headers);
+        $jws->signatures[] = Signature::create($signature, $encoded_protected_headers, $headers);
 
         return $jws;
     }
