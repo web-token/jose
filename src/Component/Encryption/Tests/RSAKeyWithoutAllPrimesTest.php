@@ -19,9 +19,9 @@ use Jose\Component\Encryption\JWE;
 use Jose\Component\Encryption\JWELoader;
 use Jose\Component\Factory\JWAManagerFactory;
 use Jose\Component\Factory\JWEFactory;
-use Jose\Component\Factory\JWSFactory;
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\JWS;
+use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
@@ -45,12 +45,17 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
 
         $claims = ['foo' => 'bar'];
 
-        $jwt = JWSFactory::createJWSToCompactJSON($claims, $key, ['alg' => $signature_algorithm]);
+        $algorithmManager = JWAManagerFactory::createFromAlgorithmName([$signature_algorithm]);
+        $builder = new JWSBuilder($algorithmManager);
+        $jws = $builder
+            ->withPayload($claims)
+            ->addSignature($key, ['alg' => $signature_algorithm])
+            ->build()
+            ->toCompactJSON(0);
 
-        $loaded = JWSLoader::load($jwt);
+        $loaded = JWSLoader::load($jws);
         $this->assertInstanceOf(JWS::class, $loaded);
 
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName([$signature_algorithm]);
         $verifier = new Verifier($algorithmManager);
         $verifier->verifyWithKey($loaded, $key);
     }

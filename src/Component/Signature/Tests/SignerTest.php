@@ -18,7 +18,6 @@ use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Factory\JWAManagerFactory;
-use Jose\Component\Factory\JWSFactory;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\Algorithm\HS512;
 use Jose\Component\Signature\Algorithm\PS512;
@@ -141,17 +140,30 @@ final class SignerTest extends TestCase
 
     public function testCreateCompactJWSUsingFactory()
     {
-        $jws0 = JWSFactory::createJWSToCompactJSON('Live long and Prosper.', $this->getKey1(), ['alg' => 'HS512']);
-        $jws1 = JWSFactory::createJWSToCompactJSON('Live long and Prosper.', $this->getKey2(), ['alg' => 'RS512']);
-        $jws2 = JWSFactory::createJWSWithDetachedPayloadToCompactJSON('Live long and Prosper.', $this->getKey1(), ['alg' => 'HS512']);
-        $jws3 = JWSFactory::createJWSWithDetachedPayloadToCompactJSON('Live long and Prosper.', $this->getKey2(), ['alg' => 'RS512']);
+        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS512', 'RS512']);
+        $builder = new JWSBuilder($algorithmManager);
+
+        $jws = $builder
+            ->withPayload('Live long and Prosper.')
+            ->addSignature($this->getKey1(), ['alg' => 'HS512'])
+            ->addSignature($this->getKey2(), ['alg' => 'RS512'])
+            ->build();
+        $jws0 = $jws->toCompactJSON(0);
+        $jws1 = $jws->toCompactJSON(1);
+
+        $jws = $builder
+            ->withPayload('Live long and Prosper.', true)
+            ->addSignature($this->getKey1(), ['alg' => 'HS512'])
+            ->addSignature($this->getKey2(), ['alg' => 'RS512'])
+            ->build();
+        $jws2 = $jws->toCompactJSON(0);
+        $jws3 = $jws->toCompactJSON(1);
 
         $this->assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws0);
         $this->assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws1);
         $this->assertEquals('eyJhbGciOiJIUzUxMiJ9..TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws2);
         $this->assertEquals('eyJhbGciOiJSUzUxMiJ9..cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws3);
 
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS512', 'RS512']);
         $verifier = new Verifier($algorithmManager);
         $loaded_0 = JWSLoader::load($jws0);
         $verifier->verifyWithKey($loaded_0, $this->getKey1());
@@ -183,17 +195,29 @@ final class SignerTest extends TestCase
 
     public function testCreateFlattenedJWSUsingFactory()
     {
-        $jws0 = JWSFactory::createJWSToFlattenedJSON('Live long and Prosper.', $this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar']);
-        $jws1 = JWSFactory::createJWSToFlattenedJSON('Live long and Prosper.', $this->getKey2(), ['alg' => 'RS512'], ['plic' => 'ploc']);
-        $jws2 = JWSFactory::createJWSWithDetachedPayloadToFlattenedJSON('Live long and Prosper.', $this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar']);
-        $jws3 = JWSFactory::createJWSWithDetachedPayloadToFlattenedJSON('Live long and Prosper.', $this->getKey2(), ['alg' => 'RS512'], ['plic' => 'ploc']);
+        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS512', 'RS512']);
+        $builder = new JWSBuilder($algorithmManager);
+        $jws = $builder
+            ->withPayload('Live long and Prosper.')
+            ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
+            ->addSignature($this->getKey2(), ['alg' => 'RS512'], ['plic' => 'ploc'])
+            ->build();
+        $jws0 = $jws->toFlattenedJSON(0);
+        $jws1 = $jws->toFlattenedJSON(1);
+
+        $jws = $builder
+            ->withPayload('Live long and Prosper.', true)
+            ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
+            ->addSignature($this->getKey2(), ['alg' => 'RS512'], ['plic' => 'ploc'])
+            ->build();
+        $jws2 = $jws->toFlattenedJSON(0);
+        $jws3 = $jws->toFlattenedJSON(1);
 
         $this->assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJIUzUxMiJ9","header":{"foo":"bar"},"signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws0);
         $this->assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJSUzUxMiJ9","header":{"plic":"ploc"},"signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws1);
         $this->assertEquals('{"protected":"eyJhbGciOiJIUzUxMiJ9","header":{"foo":"bar"},"signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws2);
         $this->assertEquals('{"protected":"eyJhbGciOiJSUzUxMiJ9","header":{"plic":"ploc"},"signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws3);
 
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS512', 'RS512']);
         $verifier = new Verifier($algorithmManager);
         $loaded_0 = JWSLoader::load($jws0);
         $verifier->verifyWithKey($loaded_0, $this->getKey1());
@@ -355,7 +379,7 @@ final class SignerTest extends TestCase
     public function testCompactJSONWithUnencodedPayload()
     {
         $payload = '$.02';
-        $protected_header = [
+        $protectedHeader = [
             'alg' => 'HS256',
             'b64' => false,
             'crit' => ['b64'],
@@ -372,7 +396,14 @@ final class SignerTest extends TestCase
             'signature' => 'A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY',
         ];
 
-        JWSFactory::createJWSToCompactJSON($payload, $key, $protected_header);
+        $signatureAlgorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jws = $jwsBuilder
+            ->withPayload('Live long and Prosper.')
+            ->addSignature($key, $protectedHeader)
+            ->build();
+
+        $jws->toCompactJSON(0);
     }
 
     /**
@@ -382,7 +413,7 @@ final class SignerTest extends TestCase
     public function testCompactJSONWithUnencodedDetachedPayload()
     {
         $payload = '$.02';
-        $protected_header = [
+        $protectedHeader = [
             'alg' => 'HS256',
             'b64' => false,
             'crit' => ['b64'],
@@ -393,17 +424,22 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $jws = JWSFactory::createJWSWithDetachedPayloadToCompactJSON($payload, $key, $protected_header);
+        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $builder = new JWSBuilder($algorithmManager);
+        $jws = $builder
+            ->withPayload($payload, true)
+            ->addSignature($key, $protectedHeader)
+            ->build()
+            ->toCompactJSON(0);
         $this->assertEquals('eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY', $jws);
 
         $loaded = JWSLoader::load($jws);
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
         $verifier = new Verifier($algorithmManager);
         $verifier->verifyWithKey($loaded, $key, $payload, $index);
 
         $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals(0, $index);
-        $this->assertEquals($protected_header, $loaded->getSignature(0)->getProtectedHeaders());
+        $this->assertEquals($protectedHeader, $loaded->getSignature(0)->getProtectedHeaders());
     }
 
     /**
@@ -412,12 +448,12 @@ final class SignerTest extends TestCase
     public function testCompactJSONWithUnencodedDetachedPayloadAndMultipleSignatures()
     {
         $payload = '$.02';
-        $protected_header1 = [
+        $protectedHeader1 = [
             'alg' => 'HS256',
             'b64' => false,
             'crit' => ['b64'],
         ];
-        $protected_header2 = [
+        $protectedHeader2 = [
             'alg' => 'HS256',
         ];
 
@@ -430,8 +466,8 @@ final class SignerTest extends TestCase
         $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
         $jwsBuilder = $jwsBuilder
             ->withPayload($payload, true)
-            ->addSignature($key, $protected_header1)
-            ->addSignature($key, $protected_header2);
+            ->addSignature($key, $protectedHeader1)
+            ->addSignature($key, $protectedHeader2);
 
         $jws = $jwsBuilder->build();
 
@@ -445,7 +481,7 @@ final class SignerTest extends TestCase
         $verifier->verifyWithKey($loaded, $key, $payload, $index1);
 
         $this->assertEquals(0, $index1);
-        $this->assertEquals($protected_header1, $loaded->getSignature(0)->getProtectedHeaders());
+        $this->assertEquals($protectedHeader1, $loaded->getSignature(0)->getProtectedHeaders());
     }
 
     /**
@@ -457,12 +493,12 @@ final class SignerTest extends TestCase
     public function testCompactJSONWithUnencodedPayloadAndMultipleSignatures()
     {
         $payload = '$.02';
-        $protected_header1 = [
+        $protectedHeader1 = [
             'alg' => 'HS256',
             'b64' => false,
             'crit' => ['b64'],
         ];
-        $protected_header2 = [
+        $protectedHeader2 = [
             'alg' => 'HS256',
         ];
 
@@ -475,8 +511,8 @@ final class SignerTest extends TestCase
         $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
         $jwsBuilder = $jwsBuilder
             ->withPayload($payload)
-            ->addSignature($key, $protected_header1)
-            ->addSignature($key, $protected_header2);
+            ->addSignature($key, $protectedHeader1)
+            ->addSignature($key, $protectedHeader2);
 
         $jws = $jwsBuilder->build();
 
@@ -490,7 +526,7 @@ final class SignerTest extends TestCase
     public function testJWSWithUnencodedPayloadButNoCritHeader()
     {
         $payload = '$.02';
-        $protected_header = [
+        $protectedHeader = [
             'alg' => 'HS256',
             'b64' => false,
         ];
@@ -500,7 +536,13 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        JWSFactory::createJWSWithDetachedPayloadToCompactJSON($payload, $key, $protected_header);
+        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $builder = new JWSBuilder($algorithmManager);
+        $builder
+            ->withPayload($payload, true)
+            ->addSignature($key, $protectedHeader)
+            ->build()
+            ->toCompactJSON(0);
     }
 
     /**
@@ -510,7 +552,7 @@ final class SignerTest extends TestCase
     public function testJWSWithUnencodedPayloadButCritHeaderIsNotAnArray()
     {
         $payload = '$.02';
-        $protected_header = [
+        $protectedHeader = [
             'alg' => 'HS256',
             'b64' => false,
             'crit' => 'foo',
@@ -521,7 +563,14 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        JWSFactory::createJWSWithDetachedPayloadToCompactJSON($payload, $key, $protected_header);
+
+        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $builder = new JWSBuilder($algorithmManager);
+        $builder
+            ->withPayload($payload, true)
+            ->addSignature($key, $protectedHeader)
+            ->build()
+            ->toCompactJSON(0);
     }
 
     /**
@@ -531,7 +580,7 @@ final class SignerTest extends TestCase
     public function testJWSWithUnencodedPayloadButCritHeaderDoesNotContainB64()
     {
         $payload = '$.02';
-        $protected_header = [
+        $protectedHeader = [
             'alg' => 'HS256',
             'b64' => false,
             'crit' => ['foo'],
@@ -542,7 +591,14 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        JWSFactory::createJWSWithDetachedPayloadToCompactJSON($payload, $key, $protected_header);
+
+        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $builder = new JWSBuilder($algorithmManager);
+        $builder
+            ->withPayload($payload, true)
+            ->addSignature($key, $protectedHeader)
+            ->build()
+            ->toCompactJSON(0);
     }
 
     /**
@@ -552,7 +608,7 @@ final class SignerTest extends TestCase
     public function testFlattenedJSONWithUnencodedPayload()
     {
         $payload = '$.02';
-        $protected_header = [
+        $protectedHeader = [
             'alg' => 'HS256',
             'b64' => false,
             'crit' => ['b64'],
@@ -569,19 +625,24 @@ final class SignerTest extends TestCase
             'signature' => 'A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY',
         ];
 
-        $jws = JWSFactory::createJWSToFlattenedJSON($payload, $key, $protected_header);
+        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $builder = new JWSBuilder($algorithmManager);
+        $jws = $builder
+            ->withPayload($payload)
+            ->addSignature($key, $protectedHeader)
+            ->build()
+            ->toFlattenedJSON(0);
 
         $this->assertEquals($expected_result, json_decode($jws, true));
 
         $loaded = JWSLoader::load($jws);
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
         $verifier = new Verifier($algorithmManager);
         $verifier->verifyWithKey($loaded, $key, null, $index);
 
         $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals($payload, $loaded->getPayload());
         $this->assertEquals(0, $index);
-        $this->assertEquals($protected_header, $loaded->getSignature(0)->getProtectedHeaders());
+        $this->assertEquals($protectedHeader, $loaded->getSignature(0)->getProtectedHeaders());
     }
 
     /**
@@ -591,7 +652,7 @@ final class SignerTest extends TestCase
     public function testFlattenedJSONWithUnencodedDetachedPayload()
     {
         $payload = '$.02';
-        $protected_header = [
+        $protectedHeader = [
             'alg' => 'HS256',
             'b64' => false,
             'crit' => ['b64'],
@@ -607,7 +668,13 @@ final class SignerTest extends TestCase
             'signature' => 'A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY',
         ];
 
-        $jws = JWSFactory::createJWSWithDetachedPayloadToFlattenedJSON($payload, $key, $protected_header);
+        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
+        $builder = new JWSBuilder($signatureAlgorithmManager);
+        $jws = $builder
+            ->withPayload($payload, true)
+            ->addSignature($key, $protectedHeader)
+            ->build()
+            ->toFlattenedJSON(0);
 
         $this->assertEquals($expected_result, json_decode($jws, true));
     }
