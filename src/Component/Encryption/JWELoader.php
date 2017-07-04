@@ -226,5 +226,7 @@ final class JWELoader
         if (array_key_exists('encrypted_key', $data)) {
             return Base64Url::decode($data['encrypted_key']);
         }
+
+        return null;
     }
 }

@@ -87,7 +87,7 @@ final class JWS extends JWT
     public function getEncodedPayload(Signature $signature): ?string
     {
         if (true === $this->isPayloadDetached()) {
-            return;
+            return null;
         }
         if (null !== $this->encodedPayload) {
             return $this->encodedPayload;

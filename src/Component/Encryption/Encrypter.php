@@ -356,7 +356,7 @@ final class Encrypter
         }
 
         if (null === $method) {
-            return;
+            return null;
         }
 
         $compression_method = $this->getCompressionManager()->get($method);

@@ -178,7 +178,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
     {
         $key = $this->key();
         if (null === $key) {
-            return;
+            return null;
         }
 
         return $this->hasKey($key) ? $this->getKey($key) : null;
@@ -252,7 +252,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
 
         //Return null if no key
         if (empty($result)) {
-            return;
+            return null;
         }
 
         //Sort by trust indicator

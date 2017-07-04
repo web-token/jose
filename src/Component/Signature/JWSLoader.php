@@ -150,6 +150,8 @@ final class JWSLoader
         if (array_key_exists('protected', $data)) {
             return $data['protected'];
         }
+
+        return null;
     }
 
     /**

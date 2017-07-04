@@ -162,6 +162,8 @@ final class Decrypter
                 continue;
             }
         }
+
+        return null;
     }
 
     /**
