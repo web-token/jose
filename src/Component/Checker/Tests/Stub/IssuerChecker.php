@@ -15,20 +15,21 @@ namespace Jose\Component\Checker\Tests\Stub;
 
 use Assert\Assertion;
 use Jose\Component\Checker\ClaimCheckerInterface;
-use Jose\Component\Core\JWT;
+use Jose\Component\Core\JWTInterface;
 
 final class IssuerChecker implements ClaimCheckerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWT $jwt): array
+    public function checkClaim(JWTInterface $jwt): array
     {
         if (!$jwt->hasClaim('iss')) {
             return [];
         }
 
         $issuer = $jwt->getClaim('iss');
+        Assertion::string($issuer, 'Invalid claim "iss". The value must be a string.');
         Assertion::true($this->isIssuerAllowed($issuer), sprintf('The issuer "%s" is not allowed.', $issuer));
 
         return ['iss'];

@@ -15,20 +15,21 @@ namespace Jose\Component\Checker\Tests\Stub;
 
 use Assert\Assertion;
 use Jose\Component\Checker\ClaimCheckerInterface;
-use Jose\Component\Core\JWT;
+use Jose\Component\Core\JWTInterface;
 
 final class JtiChecker implements ClaimCheckerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWT $jwt): array
+    public function checkClaim(JWTInterface $jwt): array
     {
         if (!$jwt->hasClaim('jti')) {
             return [];
         }
 
         $jti = $jwt->getClaim('jti');
+        Assertion::string($jti, 'Invalid claim "jti". The value must be a string.');
         Assertion::true($this->isJtiValid($jti), sprintf('Invalid token ID "%s".', $jti));
 
         return ['jti'];

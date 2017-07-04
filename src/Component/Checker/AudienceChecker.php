@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker;
 
-use Jose\Component\Core\JWT;
+use Jose\Component\Core\JWTInterface;
 
 final class AudienceChecker implements ClaimCheckerInterface
 {
@@ -35,7 +35,7 @@ final class AudienceChecker implements ClaimCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWT $jwt): array
+    public function checkClaim(JWTInterface $jwt): array
     {
         if (!$jwt->hasClaim('aud')) {
             return [];

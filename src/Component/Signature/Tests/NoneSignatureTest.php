@@ -15,11 +15,10 @@ namespace Jose\Component\Signature\Tests;
 
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Factory\JWSFactory;
 use Jose\Component\Signature\Algorithm\None;
 use Jose\Component\Signature\JWS;
+use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
-use Jose\Component\Signature\Signer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -67,12 +66,12 @@ final class NoneSignatureTest extends TestCase
             'kty' => 'none',
         ]);
 
-        $jws = JWSFactory::createJWS('Live long and Prosper.');
-        $jws = $jws->addSignatureInformation($jwk, ['alg' => 'none']);
-
         $signatureAlgorithmManager = JWAManager::create([new None()]);
-        $signer = new Signer($signatureAlgorithmManager);
-        $signer->sign($jws);
+        $builder = new JWSBuilder($signatureAlgorithmManager);
+        $jws = $builder
+            ->withPayload('Live long and Prosper.')
+            ->addSignature($jwk, ['alg' => 'none'])
+            ->build();
 
         $this->assertEquals(1, $jws->countSignatures());
 

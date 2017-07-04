@@ -16,12 +16,12 @@ namespace Jose\Component\Signature;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWT;
+use Jose\Component\Core\JWTInterface;
 
 /**
  * Class JWS.
  */
-final class JWS extends JWT
+final class JWS implements JWTInterface
 {
     /**
      * @var bool
@@ -39,6 +39,71 @@ final class JWS extends JWT
     private $signatures = [];
 
     /**
+     * @var mixed|null
+     */
+    private $payload = null;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPayload()
+    {
+        return $this->payload;
+    }
+
+    /**
+     * @param mixed $payload
+     *
+     * @return JWS
+     */
+    public function withPayload($payload): JWS
+    {
+        $jwt = clone $this;
+        $jwt->payload = $payload;
+
+        return $jwt;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClaim(string $key)
+    {
+        if ($this->hasClaim($key)) {
+            return $this->payload[$key];
+        }
+        throw new \InvalidArgumentException(sprintf('The payload does not contain claim "%s".', $key));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClaims(): array
+    {
+        if (!$this->hasClaims()) {
+            throw new \InvalidArgumentException('The payload does not contain claims.');
+        }
+
+        return $this->payload;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasClaim(string $key): bool
+    {
+        return $this->hasClaims() && array_key_exists($key, $this->payload);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasClaims(): bool
+    {
+        return is_array($this->payload);
+    }
+
+    /**
      * @return bool
      */
     public function isPayloadDetached(): bool
@@ -47,9 +112,9 @@ final class JWS extends JWT
     }
 
     /**
-     * @return JWT
+     * @return JWS
      */
-    public function withDetachedPayload(): JWT
+    public function withDetachedPayload(): JWS
     {
         $jwt = clone $this;
         $jwt->isPayloadDetached = true;
@@ -58,9 +123,9 @@ final class JWS extends JWT
     }
 
     /**
-     * @return JWT
+     * @return JWS
      */
-    public function withAttachedPayload(): JWT
+    public function withAttachedPayload(): JWS
     {
         $jwt = clone $this;
         $jwt->isPayloadDetached = false;
@@ -71,7 +136,7 @@ final class JWS extends JWT
     /**
      * {@inheritdoc}
      */
-    public function withEncodedPayload(string $encoded_payload): JWT
+    public function withEncodedPayload(string $encoded_payload): JWS
     {
         $jwt = clone $this;
         $jwt->encodedPayload = $encoded_payload;

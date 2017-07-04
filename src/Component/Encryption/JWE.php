@@ -16,12 +16,12 @@ namespace Jose\Component\Encryption;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWT;
+use Jose\Component\Core\JWTInterface;
 
 /**
  * Class JWE.
  */
-final class JWE extends JWT
+final class JWE implements JWTInterface
 {
     /**
      * @var Recipient[]
@@ -62,6 +62,71 @@ final class JWE extends JWT
      * @var string|null
      */
     private $encoded_shared_protected_headers = null;
+
+    /**
+     * @var mixed|null
+     */
+    private $payload = null;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPayload()
+    {
+        return $this->payload;
+    }
+
+    /**
+     * @param mixed $payload
+     *
+     * @return JWE
+     */
+    public function withPayload($payload): JWE
+    {
+        $jwt = clone $this;
+        $jwt->payload = $payload;
+
+        return $jwt;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClaim(string $key)
+    {
+        if ($this->hasClaim($key)) {
+            return $this->payload[$key];
+        }
+        throw new \InvalidArgumentException(sprintf('The payload does not contain claim "%s".', $key));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClaims(): array
+    {
+        if (!$this->hasClaims()) {
+            throw new \InvalidArgumentException('The payload does not contain claims.');
+        }
+
+        return $this->payload;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasClaim(string $key): bool
+    {
+        return $this->hasClaims() && array_key_exists($key, $this->payload);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasClaims(): bool
+    {
+        return is_array($this->payload);
+    }
 
     /**
      * Returns the number of recipients associated with the JWS.

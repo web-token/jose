@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker;
 
-use Jose\Component\Core\JWT;
+use Jose\Component\Core\JWTInterface;
 
 /**
  * Interface ClaimCheckerInterface.
@@ -21,11 +21,11 @@ use Jose\Component\Core\JWT;
 interface ClaimCheckerInterface
 {
     /**
-     * @param JWT $jwt
+     * @param JWTInterface $jwt
      *
      * @throws \InvalidArgumentException
      *
      * @return string[]
      */
-    public function checkClaim(JWT $jwt): array;
+    public function checkClaim(JWTInterface $jwt): array;
 }

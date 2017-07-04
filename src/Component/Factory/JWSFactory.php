@@ -22,23 +22,6 @@ final class JWSFactory
 {
     /**
      * @param mixed $payload
-     * @param bool  $is_payload_detached
-     *
-     * @return JWS
-     */
-    public static function createJWS($payload, bool $is_payload_detached = false): JWS
-    {
-        $jws = new JWS();
-        $jws = $jws->withPayload($payload);
-        if (true === $is_payload_detached) {
-            return $jws->withDetachedPayload();
-        }
-
-        return $jws->withAttachedPayload();
-    }
-
-    /**
-     * @param mixed $payload
      * @param JWK   $signature_key
      * @param array $protected_headers
      *

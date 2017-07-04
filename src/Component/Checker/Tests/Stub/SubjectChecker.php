@@ -15,20 +15,21 @@ namespace Jose\Component\Checker\Tests\Stub;
 
 use Assert\Assertion;
 use Jose\Component\Checker\ClaimCheckerInterface;
-use Jose\Component\Core\JWT;
+use Jose\Component\Core\JWTInterface;
 
 final class SubjectChecker implements ClaimCheckerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWT $jwt): array
+    public function checkClaim(JWTInterface $jwt): array
     {
         if (!$jwt->hasClaim('sub')) {
             return [];
         }
 
         $subject = $jwt->getClaim('sub');
+        Assertion::string($subject, 'Invalid claim "sub". The value must be a string.');
         Assertion::true($this->isSubjectAllowed($subject), sprintf('The subject "%s" is not allowed.', $subject));
 
         return ['sub'];

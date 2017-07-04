@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Jose\Component\Checker;
 
 use Assert\Assertion;
-use Jose\Component\Core\JWT;
+use Jose\Component\Core\JWTInterface;
+use Jose\Component\Encryption\JWE;
+use Jose\Component\Signature\JWS;
 
 /**
  * Class CheckerManager.
@@ -32,26 +34,40 @@ final class CheckerManager
     private $headerCheckers = [];
 
     /**
-     * @param JWT $jwt
+     * @param JWS $jws
      * @param int $signature
      */
-    public function checkJWS(JWT $jwt, int $signature)
+    public function checkJWS(JWS $jws, int $signature)
     {
-        Assertion::lessThan($signature, $jwt->countSignatures());
-
-        $checked_claims = $this->checkClaims($jwt);
-        $protectedHeaders = $jwt->getSignature($signature)->getProtectedHeaders();
-        $headers = $jwt->getSignature($signature)->getHeaders();
-
+        $checked_claims = $this->checkClaims($jws);
+        Assertion::lessThan($signature, $jws->countSignatures());
+        $protectedHeaders = $jws->getSignature($signature)->getProtectedHeaders();
+        $headers = $jws->getSignature($signature)->getHeaders();
         $this->checkHeaders($protectedHeaders, $headers, $checked_claims);
     }
 
     /**
-     * @param JWT $jwt
+     * @param JWE $jwe
+     * @param int $recipient
+     */
+    public function checkJWE(JWE $jwe, int $recipient)
+    {
+        $checked_claims = $this->checkClaims($jwe);
+        Assertion::lessThan($recipient, $jwe->countRecipients());
+        $protectedHeaders = $jwe->getSharedProtectedHeaders();
+        $headers = array_merge(
+            $jwe->getRecipient($recipient)->getHeaders(),
+            $jwe->getSharedHeaders()
+        );
+        $this->checkHeaders($protectedHeaders, $headers, $checked_claims);
+    }
+
+    /**
+     * @param JWTInterface $jwt
      *
      * @return string[]
      */
-    public function checkClaims(JWT $jwt): array
+    private function checkClaims(JWTInterface $jwt): array
     {
         $checked_claims = [];
 
@@ -70,7 +86,7 @@ final class CheckerManager
      * @param array $headers
      * @param array $checked_claims
      */
-    public function checkHeaders(array $protectedHeaders, array $headers, array $checked_claims)
+    private function checkHeaders(array $protectedHeaders, array $headers, array $checked_claims)
     {
         foreach ($this->headerCheckers as $headerChecker) {
             $headerChecker->checkHeader($protectedHeaders, $headers, $checked_claims);
