@@ -31,7 +31,7 @@ final class RSA
     {
         $x = $x->toBytes();
         if (strlen($x) > $xLen) {
-            return false;
+            throw new \RuntimeException('Invalid length.');
         }
 
         return str_pad($x, $xLen, chr(0), STR_PAD_LEFT);
@@ -150,7 +150,7 @@ final class RSA
         $db = $lHash.$ps.chr(1).$m;
         $seed = random_bytes($hash->getLength());
         $dbMask = self::getMGF1($seed, $key->getModulusLength() - $hash->getLength() - 1, $hash/*MGF*/);
-        $maskedDB = $db ^ $dbMask;
+        $maskedDB = strval($db ^ $dbMask);
         $seedMask = self::getMGF1($maskedDB, $hash->getLength(), $hash/*MGF*/);
         $maskedSeed = $seed ^ $seedMask;
         $em = chr(0).$maskedSeed.$maskedDB;
@@ -181,7 +181,7 @@ final class RSA
         $maskedSeed = mb_substr($em, 1, $hash->getLength(), '8bit');
         $maskedDB = mb_substr($em, $hash->getLength() + 1, null, '8bit');
         $seedMask = self::getMGF1($maskedDB, $hash->getLength(), $hash/*MGF*/);
-        $seed = $maskedSeed ^ $seedMask;
+        $seed = strval($maskedSeed ^ $seedMask);
         $dbMask = self::getMGF1($seed, $key->getModulusLength() - $hash->getLength() - 1, $hash/*MGF*/);
         $db = $maskedDB ^ $dbMask;
         $lHash2 = mb_substr($db, 0, $hash->getLength(), '8bit');
