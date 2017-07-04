@@ -22,17 +22,6 @@ before_script:
 
 script:
     - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-    - php ./examples/Encrypt1.php
-    - php ./examples/Encrypt2.php
-    - php ./examples/Signature1.php
-    - php ./examples/Signature2.php
-    - php ./examples/Load1.php
-    - php ./examples/Load2.php
-    - php ./examples/Load3.php
-    - php ./examples/Load4.php
-    - php ./examples/Load4.php
-    - php ./examples/NestedTokens.php
-    - php ./examples/LoadNestedTokens.php
 
 after_success:
     - vendor/bin/coveralls --no-interaction
