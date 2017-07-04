@@ -563,7 +563,6 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-
         $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
         $builder = new JWSBuilder($algorithmManager);
         $builder
@@ -590,7 +589,6 @@ final class SignerTest extends TestCase
             'kty' => 'oct',
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
-
 
         $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
         $builder = new JWSBuilder($algorithmManager);
