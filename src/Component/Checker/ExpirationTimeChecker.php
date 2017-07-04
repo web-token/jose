@@ -27,7 +27,8 @@ final class ExpirationTimeChecker implements ClaimCheckerInterface
             return [];
         }
 
-        $exp = (int) $jwt->getClaim('exp');
+        $exp = $jwt->getClaim('exp');
+        Assertion::integer($exp, 'The claim "exp" must be an integer.');
         Assertion::greaterThan($exp, time(), 'The JWT has expired.');
 
         return ['exp'];

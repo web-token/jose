@@ -27,7 +27,8 @@ final class NotBeforeChecker implements ClaimCheckerInterface
             return [];
         }
 
-        $nbf = (int) $jwt->getClaim('nbf');
+        $nbf = $jwt->getClaim('nbf');
+        Assertion::integer($nbf, 'The claim "nbf" must be an integer.');
         Assertion::lessOrEqualThan($nbf, time(), 'The JWT can not be used yet.');
 
         return ['nbf'];
