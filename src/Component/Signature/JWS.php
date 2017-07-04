@@ -199,9 +199,9 @@ final class JWS extends JWT
 
         $data = [];
         $values = [
-            'payload'   => $this->getEncodedPayload($signature),
+            'payload' => $this->getEncodedPayload($signature),
             'protected' => $signature->getEncodedProtectedHeaders(),
-            'header'    => $signature->getHeaders(),
+            'header' => $signature->getHeaders(),
         ];
 
         foreach ($values as $key => $value) {
@@ -233,7 +233,7 @@ final class JWS extends JWT
             $tmp = ['signature' => Base64Url::encode($signature->getSignature())];
             $values = [
                 'protected' => $signature->getEncodedProtectedHeaders(),
-                'header'    => $signature->getHeaders(),
+                'header' => $signature->getHeaders(),
             ];
 
             foreach ($values as $key => $value) {

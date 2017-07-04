@@ -88,9 +88,9 @@ final class JWSBuilder
         $clone = clone $this;
         $clone->signatures[] = [
             'signature_algorithm' => $algorithm,
-            'signature_key'       => $signatureKey,
-            'protected_headers'   => $protectedHeaders,
-            'headers'             => $headers,
+            'signature_key' => $signatureKey,
+            'protected_headers' => $protectedHeaders,
+            'headers' => $headers,
         ];
 
         return $clone;
