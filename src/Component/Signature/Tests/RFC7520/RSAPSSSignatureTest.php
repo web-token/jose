@@ -15,8 +15,8 @@ namespace Jose\Component\Signature\Tests\RFC7520;
 
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\Algorithm\PS384;
 use Jose\Component\Factory\JWSFactory;
+use Jose\Component\Signature\Algorithm\PS384;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Signer;
 use Jose\Component\Signature\Verifier;

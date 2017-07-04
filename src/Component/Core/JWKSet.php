@@ -43,7 +43,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
      */
     public static function createFromKeyData(array $data): JWKSet
     {
-        if (! array_key_exists('keys', $data) || ! is_array($data['keys'])) {
+        if (!array_key_exists('keys', $data) || !is_array($data['keys'])) {
             throw new \InvalidArgumentException('Invalid data.');
         }
 
@@ -67,7 +67,9 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
      */
     public static function createFromKeys(array $keys): JWKSet
     {
-        $keys = array_filter($keys, function (JWK $jwk) {return true; });
+        $keys = array_filter($keys, function (JWK $jwk) {
+            return true;
+        });
         foreach ($keys as $k => $v) {
             if ($v->has('kid')) {
                 $keys[$v->get('kid')] = $v;
@@ -117,7 +119,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
      */
     public function withoutKey($key): JWKSet
     {
-        if (! $this->hasKey($key)) {
+        if (!$this->hasKey($key)) {
             return $this;
         }
 
@@ -176,7 +178,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
     {
         $key = $this->key();
         if (null === $key) {
-            return null;
+            return;
         }
 
         return $this->hasKey($key) ? $this->getKey($key) : null;
@@ -250,7 +252,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
 
         //Return null if no key
         if (empty($result)) {
-            return null;
+            return;
         }
 
         //Sort by trust indicator
@@ -304,7 +306,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
     private function doesKeySatisfyRestrictions(array $restrictions, JWK $key): bool
     {
         foreach ($restrictions as $k => $v) {
-            if (! $key->has($k) || $v !== $key->get($k)) {
+            if (!$key->has($k) || $v !== $key->get($k)) {
                 return false;
             }
         }
@@ -361,7 +363,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
         $result = [];
 
         foreach ($keys as $key) {
-            if (! in_array($key->get('kty'), ['RSA', 'EC'])) {
+            if (!in_array($key->get('kty'), ['RSA', 'EC'])) {
                 continue;
             }
 

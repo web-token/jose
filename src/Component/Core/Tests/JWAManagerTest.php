@@ -15,9 +15,6 @@ namespace Jose\Component\Core\Tests;
 
 use Jose\Component\Core\JWAInterface;
 use Jose\Component\Core\JWAManager;
-use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKSet;
-use Jose\Component\Factory\JWAManagerFactory;
 use Jose\Component\Signature\Algorithm\HS512;
 use Jose\Component\Signature\Algorithm\RS256;
 use PHPUnit\Framework\TestCase;

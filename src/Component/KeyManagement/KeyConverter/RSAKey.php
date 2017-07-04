@@ -92,7 +92,7 @@ final class RSAKey extends Sequence
      */
     public function isPublic(): bool
     {
-        return ! $this->isPrivate();
+        return !$this->isPrivate();
     }
 
     /**
@@ -284,7 +284,7 @@ final class RSAKey extends Sequence
      */
     private function populateCRT()
     {
-        if (! array_key_exists('p', $this->values) && ! array_key_exists('q', $this->values)) {
+        if (!array_key_exists('p', $this->values) && !array_key_exists('q', $this->values)) {
             $d = BigInteger::createFromBinaryString(Base64Url::decode($this->values['d']));
             $e = BigInteger::createFromBinaryString(Base64Url::decode($this->values['e']));
             $n = BigInteger::createFromBinaryString(Base64Url::decode($this->values['n']));

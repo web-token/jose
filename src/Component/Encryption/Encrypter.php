@@ -107,7 +107,7 @@ final class Encrypter
             $this->processRecipient($jwe, $jwe->getRecipient($i), $cek, $content_encryption_algorithm, $additional_headers);
         }
 
-        if (! empty($additional_headers) && 1 === $jwe->countRecipients()) {
+        if (!empty($additional_headers) && 1 === $jwe->countRecipients()) {
             $jwe = $jwe->withSharedProtectedHeaders(array_merge($jwe->getSharedProtectedHeaders(), $additional_headers));
         }
 
@@ -134,7 +134,7 @@ final class Encrypter
         $this->checkKeys($key_encryption_algorithm, $content_encryption_algorithm, $recipient->getRecipientKey());
         $encrypted_content_encryption_key = $this->getEncryptedKey($complete_headers, $cek, $key_encryption_algorithm, $content_encryption_algorithm, $additional_headers, $recipient->getRecipientKey());
         $recipient_headers = $recipient->getHeaders();
-        if (! empty($additional_headers) && 1 !== $jwe->countRecipients()) {
+        if (!empty($additional_headers) && 1 !== $jwe->countRecipients()) {
             $recipient_headers = array_merge($recipient_headers, $additional_headers);
             $additional_headers = [];
         }
@@ -151,7 +151,7 @@ final class Encrypter
      */
     private function encryptJWE(JWE &$jwe, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $cek, $iv, CompressionInterface $compression_method = null)
     {
-        if (! empty($jwe->getSharedProtectedHeaders())) {
+        if (!empty($jwe->getSharedProtectedHeaders())) {
             $jwe = $jwe->withEncodedSharedProtectedHeaders(Base64Url::encode(json_encode($jwe->getSharedProtectedHeaders())));
         }
 
@@ -356,7 +356,7 @@ final class Encrypter
         }
 
         if (null === $method) {
-            return null;
+            return;
         }
 
         $compression_method = $this->getCompressionManager()->get($method);

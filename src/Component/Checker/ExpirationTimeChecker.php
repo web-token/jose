@@ -23,7 +23,7 @@ final class ExpirationTimeChecker implements ClaimCheckerInterface
      */
     public function checkClaim(JWT $jwt): array
     {
-        if (! $jwt->hasClaim('exp')) {
+        if (!$jwt->hasClaim('exp')) {
             return [];
         }
 

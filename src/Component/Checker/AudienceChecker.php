@@ -37,7 +37,7 @@ final class AudienceChecker implements ClaimCheckerInterface
      */
     public function checkClaim(JWT $jwt): array
     {
-        if (! $jwt->hasClaim('aud')) {
+        if (!$jwt->hasClaim('aud')) {
             return [];
         }
 

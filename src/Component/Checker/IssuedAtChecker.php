@@ -23,7 +23,7 @@ final class IssuedAtChecker implements ClaimCheckerInterface
      */
     public function checkClaim(JWT $jwt): array
     {
-        if (! $jwt->hasClaim('iat')) {
+        if (!$jwt->hasClaim('iat')) {
             return [];
         }
 

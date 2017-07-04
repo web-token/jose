@@ -15,8 +15,8 @@ namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Assert\Assertion;
 use Jose\Component\Core\JWK;
-use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Jose\Component\Encryption\Util\RSA as JoseRSA;
+use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
 /**
  * Class RSA.

@@ -42,7 +42,7 @@ final class JWK implements \JsonSerializable
      */
     public static function create(array $values): JWK
     {
-        if (! array_key_exists('kty', $values)) {
+        if (!array_key_exists('kty', $values)) {
             throw new \InvalidArgumentException('The parameter "kty" is mandatory.');
         }
 
@@ -68,7 +68,7 @@ final class JWK implements \JsonSerializable
      */
     public function get(string $key)
     {
-        if (! $this->has($key)) {
+        if (!$this->has($key)) {
             throw new \InvalidArgumentException(sprintf('The value identified by "%s" does not exist.', $key));
         }
 
@@ -110,7 +110,7 @@ final class JWK implements \JsonSerializable
      */
     public function thumbprint(string $hash_algorithm): string
     {
-        if (! in_array($hash_algorithm, hash_algos())) {
+        if (!in_array($hash_algorithm, hash_algos())) {
             throw new \InvalidArgumentException(sprintf('Hash algorithm "%s" is not supported', $hash_algorithm));
         }
 

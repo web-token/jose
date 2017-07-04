@@ -68,7 +68,7 @@ abstract class JWT
      */
     public function getClaims(): array
     {
-        if (! $this->hasClaims()) {
+        if (!$this->hasClaims()) {
             throw new \InvalidArgumentException('The payload does not contain claims.');
         }
 

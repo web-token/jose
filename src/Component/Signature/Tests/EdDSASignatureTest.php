@@ -16,9 +16,9 @@ namespace Jose\Component\Signature\Tests;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
+use Jose\Component\Factory\JWSFactory;
 use Jose\Component\Signature\Algorithm\EdDSA;
 use Jose\Component\Signature\JWS;
-use Jose\Component\Factory\JWSFactory;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
@@ -36,7 +36,7 @@ final class EdDSASignatureTest extends TestCase
      */
     public function testEdDSAVerifyAlgorithm()
     {
-        if (! function_exists('ed25519_sign')) {
+        if (!function_exists('ed25519_sign')) {
             $this->markTestSkipped('EdDSA extension not available');
         }
 
@@ -61,7 +61,7 @@ final class EdDSASignatureTest extends TestCase
      */
     public function testEdDSASignAndVerifyAlgorithm()
     {
-        if (! function_exists('ed25519_sign')) {
+        if (!function_exists('ed25519_sign')) {
             $this->markTestSkipped('EdDSA extension not available');
         }
 

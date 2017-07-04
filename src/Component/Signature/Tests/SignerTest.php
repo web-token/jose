@@ -15,16 +15,16 @@ namespace Jose\Component\Signature\Tests;
 
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
-use Jose\Component\Factory\JWAManagerFactory;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
+use Jose\Component\Factory\JWAManagerFactory;
+use Jose\Component\Factory\JWSFactory;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\Algorithm\HS512;
 use Jose\Component\Signature\Algorithm\PS512;
 use Jose\Component\Signature\Algorithm\RS512;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
-use Jose\Component\Factory\JWSFactory;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;

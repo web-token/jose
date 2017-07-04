@@ -104,7 +104,7 @@ final class JWELoader
     private static function fromCompactSerializationRecipientToSerialization(array $parts): array
     {
         $recipient = [];
-        if (! empty($parts[1])) {
+        if (!empty($parts[1])) {
             $recipient['encrypted_key'] = $parts[1];
         }
 
@@ -112,7 +112,7 @@ final class JWELoader
             'recipients' => [$recipient],
         ];
         foreach ([0 => 'protected', 2 => 'iv', 3 => 'ciphertext', 4 => 'tag'] as $part => $key) {
-            if (! empty($parts[$part])) {
+            if (!empty($parts[$part])) {
                 $recipients[$key] = $parts[$part];
             }
         }
@@ -226,7 +226,5 @@ final class JWELoader
         if (array_key_exists('encrypted_key', $data)) {
             return Base64Url::decode($data['encrypted_key']);
         }
-
-        return null;
     }
 }
