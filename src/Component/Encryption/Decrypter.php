@@ -162,8 +162,6 @@ final class Decrypter
                 continue;
             }
         }
-
-        return null;
     }
 
     /**
@@ -253,7 +251,7 @@ final class Decrypter
         if (array_key_exists('zip', $complete_headers)) {
             $compression_method = $this->getCompressionManager()->get($complete_headers['zip']);
             $payload = $compression_method->uncompress($payload);
-            if (! is_string($payload)) {
+            if (!is_string($payload)) {
                 throw new \InvalidArgumentException('Decompression failed');
             }
         }
@@ -267,7 +265,7 @@ final class Decrypter
     private function checkCompleteHeader(array $complete_headers)
     {
         foreach (['enc', 'alg'] as $key) {
-            if (! array_key_exists($key, $complete_headers)) {
+            if (!array_key_exists($key, $complete_headers)) {
                 throw new \InvalidArgumentException(sprintf("Parameters '%s' is missing.", $key));
             }
         }
@@ -281,7 +279,7 @@ final class Decrypter
     private function getKeyEncryptionAlgorithm(array $complete_headers)
     {
         $key_encryption_algorithm = $this->keyEncryptionAlgorithmManager->get($complete_headers['alg']);
-        if (! $key_encryption_algorithm instanceof KeyEncryptionAlgorithmInterface) {
+        if (!$key_encryption_algorithm instanceof KeyEncryptionAlgorithmInterface) {
             throw new \InvalidArgumentException(sprintf('The key encryption algorithm "%s" is not supported or does not implement KeyEncryptionAlgorithmInterface.', $complete_headers['alg']));
         }
 
@@ -296,7 +294,7 @@ final class Decrypter
     private function getContentEncryptionAlgorithm(array $complete_headers)
     {
         $content_encryption_algorithm = $this->contentEncryptionAlgorithmManager->get($complete_headers['enc']);
-        if (! $content_encryption_algorithm instanceof ContentEncryptionAlgorithmInterface) {
+        if (!$content_encryption_algorithm instanceof ContentEncryptionAlgorithmInterface) {
             throw new \InvalidArgumentException(sprintf('The key encryption algorithm "%s" is not supported or does not implement ContentEncryptionInterface.', $complete_headers['enc']));
         }
 

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Util;
 
 use Assert\Assertion;
-use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Jose\Component\Core\Util\BigInteger;
+use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
 final class RSA
 {
@@ -89,7 +89,7 @@ final class RSA
     private static function getRSAEP(RSAKey $key, BigInteger $m): ?BigInteger
     {
         if ($m->compare(BigInteger::createFromDecimal(0)) < 0 || $m->compare($key->getModulus()) > 0) {
-            return null;
+            return;
         }
 
         return self::exponentiate($key, $m);
@@ -106,7 +106,7 @@ final class RSA
     private static function getRSADP(RSAKey $key, BigInteger $c): ?BigInteger
     {
         if ($c->compare(BigInteger::createFromDecimal(0)) < 0 || $c->compare($key->getModulus()) > 0) {
-            return null;
+            return;
         }
 
         return self::exponentiate($key, $c);

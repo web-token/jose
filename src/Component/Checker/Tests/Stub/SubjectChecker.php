@@ -24,7 +24,7 @@ final class SubjectChecker implements ClaimCheckerInterface
      */
     public function checkClaim(JWT $jwt): array
     {
-        if (! $jwt->hasClaim('sub')) {
+        if (!$jwt->hasClaim('sub')) {
             return [];
         }
 

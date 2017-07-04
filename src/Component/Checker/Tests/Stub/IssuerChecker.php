@@ -24,7 +24,7 @@ final class IssuerChecker implements ClaimCheckerInterface
      */
     public function checkClaim(JWT $jwt): array
     {
-        if (! $jwt->hasClaim('iss')) {
+        if (!$jwt->hasClaim('iss')) {
             return [];
         }
 

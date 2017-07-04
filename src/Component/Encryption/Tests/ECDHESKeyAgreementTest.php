@@ -249,7 +249,7 @@ final class ECDHESKeyAgreementTest extends TestCase
      */
     public function testGetAgreementKeyWithX25519Curve()
     {
-        if (! function_exists('curve25519_public')) {
+        if (!function_exists('curve25519_public')) {
             $this->markTestSkipped('X25519 extension not available');
         }
         $receiver_private_key = JWKFactory::createOKPKey(['crv' => 'X25519']);

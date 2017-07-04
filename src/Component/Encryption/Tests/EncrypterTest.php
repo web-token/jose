@@ -31,8 +31,8 @@ use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\Encrypter;
 use Jose\Component\Encryption\JWE;
-use Jose\Component\Factory\JWEFactory;
 use Jose\Component\Encryption\JWELoader;
+use Jose\Component\Factory\JWEFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

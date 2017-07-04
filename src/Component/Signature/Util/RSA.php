@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Util;
 
 use Assert\Assertion;
-use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Jose\Component\Core\Util\BigInteger;
+use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
 final class RSA
 {
@@ -89,7 +89,7 @@ final class RSA
     private static function getRSASP1(RSAKey $key, BigInteger $m): ?BigInteger
     {
         if ($m->compare(BigInteger::createFromDecimal(0)) < 0 || $m->compare($key->getModulus()) > 0) {
-            return null;
+            return;
         }
 
         return self::exponentiate($key, $m);
@@ -106,7 +106,7 @@ final class RSA
     private static function getRSAVP1(RSAKey $key, BigInteger $s): ?BigInteger
     {
         if ($s->compare(BigInteger::createFromDecimal(0)) < 0 || $s->compare($key->getModulus()) > 0) {
-            return null;
+            return;
         }
 
         return self::exponentiate($key, $s);

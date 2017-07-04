@@ -134,7 +134,7 @@ final class JWSBuilder
     private function getInputToSign(array $protectedHeaders, ?string $encodedProtectedHeaders): string
     {
         $this->checkB64AndCriticalHeader($protectedHeaders);
-        if (! array_key_exists('b64', $protectedHeaders) || (array_key_exists('b64', $protectedHeaders) && true === $protectedHeaders['b64'])) {
+        if (!array_key_exists('b64', $protectedHeaders) || (array_key_exists('b64', $protectedHeaders) && true === $protectedHeaders['b64'])) {
             $encodedPayload = Base64Url::encode(is_string($this->payload) ? $this->payload : json_encode($this->payload));
 
             return sprintf('%s.%s', $encodedProtectedHeaders, $encodedPayload);
@@ -148,16 +148,16 @@ final class JWSBuilder
      */
     private function checkB64AndCriticalHeader(array $protectedHeaders)
     {
-        if (! array_key_exists('b64', $protectedHeaders)) {
+        if (!array_key_exists('b64', $protectedHeaders)) {
             return;
         }
-        if (! array_key_exists('crit', $protectedHeaders)) {
+        if (!array_key_exists('crit', $protectedHeaders)) {
             throw new \LogicException('The protected header parameter "crit" is mandatory when protected header parameter "b64" is set.');
         }
-        if (! is_array($protectedHeaders['crit'])) {
+        if (!is_array($protectedHeaders['crit'])) {
             throw new \LogicException('The protected header parameter "crit" must be an array.');
         }
-        if (! in_array('b64', $protectedHeaders['crit'])) {
+        if (!in_array('b64', $protectedHeaders['crit'])) {
             throw new \LogicException('The protected header parameter "crit" must contain "b64" when protected header parameter "b64" is set.');
         }
     }
@@ -172,7 +172,7 @@ final class JWSBuilder
     private function findSignatureAlgorithm(JWK $key, array $protectedHeader, array $headers): SignatureAlgorithmInterface
     {
         $completeHeader = array_merge($headers, $protectedHeader);
-        if (! array_key_exists('alg', $completeHeader)) {
+        if (!array_key_exists('alg', $completeHeader)) {
             throw new \InvalidArgumentException('No "alg" parameter set in the header.');
         }
         if ($key->has('alg') && $key->get('alg') !== $completeHeader['alg']) {
@@ -180,7 +180,7 @@ final class JWSBuilder
         }
 
         $signatureAlgorithm = $this->signatureAlgorithmManager->get($completeHeader['alg']);
-        if (! $signatureAlgorithm instanceof SignatureAlgorithmInterface) {
+        if (!$signatureAlgorithm instanceof SignatureAlgorithmInterface) {
             throw new \InvalidArgumentException(sprintf('The algorithm "%s" is not supported.', $completeHeader['alg']));
         }
 

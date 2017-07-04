@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Tests;
 
-use Jose\Component\Factory\JWAManagerFactory;
 use Jose\Component\Encryption\Compression\CompressionManagerFactory;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWE;
-use Jose\Component\Factory\JWEFactory;
 use Jose\Component\Encryption\JWELoader;
+use Jose\Component\Factory\JWAManagerFactory;
+use Jose\Component\Factory\JWEFactory;
+use Jose\Component\Factory\JWSFactory;
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\JWS;
-use Jose\Component\Factory\JWSFactory;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;

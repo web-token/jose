@@ -110,7 +110,7 @@ final class Verifier
     private function getInputToVerify(JWS $jws, Signature $signature, ?string $detached_payload): string
     {
         $encoded_protected_headers = $signature->getEncodedProtectedHeaders();
-        if (! $signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64')) {
+        if (!$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64')) {
             if (null !== $jws->getEncodedPayload($signature)) {
                 return sprintf('%s.%s', $encoded_protected_headers, $jws->getEncodedPayload($signature));
             }
@@ -178,11 +178,11 @@ final class Verifier
     private function checkPayload(JWS $jws, ?string $detached_payload = null)
     {
         Assertion::false(
-            null !== $detached_payload && ! empty($jws->getPayload()),
+            null !== $detached_payload && !empty($jws->getPayload()),
             'A detached payload is set, but the JWS already has a payload.'
         );
         Assertion::true(
-            ! empty($jws->getPayload()) || null !== $detached_payload,
+            !empty($jws->getPayload()) || null !== $detached_payload,
             'No payload.'
         );
     }

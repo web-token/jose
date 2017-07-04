@@ -59,7 +59,7 @@ final class JKUFactory
         }
 
         $data = json_decode($response->getBody()->getContents(), true);
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             throw new \InvalidArgumentException('Invalid content.');
         }
 

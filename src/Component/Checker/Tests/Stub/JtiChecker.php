@@ -24,7 +24,7 @@ final class JtiChecker implements ClaimCheckerInterface
      */
     public function checkClaim(JWT $jwt): array
     {
-        if (! $jwt->hasClaim('jti')) {
+        if (!$jwt->hasClaim('jti')) {
             return [];
         }
 

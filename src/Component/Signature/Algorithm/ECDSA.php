@@ -32,7 +32,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
      */
     public function __construct()
     {
-        if (! defined('OPENSSL_KEYTYPE_EC')) {
+        if (!defined('OPENSSL_KEYTYPE_EC')) {
             throw new \RuntimeException('Elliptic Curve key type not supported by your environment.');
         }
     }

@@ -46,7 +46,7 @@ final class KeyChecker
     private static function checkOperation(JWK $key, string $usage): bool
     {
         $ops = $key->get('key_ops');
-        if (! is_array($ops)) {
+        if (!is_array($ops)) {
             $ops = [$ops];
         }
         switch ($usage) {
@@ -102,7 +102,7 @@ final class KeyChecker
      */
     public static function checkKeyAlgorithm(JWK $key, string $algorithm)
     {
-        if (! $key->has('alg')) {
+        if (!$key->has('alg')) {
             return;
         }
 

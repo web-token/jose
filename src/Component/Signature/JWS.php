@@ -87,13 +87,13 @@ final class JWS extends JWT
     public function getEncodedPayload(Signature $signature): ?string
     {
         if (true === $this->isPayloadDetached()) {
-            return null;
+            return;
         }
         if (null !== $this->encodedPayload) {
             return $this->encodedPayload;
         }
         $payload = $this->getPayload();
-        if (! is_string($payload)) {
+        if (!is_string($payload)) {
             $payload = json_encode($payload);
         }
         Assertion::notNull($payload, 'Unsupported payload.');
@@ -205,7 +205,7 @@ final class JWS extends JWT
         ];
 
         foreach ($values as $key => $value) {
-            if (! empty($value)) {
+            if (!empty($value)) {
                 $data[$key] = $value;
             }
         }
@@ -237,7 +237,7 @@ final class JWS extends JWT
             ];
 
             foreach ($values as $key => $value) {
-                if (! empty($value)) {
+                if (!empty($value)) {
                     $tmp[$key] = $value;
                 }
             }
@@ -254,7 +254,7 @@ final class JWS extends JWT
      */
     private function isPayloadEncoded(Signature $signature): bool
     {
-        return ! $signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
+        return !$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
     }
 
     private function checkPayloadEncoding()

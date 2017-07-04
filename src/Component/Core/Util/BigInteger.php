@@ -312,6 +312,6 @@ final class BigInteger
      */
     public function isOdd(): bool
     {
-        return ! $this->isEven();
+        return !$this->isEven();
     }
 }

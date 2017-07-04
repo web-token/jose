@@ -22,7 +22,7 @@ final class CriticalHeaderChecker implements HeaderCheckerInterface
      */
     public function checkHeader(array $protected_headers, array $headers, array $checked_claims)
     {
-        if (! array_key_exists('crit', $protected_headers)) {
+        if (!array_key_exists('crit', $protected_headers)) {
             return;
         }
 

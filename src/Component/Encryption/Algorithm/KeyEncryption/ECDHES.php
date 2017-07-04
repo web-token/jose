@@ -16,8 +16,8 @@ namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
-use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Encryption\Util\ConcatKDF;
+use Jose\Component\KeyManagement\JWKFactory;
 use Mdanter\Ecc\Crypto\EcDH\EcDH;
 use Mdanter\Ecc\EccFactory;
 

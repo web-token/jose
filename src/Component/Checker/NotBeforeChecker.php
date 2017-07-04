@@ -23,7 +23,7 @@ final class NotBeforeChecker implements ClaimCheckerInterface
      */
     public function checkClaim(JWT $jwt): array
     {
-        if (! $jwt->hasClaim('nbf')) {
+        if (!$jwt->hasClaim('nbf')) {
             return [];
         }
 

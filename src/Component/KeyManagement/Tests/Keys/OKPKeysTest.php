@@ -33,7 +33,7 @@ final class OKPKeysTest extends TestCase
 
     public function testCreateOKPKeyWithCurveX25519()
     {
-        if (! function_exists('curve25519_public')) {
+        if (!function_exists('curve25519_public')) {
             $this->markTestSkipped('EdDSA extension not available');
         }
 
@@ -56,7 +56,7 @@ final class OKPKeysTest extends TestCase
 
     public function testCreateOKPKeyWithCurveEd25519()
     {
-        if (! function_exists('ed25519_publickey')) {
+        if (!function_exists('ed25519_publickey')) {
             $this->markTestSkipped('EdDSA extension not available');
         }
 
