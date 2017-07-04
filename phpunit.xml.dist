@@ -14,7 +14,6 @@
         <testsuite name="Test Suite">
             <directory>./src/Component/*/Tests/</directory>
             <directory>./src/Component/*/*/Tests/</directory>
-            <directory>./tests/</directory>
         </testsuite>
     </testsuites>
 
@@ -22,7 +21,7 @@
         <whitelist>
             <directory suffix=".php">./</directory>
             <exclude>
-                <directory>./tests</directory>
+                <directory>./performance</directory>
                 <directory>./vendor</directory>
             </exclude>
         </whitelist>
