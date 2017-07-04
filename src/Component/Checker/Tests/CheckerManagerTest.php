@@ -186,9 +186,9 @@ final class CheckerManagerTest extends TestCase
         $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss'],
             ]
         );
@@ -213,9 +213,9 @@ final class CheckerManagerTest extends TestCase
         $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss'],
             ]
         );
@@ -241,9 +241,9 @@ final class CheckerManagerTest extends TestCase
         $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud'],
             ]
         );
@@ -270,9 +270,9 @@ final class CheckerManagerTest extends TestCase
         $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud', 'jti'],
             ]
         );
@@ -296,9 +296,9 @@ final class CheckerManagerTest extends TestCase
         $jwt = $jwt->addSignatureInformation(
             JWK::create(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud', 'jti'],
             ]
         );

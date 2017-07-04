@@ -245,11 +245,11 @@ final class RSAKey extends Sequence
 
         $this->values['kty'] = 'RSA';
         $keys = [
-            'n'  => 'n',
-            'e'  => 'e',
-            'd'  => 'd',
-            'p'  => 'p',
-            'q'  => 'q',
+            'n' => 'n',
+            'e' => 'e',
+            'd' => 'd',
+            'p' => 'p',
+            'q' => 'q',
             'dp' => 'dmp1',
             'dq' => 'dmq1',
             'qi' => 'iqmp',

@@ -141,7 +141,7 @@ final class JWETest extends TestCase
     {
         $jwe = JWEFactory::createJWE([]);
         $jwe = $jwe->addRecipientWithEncryptedKey(null, [
-            'foo'  => 'bar',
+            'foo' => 'bar',
             'plic' => 'ploc',
         ]);
 
