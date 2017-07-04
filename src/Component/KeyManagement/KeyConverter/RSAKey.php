@@ -23,7 +23,7 @@ use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\OctetString;
 use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
-use Jose\Util\BigInteger;
+use Jose\Component\Core\Util\BigInteger;
 
 final class RSAKey extends Sequence
 {

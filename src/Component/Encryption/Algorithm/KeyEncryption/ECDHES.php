@@ -17,7 +17,7 @@ use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\KeyManagement\JWKFactory;
-use Jose\Util\ConcatKDF;
+use Jose\Component\Encryption\Util\ConcatKDF;
 use Mdanter\Ecc\Crypto\EcDH\EcDH;
 use Mdanter\Ecc\EccFactory;
 
