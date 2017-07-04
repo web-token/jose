@@ -23,6 +23,7 @@
             <exclude>
                 <directory>./performance</directory>
                 <directory>./vendor</directory>
+                <directory suffix="Test.php">./src</directory>
             </exclude>
         </whitelist>
     </filter>
