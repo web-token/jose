@@ -3,7 +3,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 Spomky-Labs
+ * Copyright (c) 2014-2017 Spomky-Labs
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -251,9 +251,9 @@ final class BigInteger
      */
     public static function random(BigInteger $y)
     {
-        $zero = BigInteger::createFromDecimal(0);
+        $zero = self::createFromDecimal(0);
 
-        return BigInteger::createFromGMPResource(gmp_random_range($zero->value, $y->value));
+        return self::createFromGMPResource(gmp_random_range($zero->value, $y->value));
     }
 
     /**
@@ -263,7 +263,7 @@ final class BigInteger
      */
     public function gcd(BigInteger $y)
     {
-        return BigInteger::createFromGMPResource(gmp_gcd($this->value, $y->value));
+        return self::createFromGMPResource(gmp_gcd($this->value, $y->value));
     }
 
     /**
@@ -311,8 +311,8 @@ final class BigInteger
      */
     public function isEven()
     {
-        $zero = BigInteger::createFromDecimal(0);
-        $two  = BigInteger::createFromDecimal(2);
+        $zero = self::createFromDecimal(0);
+        $two = self::createFromDecimal(2);
 
         return $this->mod($two)->equals($zero);
     }
