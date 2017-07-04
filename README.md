@@ -66,7 +66,6 @@ When `b64` header is set, the `crit` protected header with value `b64` in its ar
 | `oct`    | YES       | Symmetric keys                               |
 | `RSA`    | YES       | RSA based asymmetric keys                    |
 | `EC`     | YES       | Elliptic Curves based asymmetric keys        |
-| `dir`    | YES       | Direct Key for direct encryption keys        |
 | `OKP`    | YES       | Octet Key Pair based asymmetric keys         |
 
 JWK objects support JSON Web Key Thumbprint ([RFC 7638](https://tools.ietf.org/html/rfc7638)).
