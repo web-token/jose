@@ -13,8 +13,13 @@ declare(strict_types=1);
 
 namespace Jose\Component\Core\Tests;
 
+use Jose\Component\Core\JWAInterface;
+use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
+use Jose\Component\Factory\JWAManagerFactory;
+use Jose\Component\Signature\Algorithm\HS512;
+use Jose\Component\Signature\Algorithm\RS256;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,8 +30,27 @@ use PHPUnit\Framework\TestCase;
  */
 final class JWAManagerTest extends TestCase
 {
-    public function testKey()
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The array must contains JWAInterface objects.
+     */
+    public function testCreateManagerWithBadList()
     {
+        JWAManager::create(['foo']);
+    }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The algorithm "HS384" is not supported.
+     */
+    public function testCreateManagerAndRetrieveAlgorithm()
+    {
+        $manager = JWAManager::create([new HS512(), new RS256()]);
+
+        $this->assertEquals(['HS512', 'RS256'], $manager->list());
+        $this->assertTrue($manager->has('HS512'));
+        $this->assertFalse($manager->has('HS384'));
+        $this->assertInstanceOf(JWAInterface::class, $manager->get('HS512'));
+        $manager->get('HS384');
     }
 }

@@ -72,9 +72,9 @@ final class JWAManager
     /**
      * @param string $algorithm The algorithm
      *
-     * @return JWAInterface|null Returns JWAInterface object if the algorithm is supported, else null
+     * @return JWAInterface Returns JWAInterface object if the algorithm is supported, else null
      */
-    public function get(string $algorithm): ?JWAInterface
+    public function get(string $algorithm): JWAInterface
     {
         if (!$this->has($algorithm)) {
             throw new \InvalidArgumentException(sprintf('The algorithm "%s" is not supported.', $algorithm));
