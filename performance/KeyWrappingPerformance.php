@@ -78,63 +78,63 @@ function dataKeyWrappinPerformance()
             new A128KW(),
             JWK::create([
             'kty' => 'oct',
-            'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+            'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]),
         ],
         [
             new A192KW(),
             JWK::create([
             'kty' => 'oct',
-            'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
+            'k' => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
         ]),
         ],
         [
             new A256KW(),
             JWK::create([
             'kty' => 'oct',
-            'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
+            'k' => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
         ]),
         ],
         [
             new A128GCMKW(),
             JWK::create([
             'kty' => 'oct',
-            'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+            'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]),
         ],
         [
             new A192GCMKW(),
             JWK::create([
             'kty' => 'oct',
-            'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
+            'k' => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
         ]),
         ],
         [
             new A256GCMKW(),
             JWK::create([
             'kty' => 'oct',
-            'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
+            'k' => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
         ]),
         ],
         [
             new PBES2HS256A128KW(),
             JWK::create([
             'kty' => 'oct',
-            'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+            'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]),
         ],
         [
             new PBES2HS384A192KW(),
             JWK::create([
             'kty' => 'oct',
-            'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
+            'k' => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
         ]),
         ],
         [
             new PBES2HS512A256KW(),
             JWK::create([
             'kty' => 'oct',
-            'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
+            'k' => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
         ]),
         ],
     ];

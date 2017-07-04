@@ -59,8 +59,8 @@ function dataKeyAgreementPerformance()
             JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-256',
-                'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
-                'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
+                'x' => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
+                'y' => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
             ]),
         ],
         [
@@ -69,8 +69,8 @@ function dataKeyAgreementPerformance()
             JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-384',
-                'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
-                'y'   => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
+                'x' => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
+                'y' => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
             ]),
         ],
         [
@@ -79,8 +79,8 @@ function dataKeyAgreementPerformance()
             JWK::create([
                 'kty' => 'EC',
                 'crv' => 'P-521',
-                'x'   => 'AekpBQ8ST8a8VcfVOTNl353vSrDCLLJXmPk06wTjxrrjcBpXp5EOnYG_NjFZ6OvLFV1jSfS9tsz4qUxcWceqwQGk',
-                'y'   => 'ADSmRA43Z1DSNx_RvcLI87cdL07l6jQyyBXMoxVg_l2Th-x3S1WDhjDly79ajL4Kkd0AZMaZmh9ubmf63e3kyMj2',
+                'x' => 'AekpBQ8ST8a8VcfVOTNl353vSrDCLLJXmPk06wTjxrrjcBpXp5EOnYG_NjFZ6OvLFV1jSfS9tsz4qUxcWceqwQGk',
+                'y' => 'ADSmRA43Z1DSNx_RvcLI87cdL07l6jQyyBXMoxVg_l2Th-x3S1WDhjDly79ajL4Kkd0AZMaZmh9ubmf63e3kyMj2',
             ]),
         ],
     ];

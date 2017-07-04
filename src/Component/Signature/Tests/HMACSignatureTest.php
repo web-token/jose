@@ -47,7 +47,7 @@ final class HMACSignatureTest extends TestCase
     {
         $key = JWK::create([
             'kty' => 'oct',
-            'k'   => 'foo',
+            'k' => 'foo',
         ]);
         $hmac = new HS256();
         $data = 'Live long and Prosper.';
@@ -59,7 +59,7 @@ final class HMACSignatureTest extends TestCase
     {
         $key = JWK::create([
             'kty' => 'oct',
-            'k'   => 'foo',
+            'k' => 'foo',
         ]);
         $hmac = new HS256();
         $data = 'Live long and Prosper.';
@@ -74,7 +74,7 @@ final class HMACSignatureTest extends TestCase
     {
         $key = JWK::create([
             'kty' => 'oct',
-            'k'   => 'foo',
+            'k' => 'foo',
         ]);
         $hmac = new HS384();
         $data = 'Live long and Prosper.';
@@ -89,7 +89,7 @@ final class HMACSignatureTest extends TestCase
     {
         $key = JWK::create([
             'kty' => 'oct',
-            'k'   => 'foo',
+            'k' => 'foo',
         ]);
         $hmac = new HS512();
         $data = 'Live long and Prosper.';
