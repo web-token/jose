@@ -71,9 +71,9 @@ final class ECDHES implements KeyAgreementInterface
      *
      * @throws \InvalidArgumentException
      *
-     * @return int|string|void
+     * @return string
      */
-    public function calculateAgreementKey(JWK $private_key, JWK $public_key)
+    public function calculateAgreementKey(JWK $private_key, JWK $public_key): string
     {
         switch ($public_key->get('crv')) {
             case 'P-256':
@@ -94,10 +94,10 @@ final class ECDHES implements KeyAgreementInterface
 
                 return $this->convertDecToBin($ecdh->calculateSharedKey());
             case 'X25519':
-                return curve25519_shared(
-                    Base64Url::decode($private_key->get('d')),
-                    Base64Url::decode($public_key->get('x'))
-                );
+                $sKey = Base64Url::decode($private_key->get('d'));
+                $recipientPublickey = Base64Url::decode($public_key->get('x'));
+
+                return sodium_crypto_scalarmult($sKey, $recipientPublickey);
             default:
                 throw new \InvalidArgumentException(sprintf('The curve "%s" is not supported', $public_key->get('crv')));
         }
@@ -188,7 +188,7 @@ final class ECDHES implements KeyAgreementInterface
     /**
      * @param string $value
      *
-     * @return resource
+     * @return \GMP
      */
     private function convertBase64ToGmp($value)
     {
@@ -198,7 +198,7 @@ final class ECDHES implements KeyAgreementInterface
     }
 
     /**
-     * @param $value
+     * @param \GMP $value
      *
      * @return string
      */

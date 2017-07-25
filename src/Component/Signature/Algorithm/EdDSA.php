@@ -30,13 +30,13 @@ final class EdDSA implements SignatureAlgorithmInterface
     {
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The key is not private');
-
         $secret = Base64Url::decode($key->get('d'));
-        $public = Base64Url::decode($key->get('x'));
+        $keyPair = sodium_crypto_sign_seed_keypair($secret);
+        $secretKey = sodium_crypto_sign_secretkey($keyPair);
 
         switch ($key->get('crv')) {
             case 'Ed25519':
-                return ed25519_sign($input, $secret, $public);
+                return sodium_crypto_sign_detached($input, $secretKey);
             default:
                 throw new \InvalidArgumentException('Unsupported curve');
         }
@@ -53,7 +53,7 @@ final class EdDSA implements SignatureAlgorithmInterface
 
         switch ($key->get('crv')) {
             case 'Ed25519':
-                return ed25519_sign_open($input, $public, $signature);
+                return sodium_crypto_sign_verify_detached($signature, $input, $public);
             default:
                 throw new \InvalidArgumentException('Unsupported curve');
         }

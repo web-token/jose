@@ -1,6 +1,11 @@
 PHP JOSE Library
 ================
 
+If you really love that library, then you can help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/Spomky-Labs/jose/badge.svg?style=beer-square)](https://beerpay.io/Spomky-Labs/jose)  [![Beerpay](https://beerpay.io/Spomky-Labs/jose/make-wish.svg?style=flat-square)](https://beerpay.io/Spomky-Labs/jose?focus=wish)
+
+
 [![Join the chat at https://gitter.im/Spomky-Labs/jose](https://badges.gitter.im/Spomky-Labs/jose.svg)](https://gitter.im/Spomky-Labs/jose?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Spomky-Labs/jose/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Spomky-Labs/jose/?branch=master)
@@ -83,11 +88,8 @@ JWKSet is fully supported.
 | `RS256`, `RS384` and `RS512`   | YES       |                                                                             |
 | `PS256`, `PS384` and `PS512`   | YES       |                                                                             |
 | `none`                         | YES       | **Please note that this is not a secured algorithm. USE IT WITH CAUTION!**  |
-| *`EdDSA` with `Ed25519` curve* | YES       | [Third party extension required](https://github.com/encedo/php-ed25519-ext) |
+| *`EdDSA` with `Ed25519` curve* | YES       | [For PHP 7.1, third party extension highly recommended](https://github.com/jedisct1/libsodium-php) |
 | *`EdDSA` with `Ed448` curve*   | **NO**    |                                                                             |
-
-*Please note that the [EdDSA signature algorithm specification](https://tools.ietf.org/html/draft-ietf-jose-cfrg-curves)
-is not not yet approved. Support for algorithms `Ed25518` and `Ed448` may change. Use with caution.*
 
 ## Supported Key Encryption Algorithms
 
@@ -98,12 +100,9 @@ is not not yet approved. Support for algorithms `Ed25518` and `Ed448` may change
 | `ECDH-ES`, `ECDH-ES+A128KW`, `ECDH-ES+A192KW` and `ECDH-ES+A256KW`  | YES       |                                                                                                                   |
 | `A128KW`, `A128KW` and `A128KW`                                     | YES       |                                                                                                                   |
 | `PBES2-HS256+A128KW`, `PBES2-HS384+A192KW` and `PBES2-HS512+A256KW` | YES       |                                                                                                                   |
-| `A128GCMKW`, `A192GCMKW` and `A256GCMKW`                            | YES       | For better performance, please use PHP 7.1+ or this [third party extension ](https://github.com/bukka/php-crypto) |
-| `EdDSA` with `X25519` curve                                         | YES       | [Third party extension required](https://github.com/encedo/php-curve25519-ext)                                    |
+| `A128GCMKW`, `A192GCMKW` and `A256GCMKW`                            | YES       |                                                                                                                   |
+| `EdDSA` with `X25519` curve                                         | YES       | [For PHP 7.1, third party extension highly recommended](https://github.com/jedisct1/libsodium-php)                |
 | `EdDSA` with `X448` curve                                           | **NO**    |                                                                                                                   |
-
-*Please note that the [EdDSA encryption algorithm specification](https://tools.ietf.org/html/draft-ietf-jose-cfrg-curves)
-is not not yet approved. Support for algorithms `X25518` and `X448` may change. Use with caution.*
 
 ## Supported Content Encryption Algorithms
 
@@ -123,15 +122,14 @@ This library needs at least:
 * OpenSSL extension.
 
 Please consider the following optional requirements:
-* For Ed25519 algorithm: [php-ed25519-ext](https://github.com/encedo/php-ed25519-ext) required
-* For X25519 algorithm: [php-curve25519-ext](https://github.com/encedo/php-curve25519-ext) required
+* [For PHP 7.1 only, third party extension highly recommended](https://github.com/jedisct1/libsodium-php)
 
 Please read performance test results below concerning the ECC based algorithms.
 As the time needed to perform operation is long compared to the other algorithms, we do not recommend their use.
 
 # Continuous Integration
 
-It has been successfully tested using `PHP 5.6`, `PHP 7.0`, `PHP 7.1` and `HHVM` with all algorithms.
+It has been successfully tested using `PHP 7.1` with all algorithms.
 
 Tests vectors from the [RFC 7520](http://tools.ietf.org/html/rfc7520) are fully implemented and all tests pass.
 
@@ -160,13 +158,9 @@ Please read the [performance page](doc/Performance.md) to know how fast are the 
 # Contributing
 
 Requests for new features, bug fixed and all other ideas to make this library useful are welcome.
-If you feel comfortable writting code, you could try to fix [opened issues where help is wanted](https://github.com/Spomky-Labs/jose/labels/help+wanted) or [those that are easy to fix](https://github.com/Spomky-Labs/jose/labels/easy-pick).
+If you feel comfortable writing code, you could try to fix [opened issues where help is wanted](https://github.com/Spomky-Labs/jose/labels/help+wanted) or [those that are easy to fix](https://github.com/Spomky-Labs/jose/labels/easy-pick).
 
 Do not forget to [follow these best practices](doc/Contributing.md).
-
-If you really love that library, then you can help me out for a couple of :beers:!
-
-[![Beerpay](https://beerpay.io/Spomky-Labs/jose/badge.svg?style=beer-square)](https://beerpay.io/Spomky-Labs/jose)  [![Beerpay](https://beerpay.io/Spomky-Labs/jose/make-wish.svg?style=flat-square)](https://beerpay.io/Spomky-Labs/jose?focus=wish)
 
 # Licence
 

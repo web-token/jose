@@ -36,10 +36,6 @@ final class EdDSASignatureTest extends TestCase
      */
     public function testEdDSAVerifyAlgorithm()
     {
-        if (!function_exists('ed25519_sign')) {
-            $this->markTestSkipped('EdDSA extension not available');
-        }
-
         $key = JWK::create([
             'kty' => 'OKP',
             'crv' => 'Ed25519',
@@ -61,10 +57,6 @@ final class EdDSASignatureTest extends TestCase
      */
     public function testEdDSASignAndVerifyAlgorithm()
     {
-        if (!function_exists('ed25519_sign')) {
-            $this->markTestSkipped('EdDSA extension not available');
-        }
-
         $key = JWK::create([
             'kty' => 'OKP',
             'crv' => 'Ed25519',

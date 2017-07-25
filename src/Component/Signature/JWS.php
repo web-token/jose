@@ -46,11 +46,13 @@ final class JWS implements JWTInterface
      * JWS constructor.
      *
      * @param mixed|null $payload
+     * @param mixed|null $encodedPayload
      * @param bool       $isPayloadDetached
      */
-    private function __construct($payload = null, bool $isPayloadDetached = false)
+    private function __construct($payload = null, $encodedPayload = null, bool $isPayloadDetached = false)
     {
         $this->payload = $payload;
+        $this->encodedPayload = $encodedPayload;
         $this->isPayloadDetached = $isPayloadDetached;
     }
 
@@ -62,7 +64,24 @@ final class JWS implements JWTInterface
      */
     public static function create($payload = null, bool $isPayloadDetached = false): JWS
     {
-        return new self($payload, $isPayloadDetached);
+        return new self($payload, null, $isPayloadDetached);
+    }
+
+    /**
+     * @param mixed|null $encodedPayload
+     * @param bool       $isPayloadDetached
+     *
+     * @return JWS
+     */
+    public static function createFromEncodedPayload($encodedPayload, bool $isPayloadDetached = false): JWS
+    {
+        $payload = Base64Url::decode($encodedPayload);
+        $json = json_decode($payload, true);
+        if (null !== $json && !empty($payload)) {
+            $payload = $json;
+        }
+
+        return new self($payload, $encodedPayload, $isPayloadDetached);
     }
 
     /**

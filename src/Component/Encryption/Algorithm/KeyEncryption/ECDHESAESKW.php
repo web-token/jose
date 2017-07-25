@@ -27,7 +27,7 @@ abstract class ECDHESAESKW implements KeyAgreementWrappingInterface
     {
         $ecdh_es = new ECDHES();
 
-        $agreement_key = $ecdh_es->getAgreementKey($this->getKeyLength(), $this->name(), $receiver_key, $complete_header, $additional_header_values);
+        $agreement_key = $ecdh_es->getAgreementKey($this->getKeyLength(), $this->name(), $receiver_key->toPublic(), $complete_header, $additional_header_values);
         $wrapper = $this->getWrapper();
 
         return $wrapper->wrap($agreement_key, $cek);

@@ -132,14 +132,13 @@ final class JWKFactory
         $curve = $values['crv'];
         switch ($curve) {
             case 'X25519':
-                Assertion::true(function_exists('curve25519_public'), sprintf('Unsupported "%s" curve', $curve));
-                $d = random_bytes(32);
-                $x = curve25519_public($d);
+                $d = sodium_randombytes_buf(\Sodium\CRYPTO_BOX_SEEDBYTES);
+                $x = sodium_crypto_scalarmult_base($d);
                 break;
             case 'Ed25519':
-                Assertion::true(function_exists('ed25519_publickey'), sprintf('Unsupported "%s" curve', $curve));
-                $d = random_bytes(32);
-                $x = ed25519_publickey($d);
+                $d = sodium_randombytes_buf(\Sodium\CRYPTO_SIGN_SEEDBYTES);
+                $keyPair = sodium_crypto_sign_seed_keypair($d);
+                $x = sodium_crypto_sign_publickey($keyPair);
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('Unsupported "%s" curve', $curve));
@@ -178,11 +177,11 @@ final class JWKFactory
     }
 
     /**
-     * @param string $value
+     * @param \GMP $value
      *
      * @return string
      */
-    private static function encodeValue(string $value): string
+    private static function encodeValue(\GMP $value): string
     {
         $value = gmp_strval($value);
 

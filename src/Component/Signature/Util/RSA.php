@@ -31,7 +31,7 @@ final class RSA
     {
         $x = $x->toBytes();
         if (strlen($x) > $xLen) {
-            return false;
+            throw new \RuntimeException();
         }
 
         return str_pad($x, $xLen, chr(0), STR_PAD_LEFT);
@@ -84,12 +84,12 @@ final class RSA
      * @param RSAKey     $key
      * @param BigInteger $m
      *
-     * @return BigInteger|null
+     * @return BigInteger
      */
-    private static function getRSASP1(RSAKey $key, BigInteger $m): ?BigInteger
+    private static function getRSASP1(RSAKey $key, BigInteger $m): BigInteger
     {
         if ($m->compare(BigInteger::createFromDecimal(0)) < 0 || $m->compare($key->getModulus()) > 0) {
-            return null;
+            throw new \RuntimeException();
         }
 
         return self::exponentiate($key, $m);
@@ -140,9 +140,9 @@ final class RSA
      * @param int    $emBits
      * @param Hash   $hash
      *
-     * @return string|null
+     * @return string
      */
-    private static function encodeEMSAPSS(string $m, int $emBits, Hash $hash): ?string
+    private static function encodeEMSAPSS(string $m, int $emBits, Hash $hash): string
     {
         $emLen = ($emBits + 1) >> 3;
         $sLen = $hash->getLength();
@@ -208,10 +208,8 @@ final class RSA
     {
         Assertion::inArray($hash, ['sha256', 'sha384', 'sha512']);
         $em = self::encodeEMSAPSS($message, 8 * $key->getModulusLength() - 1, Hash::$hash());
-        Assertion::string($em);
         $message = self::convertOctetStringToInteger($em);
         $signature = self::getRSASP1($key, $message);
-        Assertion::isInstanceOf($signature, BigInteger::class);
 
         return self::convertIntegerToOctetString($signature, $key->getModulusLength());
     }
