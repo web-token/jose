@@ -10,7 +10,7 @@ Tests on HHVM are not performed anymore.
 ## `ECDH-ES*` Encryption Algorithms
 
 The library `mdanter/ecc` is not installed by default.
-If you need `ECDH-ES*` encryption algorithms, then you have to install it explicitly. 
+If you need `ECDH-ES` with `P-256`, `P-384` or `P-521` curves encryption algorithms, then you have to install it explicitly. 
 
 ## Features added
 
@@ -70,6 +70,6 @@ The following classes are now marked as final.
 * `Jose\Checker\NotBeforeChecker`
 * `Jose\Checker\CheckerManager`
 
-## Typehinting
+## Type Hinting
 
 Every classes of the project has methods and functions have strict type hinting. 
