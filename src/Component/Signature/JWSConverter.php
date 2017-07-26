@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature;
 
 /**
- * Class JWSConverter
+ * Class JWSConverter.
  */
 final class JWSConverter
 {
