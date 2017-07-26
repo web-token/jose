@@ -31,7 +31,7 @@ final class JWEFactory
      */
     public static function createJWE($payload, array $shared_protected_headers = [], array $shared_headers = [], ?string $aad = null): JWE
     {
-        $jwe = new JWE();
+        $jwe = JWE::createEmpty();
         $jwe = $jwe->withSharedProtectedHeaders($shared_protected_headers);
         $jwe = $jwe->withSharedHeaders($shared_headers);
         $jwe = $jwe->withPayload($payload);

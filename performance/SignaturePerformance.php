@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 include_once __DIR__.'/../vendor/autoload.php';
 
+use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\EdDSA;
 use Jose\Component\Signature\Algorithm\ES256;
@@ -28,16 +29,23 @@ use Jose\Component\Signature\Algorithm\PS512;
 use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\Algorithm\RS384;
 use Jose\Component\Signature\Algorithm\RS512;
+use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 function testSignaturePerformance(SignatureAlgorithmInterface $alg, JWK $key)
 {
     $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
 
+    $jwaManager = JWAManager::create([$alg]);
     $time_start = microtime(true);
     $nb = 100;
     for ($i = 0; $i < $nb; ++$i) {
-        $alg->sign($key, $payload);
+        $jwsBuilder = new JWSBuilder($jwaManager);
+        $jwsBuilder
+            ->withPayload($payload)
+            ->addSignature($key, ['alg' => $alg->name()])
+            ->build()
+            ->toCompactJSON(0);
     }
 
     $time_end = microtime(true);

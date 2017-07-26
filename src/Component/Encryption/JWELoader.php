@@ -127,7 +127,7 @@ final class JWELoader
      */
     private static function loadSerializedJsonJWE(array $data): JWE
     {
-        $jwe = new JWE();
+        $jwe = JWE::createEmpty();
         $jwe = $jwe->withCiphertext(Base64Url::decode($data['ciphertext']));
 
         self::populateIV($jwe, $data);

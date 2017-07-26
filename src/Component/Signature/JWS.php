@@ -68,23 +68,6 @@ final class JWS implements JWTInterface
     }
 
     /**
-     * @param mixed|null $encodedPayload
-     * @param bool       $isPayloadDetached
-     *
-     * @return JWS
-     */
-    public static function createFromEncodedPayload($encodedPayload, bool $isPayloadDetached = false): JWS
-    {
-        $payload = Base64Url::decode($encodedPayload);
-        $json = json_decode($payload, true);
-        if (null !== $json && !empty($payload)) {
-            $payload = $json;
-        }
-
-        return new self($payload, $encodedPayload, $isPayloadDetached);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getPayload()
@@ -222,7 +205,7 @@ final class JWS implements JWTInterface
      *
      * @return Signature
      */
-    public function &getSignature(int $id): Signature
+    public function getSignature(int $id): Signature
     {
         if (isset($this->signatures[$id])) {
             return $this->signatures[$id];

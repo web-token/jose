@@ -44,9 +44,7 @@
         "satooshi/php-coveralls": "^1.0"
     },
    "suggest":{
-        "mdanter/ecc": "For ECDH-ES with P-256, P-384 and P-521 Elliptic Curves algorithms support.",
-        "ext-ed25519": "For EdDSA with Ed25519 curves support.",
-        "ext-curve25519": "For ECDH-ES with X25519 curves support."
+        "mdanter/ecc": "For ECDH-ES with P-256, P-384 and P-521 Elliptic Curves algorithms support."
    },
     "extra": {
         "branch-alias": {

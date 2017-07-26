@@ -17,7 +17,6 @@ use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
-use Jose\Component\Factory\JWAManagerFactory;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\Algorithm\HS512;
 use Jose\Component\Signature\Algorithm\PS512;
@@ -140,7 +139,7 @@ final class SignerTest extends TestCase
 
     public function testCreateCompactJWSUsingFactory()
     {
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS512', 'RS512']);
+        $algorithmManager = JWAManager::create([new HS512(), new RS512()]);
         $builder = new JWSBuilder($algorithmManager);
 
         $jws = $builder
@@ -195,7 +194,7 @@ final class SignerTest extends TestCase
 
     public function testCreateFlattenedJWSUsingFactory()
     {
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS512', 'RS512']);
+        $algorithmManager = JWAManager::create([new HS512(), new RS512()]);
         $builder = new JWSBuilder($algorithmManager);
         $jws = $builder
             ->withPayload('Live long and Prosper.')
@@ -396,7 +395,7 @@ final class SignerTest extends TestCase
             'signature' => 'A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY',
         ];
 
-        $signatureAlgorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
         $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
@@ -424,7 +423,7 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $algorithmManager = JWAManager::create([new HS256()]);
         $builder = new JWSBuilder($algorithmManager);
         $jws = $builder
             ->withPayload($payload, true)
@@ -476,7 +475,7 @@ final class SignerTest extends TestCase
         $this->assertEquals($expected_result, $jws->toJSON());
 
         $loaded = JWSLoader::load($expected_result);
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $algorithmManager = JWAManager::create([new HS256()]);
         $verifier = new Verifier($algorithmManager);
         $verifier->verifyWithKey($loaded, $key, $payload, $index1);
 
@@ -536,7 +535,7 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $algorithmManager = JWAManager::create([new HS256()]);
         $builder = new JWSBuilder($algorithmManager);
         $builder
             ->withPayload($payload, true)
@@ -563,7 +562,7 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $algorithmManager = JWAManager::create([new HS256()]);
         $builder = new JWSBuilder($algorithmManager);
         $builder
             ->withPayload($payload, true)
@@ -590,7 +589,7 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $algorithmManager = JWAManager::create([new HS256()]);
         $builder = new JWSBuilder($algorithmManager);
         $builder
             ->withPayload($payload, true)
@@ -623,7 +622,7 @@ final class SignerTest extends TestCase
             'signature' => 'A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY',
         ];
 
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName(['HS256']);
+        $algorithmManager = JWAManager::create([new HS256()]);
         $builder = new JWSBuilder($algorithmManager);
         $jws = $builder
             ->withPayload($payload)

@@ -69,6 +69,69 @@ final class JWE implements JWTInterface
     private $payload = null;
 
     /**
+     * JWE constructor.
+     * @param null|string $ciphertext
+     * @param null|string $iv
+     * @param null|string $aad
+     * @param null|string $tag
+     * @param array $shared_headers
+     * @param array $shared_protected_headers
+     * @param null|string $encoded_shared_protected_headers
+     * @param mixed|null $payload
+     * @param array $recipients
+     */
+    private function __construct(?string $ciphertext = null, ?string $iv = null, ?string $aad = null, ?string $tag = null, array $shared_headers = [], array $shared_protected_headers = [], ?string $encoded_shared_protected_headers = null,  $payload = null, array $recipients = [])
+    {
+        $this->ciphertext = $ciphertext;
+        $this->iv = $iv;
+        $this->aad = $aad;
+        $this->tag = $tag;
+        $this->shared_headers = $shared_headers;
+        $this->shared_protected_headers = $shared_protected_headers;
+        $this->encoded_shared_protected_headers = $encoded_shared_protected_headers;
+        $this->payload = $payload;
+        $this->recipients = $recipients;
+    }
+
+    /**
+     * @return JWE
+     */
+    public static function createEmpty(): JWE
+    {
+        return new self();
+    }
+
+    /**
+     * @param $payload
+     * @param array $shared_protected_headers
+     * @param null|string $aad
+     * @param array $shared_headers
+     *
+     * @return JWE
+     */
+    public static function create($payload, array $shared_protected_headers = [], array $shared_headers = [], ?string $aad = null): JWE
+    {
+        return new self(null, null, $aad, null, $shared_headers, $shared_protected_headers, null, $payload);
+    }
+
+    /**
+     * @param null|string $ciphertext
+     * @param null|string $iv
+     * @param null|string $aad
+     * @param null|string $tag
+     * @param array $shared_headers
+     * @param array $shared_protected_headers
+     * @param null|string $encoded_shared_protected_headers
+     * @param array $recipients
+     *
+     * @return JWE
+     */
+    public static function createFromLoadedData(?string $ciphertext = null, ?string $iv = null, ?string $aad = null, ?string $tag = null, array $shared_headers = [], array $shared_protected_headers = [], ?string $encoded_shared_protected_headers = null,  array $recipients = []): JWE
+    {
+        return new self($ciphertext, $iv, $aad, $tag, $shared_headers, $shared_protected_headers, $encoded_shared_protected_headers, null, $recipients);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getPayload()

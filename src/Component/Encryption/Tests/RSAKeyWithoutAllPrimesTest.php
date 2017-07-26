@@ -13,16 +13,28 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Tests;
 
+use Jose\Component\Core\JWAManager;
+use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
+use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256;
+use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Component\Encryption\Compression\CompressionManagerFactory;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Encryption\JWELoader;
-use Jose\Component\Factory\JWAManagerFactory;
 use Jose\Component\Factory\JWEFactory;
 use Jose\Component\KeyManagement\JWKFactory;
+use Jose\Component\Signature\Algorithm\PS256;
+use Jose\Component\Signature\Algorithm\PS384;
+use Jose\Component\Signature\Algorithm\PS512;
+use Jose\Component\Signature\Algorithm\RS256;
+use Jose\Component\Signature\Algorithm\RS384;
+use Jose\Component\Signature\Algorithm\RS512;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
@@ -35,21 +47,21 @@ use PHPUnit\Framework\TestCase;
 final class RSAKeyWithoutAllPrimesTest extends TestCase
 {
     /**
-     * @param string $signature_algorithm
+     * @param SignatureAlgorithmInterface $signature_algorithm
      *
      * @dataProvider dataSignatureAlgorithms
      */
-    public function testSignatureAlgorithms($signature_algorithm)
+    public function testSignatureAlgorithms(SignatureAlgorithmInterface $signature_algorithm)
     {
         $key = $this->getPrivateKey();
 
         $claims = ['foo' => 'bar'];
 
-        $algorithmManager = JWAManagerFactory::createFromAlgorithmName([$signature_algorithm]);
+        $algorithmManager = JWAManager::create([$signature_algorithm]);
         $builder = new JWSBuilder($algorithmManager);
         $jws = $builder
             ->withPayload($claims)
-            ->addSignature($key, ['alg' => $signature_algorithm])
+            ->addSignature($key, ['alg' => $signature_algorithm->name()])
             ->build()
             ->toCompactJSON(0);
 
@@ -66,12 +78,12 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     public function dataSignatureAlgorithms()
     {
         return [
-            ['RS256'],
-            ['RS384'],
-            ['RS512'],
-            ['PS256'],
-            ['PS384'],
-            ['PS512'],
+            [new RS256()],
+            [new RS384()],
+            [new RS512()],
+            [new PS256()],
+            [new PS384()],
+            [new PS512()],
         ];
     }
 
@@ -81,53 +93,53 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     public function dataSignatureAlgorithmsWithSimpleKey()
     {
         return [
-            ['PS256'],
-            ['PS384'],
-            ['PS512'],
+            [new PS256()],
+            [new PS384()],
+            [new PS512()],
         ];
     }
 
     /**
-     * @param string $encryption_algorithm
+     * @param KeyEncryptionAlgorithmInterface $encryption_algorithm
      *
      * @dataProvider dataEncryptionAlgorithms
      */
-    public function testEncryptionAlgorithms($encryption_algorithm)
+    public function testEncryptionAlgorithms(KeyEncryptionAlgorithmInterface $encryption_algorithm)
     {
         $key = $this->getPrivateKey();
 
         $claims = ['foo' => 'bar'];
 
-        $jwt = JWEFactory::createJWEToCompactJSON($claims, $key, ['alg' => $encryption_algorithm, 'enc' => 'A256GCM']);
+        $jwt = JWEFactory::createJWEToCompactJSON($claims, $key, ['alg' => $encryption_algorithm->name(), 'enc' => 'A256GCM']);
 
         $loaded = JWELoader::load($jwt);
         $this->assertInstanceOf(JWE::class, $loaded);
 
-        $keyEncryptionAlgorithmManager = JWAManagerFactory::createFromAlgorithmName([$encryption_algorithm]);
-        $contentEncryptionAlgorithmManager = JWAManagerFactory::createFromAlgorithmName(['A256GCM']);
+        $keyEncryptionAlgorithmManager = JWAManager::create([$encryption_algorithm]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
         $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter->decryptUsingKey($loaded, $key);
     }
 
     /**
-     * @param string $encryption_algorithm
+     * @param KeyEncryptionAlgorithmInterface $encryption_algorithm
      *
      * @dataProvider dataEncryptionAlgorithms
      */
-    public function testEncryptionAlgorithmsWithMinimalRsaKey($encryption_algorithm)
+    public function testEncryptionAlgorithmsWithMinimalRsaKey(KeyEncryptionAlgorithmInterface $encryption_algorithm)
     {
         $key = $this->getMinimalPrivateKey();
 
         $claims = ['foo' => 'bar'];
 
-        $jwt = JWEFactory::createJWEToCompactJSON($claims, $key, ['alg' => $encryption_algorithm, 'enc' => 'A256GCM']);
+        $jwt = JWEFactory::createJWEToCompactJSON($claims, $key, ['alg' => $encryption_algorithm->name(), 'enc' => 'A256GCM']);
 
         $loaded = JWELoader::load($jwt);
         $this->assertInstanceOf(JWE::class, $loaded);
 
-        $keyEncryptionAlgorithmManager = JWAManagerFactory::createFromAlgorithmName([$encryption_algorithm]);
-        $contentEncryptionAlgorithmManager = JWAManagerFactory::createFromAlgorithmName(['A256GCM']);
+        $keyEncryptionAlgorithmManager = JWAManager::create([$encryption_algorithm]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
         $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter->decryptUsingKey($loaded, $key);
@@ -139,9 +151,9 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     public function dataEncryptionAlgorithms()
     {
         return [
-            ['RSA1_5'],
-            ['RSA-OAEP'],
-            ['RSA-OAEP-256'],
+            [new RSA15()],
+            [new RSAOAEP()],
+            [new RSAOAEP256()],
         ];
     }
 
@@ -151,8 +163,8 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     public function dataEncryptionAlgorithmsWithSimpleKey()
     {
         return [
-            ['RSA-OAEP'],
-            ['RSA-OAEP-256'],
+            [new RSAOAEP()],
+            [new RSAOAEP256()],
         ];
     }
 

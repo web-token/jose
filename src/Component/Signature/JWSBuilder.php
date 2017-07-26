@@ -41,7 +41,7 @@ final class JWSBuilder
     private $signatureAlgorithmManager;
 
     /**
-     * Signer constructor.
+     * JWSBuilder constructor.
      *
      * @param JWAManager $signatureAlgorithmManager
      */
@@ -83,11 +83,11 @@ final class JWSBuilder
     public function addSignature(JWK $signatureKey, array $protectedHeaders, array $headers = []): JWSBuilder
     {
         KeyChecker::checkKeyUsage($signatureKey, 'signature');
-        $algorithm = $this->findSignatureAlgorithm($signatureKey, $protectedHeaders, $headers);
-        KeyChecker::checkKeyAlgorithm($signatureKey, $algorithm->name());
+        $signatureAlgorithm = $this->findSignatureAlgorithm($signatureKey, $protectedHeaders, $headers);
+        KeyChecker::checkKeyAlgorithm($signatureKey, $signatureAlgorithm->name());
         $clone = clone $this;
         $clone->signatures[] = [
-            'signature_algorithm' => $algorithm,
+            'signature_algorithm' => $signatureAlgorithm,
             'signature_key' => $signatureKey,
             'protected_headers' => $protectedHeaders,
             'headers' => $headers,
