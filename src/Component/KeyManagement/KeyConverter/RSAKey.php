@@ -25,8 +25,13 @@ use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\BigInteger;
 
-final class RSAKey extends Sequence
+final class RSAKey
 {
+    /**
+     * @var Sequence
+     */
+    private $sequence;
+
     /**
      * @var array
      */
@@ -70,9 +75,9 @@ final class RSAKey extends Sequence
     /**
      * @param JWK|string|array $data
      */
-    public function __construct($data)
+    private function __construct($data)
     {
-        parent::__construct();
+        $this->sequence = new Sequence();
 
         if ($data instanceof JWK) {
             $this->loadJWK($data->all());
@@ -85,6 +90,36 @@ final class RSAKey extends Sequence
         }
 
         $this->populateBigIntegers();
+    }
+
+    /**
+     * @param JWK $jwk
+     *
+     * @return RSAKey
+     */
+    public static function createFromJWK(JWK $jwk): RSAKey
+    {
+        return new self($jwk);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return RSAKey
+     */
+    public static function createFromArray(array $data): RSAKey
+    {
+        return new self($data);
+    }
+
+    /**
+     * @param string $pem
+     *
+     * @return RSAKey
+     */
+    public static function createFromPEM(string $pem): RSAKey
+    {
+        return new self($pem);
     }
 
     /**
@@ -211,7 +246,7 @@ final class RSAKey extends Sequence
      */
     public function toDER(): string
     {
-        return $this->getBinary();
+        return $this->sequence->getBinary();
     }
 
     /**
@@ -220,7 +255,7 @@ final class RSAKey extends Sequence
     public function toPEM(): string
     {
         $result = '-----BEGIN '.($this->isPrivate() ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
-        $result .= chunk_split(base64_encode($this->getBinary()), 64, PHP_EOL);
+        $result .= chunk_split(base64_encode($this->sequence->getBinary()), 64, PHP_EOL);
         $result .= '-----END '.($this->isPrivate() ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
 
         return $result;
@@ -316,7 +351,7 @@ final class RSAKey extends Sequence
         $oid_sequence = new Sequence();
         $oid_sequence->addChild(new ObjectIdentifier('1.2.840.113549.1.1.1'));
         $oid_sequence->addChild(new NullObject());
-        $this->addChild($oid_sequence);
+        $this->sequence->addChild($oid_sequence);
 
         $n = new Integer($this->fromBase64ToInteger($this->values['n']));
         $e = new Integer($this->fromBase64ToInteger($this->values['e']));
@@ -325,17 +360,17 @@ final class RSAKey extends Sequence
         $key_sequence->addChild($n);
         $key_sequence->addChild($e);
         $key_bit_string = new BitString(bin2hex($key_sequence->getBinary()));
-        $this->addChild($key_bit_string);
+        $this->sequence->addChild($key_bit_string);
     }
 
     private function initPrivateKey()
     {
-        $this->addChild(new Integer(0));
+        $this->sequence->addChild(new Integer(0));
 
         $oid_sequence = new Sequence();
         $oid_sequence->addChild(new ObjectIdentifier('1.2.840.113549.1.1.1'));
         $oid_sequence->addChild(new NullObject());
-        $this->addChild($oid_sequence);
+        $this->sequence->addChild($oid_sequence);
 
         $v = new Integer(0);
         $n = new Integer($this->fromBase64ToInteger($this->values['n']));
@@ -358,7 +393,7 @@ final class RSAKey extends Sequence
         $key_sequence->addChild($dq);
         $key_sequence->addChild($qi);
         $key_octet_string = new OctetString(bin2hex($key_sequence->getBinary()));
-        $this->addChild($key_octet_string);
+        $this->sequence->addChild($key_octet_string);
     }
 
     /**

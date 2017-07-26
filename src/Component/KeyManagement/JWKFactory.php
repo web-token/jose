@@ -45,7 +45,7 @@ final class JWKFactory
             'private_key_type' => OPENSSL_KEYTYPE_RSA,
         ]);
         openssl_pkey_export($key, $out);
-        $rsa = new RSAKey($out);
+        $rsa = RSAKey::createFromPEM($out);
         $values = array_merge(
             $values,
             $rsa->toArray()
@@ -72,7 +72,7 @@ final class JWKFactory
             $res = openssl_pkey_export($key, $out);
             Assertion::true($res, 'Unable to create the key');
 
-            $rsa = new ECKey($out);
+            $rsa = ECKey::createFromPEM($out);
             $values = array_merge(
                 $values,
                 $rsa->toArray()

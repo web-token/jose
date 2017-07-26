@@ -51,7 +51,7 @@ abstract class RSA implements SignatureAlgorithmInterface
     {
         $this->checkKey($key);
 
-        $pub = RSAKey::toPublic(new RSAKey($key));
+        $pub = RSAKey::toPublic(RSAKey::createFromJWK($key));
 
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
             return JoseRSA::verify($pub, $input, $signature, $this->getAlgorithm());
@@ -68,7 +68,7 @@ abstract class RSA implements SignatureAlgorithmInterface
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The key is not a private key');
 
-        $priv = new RSAKey($key);
+        $priv = RSAKey::createFromJWK($key);
 
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
             $signature = JoseRSA::sign($priv, $input, $this->getAlgorithm());

@@ -25,8 +25,13 @@ use FG\ASN1\Universal\OctetString;
 use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
 
-final class ECKey extends Sequence
+final class ECKey
 {
+    /**
+     * @var null|Sequence
+     */
+    private $sequence = null;
+
     /**
      * @var bool
      */
@@ -38,11 +43,13 @@ final class ECKey extends Sequence
     private $values = [];
 
     /**
-     * @param JWK|string|array $data
+     * ECKey constructor.
+     *
+     * @param $data
      */
-    public function __construct($data)
+    private function __construct($data)
     {
-        parent::__construct();
+        $this->sequence = new Sequence();
 
         if ($data instanceof JWK) {
             $this->loadJWK($data->all());
@@ -54,6 +61,36 @@ final class ECKey extends Sequence
             throw new \InvalidArgumentException('Unsupported input');
         }
         $this->private = isset($this->values['d']);
+    }
+
+    /**
+     * @param JWK $jwk
+     *
+     * @return ECKey
+     */
+    public static function createFromJWK(JWK $jwk): ECKey
+    {
+        return new self($jwk);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return ECKey
+     */
+    public static function createFromArray(array $data): ECKey
+    {
+        return new self($data);
+    }
+
+    /**
+     * @param string $pem
+     *
+     * @return ECKey
+     */
+    public static function createFromPEM(string $pem): ECKey
+    {
+        return new self($pem);
     }
 
     /**
@@ -144,27 +181,27 @@ final class ECKey extends Sequence
         $oid_sequence = new Sequence();
         $oid_sequence->addChild(new ObjectIdentifier('1.2.840.10045.2.1'));
         $oid_sequence->addChild(new ObjectIdentifier($this->getOID($this->values['crv'])));
-        $this->addChild($oid_sequence);
+        $this->sequence->addChild($oid_sequence);
 
         $bits = '04';
         $bits .= bin2hex(Base64Url::decode($this->values['x']));
         $bits .= bin2hex(Base64Url::decode($this->values['y']));
-        $this->addChild(new BitString($bits));
+        $this->sequence->addChild(new BitString($bits));
     }
 
     private function initPrivateKey()
     {
-        $this->addChild(new Integer(1));
-        $this->addChild(new OctetString(bin2hex(Base64Url::decode($this->values['d']))));
+        $this->sequence->addChild(new Integer(1));
+        $this->sequence->addChild(new OctetString(bin2hex(Base64Url::decode($this->values['d']))));
 
         $oid = new ObjectIdentifier($this->getOID($this->values['crv']));
-        $this->addChild(new ExplicitlyTaggedObject(0, $oid));
+        $this->sequence->addChild(new ExplicitlyTaggedObject(0, $oid));
 
         $bits = '04';
         $bits .= bin2hex(Base64Url::decode($this->values['x']));
         $bits .= bin2hex(Base64Url::decode($this->values['y']));
         $bit = new BitString($bits);
-        $this->addChild(new ExplicitlyTaggedObject(1, $bit));
+        $this->sequence->addChild(new ExplicitlyTaggedObject(1, $bit));
     }
 
     /**
@@ -304,7 +341,7 @@ final class ECKey extends Sequence
      */
     public function toDER(): string
     {
-        return $this->getBinary();
+        return $this->sequence->getBinary();
     }
 
     /**
@@ -313,7 +350,7 @@ final class ECKey extends Sequence
     public function toPEM(): string
     {
         $result = '-----BEGIN '.($this->private ? 'EC PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
-        $result .= chunk_split(base64_encode($this->getBinary()), 64, PHP_EOL);
+        $result .= chunk_split(base64_encode($this->sequence->getBinary()), 64, PHP_EOL);
         $result .= '-----END '.($this->private ? 'EC PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
 
         return $result;

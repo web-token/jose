@@ -13,15 +13,12 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Util;
 
-use Assert\Assertion;
 use Jose\Component\Core\Util\BigInteger;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
 final class RSA
 {
     /**
-     * Integer-to-Octet-String primitive.
-     *
      * @param BigInteger $x
      * @param int        $xLen
      *
@@ -84,12 +81,12 @@ final class RSA
      * @param RSAKey     $key
      * @param BigInteger $m
      *
-     * @return BigInteger|null
+     * @return BigInteger
      */
-    private static function getRSAEP(RSAKey $key, BigInteger $m): ?BigInteger
+    private static function getRSAEP(RSAKey $key, BigInteger $m): BigInteger
     {
         if ($m->compare(BigInteger::createFromDecimal(0)) < 0 || $m->compare($key->getModulus()) > 0) {
-            return null;
+            throw new \RuntimeException();
         }
 
         return self::exponentiate($key, $m);
@@ -101,12 +98,12 @@ final class RSA
      * @param RSAKey     $key
      * @param BigInteger $c
      *
-     * @return BigInteger|null
+     * @return BigInteger
      */
-    private static function getRSADP(RSAKey $key, BigInteger $c): ?BigInteger
+    private static function getRSADP(RSAKey $key, BigInteger $c): BigInteger
     {
         if ($c->compare(BigInteger::createFromDecimal(0)) < 0 || $c->compare($key->getModulus()) > 0) {
-            return null;
+            throw new \RuntimeException();
         }
 
         return self::exponentiate($key, $c);
@@ -175,7 +172,6 @@ final class RSA
     {
         $c = self::convertOctetStringToInteger($c);
         $m = self::getRSADP($key, $c);
-        Assertion::isInstanceOf($m, BigInteger::class);
         $em = self::convertIntegerToOctetString($m, $key->getModulusLength());
         $lHash = $hash->hash('');
         $maskedSeed = mb_substr($em, 1, $hash->getLength(), '8bit');
@@ -186,9 +182,13 @@ final class RSA
         $db = $maskedDB ^ $dbMask;
         $lHash2 = mb_substr($db, 0, $hash->getLength(), '8bit');
         $m = mb_substr($db, $hash->getLength(), null, '8bit');
-        Assertion::eq($lHash, $lHash2);
+        if (!hash_equals($lHash, $lHash2)) {
+            throw new \RuntimeException();
+        }
         $m = ltrim($m, chr(0));
-        Assertion::eq(ord($m[0]), 1);
+        if (1 !== ord($m[0])) {
+            throw new \RuntimeException();
+        }
 
         return mb_substr($m, 1, null, '8bit');
     }
@@ -209,7 +209,9 @@ final class RSA
          */
         $hash = Hash::$hash_algorithm();
         $length = $key->getModulusLength() - 2 * $hash->getLength() - 2;
-        Assertion::greaterThan($length, 0);
+        if (0 >= $length) {
+            throw new \RuntimeException();
+        }
         $plaintext = str_split($plaintext, $length);
         $ciphertext = '';
         foreach ($plaintext as $m) {
@@ -230,7 +232,9 @@ final class RSA
      */
     public static function decrypt(RSAKey $key, string $ciphertext, string $hash_algorithm): string
     {
-        Assertion::greaterThan($key->getModulusLength(), 0);
+        if (0 >= $key->getModulusLength()) {
+            throw new \RuntimeException();
+        }
         $hash = Hash::$hash_algorithm();
         $ciphertext = str_split($ciphertext, $key->getModulusLength());
         $ciphertext[count($ciphertext) - 1] = str_pad($ciphertext[count($ciphertext) - 1], $key->getModulusLength(), chr(0), STR_PAD_LEFT);

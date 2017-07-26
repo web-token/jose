@@ -59,20 +59,11 @@ final class RSAKeysTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unsupported input
-     */
-    public function testUnsupportedInputType()
-    {
-        new RSAKey(1234);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage JWK is not a RSA key
      */
     public function testUnsupportedKeyType()
     {
-        new RSAKey([
+        RSAKey::createFromArray([
             'kty' => 'EC',
             'crv' => 'P-256',
             'd' => 'q_VkzNnxTG39jHB0qkwA_SeVXud7yCHT7kb7kZv-0xQ',
@@ -84,7 +75,7 @@ final class RSAKeysTest extends TestCase
     public function testLoadPublicRSAKeyFromPEM()
     {
         $file = 'file://'.__DIR__.DIRECTORY_SEPARATOR.'RSA'.DIRECTORY_SEPARATOR.'public.key';
-        $rsa_key = new RSAKey($file);
+        $rsa_key = RSAKey::createFromPEM($file);
 
         $this->assertEquals([
             'kty' => 'RSA',
@@ -103,7 +94,7 @@ final class RSAKeysTest extends TestCase
             'use' => 'sig',
             'key_ops' => ['sign', 'verify'],
         ]);
-        $rsa_key = new RSAKey($jwk);
+        $rsa_key = RSAKey::createFromJWK($jwk);
 
         $this->assertEquals([
             'kty' => 'RSA',
@@ -117,7 +108,7 @@ final class RSAKeysTest extends TestCase
 
     public function testLoadPublicRSAKeyFromValues()
     {
-        $rsa_key = new RSAKey([
+        $rsa_key = RSAKey::createFromArray([
             'kty' => 'RSA',
             'n' => 'tpS1ZmfVKVP5KofIhMBP0tSWc4qlh6fm2lrZSkuKxUjEaWjzZSzs72gEIGxraWusMdoRuV54xsWRyf5KeZT0S-I5Prle3Idi3gICiO4NwvMk6JwSBcJWwmSLFEKyUSnB2CtfiGc0_5rQCpcEt_Dn5iM-BNn7fqpoLIbks8rXKUIj8-qMVqkTXsEKeKinE23t1ykMldsNaaOH-hvGti5Jt2DMnH1JjoXdDXfxvSP_0gjUYb0ektudYFXoA6wekmQyJeImvgx4Myz1I4iHtkY_Cp7J4Mn1ejZ6HNmyvoTE_4OuY1uCeYv4UyXFc1s1uUyYtj4z57qsHGsS4dQ3A2MJsw',
             'e' => 'AQAB',
@@ -134,7 +125,7 @@ final class RSAKeysTest extends TestCase
     public function testLoadPrivateRSAKey()
     {
         $file = 'file://'.__DIR__.DIRECTORY_SEPARATOR.'RSA'.DIRECTORY_SEPARATOR.'private.key';
-        $rsa_key = new RSAKey($file);
+        $rsa_key = RSAKey::createFromPEM($file);
 
         $this->assertEquals([
             'kty' => 'RSA',
@@ -171,7 +162,7 @@ final class RSAKeysTest extends TestCase
             'dq' => 'JV2pC7CB50QeZx7C02h3jZyuObC9YHEEoxOXr9ZPjPBVvjV5S6NVajQsdEu4Kgr_8YOqaWgiHovcxTwyqcgZvQ',
             'qi' => 'VZykPj-ugKQxuWTSE-hA-nJqkl7FzjfzHte4QYUSHLHFq6oLlHhgUoJ_4oFLaBmCvgZLAFRDDD6pnd5Fgzt9ow',
         ]);
-        $rsa_key = new RSAKey($jwk);
+        $rsa_key = RSAKey::createFromJWK($jwk);
 
         $this->assertEquals([
             'kty' => 'RSA',
@@ -197,7 +188,7 @@ final class RSAKeysTest extends TestCase
 
     public function testLoadPrivateRSAKeyFromValues()
     {
-        $rsa_key = new RSAKey([
+        $rsa_key = RSAKey::createFromArray([
             'kty' => 'RSA',
             'n' => '33WRDEG5rN7daMgI2N5H8cPwTeQPOnz34uG2fe0yKyHjJDGE2XoESRpu5LelSPdYM_r4AWMFWoDWPd-7xaq7uFEkM8c6zaQIgj4uEiq-pBMvH-e805SFbYOKYqfQe4eeXAk4OrQwcUkSrlGskf6YUaw_3IwbPgzEDTgTZFVtQlE',
             'e' => 'AQAB',
@@ -234,7 +225,7 @@ final class RSAKeysTest extends TestCase
 
     public function testConvertPrivateKeyToPublic()
     {
-        $private_ec_key = new RSAKey([
+        $private_ec_key = RSAKey::createFromArray([
             'kty' => 'RSA',
             'kid' => 'Foo',
             'n' => '33WRDEG5rN7daMgI2N5H8cPwTeQPOnz34uG2fe0yKyHjJDGE2XoESRpu5LelSPdYM_r4AWMFWoDWPd-7xaq7uFEkM8c6zaQIgj4uEiq-pBMvH-e805SFbYOKYqfQe4eeXAk4OrQwcUkSrlGskf6YUaw_3IwbPgzEDTgTZFVtQlE',
@@ -275,7 +266,7 @@ final class RSAKeysTest extends TestCase
 
     public function testLoadPrivateRSAKeyFromMinimalValues()
     {
-        $rsa_key = new RSAKey([
+        $rsa_key = RSAKey::createFromArray([
             'kty' => 'RSA',
             'n' => 'gVf-iyhwLn2J2Up4EKjwdLYmk5n24gjGk4oQkCHVcE7j8wkS1iSzcu0ApVcMPLklEp_PWycZE12vL90gPeVjF2IPL_MKFL0b6Wy7A1f4kCDkKv7TDDjt1IIwbS-Jdp-2pG7bPb3tWjJUu6QZBLoXfRtW3cMDkQjXaVGixENORLAZs6qdu2MMKV94jetCiFd0JYCjxGVC0HW2OKnM21B_2R1NubOvMlWA7gypdpvmBYDGpkw4mjV3walWlCZObG7IH84Ovl7wOP8XLzqi2un4e6fNzy3rdp4OUSPYItF4ZX5qThWYY2R47Z5sbrZxHjNeDECKUeio0KPQNrgr6FSKSw',
             'e' => 'AQAB',

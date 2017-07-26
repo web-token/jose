@@ -165,11 +165,11 @@ final class KeyConverter
 
         switch ($details['type']) {
             case OPENSSL_KEYTYPE_EC:
-                $ec_key = new ECKey($pem);
+                $ec_key = ECKey::createFromPEM($pem);
 
                 return $ec_key->toArray();
             case OPENSSL_KEYTYPE_RSA:
-                 $rsa_key = new RSAKey($pem);
+                 $rsa_key = RSAKey::createFromPEM($pem);
 
                  return $rsa_key->toArray();
             default:

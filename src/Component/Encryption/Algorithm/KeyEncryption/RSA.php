@@ -40,7 +40,7 @@ abstract class RSA implements KeyEncryptionInterface
     {
         $this->checkKey($key);
 
-        $pub = RSAKey::toPublic(new RSAKey($key));
+        $pub = RSAKey::toPublic(RSAKey::createFromJWK($key));
 
         if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
             $encrypted = JoseRSA::encrypt($pub, $cek, $this->getHashAlgorithm());
@@ -63,7 +63,7 @@ abstract class RSA implements KeyEncryptionInterface
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The key is not a private key');
 
-        $priv = new RSAKey($key);
+        $priv = RSAKey::createFromJWK($key);
 
         if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
             $decrypted = JoseRSA::decrypt($priv, $encrypted_cek, $this->getHashAlgorithm());

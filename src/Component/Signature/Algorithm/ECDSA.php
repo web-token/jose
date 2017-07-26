@@ -45,7 +45,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
         $this->checkKey($key);
         Assertion::true($key->has('d'), 'The EC key is not private');
 
-        $pem = (new ECKey($key))->toPEM();
+        $pem = (ECKey::createFromJWK($key))->toPEM();
         $result = openssl_sign($input, $signature, $pem, $this->getHashAlgorithm());
 
         Assertion::true($result, 'Signature failed');
@@ -77,7 +77,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
         $R = mb_substr($signature, 0, $part_length, '8bit');
         $S = mb_substr($signature, $part_length, null, '8bit');
 
-        $pem = ECKey::toPublic(new ECKey($key))->toPEM();
+        $pem = ECKey::toPublic(ECKey::createFromJWK($key))->toPEM();
 
         $oid_sequence = new Sequence();
         $oid_sequence->addChildren([

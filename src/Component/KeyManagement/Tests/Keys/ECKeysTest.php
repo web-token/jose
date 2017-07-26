@@ -61,7 +61,7 @@ final class ECKeysTest extends TestCase
             'y' => 'oq-E2K-X0kPeqGuKnhlXkxc5fnxomRSC6KLby7Ij8AE',
         ]);
 
-        $ec_key = new ECKey($details);
+        $ec_key = ECKey::createFromArray($details);
 
         $this->assertEquals(str_replace("\r\n", PHP_EOL, $pem), $ec_key->toPEM());
     }
@@ -79,7 +79,7 @@ final class ECKeysTest extends TestCase
             'y' => 'oq-E2K-X0kPeqGuKnhlXkxc5fnxomRSC6KLby7Ij8AE',
         ]);
 
-        $ec_key = new ECKey($details);
+        $ec_key = ECKey::createFromArray($details);
 
         $this->assertEquals(str_replace("\r\n", PHP_EOL, $private_pem), $ec_key->toPEM());
         $this->assertEquals(str_replace("\r\n", PHP_EOL, $public_pem), ECKey::toPublic($ec_key)->toPEM());
@@ -98,7 +98,7 @@ final class ECKeysTest extends TestCase
             'y' => 'oq-E2K-X0kPeqGuKnhlXkxc5fnxomRSC6KLby7Ij8AE',
         ]);
 
-        $ec_key = new ECKey($details);
+        $ec_key = ECKey::createFromArray($details);
         $this->assertEquals(str_replace("\r\n", PHP_EOL, $public_pem), ECKey::toPublic($ec_key)->toPEM());
     }
 
@@ -122,7 +122,7 @@ final class ECKeysTest extends TestCase
             'y' => 'b8nOnRwmpmEnvA2U8ydS-dbnPv7bwYl-q1qNeh8Wpjor3VO-RTt4ce0Pn25oGGWU',
         ]);
 
-        $ec_key = new ECKey($details);
+        $ec_key = ECKey::createFromArray($details);
 
         $this->assertEquals(str_replace("\r\n", PHP_EOL, $pem), $ec_key->toPEM());
     }
@@ -140,7 +140,7 @@ final class ECKeysTest extends TestCase
             'y' => 'b8nOnRwmpmEnvA2U8ydS-dbnPv7bwYl-q1qNeh8Wpjor3VO-RTt4ce0Pn25oGGWU',
         ]);
 
-        $ec_key = new ECKey($details);
+        $ec_key = ECKey::createFromArray($details);
 
         $this->assertEquals(str_replace("\r\n", PHP_EOL, $private_pem), $ec_key->toPEM());
         $this->assertEquals(str_replace("\r\n", PHP_EOL, $public_pem), ECKey::toPublic($ec_key)->toPEM());
@@ -158,7 +158,7 @@ final class ECKeysTest extends TestCase
             'x' => '6f-XZsg2Tvn0EoEapQ-ylMYNtsm8CPf0cb8HI2EkfY9Bqpt3QMzwlM7mVsFRmaMZ',
             'y' => 'b8nOnRwmpmEnvA2U8ydS-dbnPv7bwYl-q1qNeh8Wpjor3VO-RTt4ce0Pn25oGGWU',
         ]);
-        $ec_key = new ECKey($details);
+        $ec_key = ECKey::createFromArray($details);
 
         $this->assertEquals(str_replace("\r\n", PHP_EOL, $public_pem), ECKey::toPublic($ec_key)->toPEM());
     }
@@ -174,7 +174,7 @@ final class ECKeysTest extends TestCase
             'y' => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
         ]);
 
-        $ec_key = new ECKey($details);
+        $ec_key = ECKey::createFromArray($details);
 
         $this->assertEquals(str_replace("\r\n", PHP_EOL, $pem), $ec_key->toPEM());
     }
@@ -192,7 +192,7 @@ final class ECKeysTest extends TestCase
             'y' => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
         ]);
 
-        $ec_key = new ECKey($details);
+        $ec_key = ECKey::createFromArray($details);
 
         $this->assertEquals(str_replace("\r\n", PHP_EOL, $private_pem), $ec_key->toPEM());
         $this->assertEquals(str_replace("\r\n", PHP_EOL, $public_pem), ECKey::toPublic($ec_key)->toPEM());
@@ -211,14 +211,14 @@ final class ECKeysTest extends TestCase
             'y' => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
         ]);
 
-        $ec_key = new ECKey($details);
+        $ec_key = ECKey::createFromArray($details);
 
         $this->assertEquals(str_replace("\r\n", PHP_EOL, $public_pem), ECKey::toPublic($ec_key)->toPEM());
     }
 
     public function testConvertPrivateKeyToPublic()
     {
-        $private_ec_key = new ECKey([
+        $private_ec_key = ECKey::createFromArray([
             'kty' => 'EC',
             'kid' => 'Foo',
             'crv' => 'P-256',
