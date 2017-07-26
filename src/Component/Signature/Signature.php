@@ -47,9 +47,9 @@ final class Signature
     /**
      * Signature constructor.
      *
-     * @param string $signature
+     * @param string      $signature
      * @param null|string $encodedProtectedHeaders
-     * @param array $headers
+     * @param array       $headers
      */
     private function __construct(string $signature, ?string $encodedProtectedHeaders, array $headers)
     {

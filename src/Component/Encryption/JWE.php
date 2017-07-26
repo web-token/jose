@@ -70,17 +70,18 @@ final class JWE implements JWTInterface
 
     /**
      * JWE constructor.
+     *
      * @param null|string $ciphertext
      * @param null|string $iv
      * @param null|string $aad
      * @param null|string $tag
-     * @param array $shared_headers
-     * @param array $shared_protected_headers
+     * @param array       $shared_headers
+     * @param array       $shared_protected_headers
      * @param null|string $encoded_shared_protected_headers
-     * @param mixed|null $payload
-     * @param array $recipients
+     * @param mixed|null  $payload
+     * @param array       $recipients
      */
-    private function __construct(?string $ciphertext = null, ?string $iv = null, ?string $aad = null, ?string $tag = null, array $shared_headers = [], array $shared_protected_headers = [], ?string $encoded_shared_protected_headers = null,  $payload = null, array $recipients = [])
+    private function __construct(?string $ciphertext = null, ?string $iv = null, ?string $aad = null, ?string $tag = null, array $shared_headers = [], array $shared_protected_headers = [], ?string $encoded_shared_protected_headers = null, $payload = null, array $recipients = [])
     {
         $this->ciphertext = $ciphertext;
         $this->iv = $iv;
@@ -103,9 +104,9 @@ final class JWE implements JWTInterface
 
     /**
      * @param $payload
-     * @param array $shared_protected_headers
+     * @param array       $shared_protected_headers
      * @param null|string $aad
-     * @param array $shared_headers
+     * @param array       $shared_headers
      *
      * @return JWE
      */
@@ -119,14 +120,14 @@ final class JWE implements JWTInterface
      * @param null|string $iv
      * @param null|string $aad
      * @param null|string $tag
-     * @param array $shared_headers
-     * @param array $shared_protected_headers
+     * @param array       $shared_headers
+     * @param array       $shared_protected_headers
      * @param null|string $encoded_shared_protected_headers
-     * @param array $recipients
+     * @param array       $recipients
      *
      * @return JWE
      */
-    public static function createFromLoadedData(?string $ciphertext = null, ?string $iv = null, ?string $aad = null, ?string $tag = null, array $shared_headers = [], array $shared_protected_headers = [], ?string $encoded_shared_protected_headers = null,  array $recipients = []): JWE
+    public static function createFromLoadedData(?string $ciphertext = null, ?string $iv = null, ?string $aad = null, ?string $tag = null, array $shared_headers = [], array $shared_protected_headers = [], ?string $encoded_shared_protected_headers = null, array $recipients = []): JWE
     {
         return new self($ciphertext, $iv, $aad, $tag, $shared_headers, $shared_protected_headers, $encoded_shared_protected_headers, null, $recipients);
     }

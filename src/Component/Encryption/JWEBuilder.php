@@ -85,8 +85,8 @@ final class JWEBuilder
     /**
      * JWEBuilder constructor.
      *
-     * @param JWAManager $keyEncryptionAlgorithmManager
-     * @param JWAManager $contentEncryptionAlgorithmManager
+     * @param JWAManager         $keyEncryptionAlgorithmManager
+     * @param JWAManager         $contentEncryptionAlgorithmManager
      * @param CompressionManager $compressionManager
      */
     public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionManager $compressionManager)
@@ -173,7 +173,7 @@ final class JWEBuilder
     }
 
     /**
-     * @param JWK $recipientKey
+     * @param JWK   $recipientKey
      * @param array $recipientHeaders
      *
      * @return JWEBuilder
@@ -229,7 +229,7 @@ final class JWEBuilder
         $contentEncryptionAlgorithm = $this->getContentEncryptionAlgorithm($completeHeaders);
         if (null === $this->contentEncryptionAlgorithm) {
             $this->contentEncryptionAlgorithm = $contentEncryptionAlgorithm;
-        } elseif($contentEncryptionAlgorithm->name() !== $this->contentEncryptionAlgorithm->name()) {
+        } elseif ($contentEncryptionAlgorithm->name() !== $this->contentEncryptionAlgorithm->name()) {
             throw new \InvalidArgumentException('Inconsistent content encryption algorithm');
         }
     }
