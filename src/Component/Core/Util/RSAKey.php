@@ -11,11 +11,10 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\KeyManagement\KeyConverter;
+namespace Jose\Component\Core\Util;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use FG\ASN1\Exception\ParserException;
 use FG\ASN1\Universal\BitString;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\NullObject;
@@ -23,7 +22,6 @@ use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\OctetString;
 use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\Util\BigInteger;
 
 final class RSAKey
 {
@@ -73,22 +71,12 @@ final class RSAKey
     private $coefficient = null;
 
     /**
-     * @param JWK|string|array $data
+     * @param JWK $data
      */
-    private function __construct($data)
+    private function __construct(JWK $data)
     {
         $this->sequence = new Sequence();
-
-        if ($data instanceof JWK) {
-            $this->loadJWK($data->all());
-        } elseif (is_array($data)) {
-            $this->loadJWK($data);
-        } elseif (is_string($data)) {
-            $this->loadPEM($data);
-        } else {
-            throw new \InvalidArgumentException('Unsupported input');
-        }
-
+        $this->loadJWK($data->all());
         $this->populateBigIntegers();
     }
 
@@ -103,32 +91,6 @@ final class RSAKey
     }
 
     /**
-     * @param string $pem
-     *
-     * @return RSAKey
-     */
-    public static function createFromPEM(string $pem): RSAKey
-    {
-        return new self($pem);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPublic(): bool
-    {
-        return !$this->isPrivate();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPrivate(): bool
-    {
-        return array_key_exists('d', $this->values);
-    }
-
-    /**
      * @return BigInteger
      */
     public function getModulus(): BigInteger
@@ -137,90 +99,11 @@ final class RSAKey
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getModulusLength(): int
+    public function isPrivate(): bool
     {
-        return $this->modulus_length;
-    }
-
-    /**
-     * @return BigInteger
-     */
-    public function getExponent(): BigInteger
-    {
-        $d = $this->getPrivateExponent();
-        if (null !== $d) {
-            return $d;
-        }
-
-        return $this->getPublicExponent();
-    }
-
-    /**
-     * @return BigInteger
-     */
-    public function getPublicExponent(): BigInteger
-    {
-        return $this->public_exponent;
-    }
-
-    /**
-     * @return BigInteger|null
-     */
-    public function getPrivateExponent(): ?BigInteger
-    {
-        return $this->private_exponent;
-    }
-
-    /**
-     * @return BigInteger[]
-     */
-    public function getPrimes(): array
-    {
-        return $this->primes;
-    }
-
-    /**
-     * @return BigInteger[]
-     */
-    public function getExponents(): array
-    {
-        return $this->exponents;
-    }
-
-    /**
-     * @return BigInteger|null
-     */
-    public function getCoefficient(): ?BigInteger
-    {
-        return $this->coefficient;
-    }
-
-    /**
-     * @param RSAKey $private
-     *
-     * @return RSAKey
-     */
-    public static function toPublic(RSAKey $private): RSAKey
-    {
-        $data = $private->toArray();
-        $keys = ['p', 'd', 'q', 'dp', 'dq', 'qi'];
-        foreach ($keys as $key) {
-            if (array_key_exists($key, $data)) {
-                unset($data[$key]);
-            }
-        }
-
-        return new self($data);
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray(): array
-    {
-        return $this->values;
+        return array_key_exists('d', $this->values);
     }
 
     /**
@@ -233,42 +116,6 @@ final class RSAKey
         $result .= '-----END '.($this->isPrivate() ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
 
         return $result;
-    }
-
-    /**
-     * @param string $data
-     *
-     * @throws \Exception
-     * @throws ParserException
-     */
-    private function loadPEM(string $data)
-    {
-        $res = openssl_pkey_get_private($data);
-        if (false === $res) {
-            $res = openssl_pkey_get_public($data);
-        }
-        Assertion::false(false === $res, 'Unable to load the key');
-
-        $details = openssl_pkey_get_details($res);
-        Assertion::keyExists($details, 'rsa', 'Unable to load the key');
-
-        $this->values['kty'] = 'RSA';
-        $keys = [
-            'n' => 'n',
-            'e' => 'e',
-            'd' => 'd',
-            'p' => 'p',
-            'q' => 'q',
-            'dp' => 'dmp1',
-            'dq' => 'dmq1',
-            'qi' => 'iqmp',
-        ];
-        foreach ($details['rsa'] as $key => $value) {
-            if (in_array($key, $keys)) {
-                $value = Base64Url::encode($value);
-                $this->values[array_search($key, $keys)] = $value;
-            }
-        }
     }
 
     /**

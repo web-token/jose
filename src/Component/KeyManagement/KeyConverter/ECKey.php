@@ -74,16 +74,6 @@ final class ECKey
     }
 
     /**
-     * @param array $data
-     *
-     * @return ECKey
-     */
-    public static function createFromArray(array $data): ECKey
-    {
-        return new self($data);
-    }
-
-    /**
      * @param string $pem
      *
      * @return ECKey
@@ -298,14 +288,6 @@ final class ECKey
     }
 
     /**
-     * @return bool
-     */
-    public function isPrivate(): bool
-    {
-        return $this->private;
-    }
-
-    /**
      * @param ECKey $private
      *
      * @return ECKey
@@ -321,27 +303,11 @@ final class ECKey
     }
 
     /**
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return $this->toPEM();
-    }
-
-    /**
      * @return array
      */
     public function toArray()
     {
         return $this->values;
-    }
-
-    /**
-     * @return string
-     */
-    public function toDER(): string
-    {
-        return $this->sequence->getBinary();
     }
 
     /**

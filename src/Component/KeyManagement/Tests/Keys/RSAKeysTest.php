@@ -63,13 +63,13 @@ final class RSAKeysTest extends TestCase
      */
     public function testUnsupportedKeyType()
     {
-        RSAKey::createFromArray([
+        RSAKey::createFromJWK(JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'd' => 'q_VkzNnxTG39jHB0qkwA_SeVXud7yCHT7kb7kZv-0xQ',
             'x' => 'vuYsP-QnrqAbM7Iyhzjt08hFSuzapyojCB_gFsBt65U',
             'y' => 'oq-E2K-X0kPeqGuKnhlXkxc5fnxomRSC6KLby7Ij8AE',
-        ]);
+        ]));
     }
 
     public function testLoadPublicRSAKeyFromPEM()
@@ -108,11 +108,11 @@ final class RSAKeysTest extends TestCase
 
     public function testLoadPublicRSAKeyFromValues()
     {
-        $rsa_key = RSAKey::createFromArray([
+        $rsa_key = RSAKey::createFromJWK(JWK::create([
             'kty' => 'RSA',
             'n' => 'tpS1ZmfVKVP5KofIhMBP0tSWc4qlh6fm2lrZSkuKxUjEaWjzZSzs72gEIGxraWusMdoRuV54xsWRyf5KeZT0S-I5Prle3Idi3gICiO4NwvMk6JwSBcJWwmSLFEKyUSnB2CtfiGc0_5rQCpcEt_Dn5iM-BNn7fqpoLIbks8rXKUIj8-qMVqkTXsEKeKinE23t1ykMldsNaaOH-hvGti5Jt2DMnH1JjoXdDXfxvSP_0gjUYb0ektudYFXoA6wekmQyJeImvgx4Myz1I4iHtkY_Cp7J4Mn1ejZ6HNmyvoTE_4OuY1uCeYv4UyXFc1s1uUyYtj4z57qsHGsS4dQ3A2MJsw',
             'e' => 'AQAB',
-        ]);
+        ]));
 
         $this->assertEquals([
             'kty' => 'RSA',
@@ -188,7 +188,7 @@ final class RSAKeysTest extends TestCase
 
     public function testLoadPrivateRSAKeyFromValues()
     {
-        $rsa_key = RSAKey::createFromArray([
+        $rsa_key = RSAKey::createFromJWK(JWK::create([
             'kty' => 'RSA',
             'n' => '33WRDEG5rN7daMgI2N5H8cPwTeQPOnz34uG2fe0yKyHjJDGE2XoESRpu5LelSPdYM_r4AWMFWoDWPd-7xaq7uFEkM8c6zaQIgj4uEiq-pBMvH-e805SFbYOKYqfQe4eeXAk4OrQwcUkSrlGskf6YUaw_3IwbPgzEDTgTZFVtQlE',
             'e' => 'AQAB',
@@ -198,7 +198,7 @@ final class RSAKeysTest extends TestCase
             'dp' => '5m79fpE1Jz0YE1ijT7ivOMAws-fnTCnR08eiB8-W36GBWplbHaXejrJFV1WMD-AWomnVD5VZ1LW29hEiqZp2QQ',
             'dq' => 'JV2pC7CB50QeZx7C02h3jZyuObC9YHEEoxOXr9ZPjPBVvjV5S6NVajQsdEu4Kgr_8YOqaWgiHovcxTwyqcgZvQ',
             'qi' => 'VZykPj-ugKQxuWTSE-hA-nJqkl7FzjfzHte4QYUSHLHFq6oLlHhgUoJ_4oFLaBmCvgZLAFRDDD6pnd5Fgzt9ow',
-        ]);
+        ]));
 
         $this->assertEquals([
             'kty' => 'RSA',
@@ -225,7 +225,7 @@ final class RSAKeysTest extends TestCase
 
     public function testConvertPrivateKeyToPublic()
     {
-        $private_ec_key = RSAKey::createFromArray([
+        $private_ec_key = RSAKey::createFromJWK(JWK::create([
             'kty' => 'RSA',
             'kid' => 'Foo',
             'n' => '33WRDEG5rN7daMgI2N5H8cPwTeQPOnz34uG2fe0yKyHjJDGE2XoESRpu5LelSPdYM_r4AWMFWoDWPd-7xaq7uFEkM8c6zaQIgj4uEiq-pBMvH-e805SFbYOKYqfQe4eeXAk4OrQwcUkSrlGskf6YUaw_3IwbPgzEDTgTZFVtQlE',
@@ -237,7 +237,7 @@ final class RSAKeysTest extends TestCase
             'dq' => 'JV2pC7CB50QeZx7C02h3jZyuObC9YHEEoxOXr9ZPjPBVvjV5S6NVajQsdEu4Kgr_8YOqaWgiHovcxTwyqcgZvQ',
             'qi' => 'VZykPj-ugKQxuWTSE-hA-nJqkl7FzjfzHte4QYUSHLHFq6oLlHhgUoJ_4oFLaBmCvgZLAFRDDD6pnd5Fgzt9ow',
             'foo' => 'bar',
-        ]);
+        ]));
 
         $public_ec_key = RSAKey::toPublic($private_ec_key);
 
@@ -266,12 +266,12 @@ final class RSAKeysTest extends TestCase
 
     public function testLoadPrivateRSAKeyFromMinimalValues()
     {
-        $rsa_key = RSAKey::createFromArray([
+        $rsa_key = RSAKey::createFromJWK(JWK::create([
             'kty' => 'RSA',
             'n' => 'gVf-iyhwLn2J2Up4EKjwdLYmk5n24gjGk4oQkCHVcE7j8wkS1iSzcu0ApVcMPLklEp_PWycZE12vL90gPeVjF2IPL_MKFL0b6Wy7A1f4kCDkKv7TDDjt1IIwbS-Jdp-2pG7bPb3tWjJUu6QZBLoXfRtW3cMDkQjXaVGixENORLAZs6qdu2MMKV94jetCiFd0JYCjxGVC0HW2OKnM21B_2R1NubOvMlWA7gypdpvmBYDGpkw4mjV3walWlCZObG7IH84Ovl7wOP8XLzqi2un4e6fNzy3rdp4OUSPYItF4ZX5qThWYY2R47Z5sbrZxHjNeDECKUeio0KPQNrgr6FSKSw',
             'e' => 'AQAB',
             'd' => 'JSqz6ijkk3dfdSEA_0iMT_1HeIJ1ft4msZ6qw7_1JSCGQAALeZ1yM0QHO3uX-Jr7HC7v1rGVcwsonAhei2qu3rk-w_iCnRL6QkkMNBnDQycwaWpwGsMBFF-UqstOJNggE4AHX-aDnbd4wbKVvdX7ieehPngbPkHcJFdg_iSZCQNoajz6XfEruyIi7_IFXYEGmH_UyEbQkgNtriZysutgYdolUjo9flUlh20HbuV3NwsPjGyDG4dUMpNpdBpSuRHYKLX6h3FjeLhItBmhBfuL7d-G3EXwKlwfNXXYivqY5NQAkFNrRbvFlc_ARIws3zAfykPDIWGWFiPiN3H-hXMgAQ',
-        ]);
+        ]));
 
         $this->assertEquals([
             'kty' => 'RSA',

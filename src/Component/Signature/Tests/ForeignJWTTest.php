@@ -65,7 +65,7 @@ final class ForeignJWTTest extends TestCase
 
         $this->assertInstanceOf(JWS::class, $jwt);
         $this->assertEquals($expected_index, $index);
-        $this->assertEquals($expected_headers, $jwt->getSignature(0)->getAllHeaders());
+        $this->assertEquals($expected_headers, $jwt->getSignature(0)->getProtectedHeaders());
         $this->assertEquals($expected_claims, $jwt->getClaims());
     }
 }

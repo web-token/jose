@@ -20,8 +20,6 @@ use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 final class RSA
 {
     /**
-     * Integer-to-Octet-String primitive.
-     *
      * @param BigInteger $x
      * @param int        $xLen
      *
@@ -38,18 +36,6 @@ final class RSA
     }
 
     /**
-     * Octet-String-to-Integer primitive.
-     *
-     * @param string $x
-     *
-     * @return BigInteger
-     */
-    private static function convertOctetStringToInteger(string $x): BigInteger
-    {
-        return BigInteger::createFromBinaryString($x);
-    }
-
-    /**
      * Exponentiate with or without Chinese Remainder Theorem.
      * Operation with primes 'p' and 'q' is appox. 2x faster.
      *
@@ -60,6 +46,9 @@ final class RSA
      */
     private static function exponentiate(RSAKey $key, BigInteger $c): BigInteger
     {
+        if ($c->compare(BigInteger::createFromDecimal(0)) < 0 || $c->compare($key->getModulus()) > 0) {
+            throw new \RuntimeException();
+        }
         if ($key->isPublic() || empty($key->getPrimes())) {
             return $c->modPow($key->getExponent(), $key->getModulus());
         }
@@ -76,40 +65,6 @@ final class RSA
         $m = $m2->add($h->multiply($q));
 
         return $m;
-    }
-
-    /**
-     * RSA SP1.
-     *
-     * @param RSAKey     $key
-     * @param BigInteger $m
-     *
-     * @return BigInteger
-     */
-    private static function getRSASP1(RSAKey $key, BigInteger $m): BigInteger
-    {
-        if ($m->compare(BigInteger::createFromDecimal(0)) < 0 || $m->compare($key->getModulus()) > 0) {
-            throw new \RuntimeException();
-        }
-
-        return self::exponentiate($key, $m);
-    }
-
-    /**
-     * RSAVP1.
-     *
-     * @param RSAKey     $key
-     * @param BigInteger $s
-     *
-     * @return BigInteger|null
-     */
-    private static function getRSAVP1(RSAKey $key, BigInteger $s): ?BigInteger
-    {
-        if ($s->compare(BigInteger::createFromDecimal(0)) < 0 || $s->compare($key->getModulus()) > 0) {
-            return null;
-        }
-
-        return self::exponentiate($key, $s);
     }
 
     /**
@@ -136,26 +91,28 @@ final class RSA
     /**
      * EMSA-PSS-ENCODE.
      *
-     * @param string $m
-     * @param int    $emBits
+     * @param string $message
+     * @param int    $modulusLength
      * @param Hash   $hash
      *
      * @return string
      */
-    private static function encodeEMSAPSS(string $m, int $emBits, Hash $hash): string
+    private static function encodeEMSAPSS(string $message, int $modulusLength, Hash $hash): string
     {
-        $emLen = ($emBits + 1) >> 3;
+        $emLen = ($modulusLength + 1) >> 3;
         $sLen = $hash->getLength();
-        $mHash = $hash->hash($m);
-        Assertion::greaterThan($emLen, $hash->getLength() + $sLen + 2);
+        $mHash = $hash->hash($message);
+        if ($emLen <= $hash->getLength() + $sLen + 2) {
+            throw new \RuntimeException();
+        }
         $salt = random_bytes($sLen);
         $m2 = "\0\0\0\0\0\0\0\0".$mHash.$salt;
         $h = $hash->hash($m2);
         $ps = str_repeat(chr(0), $emLen - $sLen - $hash->getLength() - 2);
         $db = $ps.chr(1).$salt;
-        $dbMask = self::getMGF1($h, $emLen - $hash->getLength() - 1, $hash/*MGF*/);
+        $dbMask = self::getMGF1($h, $emLen - $hash->getLength() - 1, $hash);
         $maskedDB = $db ^ $dbMask;
-        $maskedDB[0] = ~chr(0xFF << ($emBits & 7)) & $maskedDB[0];
+        $maskedDB[0] = ~chr(0xFF << ($modulusLength & 7)) & $maskedDB[0];
         $em = $maskedDB.$h.chr(0xBC);
 
         return $em;
@@ -206,10 +163,12 @@ final class RSA
      */
     public static function sign(RSAKey $key, string $message, string $hash): string
     {
-        Assertion::inArray($hash, ['sha256', 'sha384', 'sha512']);
+        if (!in_array($hash, ['sha256', 'sha384', 'sha512'])) {
+            throw new \InvalidArgumentException();
+        }
         $em = self::encodeEMSAPSS($message, 8 * $key->getModulusLength() - 1, Hash::$hash());
-        $message = self::convertOctetStringToInteger($em);
-        $signature = self::getRSASP1($key, $message);
+        $message = BigInteger::createFromBinaryString($em);
+        $signature = self::exponentiate($key, $message);
 
         return self::convertIntegerToOctetString($signature, $key->getModulusLength());
     }
@@ -226,12 +185,15 @@ final class RSA
      */
     public static function verify(RSAKey $key, string $message, string $signature, string $hash): bool
     {
-        Assertion::inArray($hash, ['sha256', 'sha384', 'sha512']);
-        Assertion::eq(strlen($signature), $key->getModulusLength());
+        if (!in_array($hash, ['sha256', 'sha384', 'sha512'])) {
+            throw new \InvalidArgumentException();
+        }
+        if (strlen($signature) !== $key->getModulusLength()) {
+            throw new \InvalidArgumentException();
+        }
         $modBits = 8 * $key->getModulusLength();
-        $s2 = self::convertOctetStringToInteger($signature);
-        $m2 = self::getRSAVP1($key, $s2);
-        Assertion::isInstanceOf($m2, BigInteger::class);
+        $s2 = BigInteger::createFromBinaryString($signature);
+        $m2 = self::exponentiate($key, $s2);
         $em = self::convertIntegerToOctetString($m2, $modBits >> 3);
 
         return self::verifyEMSAPSS($message, $em, $modBits - 1, Hash::$hash());

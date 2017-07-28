@@ -15,7 +15,6 @@ namespace Jose\Component\Signature;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWK;
 
 final class Signature
 {
@@ -38,11 +37,6 @@ final class Signature
      * @var string
      */
     private $signature;
-
-    /**
-     * @var JWK
-     */
-    private $signature_key;
 
     /**
      * Signature constructor.
@@ -80,7 +74,7 @@ final class Signature
      *
      * @return array
      */
-    public function getProtectedHeaders()
+    public function getProtectedHeaders(): array
     {
         return $this->protectedHeaders;
     }
@@ -90,7 +84,7 @@ final class Signature
      *
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }
@@ -101,7 +95,7 @@ final class Signature
      *
      * @return null|string
      */
-    public function getEncodedProtectedHeaders()
+    public function getEncodedProtectedHeaders(): ?string
     {
         return $this->encodedProtectedHeaders;
     }
@@ -113,7 +107,7 @@ final class Signature
      *
      * @return mixed|null Header value
      */
-    public function getProtectedHeader($key)
+    public function getProtectedHeader(string $key)
     {
         if ($this->hasProtectedHeader($key)) {
             return $this->getProtectedHeaders()[$key];
@@ -126,7 +120,7 @@ final class Signature
      *
      * @return bool
      */
-    public function hasProtectedHeader($key)
+    public function hasProtectedHeader(string $key): bool
     {
         return array_key_exists($key, $this->getProtectedHeaders());
     }
@@ -138,7 +132,7 @@ final class Signature
      *
      * @return mixed|null Header value
      */
-    public function getHeader($key)
+    public function getHeader(string $key)
     {
         if ($this->hasHeader($key)) {
             return $this->headers[$key];
@@ -151,22 +145,9 @@ final class Signature
      *
      * @return bool
      */
-    public function hasHeader($key)
+    public function hasHeader(string $key): bool
     {
         return array_key_exists($key, $this->headers);
-    }
-
-    /**
-     * The protected and unprotected header associated with the signature.
-     *
-     * @return array
-     */
-    public function getAllHeaders()
-    {
-        return array_merge(
-            $this->getProtectedHeaders(),
-            $this->getHeaders()
-        );
     }
 
     /**
@@ -174,16 +155,8 @@ final class Signature
      *
      * @return string
      */
-    public function getSignature()
+    public function getSignature(): string
     {
         return $this->signature;
-    }
-
-    /**
-     * @return JWK
-     */
-    public function getSignatureKey()
-    {
-        return $this->signature_key;
     }
 }
