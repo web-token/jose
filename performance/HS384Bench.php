@@ -5,9 +5,9 @@ namespace Jose\Performance;
 use Jose\Component\Core\JWK;
 
 /**
- * @Groups({"None"})
+ * @Groups({"hmac"})
  */
-final class NoneBench extends SignatureBench
+final class HS384Bench extends SignatureBench
 {
     /**
      * @return array
@@ -16,7 +16,7 @@ final class NoneBench extends SignatureBench
     {
         return [
             [
-                'algorithm' => 'none',
+                'algorithm' => 'HS384',
             ],
         ];
     }
@@ -28,7 +28,7 @@ final class NoneBench extends SignatureBench
     {
         return [
             [
-                'input' => 'eyJhbGciOiJub25lIn0.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.',
+                'input' => 'eyJhbGciOiJIUzM4NCJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.VIvxaoPUCpKMAvBN_Pi5GdeR3EgKvp3Rql5xrAmGHsjVXPBBmoVDyDGeIHsewzv2',
             ],
         ];
     }
@@ -39,7 +39,10 @@ final class NoneBench extends SignatureBench
     protected function getPrivateKey(): JWK
     {
         return JWK::create([
-            'kty' => 'none',
+            'kty' => 'oct',
+            'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
+            'use' => 'sig',
+            'k' => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
         ]);
     }
 

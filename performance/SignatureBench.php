@@ -20,6 +20,8 @@ use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\Algorithm\RS384;
 use Jose\Component\Signature\Algorithm\RS512;
 use Jose\Component\Signature\JWSBuilder;
+use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\Verifier;
 
 /**
  * @BeforeMethods({"init"})
@@ -64,9 +66,9 @@ abstract class SignatureBench
     /**
      * @param array $params
      *
-     * @ParamProviders({"dataSignatureAlgorithms"})
+     * @ParamProviders({"dataSignature"})
      */
-    public function benchSignatureAlgorithms($params)
+    public function benchSignature($params)
     {
         $jwsBuilder = new JWSBuilder($this->jwaManager);
         $jwsBuilder
@@ -77,7 +79,24 @@ abstract class SignatureBench
     }
 
     /**
+     * @param array $params
+     *
+     * @ParamProviders({"dataVerification"})
+     */
+    public function benchVerification($params)
+    {
+        $jws = JWSLoader::load($params['input']);
+        $verifier = new Verifier($this->jwaManager);
+        $verifier->verifyWithKey($jws, $this->getPublicKey(), null, $index);
+    }
+
+    /**
      * @return JWK
      */
     abstract protected function getPrivateKey(): JWK;
+
+    /**
+     * @return JWK
+     */
+    abstract protected function getPublicKey(): JWK;
 }

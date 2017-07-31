@@ -7,31 +7,28 @@ use Jose\Component\Core\JWK;
 /**
  * @Groups({"RSA"})
  */
-final class RsaBench extends SignatureBench
+final class PS256Bench extends SignatureBench
 {
     /**
      * @return array
      */
-    public function dataSignatureAlgorithms(): array
+    public function dataSignature(): array
     {
         return [
             [
-                'algorithm' => 'RS256',
-            ],
-            [
-                'algorithm' => 'RS384',
-            ],
-            [
-                'algorithm' => 'RS512',
-            ],
-            [
                 'algorithm' => 'PS256',
             ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataVerification(): array
+    {
+        return [
             [
-                'algorithm' => 'PS384',
-            ],
-            [
-                'algorithm' => 'PS512',
+                'input' => 'eyJhbGciOiJQUzI1NiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.P28nqnlDaovXZjgACs-qozK98HGsLLiz_vHrxF_Dk6aC_0a1-Pn02wJ2_9ZGYVpB5xsT6FunUwemLcKtBaf9cPCKe_xXni_VOtAwTWEeB-tjyeJrvGn5fu8WOPMM_PG_HCNkdkSC5qTj1lRj2WWfp6cWM09A6HrUiD-d5beBDjfjsVom-89SdcQimbs47TVYv-5_dQ3eqFrym4ZFKb2EM12Is1acoTBWllc8Mb4JZwLW-fhPW9RbAT0NwV3k67FWt9RPS07xokfU-vWeTmJXbRR5ifjZyi6E-pcaPvEQlxBbS8i5vwgvnl7kQCmPyQubF4EXqz0fskgIl8Howhb_vQ',
             ],
         ];
     }
@@ -54,5 +51,13 @@ final class RsaBench extends SignatureBench
             'dq' => 'CLDmDGduhylc9o7r84rEUVn7pzQ6PF83Y-iBZx5NT-TpnOZKF1pErAMVeKzFEl41DlHHqqBLSM0W1sOFbwTxYWZDm6sI6og5iTbwQGIC3gnJKbi_7k_vJgGHwHxgPaX2PnvP-zyEkDERuf-ry4c_Z11Cq9AqC2yeL6kdKT1cYF8',
             'qi' => '3PiqvXQN0zwMeE-sBvZgi289XP9XCQF3VWqPzMKnIgQp7_Tugo6-NZBKCQsMf3HaEGBjTVJs_jcK8-TRXvaKe-7ZMaQj8VfBdYkssbu0NKDDhjJ-GtiseaDVWt7dcH0cfwxgFUHpQh7FoCrjFJ6h6ZEpMF6xmujs4qMpPz8aaI4',
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getPublicKey(): JWK
+    {
+        return $this->getPrivateKey()->toPublic();
     }
 }

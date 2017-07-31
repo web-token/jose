@@ -23,4 +23,5 @@ script:
 
 after_success:
     - vendor/bin/coveralls --no-interaction
-    - vendor/bin/phpbench run -l dots --report aggregate
+    - vendor/bin/phpbench run --store
+    - vendor/bin/phpbench report --report=aggregate --uuid=latest

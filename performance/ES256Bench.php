@@ -1,0 +1,59 @@
+<?php
+
+namespace Jose\Performance;
+
+use Jose\Component\Core\JWK;
+
+/**
+ * @Groups({"ECDSA"})
+ */
+final class ES256Bench extends SignatureBench
+{
+    /**
+     * @return array
+     */
+    public function dataSignature(): array
+    {
+        return [
+            [
+                'algorithm' => 'ES256',
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataVerification(): array
+    {
+        return [
+            [
+                'input' => 'eyJhbGciOiJFUzI1NiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.PQcIuf_bZFoOChBj7z_6KQlfpfvZ4YSUvtVheoAKQJ_rjywLft5dqL79bOrGffW0CkGPvaKzBr3yGdQt3II54g',
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getPrivateKey(): JWK
+    {
+        return JWK::create([
+            'kty' => 'EC',
+            'kid' => 'meriadoc.brandybuck@buckland.example',
+            'use' => 'sig',
+            'crv' => 'P-256',
+            'x' => 'Ze2loSV3wrroKUN_4zhwGhCqo3Xhu1td4QjeQ5wIVR0',
+            'y' => 'HlLtdXARY_f55A3fnzQbPcm6hgr34Mp8p-nuzQCE0Zw',
+            'd' => 'r_kHyZ-a06rmxM3yESK84r1otSg-aQcVStkRhA-iCM8',
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getPublicKey(): JWK
+    {
+        return $this->getPrivateKey()->toPublic();
+    }
+}

@@ -12,11 +12,23 @@ final class EdDSABench extends SignatureBench
     /**
      * @return array
      */
-    public function dataSignatureAlgorithms(): array
+    public function dataSignature(): array
     {
         return [
             [
                 'algorithm' => 'EdDSA',
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataVerification(): array
+    {
+        return [
+            [
+                'input' => 'eyJhbGciOiJFZERTQSJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.zwhKxTMnLVgl0KSn9GT2ongThN0hOZkp046k3S296_TKwAXZH3n4OGMavgUgmuhXER3_zRz-nBqJMfUDIoRHBQ',
             ],
         ];
     }
@@ -32,5 +44,13 @@ final class EdDSABench extends SignatureBench
             'd' => 'nWGxne_9WmC6hEr0kuwsxERJxWl7MmkZcDusAxyuf2A',
             'x' => '11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo',
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getPublicKey(): JWK
+    {
+        return $this->getPrivateKey()->toPublic();
     }
 }
