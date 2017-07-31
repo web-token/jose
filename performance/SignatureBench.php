@@ -1,7 +1,15 @@
 <?php
 
-namespace Jose\Performance;
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
 
+namespace Jose\Performance;
 
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
@@ -40,9 +48,6 @@ abstract class SignatureBench
      */
     private $jwaManager;
 
-    /**
-     *
-     */
     public function init()
     {
         $this->jwaManager = JWAManager::create([
