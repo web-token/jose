@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-sudo add-apt-repository ppa:chris-lea/libsodium -y
+sudo add-apt-repository ppa:ondrej/php -y
 sudo apt-get update -y
 sudo apt-get install libsodium-dev build-essential -y
 git clone -b stable https://github.com/jedisct1/libsodium.git
