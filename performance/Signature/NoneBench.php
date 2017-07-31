@@ -9,14 +9,14 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance;
+namespace Jose\Performance\Signature;
 
 use Jose\Component\Core\JWK;
 
 /**
- * @Groups({"EdDSA"})
+ * @Groups({"None"})
  */
-final class EdDSABench extends SignatureBench
+final class NoneBench extends SignatureBench
 {
     /**
      * @return array
@@ -25,7 +25,7 @@ final class EdDSABench extends SignatureBench
     {
         return [
             [
-                'algorithm' => 'EdDSA',
+                'algorithm' => 'none',
             ],
         ];
     }
@@ -37,7 +37,7 @@ final class EdDSABench extends SignatureBench
     {
         return [
             [
-                'input' => 'eyJhbGciOiJFZERTQSJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.zwhKxTMnLVgl0KSn9GT2ongThN0hOZkp046k3S296_TKwAXZH3n4OGMavgUgmuhXER3_zRz-nBqJMfUDIoRHBQ',
+                'input' => 'eyJhbGciOiJub25lIn0.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.',
             ],
         ];
     }
@@ -48,10 +48,7 @@ final class EdDSABench extends SignatureBench
     protected function getPrivateKey(): JWK
     {
         return JWK::create([
-            'kty' => 'OKP',
-            'crv' => 'Ed25519',
-            'd' => 'nWGxne_9WmC6hEr0kuwsxERJxWl7MmkZcDusAxyuf2A',
-            'x' => '11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo',
+            'kty' => 'none',
         ]);
     }
 
@@ -60,6 +57,6 @@ final class EdDSABench extends SignatureBench
      */
     protected function getPublicKey(): JWK
     {
-        return $this->getPrivateKey()->toPublic();
+        return $this->getPrivateKey();
     }
 }

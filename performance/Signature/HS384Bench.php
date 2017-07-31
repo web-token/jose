@@ -9,14 +9,14 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance;
+namespace Jose\Performance\Signature;
 
 use Jose\Component\Core\JWK;
 
 /**
  * @Groups({"hmac"})
  */
-final class HS256Bench extends SignatureBench
+final class HS384Bench extends SignatureBench
 {
     /**
      * @return array
@@ -25,7 +25,7 @@ final class HS256Bench extends SignatureBench
     {
         return [
             [
-                'algorithm' => 'HS256',
+                'algorithm' => 'HS384',
             ],
         ];
     }
@@ -37,7 +37,7 @@ final class HS256Bench extends SignatureBench
     {
         return [
             [
-                'input' => 'eyJhbGciOiJIUzI1NiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.bWUSVaxorn7bEF1djytBd0kHv70Ly5pvbomzMWSOr20',
+                'input' => 'eyJhbGciOiJIUzM4NCJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.VIvxaoPUCpKMAvBN_Pi5GdeR3EgKvp3Rql5xrAmGHsjVXPBBmoVDyDGeIHsewzv2',
             ],
         ];
     }

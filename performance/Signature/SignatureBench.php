@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance;
+namespace Jose\Performance\Signature;
 
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;

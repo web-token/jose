@@ -9,14 +9,14 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance;
+namespace Jose\Performance\Signature;
 
 use Jose\Component\Core\JWK;
 
 /**
  * @Groups({"ECDSA"})
  */
-final class ES256Bench extends SignatureBench
+final class ES384Bench extends SignatureBench
 {
     /**
      * @return array
@@ -25,7 +25,7 @@ final class ES256Bench extends SignatureBench
     {
         return [
             [
-                'algorithm' => 'ES256',
+                'algorithm' => 'ES384',
             ],
         ];
     }
@@ -37,7 +37,7 @@ final class ES256Bench extends SignatureBench
     {
         return [
             [
-                'input' => 'eyJhbGciOiJFUzI1NiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.PQcIuf_bZFoOChBj7z_6KQlfpfvZ4YSUvtVheoAKQJ_rjywLft5dqL79bOrGffW0CkGPvaKzBr3yGdQt3II54g',
+                'input' => 'eyJhbGciOiJFUzM4NCJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.KYD8GcuF5obFaHyjMHJu-v55pfcJdTw_0DSWU1achSeVqbJsGT0wjkGqfr839ZxB5x-g7hbAHKIFzwZanWq9cxoORKgUSQC6NRhtwM-Y_21aauWhB3Zz1FrNcnpKTAIq',
             ],
         ];
     }
@@ -49,12 +49,12 @@ final class ES256Bench extends SignatureBench
     {
         return JWK::create([
             'kty' => 'EC',
-            'kid' => 'meriadoc.brandybuck@buckland.example',
+            'kid' => 'peregrin.took@tuckborough.example',
             'use' => 'sig',
-            'crv' => 'P-256',
-            'x' => 'Ze2loSV3wrroKUN_4zhwGhCqo3Xhu1td4QjeQ5wIVR0',
-            'y' => 'HlLtdXARY_f55A3fnzQbPcm6hgr34Mp8p-nuzQCE0Zw',
-            'd' => 'r_kHyZ-a06rmxM3yESK84r1otSg-aQcVStkRhA-iCM8',
+            'crv' => 'P-384',
+            'x' => 'YU4rRUzdmVqmRtWOs2OpDE_T5fsNIodcG8G5FWPrTPMyxpzsSOGaQLpe2FpxBmu2',
+            'y' => 'A8-yxCHxkfBz3hKZfI1jUYMjUhsEveZ9THuwFjH2sCNdtksRJU7D5-SkgaFL1ETP',
+            'd' => 'iTx2pk7wW-GqJkHcEkFQb2EFyYcO7RugmaW3mRrQVAOUiPommT0IdnYK2xDlZh-j',
         ]);
     }
 
