@@ -9,7 +9,7 @@ cd libsodium
 make
 make check
 sudo make install
-sudo pecl channel-update pecl.php.net
-sudo pecl install libsodium
+pecl channel-update pecl.php.net
+pecl install libsodium
 echo "extension = sodium.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 cd ../
