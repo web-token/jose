@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-sudo add-apt-repository ppa:chris-lea/libsodium
-sudo apt-get update
-sudo apt-get install libsodium-dev build-essential
+sudo add-apt-repository ppa:chris-lea/libsodium -y
+sudo apt-get update -y
+sudo apt-get install libsodium-dev build-essential -y
 git clone -b stable https://github.com/jedisct1/libsodium.git
 cd libsodium
 ./configure
