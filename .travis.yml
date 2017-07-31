@@ -13,6 +13,8 @@ matrix:
         - php: nightly
 
 before_script:
+    - chmod +x ./install_php_ext.sh
+    - if [ "$TRAVIS_PHP_VERSION" = '7.1' ]; then ./install_php_ext.sh; fi
     - composer self-update
     - mkdir -p build/logs
     - if [[ $deps = low ]]; then composer update --no-interaction --prefer-lowest ; fi
