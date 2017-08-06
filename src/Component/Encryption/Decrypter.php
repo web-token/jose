@@ -84,9 +84,9 @@ final class Decrypter
     }
 
     /**
-     * @param JWE      $jwe             A JWE object to decrypt
-     * @param JWK      $jwk             The key used to decrypt the input
-     * @param null|int $recipientIndex  If the JWE has been decrypted, an integer that represents the ID of the recipient is set
+     * @param JWE      $jwe            A JWE object to decrypt
+     * @param JWK      $jwk            The key used to decrypt the input
+     * @param null|int $recipientIndex If the JWE has been decrypted, an integer that represents the ID of the recipient is set
      *
      * @return JWE
      */
@@ -98,9 +98,9 @@ final class Decrypter
     }
 
     /**
-     * @param JWE      $jwe             A JWE object to decrypt
-     * @param JWKSet   $jwkset          The key set used to decrypt the input
-     * @param null|int $recipientIndex  If the JWE has been decrypted, an integer that represents the ID of the recipient is set
+     * @param JWE      $jwe            A JWE object to decrypt
+     * @param JWKSet   $jwkset         The key set used to decrypt the input
+     * @param null|int $recipientIndex If the JWE has been decrypted, an integer that represents the ID of the recipient is set
      *
      * @return JWE
      */
