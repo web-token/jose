@@ -61,9 +61,6 @@ abstract class SignatureBench
         ]);
     }
 
-    /**
-     *
-     */
     public function benchSignature()
     {
         $this->getAlgorithm()->sign($this->getPrivateKey(), $this->getInput());
