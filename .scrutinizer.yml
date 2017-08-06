@@ -13,7 +13,8 @@ tools:
     php_pdepend:
         excluded_dirs: [vendor/*, doc/*, performance/*, */Tests/*]
 filter:
-    excluded_paths: [vendor/*, doc/*, performance/*, */Tests/*]
+    paths: ["dir1/*", "dir2/*"]
+    excluded_paths: ["vendor/*", "doc/*", "performance/*", "*/Tests/*"]
 build_failure_conditions:
     - 'elements.rating(<= D).exists'               # No classes/methods with a rating of D or worse
     - 'elements.rating(<= D).new.exists'           # No new classes/methods with a rating of D or worse
