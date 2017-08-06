@@ -9,27 +9,16 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\Signature;
+namespace Jose\Performance\JWS\Signature;
 
 use Jose\Component\Core\JWK;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
- * @Groups({"ECDSA"})
+ * @Groups({"Signature", "ECDSA"})
  */
 final class ES512Bench extends SignatureBench
 {
-    /**
-     * @return array
-     */
-    public function dataSignature(): array
-    {
-        return [
-            [
-                'algorithm' => 'ES512',
-            ],
-        ];
-    }
-
     /**
      * @return array
      */
@@ -37,9 +26,25 @@ final class ES512Bench extends SignatureBench
     {
         return [
             [
-                'input' => 'eyJhbGciOiJFUzUxMiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.AHWHIEWLWQl8n07gsrSx-UvwtUX1Clp-8QCJX20ifv3glXIJMRj9kiB8MlpKA_cpTaEROgf4apb5BYNqi3V4s7_CANg0hFc6_gJ-ECAjanlIVrXhFdJhDyIMhEkBkA3cq6HsWulJeZinP5CU-4_oNup--ir_PfQcui1jpboNwER6_XRG',
+                'signature' => 'AHWHIEWLWQl8n07gsrSx-UvwtUX1Clp-8QCJX20ifv3glXIJMRj9kiB8MlpKA_cpTaEROgf4apb5BYNqi3V4s7_CANg0hFc6_gJ-ECAjanlIVrXhFdJhDyIMhEkBkA3cq6HsWulJeZinP5CU-4_oNup--ir_PfQcui1jpboNwER6_XRG',
             ],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAlgorithm(): SignatureAlgorithmInterface
+    {
+        return $this->jwaManager->get('ES512');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getInput(): string
+    {
+        return 'eyJhbGciOiJFUzUxMiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4';
     }
 
     /**

@@ -9,12 +9,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\Signature;
+namespace Jose\Performance\JWS\Creation;
 
 use Jose\Component\Core\JWK;
 
 /**
- * @Groups({"RSA"})
+ * @Groups({"JWS", "RSA"})
  */
 final class PS384Bench extends SignatureBench
 {

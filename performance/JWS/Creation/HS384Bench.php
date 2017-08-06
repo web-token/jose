@@ -9,14 +9,14 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\Signature;
+namespace Jose\Performance\JWS\Creation;
 
 use Jose\Component\Core\JWK;
 
 /**
- * @Groups({"hmac"})
+ * @Groups({"JWS", "hmac"})
  */
-final class HS512Bench extends SignatureBench
+final class HS384Bench extends SignatureBench
 {
     /**
      * @return array
@@ -25,7 +25,7 @@ final class HS512Bench extends SignatureBench
     {
         return [
             [
-                'algorithm' => 'HS512',
+                'algorithm' => 'HS384',
             ],
         ];
     }
@@ -37,7 +37,7 @@ final class HS512Bench extends SignatureBench
     {
         return [
             [
-                'input' => 'eyJhbGciOiJIUzUxMiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.1iIN1THXoEvVr6OiIZ2jTqAsmTF0UAut_cZ6GCy31zHc66MZmfo_0uAYEoVvz1IpfC--ZPSocgY8ImtCNfDVRQ',
+                'input' => 'eyJhbGciOiJIUzM4NCJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.VIvxaoPUCpKMAvBN_Pi5GdeR3EgKvp3Rql5xrAmGHsjVXPBBmoVDyDGeIHsewzv2',
             ],
         ];
     }

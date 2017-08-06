@@ -9,14 +9,14 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\Signature;
+namespace Jose\Performance\JWS\Creation;
 
 use Jose\Component\Core\JWK;
 
 /**
- * @Groups({"RSA"})
+ * @Groups({"JWS", "RSA"})
  */
-final class PS256Bench extends SignatureBench
+final class RS256Bench extends SignatureBench
 {
     /**
      * @return array
@@ -25,7 +25,7 @@ final class PS256Bench extends SignatureBench
     {
         return [
             [
-                'algorithm' => 'PS256',
+                'algorithm' => 'RS256',
             ],
         ];
     }
@@ -37,7 +37,7 @@ final class PS256Bench extends SignatureBench
     {
         return [
             [
-                'input' => 'eyJhbGciOiJQUzI1NiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.P28nqnlDaovXZjgACs-qozK98HGsLLiz_vHrxF_Dk6aC_0a1-Pn02wJ2_9ZGYVpB5xsT6FunUwemLcKtBaf9cPCKe_xXni_VOtAwTWEeB-tjyeJrvGn5fu8WOPMM_PG_HCNkdkSC5qTj1lRj2WWfp6cWM09A6HrUiD-d5beBDjfjsVom-89SdcQimbs47TVYv-5_dQ3eqFrym4ZFKb2EM12Is1acoTBWllc8Mb4JZwLW-fhPW9RbAT0NwV3k67FWt9RPS07xokfU-vWeTmJXbRR5ifjZyi6E-pcaPvEQlxBbS8i5vwgvnl7kQCmPyQubF4EXqz0fskgIl8Howhb_vQ',
+                'input' => 'eyJhbGciOiJSUzI1NiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.MIsjqtVlOpa71KE-Mss8_Nq2YH4FGhiocsqrgi5NvyG53uoimic1tcMdSg-qptrzZc7CG6Svw2Y13TDIqHzTUrL_lR2ZFcryNFiHkSw129EghGpwkpxaTn_THJTCglNbADko1MZBCdwzJxwqZc-1RlpO2HibUYyXSwO97BSe0_evZKdjvvKSgsIqjytKSeAMbhMBdMma622_BG5t4sdbuCHtFjp9iJmkio47AIwqkZV1aIZsv33uPUqBBCXbYoQJwt7mxPftHmNlGoOSMxR_3thmXTCm4US-xiNOyhbm8afKK64jU6_TPtQHiJeQJxz9G3Tx-083B745_AfYOnlC9w',
             ],
         ];
     }

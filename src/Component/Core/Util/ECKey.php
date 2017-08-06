@@ -137,20 +137,6 @@ final class ECKey
     }
 
     /**
-     * @param string $oid
-     *
-     * @return string
-     */
-    private function getCurve(string $oid): string
-    {
-        $curves = $this->getSupportedCurves();
-        $curve = array_search($oid, $curves, true);
-        Assertion::string($curve, 'Unsupported OID');
-
-        return $curve;
-    }
-
-    /**
      * @return array
      */
     private function getSupportedCurves(): array

@@ -9,12 +9,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\Signature;
+namespace Jose\Performance\JWS\Creation;
 
 use Jose\Component\Core\JWK;
 
 /**
- * @Groups({"ECDSA"})
+ * @Groups({"JWS", "ECDSA"})
  */
 final class ES384Bench extends SignatureBench
 {

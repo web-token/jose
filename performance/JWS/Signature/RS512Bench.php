@@ -9,27 +9,16 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\Signature;
+namespace Jose\Performance\JWS\Signature;
 
 use Jose\Component\Core\JWK;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
- * @Groups({"RSA"})
+ * @Groups({"Signature", "RSA"})
  */
-final class PS512Bench extends SignatureBench
+final class RS512Bench extends SignatureBench
 {
-    /**
-     * @return array
-     */
-    public function dataSignature(): array
-    {
-        return [
-            [
-                'algorithm' => 'PS512',
-            ],
-        ];
-    }
-
     /**
      * @return array
      */
@@ -37,9 +26,25 @@ final class PS512Bench extends SignatureBench
     {
         return [
             [
-                'input' => 'eyJhbGciOiJQUzUxMiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.fM-DcWADS5rSbl6gvmKcPlsRRH9bz9kAP2yVjsB5o3Wg4MTxDe_JpY0mYWuj1maRtgcPLuH1SdqQeGDDsf82io8No9NWvxzww5vQY7WaKpgOtRfU3-K852TzpKoSxaUWSoANb_wHNpXOl8aouIyy2R9U4SkpB1yh_VSYJwH5Ktlmok4_Sw0B64mK9P4tlm-XprxStx1Vo_sLmPfReQ03Un1zMB38JeZkrvxHBYdwmBD_pSPo8DEtAiCO1surIqX5GaF_gFtF6wwRdg1J4-J9FoRSvDs0KeWUm_jxPtiUTRTwihsjg6jZEQMBWf0A18skKpr7COALaH6Kc1R5oJ-cZg',
+                'signature' => 'cGjv9jlIZ1_p8-lvV1BwXecB72C1l9P2KztGjnE-YTzife6KRUvMBSIlPTtJQMJV-s3PzjWgaCyO0dtoizQKZXQLYFjb_lT1ryfy3bszzk4329RhF4YZ4vIU-O3K4ZRP22yhJ6uCxQ1dWrwQqLyRQkPRKN40ZjtgjG7MG0tHq16M7_iS58X7XgcXlYpGFIDcFRK604svbGEr8vy32iR42AFcAnHpTrWKqMxFEyPvq5EsIfSVmKXvo8PZPXmRYhoAAmi8Akwh4ib6Whz4U5WGT5n8furFN8mPegp7ROwYKCeLim4ct1zw7g4owddQzV9pe6EcloKcgnvhJtgRWCUwdQ',
             ],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAlgorithm(): SignatureAlgorithmInterface
+    {
+        return $this->jwaManager->get('RS512');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getInput(): string
+    {
+        return 'eyJhbGciOiJSUzUxMiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4';
     }
 
     /**

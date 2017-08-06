@@ -9,8 +9,9 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\Signature;
+namespace Jose\Performance\JWS\Signature;
 
+use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\EdDSA;
@@ -27,26 +28,18 @@ use Jose\Component\Signature\Algorithm\PS512;
 use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\Algorithm\RS384;
 use Jose\Component\Signature\Algorithm\RS512;
-use Jose\Component\Signature\JWSBuilder;
-use Jose\Component\Signature\JWSLoader;
-use Jose\Component\Signature\Verifier;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
  * @BeforeMethods({"init"})
- * @Groups({"signature"})
  * @Revs(100)
  */
 abstract class SignatureBench
 {
     /**
-     * @var string
-     */
-    private $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
-
-    /**
      * @param JWAManager
      */
-    private $jwaManager;
+    protected $jwaManager;
 
     public function init()
     {
@@ -69,18 +62,11 @@ abstract class SignatureBench
     }
 
     /**
-     * @param array $params
      *
-     * @ParamProviders({"dataSignature"})
      */
-    public function benchSignature($params)
+    public function benchSignature()
     {
-        $jwsBuilder = new JWSBuilder($this->jwaManager);
-        $jwsBuilder
-            ->withPayload($this->payload)
-            ->addSignature($this->getPrivateKey(), ['alg' => $params['algorithm']])
-            ->build()
-            ->toCompactJSON(0);
+        $this->getAlgorithm()->sign($this->getPrivateKey(), $this->getInput());
     }
 
     /**
@@ -90,10 +76,19 @@ abstract class SignatureBench
      */
     public function benchVerification($params)
     {
-        $jws = JWSLoader::load($params['input']);
-        $verifier = new Verifier($this->jwaManager);
-        $verifier->verifyWithKey($jws, $this->getPublicKey(), null, $index);
+        $signature = '' === $params['signature'] ? $params['signature'] : Base64Url::decode($params['signature']);
+        $this->getAlgorithm()->verify($this->getPublicKey(), $this->getInput(), $signature);
     }
+
+    /**
+     * @return SignatureAlgorithmInterface
+     */
+    abstract protected function getAlgorithm(): SignatureAlgorithmInterface;
+
+    /**
+     * @return string
+     */
+    abstract protected function getInput(): string;
 
     /**
      * @return JWK

@@ -3,7 +3,6 @@
   "path": "performance",
   "progress": "dots",
   "time_unit": "microseconds",
-  "php_wrapper": "blackfire run",
   "reports": {
     "all": {
       "extends": "aggregate",
