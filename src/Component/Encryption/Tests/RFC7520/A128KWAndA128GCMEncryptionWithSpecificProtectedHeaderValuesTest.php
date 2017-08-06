@@ -117,7 +117,6 @@ final class A128KWAndA128GCMEncryptionWithSpecificProtectedHeaderValuesTest exte
             'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
         ];
 
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
         $compressionManager = CompressionManager::create([new Deflate()]);

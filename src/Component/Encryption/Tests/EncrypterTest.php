@@ -560,7 +560,6 @@ final class EncrypterTest extends TestCase
             ->build()
             ->toJSON();
 
-
         $loaded = JWELoader::load($jwe);
 
         $this->assertEquals(2, $loaded->countRecipients());

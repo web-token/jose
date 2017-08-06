@@ -45,7 +45,6 @@ final class ECDHESWithX25519EncryptionTest extends TestCase
             'enc' => 'A128GCM',
         ];
 
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA128KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
         $compressionManager = CompressionManager::create([new Deflate()]);

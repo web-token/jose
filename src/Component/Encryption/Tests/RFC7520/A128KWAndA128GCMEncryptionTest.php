@@ -121,7 +121,6 @@ final class A128KWAndA128GCMEncryptionTest extends TestCase
             'enc' => 'A128GCM',
         ];
 
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
         $compressionManager = CompressionManager::create([new Deflate()]);

@@ -134,7 +134,6 @@ final class RSA_OAEPAndA256GCMEncryptionTest extends TestCase
             'enc' => 'A256GCM',
         ];
 
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
