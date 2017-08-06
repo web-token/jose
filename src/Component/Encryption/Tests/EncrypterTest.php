@@ -441,8 +441,9 @@ final class EncrypterTest extends TestCase
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
+        $payload = ['user_id' => '1234', 'exp' => time() + 3600];
         $jwe = $jweBuilder
-            ->withPayload(['user_id' => '1234', 'exp' => time() + 3600])
+            ->withPayload($payload)
             ->withSharedProtectedHeaders([
                 'kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d',
                 'enc' => 'A192CBC-HS384',
@@ -463,7 +464,7 @@ final class EncrypterTest extends TestCase
         $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
-        $this->assertEquals(['user_id' => '1234', 'exp' => time() + 3600], json_decode($loaded->getPayload(), true));
+        $this->assertEquals($payload, json_decode($loaded->getPayload(), true));
     }
 
     public function testEncryptAndLoadCompactKeyAgreementWithWrappingCompact()
