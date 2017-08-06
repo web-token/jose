@@ -132,7 +132,6 @@ final class RSA1_5AndA128CBC_HS256EncryptionTest extends TestCase
             'enc' => 'A128CBC-HS256',
         ];
 
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionManager::create([new Deflate()]);

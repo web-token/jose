@@ -106,7 +106,6 @@ class DirAndA128GCMEncryptionTest extends TestCase
             'enc' => 'A128GCM',
         ];
 
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new Dir()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
         $compressionManager = CompressionManager::create([new Deflate()]);

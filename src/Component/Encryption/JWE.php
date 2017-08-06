@@ -15,7 +15,6 @@ namespace Jose\Component\Encryption;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWTInterface;
 
 /**

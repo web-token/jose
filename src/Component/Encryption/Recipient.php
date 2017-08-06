@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption;
 
 /**
- * Class Recipient
+ * Class Recipient.
  */
 final class Recipient
 {
@@ -31,7 +31,7 @@ final class Recipient
     /**
      * Recipient constructor.
      *
-     * @param array $headers
+     * @param array       $headers
      * @param null|string $encryptedKey
      */
     private function __construct(array $headers, ?string $encryptedKey)
@@ -46,7 +46,7 @@ final class Recipient
      *
      * @return Recipient
      */
-    public static function create(array $headers = [], ?string $encryptedKey):Recipient
+    public static function create(array $headers = [], ?string $encryptedKey): Recipient
     {
         return new self($headers, $encryptedKey);
     }

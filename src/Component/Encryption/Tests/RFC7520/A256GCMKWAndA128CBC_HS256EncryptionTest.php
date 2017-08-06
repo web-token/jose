@@ -128,7 +128,6 @@ final class A256GCMKWAndA128CBC_HS256EncryptionTest extends TestCase
             'enc' => 'A128CBC-HS256',
         ];
 
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new A256GCMKW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionManager::create([new Deflate()]);

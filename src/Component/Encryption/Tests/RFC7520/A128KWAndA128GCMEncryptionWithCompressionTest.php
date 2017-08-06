@@ -123,7 +123,6 @@ final class A128KWAndA128GCMEncryptionWithCompressionTest extends TestCase
             'zip' => 'DEF',
         ];
 
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
         $compressionManager = CompressionManager::create([new Deflate()]);

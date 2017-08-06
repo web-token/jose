@@ -320,11 +320,11 @@ final class JWEBuilder
     }
 
     /**
-     * @param array                               $completeHeaders
-     * @param string                              $cek
-     * @param KeyEncryptionAlgorithmInterface     $keyEncryptionAlgorithm
-     * @param JWK                                 $recipientKey
-     * @param array                               $additionalHeaders
+     * @param array                           $completeHeaders
+     * @param string                          $cek
+     * @param KeyEncryptionAlgorithmInterface $keyEncryptionAlgorithm
+     * @param JWK                             $recipientKey
+     * @param array                           $additionalHeaders
      *
      * @return string|null
      */
@@ -345,11 +345,11 @@ final class JWEBuilder
     }
 
     /**
-     * @param array                               $completeHeaders
-     * @param string                              $cek
-     * @param KeyAgreementWrappingInterface       $keyEncryptionAlgorithm
-     * @param array                               $additionalHeaders
-     * @param JWK                                 $recipientKey
+     * @param array                         $completeHeaders
+     * @param string                        $cek
+     * @param KeyAgreementWrappingInterface $keyEncryptionAlgorithm
+     * @param array                         $additionalHeaders
+     * @param JWK                           $recipientKey
      *
      * @return string
      */
@@ -401,7 +401,7 @@ final class JWEBuilder
     }
 
     /**
-     * @param array                               $additionalHeaders
+     * @param array $additionalHeaders
      *
      * @return string
      */

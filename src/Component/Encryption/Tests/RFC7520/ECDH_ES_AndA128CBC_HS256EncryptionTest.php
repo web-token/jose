@@ -126,7 +126,6 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends TestCase
             'enc' => 'A128CBC-HS256',
         ];
 
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHES()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionManager::create([new Deflate()]);

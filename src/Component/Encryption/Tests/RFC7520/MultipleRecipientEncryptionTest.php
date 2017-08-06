@@ -212,7 +212,6 @@ final class MultipleRecipientEncryptionTest extends TestCase
             'kid' => '18ec08e1-bfa9-4d95-b205-2b4dd1d4321d',
         ];
 
-
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15(), new ECDHESA256KW(), new A256GCMKW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
