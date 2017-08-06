@@ -21,9 +21,8 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\Encrypter;
+use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\JWELoader;
-use Jose\Component\Factory\JWEFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -71,13 +70,13 @@ final class A128KWAndA128GCMEncryptionWithCompressionTest extends TestCase
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loaded_compact_json = JWELoader::load($expected_compact_json);
-        $decrypter->decryptUsingKey($loaded_compact_json, $private_key);
+        $loaded_compact_json = $decrypter->decryptUsingKey($loaded_compact_json, $private_key);
 
         $loaded_flattened_json = JWELoader::load($expected_flattened_json);
-        $decrypter->decryptUsingKey($loaded_flattened_json, $private_key);
+        $loaded_flattened_json = $decrypter->decryptUsingKey($loaded_flattened_json, $private_key);
 
         $loaded_json = JWELoader::load($expected_json);
-        $decrypter->decryptUsingKey($loaded_json, $private_key);
+        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
 
         $this->assertEquals($expected_ciphertext, Base64Url::encode($loaded_compact_json->getCiphertext()));
         $this->assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());
@@ -124,28 +123,27 @@ final class A128KWAndA128GCMEncryptionWithCompressionTest extends TestCase
             'zip' => 'DEF',
         ];
 
-        $jwe = JWEFactory::createJWE($expected_payload, $protected_headers);
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
-
-        $jwe = $jwe->addRecipientInformation(
-            $private_key
-        );
-
-        $encrypter->encrypt($jwe);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
+        $jwe = $jweBuilder
+            ->withPayload($expected_payload)
+            ->withSharedProtectedHeaders($protected_headers)
+            ->addRecipient($private_key)
+            ->build();
+
         $loaded_compact_json = JWELoader::load($jwe->toCompactJSON(0));
-        $decrypter->decryptUsingKey($loaded_compact_json, $private_key);
+        $loaded_compact_json = $decrypter->decryptUsingKey($loaded_compact_json, $private_key);
 
         $loaded_flattened_json = JWELoader::load($jwe->toFlattenedJSON(0));
-        $decrypter->decryptUsingKey($loaded_flattened_json, $private_key);
+        $loaded_flattened_json = $decrypter->decryptUsingKey($loaded_flattened_json, $private_key);
 
         $loaded_json = JWELoader::load($jwe->toJSON());
-        $decrypter->decryptUsingKey($loaded_json, $private_key);
+        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
 
         $this->assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());
 

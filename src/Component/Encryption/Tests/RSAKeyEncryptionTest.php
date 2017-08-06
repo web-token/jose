@@ -172,7 +172,7 @@ final class RSAKeyEncryptionTest extends TestCase
         $this->assertEquals('A256GCM', $loaded->getSharedProtectedHeader('enc'));
         $this->assertNull($loaded->getPayload());
 
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
         $this->assertEquals('The true sign of intelligence is not knowledge but imagination.', $loaded->getPayload());
@@ -193,7 +193,7 @@ final class RSAKeyEncryptionTest extends TestCase
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertNull($loaded->getPayload());
 
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
         $this->assertEquals('Live long and prosper.', $loaded->getPayload());
@@ -216,7 +216,7 @@ final class RSAKeyEncryptionTest extends TestCase
         $this->assertEquals('A128CBC-HS256', $loaded->getSharedProtectedHeader('enc'));
         $this->assertNull($loaded->getPayload());
 
-        $decrypter->decryptUsingKeySet($loaded, $this->getSymmetricKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getSymmetricKeySet(), $index);
 
         $this->assertEquals(0, $index);
         $this->assertEquals('Live long and prosper.', $loaded->getPayload());

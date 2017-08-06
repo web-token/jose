@@ -140,7 +140,7 @@ final class JWELoader
             $encrypted_key = self::getRecipientEncryptedKey($recipient);
             $recipient_headers = self::getRecipientHeaders($recipient);
 
-            $jwe = $jwe->addRecipientWithEncryptedKey($encrypted_key, $recipient_headers);
+            $jwe = $jwe->addRecipient($recipient_headers, $encrypted_key);
         }
 
         return $jwe;

@@ -24,15 +24,13 @@ use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\Dir;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW;
-use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\Encrypter;
+use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Encryption\JWELoader;
-use Jose\Component\Factory\JWEFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,34 +46,30 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE(
-            'FOO',
-            [
+        $jwe = $jweBuilder
+            ->withPayload('FOO')
+            ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
                 'zip' => 'DEF',
-            ],
-            [],
-            'foo,bar,baz'
-        );
+            ])
+            ->withAAD('foo,bar,baz')
+            ->addRecipient($this->getRSARecipientKey())
+            ->build();
 
-        $jwe = $jwe->addRecipientInformation($this->getRSARecipientKey());
+        $jwe = $jwe->toFlattenedJSON(0);
 
-        $encrypter->encrypt($jwe);
-
-        $encrypted = $jwe->toFlattenedJSON(0);
-
-        $loaded = JWELoader::load($encrypted);
+        $loaded = JWELoader::load($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
         $this->assertEquals('A256CBC-HS512', $loaded->getSharedProtectedHeader('enc'));
         $this->assertEquals('DEF', $loaded->getSharedProtectedHeader('zip'));
         $this->assertNull($loaded->getPayload());
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
         $this->assertEquals('FOO', $loaded->getPayload());
@@ -83,15 +77,22 @@ final class EncrypterTest extends TestCase
 
     public function testCreateCompactJWEUsingFactory()
     {
-        $jwe = JWEFactory::createJWEToCompactJSON(
-            'FOO',
-            $this->getRSARecipientKey(),
-            [
+        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+
+        $jwe = $jweBuilder
+            ->withPayload('FOO')
+            ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
                 'zip' => 'DEF',
-            ]
-        );
+            ])
+            ->addRecipient($this->getRSARecipientKey())
+            ->build()
+            ->toCompactJSON(0);
 
         $loaded = JWELoader::load($jwe);
 
@@ -101,11 +102,7 @@ final class EncrypterTest extends TestCase
         $this->assertEquals('DEF', $loaded->getSharedProtectedHeader('zip'));
         $this->assertNull($loaded->getPayload());
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
         $this->assertEquals('FOO', $loaded->getPayload());
@@ -113,22 +110,31 @@ final class EncrypterTest extends TestCase
 
     public function testCreateFlattenedJWEUsingFactory()
     {
-        $jwe = JWEFactory::createJWEToFlattenedJSON(
-            'FOO',
-            $this->getRSARecipientKey(),
-            [
+        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
+        $compressionManager = CompressionManager::create([new Deflate()]);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+
+        $jwe = $jweBuilder
+            ->withPayload('FOO')
+            ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
                 'zip' => 'DEF',
-            ],
-            [
-                'foo' => 'bar',
-            ],
-            [
-                'plic' => 'ploc',
-            ],
-            'A,B,C,D'
-        );
+            ])
+            ->withSharedHeaders([
+                    'foo' => 'bar',
+            ])
+            ->addRecipient(
+                $this->getRSARecipientKey(),
+                [
+                    'plic' => 'ploc',
+                ]
+            )
+            ->withAAD('A,B,C,D')
+            ->build()
+            ->toFlattenedJSON(0);
 
         $loaded = JWELoader::load($jwe);
 
@@ -141,11 +147,7 @@ final class EncrypterTest extends TestCase
         $this->assertEquals('ploc', $loaded->getRecipient(0)->getHeader('plic'));
         $this->assertNull($loaded->getPayload());
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
         $this->assertEquals('FOO', $loaded->getPayload());
@@ -156,27 +158,22 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE(
-            $this->getKeyToEncrypt(),
-            [
+        $jwe = $jweBuilder
+            ->withPayload($this->getKeyToEncrypt())
+            ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
                 'zip' => 'DEF',
-            ],
-            [],
-            'foo,bar,baz'
-        );
+            ])
+            ->addRecipient($this->getRSARecipientKey())
+            ->withAAD('foo,bar,baz')
+            ->build()
+            ->toFlattenedJSON(0);
 
-        $jwe = $jwe->addRecipientInformation($this->getRSARecipientKey());
-
-        $encrypter->encrypt($jwe);
-
-        $encrypted = $jwe->toFlattenedJSON(0);
-
-        $loaded = JWELoader::load($encrypted);
+        $loaded = JWELoader::load($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
@@ -184,11 +181,10 @@ final class EncrypterTest extends TestCase
         $this->assertEquals('DEF', $loaded->getSharedProtectedHeader('zip'));
         $this->assertNull($loaded->getPayload());
 
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
-        $this->assertTrue($loaded->hasClaims());
-        $this->assertEquals($this->getKeyToEncrypt(), JWK::create($loaded->getClaims()));
+        $this->assertEquals($this->getKeyToEncrypt(), JWK::create(json_decode($loaded->getPayload(), true)));
     }
 
     /**
@@ -200,68 +196,19 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE(
-            $this->getKeyToEncrypt(),
-            [
+        $jweBuilder
+            ->withPayload($this->getKeyToEncrypt())
+            ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
                 'zip' => 'FIP',
-            ],
-            [],
-            'foo,bar,baz'
-        );
-
-        $jwe = $jwe->addRecipientInformation($this->getRSARecipientKey());
-
-        $encrypter->encrypt($jwe);
-    }
-
-    public function testMultipleInstructionsNotAllowedWithCompactSerialization()
-    {
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP(), new RSAOAEP256()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
-
-        $jwe = JWEFactory::createJWE('Live long and Prosper.');
-        $jwe = $jwe->withSharedProtectedHeaders([
-            'enc' => 'A256CBC-HS512',
-        ]);
-
-        $jwe = $jwe->addRecipientInformation($this->getRSARecipientKeyWithAlgorithm(), ['alg' => 'RSA-OAEP']);
-        $jwe = $jwe->addRecipientInformation($this->getRSARecipientKey(), ['alg' => 'RSA-OAEP-256']);
-
-        $encrypter->encrypt($jwe);
-
-        $this->assertEquals(2, $jwe->countRecipients());
-    }
-
-    public function testMultipleInstructionsNotAllowedWithFlattenedSerialization()
-    {
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256(), new ECDHESA256KW()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
-
-        $jwe = JWEFactory::createJWE('Live long and Prosper.');
-        $jwe = $jwe->withSharedProtectedHeaders([
-            'enc' => 'A256CBC-HS512',
-        ]);
-
-        $jwe = $jwe->addRecipientInformation(
-            $this->getECDHRecipientPublicKey(),
-            ['kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d', 'alg' => 'ECDH-ES+A256KW']
-        );
-        $jwe = $jwe->addRecipientInformation(
-            $this->getRSARecipientKey(),
-            ['kid' => '123456789', 'alg' => 'RSA-OAEP-256']
-        );
-
-        $encrypter->encrypt($jwe);
-
-        $this->assertEquals(2, $jwe->countRecipients());
+            ])
+            ->addRecipient($this->getRSARecipientKey())
+            ->withAAD('foo,bar,baz')
+            ->build()
+            ->toFlattenedJSON(0);
     }
 
     /**
@@ -273,23 +220,16 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new Dir(), new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE('Live long and Prosper.');
-        $jwe = $jwe->withSharedProtectedHeaders([
-            'enc' => 'A256CBC-HS512',
-        ]);
-
-        $jwe = $jwe->addRecipientInformation(
-            $this->getECDHRecipientPublicKey(),
-            ['kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d', 'alg' => 'ECDH-ES+A256KW']
-        );
-        $jwe = $jwe->addRecipientInformation(
-            $this->getDirectKey(),
-            ['kid' => 'DIR_1', 'alg' => 'dir']
-        );
-
-        $encrypter->encrypt($jwe);
+        $jweBuilder
+            ->withPayload('Live long and Prosper.')
+            ->withSharedProtectedHeaders([
+                'enc' => 'A256CBC-HS512',
+            ])
+            ->addRecipient($this->getECDHRecipientPublicKey(), ['kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d', 'alg' => 'ECDH-ES+A256KW'])
+            ->addRecipient($this->getDirectKey(), ['kid' => 'DIR_1', 'alg' => 'dir'])
+            ->build();
     }
 
     /**
@@ -301,23 +241,17 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE(
-            'Foo',
-            [
+        $jweBuilder
+            ->withPayload('Live long and Prosper.')
+            ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
                 'zip' => 'DEF',
-            ],
-            [],
-            'foo,bar,baz'
-        );
-        $jwe = $jwe->addRecipientInformation(
-            $this->getSigningKey()
-        );
-
-        $encrypter->encrypt($jwe);
+            ])
+            ->addRecipient($this->getSigningKey())
+            ->build();
     }
 
     /**
@@ -329,23 +263,17 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE(
-            'FOO',
-            [
+        $jweBuilder
+            ->withPayload('Live long and Prosper.')
+            ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
                 'zip' => 'DEF',
-            ],
-            [],
-            'foo,bar,baz'
-        );
-        $jwe = $jwe->addRecipientInformation(
-            $this->getRSARecipientKeyWithAlgorithm()
-        );
-
-        $encrypter->encrypt($jwe);
+            ])
+            ->addRecipient($this->getRSARecipientKeyWithAlgorithm())
+            ->build();
     }
 
     public function testEncryptAndLoadFlattenedWithDeflateCompression()
@@ -353,25 +281,22 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE($this->getKeySetToEncrypt());
-        $jwe = $jwe->withSharedProtectedHeaders([
-            'kid' => '123456789',
-            'enc' => 'A128CBC-HS256',
-            'alg' => 'RSA-OAEP-256',
-            'zip' => 'DEF',
-        ]);
-        $jwe = $jwe->addRecipientInformation(
-            $this->getRSARecipientKey()
-        );
+        $jwe = $jweBuilder
+            ->withPayload($this->getKeySetToEncrypt())
+            ->withSharedProtectedHeaders([
+                'kid' => '123456789',
+                'enc' => 'A128CBC-HS256',
+                'alg' => 'RSA-OAEP-256',
+                'zip' => 'DEF',
+            ])
+            ->addRecipient($this->getRSARecipientKey())
+            ->build()
+            ->toCompactJSON(0);
 
-        $encrypter->encrypt($jwe);
-
-        $encrypted = $jwe->toCompactJSON(0);
-
-        $loaded = JWELoader::load($encrypted);
+        $loaded = JWELoader::load($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
@@ -379,11 +304,10 @@ final class EncrypterTest extends TestCase
         $this->assertEquals('DEF', $loaded->getSharedProtectedHeader('zip'));
         $this->assertNull($loaded->getPayload());
 
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
-        $this->assertTrue(is_array($loaded->getPayload()));
-        $this->assertEquals($this->getKeySetToEncrypt(), JWKSet::createFromKeyData($loaded->getPayload()));
+        $this->assertEquals($this->getKeySetToEncrypt(), JWKSet::createFromKeyData(json_decode($loaded->getPayload(), true)));
     }
 
     /**
@@ -395,19 +319,17 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE($this->getKeyToEncrypt());
-        $jwe = $jwe->withSharedProtectedHeaders([
-            'kid' => '123456789',
-            'enc' => 'A256CBC-HS512',
-            'zip' => 'DEF',
-        ]);
-        $jwe = $jwe->addRecipientInformation(
-            $this->getRSARecipientKey()
-        );
-
-        $encrypter->encrypt($jwe);
+        $jweBuilder
+            ->withPayload($this->getKeyToEncrypt())
+            ->withSharedProtectedHeaders([
+                'kid' => '123456789',
+                'enc' => 'A256CBC-HS512',
+                'zip' => 'DEF',
+            ])
+            ->addRecipient($this->getRSARecipientKey())
+            ->build();
     }
 
     /**
@@ -419,19 +341,17 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE($this->getKeyToEncrypt());
-        $jwe = $jwe->withSharedProtectedHeaders([
-            'kid' => '123456789',
-            'alg' => 'RSA-OAEP-256',
-            'zip' => 'DEF',
-        ]);
-        $jwe = $jwe->addRecipientInformation(
-            $this->getRSARecipientKey()
-        );
-
-        $encrypter->encrypt($jwe);
+        $jweBuilder
+            ->withPayload($this->getKeyToEncrypt())
+            ->withSharedProtectedHeaders([
+                'kid' => '123456789',
+                'alg' => 'RSA-OAEP-256',
+                'zip' => 'DEF',
+            ])
+            ->addRecipient($this->getRSARecipientKey())
+            ->build();
     }
 
     /**
@@ -443,20 +363,18 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE($this->getKeyToEncrypt());
-        $jwe = $jwe->withSharedProtectedHeaders([
-            'kid' => '123456789',
-            'enc' => 'A256CBC-HS512',
-            'alg' => 'A256CBC-HS512',
-            'zip' => 'DEF',
-        ]);
-        $jwe = $jwe->addRecipientInformation(
-            $this->getRSARecipientKey()
-        );
-
-        $encrypter->encrypt($jwe);
+        $jweBuilder
+            ->withPayload($this->getKeyToEncrypt())
+            ->withSharedProtectedHeaders([
+                'kid' => '123456789',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'A256CBC-HS512',
+                'zip' => 'DEF',
+            ])
+            ->addRecipient($this->getRSARecipientKey())
+            ->build();
     }
 
     /**
@@ -468,21 +386,18 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE($this->getKeyToEncrypt());
-        $jwe = $jwe->withSharedProtectedHeaders([
-            'kid' => '123456789',
-            'enc' => 'RSA-OAEP-256',
-            'alg' => 'RSA-OAEP-256',
-            'zip' => 'DEF',
-        ]);
-
-        $jwe = $jwe->addRecipientInformation(
-            $this->getRSARecipientKey()
-        );
-
-        $encrypter->encrypt($jwe);
+        $jweBuilder
+            ->withPayload($this->getKeyToEncrypt())
+            ->withSharedProtectedHeaders([
+                'kid' => '123456789',
+                'enc' => 'RSA-OAEP-256',
+                'alg' => 'RSA-OAEP-256',
+                'zip' => 'DEF',
+            ])
+            ->addRecipient($this->getRSARecipientKey())
+            ->build();
     }
 
     public function testEncryptAndLoadCompactWithDirectKeyEncryption()
@@ -490,24 +405,21 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new Dir()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A192CBCHS384()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE($this->getKeyToEncrypt());
-        $jwe = $jwe->withSharedProtectedHeaders([
-            'kid' => 'DIR_1',
-            'enc' => 'A192CBC-HS384',
-            'alg' => 'dir',
-        ]);
+        $jwe = $jweBuilder
+            ->withPayload($this->getKeyToEncrypt())
+            ->withSharedProtectedHeaders([
+                'kid' => 'DIR_1',
+                'enc' => 'A192CBC-HS384',
+                'alg' => 'dir',
+            ])
+            ->addRecipient($this->getDirectKey())
+            ->build()
+            ->toFlattenedJSON(0);
 
-        $jwe = $jwe->addRecipientInformation(
-            $this->getDirectKey()
-        );
-        $encrypter->encrypt($jwe);
-
-        $encrypted = $jwe->toFlattenedJSON(0);
-
-        $loaded = JWELoader::load($encrypted);
+        $loaded = JWELoader::load($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('dir', $loaded->getSharedProtectedHeader('alg'));
@@ -515,11 +427,10 @@ final class EncrypterTest extends TestCase
         $this->assertFalse($loaded->hasSharedHeader('zip'));
         $this->assertNull($loaded->getPayload());
 
-        $decrypter->decryptUsingKeySet($loaded, $this->getSymmetricKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getSymmetricKeySet(), $index);
 
         $this->assertEquals(0, $index);
-        $this->assertTrue(is_array($loaded->getPayload()));
-        $this->assertEquals($this->getKeyToEncrypt(), JWK::create($loaded->getPayload()));
+        $this->assertEquals($this->getKeyToEncrypt(), JWK::create(json_decode($loaded->getPayload(), true)));
     }
 
     public function testEncryptAndLoadCompactKeyAgreement()
@@ -527,23 +438,21 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHES()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A192CBCHS384()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE(['user_id' => '1234', 'exp' => time() + 3600]);
-        $jwe = $jwe->withSharedProtectedHeaders([
-            'kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d',
-            'enc' => 'A192CBC-HS384',
-            'alg' => 'ECDH-ES',
-        ]);
+        $jwe = $jweBuilder
+            ->withPayload(['user_id' => '1234', 'exp' => time() + 3600])
+            ->withSharedProtectedHeaders([
+                'kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d',
+                'enc' => 'A192CBC-HS384',
+                'alg' => 'ECDH-ES',
+            ])
+            ->addRecipient($this->getECDHRecipientPublicKey())
+            ->build()
+            ->toFlattenedJSON(0);
 
-        $jwe = $jwe->addRecipientInformation(
-            $this->getECDHRecipientPublicKey()
-        );
-
-        $encrypter->encrypt($jwe);
-
-        $loaded = JWELoader::load($jwe->toFlattenedJSON(0));
+        $loaded = JWELoader::load($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('ECDH-ES', $loaded->getSharedProtectedHeader('alg'));
@@ -551,12 +460,10 @@ final class EncrypterTest extends TestCase
         $this->assertFalse($loaded->hasSharedProtectedHeader('zip'));
         $this->assertNull($loaded->getPayload());
 
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
-        $this->assertTrue($loaded->hasClaims());
-        $this->assertTrue($loaded->hasClaim('user_id'));
-        $this->assertEquals('1234', $loaded->getClaim('user_id'));
+        $this->assertEquals(['user_id' => '1234', 'exp' => time() + 3600], json_decode($loaded->getPayload(), true));
     }
 
     public function testEncryptAndLoadCompactKeyAgreementWithWrappingCompact()
@@ -564,23 +471,21 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE('Live long and Prosper.');
-        $jwe = $jwe->withSharedProtectedHeaders([
-            'kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d',
-            'enc' => 'A256CBC-HS512',
-            'alg' => 'ECDH-ES+A256KW',
-        ]);
+        $jwe = $jweBuilder
+            ->withPayload('Live long and Prosper.')
+            ->withSharedProtectedHeaders([
+                'kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'ECDH-ES+A256KW',
+            ])
+            ->addRecipient($this->getECDHRecipientPublicKey())
+            ->build()
+            ->toFlattenedJSON(0);
 
-        $jwe = $jwe->addRecipientInformation(
-            $this->getECDHRecipientPublicKey()
-        );
-
-        $encrypter->encrypt($jwe);
-
-        $loaded = JWELoader::load($jwe->toFlattenedJSON(0));
+        $loaded = JWELoader::load($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('ECDH-ES+A256KW', $loaded->getSharedProtectedHeader('alg'));
@@ -589,7 +494,7 @@ final class EncrypterTest extends TestCase
         $this->assertFalse($loaded->hasSharedHeader('zip'));
         $this->assertNull($loaded->getPayload());
 
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
         $this->assertTrue(is_string($loaded->getPayload()));
@@ -601,26 +506,21 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE(
-            'Live long and Prosper.',
-            [
+        $jwe = $jweBuilder
+            ->withPayload('Live long and Prosper.')
+            ->withSharedProtectedHeaders([
                 'kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d',
                 'enc' => 'A256GCM',
                 'alg' => 'ECDH-ES+A256KW',
-            ],
-            [],
-            'foo,bar,baz'
-        );
+            ])
+            ->withAAD('foo,bar,baz')
+            ->addRecipient($this->getECDHRecipientPublicKey())
+            ->build()
+            ->toFlattenedJSON(0);
 
-        $jwe = $jwe->addRecipientInformation(
-            $this->getECDHRecipientPublicKey()
-        );
-
-        $encrypter->encrypt($jwe);
-
-        $loaded = JWELoader::load($jwe->toFlattenedJSON(0));
+        $loaded = JWELoader::load($jwe);
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
@@ -634,7 +534,7 @@ final class EncrypterTest extends TestCase
         $this->assertFalse($loaded->hasSharedHeader('zip'));
         $this->assertNull($loaded->getPayload());
 
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
         $this->assertTrue(is_string($loaded->getPayload()));
@@ -646,24 +546,22 @@ final class EncrypterTest extends TestCase
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256(), new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $jwe = JWEFactory::createJWE('Live long and Prosper.');
-        $jwe = $jwe->withSharedProtectedHeaders(['enc' => 'A256CBC-HS512']);
+        $jwe = $jweBuilder
+            ->withPayload('Live long and Prosper.')
+            ->withSharedProtectedHeaders([
+                'enc' => 'A256CBC-HS512',
+            ])
+            ->withAAD('foo,bar,baz')
+            ->addRecipient($this->getECDHRecipientPublicKey(), ['kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d', 'alg' => 'ECDH-ES+A256KW'])
+            ->addRecipient($this->getRSARecipientKey(), ['kid' => '123456789', 'alg' => 'RSA-OAEP-256'])
+            ->build()
+            ->toJSON();
 
-        $jwe = $jwe->addRecipientInformation(
-            $this->getECDHRecipientPublicKey(),
-            ['kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d', 'alg' => 'ECDH-ES+A256KW']
-        );
-        $jwe = $jwe->addRecipientInformation(
-            $this->getRSARecipientKey(),
-            ['kid' => '123456789', 'alg' => 'RSA-OAEP-256']
-        );
 
-        $encrypter->encrypt($jwe);
-
-        $loaded = JWELoader::load($jwe->toJSON());
+        $loaded = JWELoader::load($jwe);
 
         $this->assertEquals(2, $loaded->countRecipients());
 
@@ -675,7 +573,7 @@ final class EncrypterTest extends TestCase
         $this->assertFalse($loaded->hasSharedProtectedHeader('zip'));
         $this->assertNull($loaded->getPayload());
 
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
         $this->assertTrue(is_string($loaded->getPayload()));

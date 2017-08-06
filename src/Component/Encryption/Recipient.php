@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption;
 
-use Jose\Component\Core\JWK;
-
 /**
- * Class EncryptionInstruction.
+ * Class Recipient
  */
 final class Recipient
 {
@@ -28,47 +26,35 @@ final class Recipient
     /**
      * @var null|string
      */
-    private $encrypted_key = null;
+    private $encryptedKey = null;
 
     /**
-     * @var JWK
-     */
-    private $recipient_key = null;
-
-    /**
-     * @param array       $headers
-     * @param string|null $encrypted_key
+     * Recipient constructor.
      *
-     * @return Recipient
+     * @param array $headers
+     * @param null|string $encryptedKey
      */
-    public static function createRecipientFromLoadedJWE(array $headers, $encrypted_key)
+    private function __construct(array $headers, ?string $encryptedKey)
     {
-        $recipient = new self();
-        $recipient->headers = $headers;
-        $recipient->encrypted_key = $encrypted_key;
-
-        return $recipient;
+        $this->headers = $headers;
+        $this->encryptedKey = $encryptedKey;
     }
 
     /**
-     * @param JWK   $recipient_key
-     * @param array $headers
+     * @param array       $headers
+     * @param null|string $encryptedKey
      *
      * @return Recipient
      */
-    public static function createRecipient(JWK $recipient_key, array $headers = [])
+    public static function create(array $headers = [], ?string $encryptedKey):Recipient
     {
-        $recipient = new self();
-        $recipient->headers = $headers;
-        $recipient->recipient_key = $recipient_key;
-
-        return $recipient;
+        return new self($headers, $encryptedKey);
     }
 
     /**
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }
@@ -80,7 +66,7 @@ final class Recipient
      *
      * @return mixed|null Header value
      */
-    public function getHeader($key)
+    public function getHeader(string $key)
     {
         if ($this->hasHeader($key)) {
             return $this->headers[$key];
@@ -93,24 +79,16 @@ final class Recipient
      *
      * @return bool
      */
-    public function hasHeader($key)
+    public function hasHeader(string $key): bool
     {
         return array_key_exists($key, $this->headers);
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getEncryptedKey()
+    public function getEncryptedKey(): ?string
     {
-        return $this->encrypted_key;
-    }
-
-    /**
-     * @return JWK
-     */
-    public function getRecipientKey()
-    {
-        return $this->recipient_key;
+        return $this->encryptedKey;
     }
 }

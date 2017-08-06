@@ -1,20 +1,20 @@
 {
-    "bootstrap": "vendor/autoload.php",
-    "path": "performance",
-    "progress": "dots",
-    "time_unit": "microseconds",
-    "retry_threshold": 5,
-    "reports": {
-        "all": {
-            "extends": "aggregate",
-            "cols": ["benchmark", "groups", "subject", "mean", "best", "worst"]
-        }
-    },
-    "outputs": {
-        "all": {
-            "extends": "html",
-            "file": "report.html",
-            "title": "Jose Performance Test Suite"
-        }
+  "bootstrap": "vendor/autoload.php",
+  "path": "performance",
+  "progress": "dots",
+  "time_unit": "microseconds",
+  "php_wrapper": "blackfire run",
+  "reports": {
+    "all": {
+      "extends": "aggregate",
+      "cols": ["benchmark", "groups", "subject", "mean", "best", "worst"]
     }
+  },
+  "outputs": {
+    "all": {
+      "extends": "html",
+      "file": "report.html",
+      "title": "Jose Performance Test Suite"
+    }
+  }
 }

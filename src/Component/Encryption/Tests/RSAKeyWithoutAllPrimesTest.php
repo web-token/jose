@@ -22,8 +22,8 @@ use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Component\Encryption\Compression\CompressionManagerFactory;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWE;
+use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\JWELoader;
-use Jose\Component\Factory\JWEFactory;
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\Algorithm\PS256;
 use Jose\Component\Signature\Algorithm\PS384;
@@ -110,15 +110,22 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
 
         $claims = ['foo' => 'bar'];
 
-        $jwt = JWEFactory::createJWEToCompactJSON($claims, $key, ['alg' => $encryption_algorithm->name(), 'enc' => 'A256GCM']);
+        $keyEncryptionAlgorithmManager = JWAManager::create([$encryption_algorithm]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
+        $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF']);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+
+        $jwt = $jweBuilder
+            ->withPayload($claims)
+            ->withSharedProtectedHeaders(['alg' => $encryption_algorithm->name(), 'enc' => 'A256GCM'])
+            ->addRecipient($key)
+            ->build()
+            ->toCompactJSON(0);
 
         $loaded = JWELoader::load($jwt);
         $this->assertInstanceOf(JWE::class, $loaded);
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([$encryption_algorithm]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
-        $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF']);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter->decryptUsingKey($loaded, $key);
     }
 
@@ -133,15 +140,22 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
 
         $claims = ['foo' => 'bar'];
 
-        $jwt = JWEFactory::createJWEToCompactJSON($claims, $key, ['alg' => $encryption_algorithm->name(), 'enc' => 'A256GCM']);
+        $keyEncryptionAlgorithmManager = JWAManager::create([$encryption_algorithm]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
+        $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF']);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+
+        $jwt = $jweBuilder
+            ->withPayload($claims)
+            ->withSharedProtectedHeaders(['alg' => $encryption_algorithm->name(), 'enc' => 'A256GCM'])
+            ->addRecipient($key)
+            ->build()
+            ->toCompactJSON(0);
 
         $loaded = JWELoader::load($jwt);
         $this->assertInstanceOf(JWE::class, $loaded);
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([$encryption_algorithm]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
-        $compressionManager = CompressionManagerFactory::createCompressionManager(['DEF']);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter->decryptUsingKey($loaded, $key);
     }
 

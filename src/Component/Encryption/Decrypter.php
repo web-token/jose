@@ -46,19 +46,11 @@ final class Decrypter
     private $compressionManager;
 
     /**
-     * @return CompressionManager
-     */
-    private function getCompressionManager(): CompressionManager
-    {
-        return $this->compressionManager;
-    }
-
-    /**
      * @return string[]
      */
     public function getSupportedCompressionMethods(): array
     {
-        return $this->getCompressionManager()->list();
+        return $this->compressionManager->list();
     }
 
     /**
@@ -95,20 +87,24 @@ final class Decrypter
      * @param JWE      $jwe             A JWE object to decrypt
      * @param JWK      $jwk             The key used to decrypt the input
      * @param null|int $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
+     *
+     * @return JWE
      */
-    public function decryptUsingKey(JWE &$jwe, JWK $jwk, ?int &$recipient_index = null)
+    public function decryptUsingKey(JWE $jwe, JWK $jwk, ?int &$recipient_index = null): JWE
     {
         $jwkset = JWKSet::createFromKeys([$jwk]);
 
-        $this->decryptUsingKeySet($jwe, $jwkset, $recipient_index);
+        return $this->decryptUsingKeySet($jwe, $jwkset, $recipient_index);
     }
 
     /**
      * @param JWE      $jwe             A JWE object to decrypt
      * @param JWKSet   $jwkset          The key set used to decrypt the input
      * @param null|int $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
+     *
+     * @return JWE
      */
-    public function decryptUsingKeySet(JWE &$jwe, JWKSet $jwkset, &$recipient_index = null)
+    public function decryptUsingKeySet(JWE $jwe, JWKSet $jwkset, ?int &$recipient_index = null): JWE
     {
         $this->checkJWKSet($jwkset);
         $this->checkPayload($jwe);
@@ -117,10 +113,11 @@ final class Decrypter
         $nb_recipients = $jwe->countRecipients();
 
         for ($i = 0; $i < $nb_recipients; ++$i) {
-            if (is_int($result = $this->decryptRecipientKey($jwe, $jwkset, $i))) {
-                $recipient_index = $result;
+            $plaintext = $this->decryptRecipientKey($jwe, $jwkset, $i);
+            if (null !== $plaintext) {
+                $recipient_index = $i;
 
-                return;
+                return $jwe->withPayload($plaintext);
             }
         }
 
@@ -132,9 +129,9 @@ final class Decrypter
      * @param JWKSet $jwkset
      * @param int    $i
      *
-     * @return int|null
+     * @return string|null
      */
-    private function decryptRecipientKey(JWE &$jwe, JWKSet $jwkset, $i): ?int
+    private function decryptRecipientKey(JWE $jwe, JWKSet $jwkset, int $i): ?string
     {
         $recipient = $jwe->getRecipient($i);
         $complete_headers = array_merge($jwe->getSharedProtectedHeaders(), $jwe->getSharedHeaders(), $recipient->getHeaders());
@@ -153,9 +150,7 @@ final class Decrypter
                 }
                 $cek = $this->decryptCEK($key_encryption_algorithm, $content_encryption_algorithm, $jwk, $recipient, $complete_headers);
                 if (null !== $cek) {
-                    if (true === $this->decryptPayload($jwe, $cek, $content_encryption_algorithm, $complete_headers)) {
-                        return $i;
-                    }
+                    return $this->decryptPayload($jwe, $cek, $content_encryption_algorithm, $complete_headers);
                 }
             } catch (\Exception $e) {
                 //We do nothing, we continue with other keys
@@ -228,35 +223,35 @@ final class Decrypter
      * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
      * @param array                               $complete_headers
      *
-     * @return bool
+     * @return string
      */
-    private function decryptPayload(JWE &$jwe, $cek, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array $complete_headers): bool
+    private function decryptPayload(JWE $jwe, string $cek, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, array $complete_headers): string
     {
         $payload = $content_encryption_algorithm->decryptContent($jwe->getCiphertext(), $cek, $jwe->getIV(), null === $jwe->getAAD() ? null : Base64Url::encode($jwe->getAAD()), $jwe->getEncodedSharedProtectedHeaders(), $jwe->getTag());
         if (null === $payload) {
-            return false;
+            throw new \RuntimeException('Unable to decrypt the JWE.');
         }
 
-        $this->decompressIfNeeded($payload, $complete_headers);
-        $decoded = json_decode($payload, true);
-        $jwe = $jwe->withPayload(null === $decoded ? $payload : $decoded);
-
-        return true;
+        return $this->decompressIfNeeded($payload, $complete_headers);
     }
 
     /**
      * @param string $payload
      * @param array  $complete_headers
+     *
+     * @return string
      */
-    private function decompressIfNeeded(&$payload, array $complete_headers)
+    private function decompressIfNeeded(string $payload, array $complete_headers): string
     {
         if (array_key_exists('zip', $complete_headers)) {
-            $compression_method = $this->getCompressionManager()->get($complete_headers['zip']);
+            $compression_method = $this->compressionManager->get($complete_headers['zip']);
             $payload = $compression_method->uncompress($payload);
             if (!is_string($payload)) {
                 throw new \InvalidArgumentException('Decompression failed');
             }
         }
+
+        return $payload;
     }
 
     /**
@@ -278,7 +273,7 @@ final class Decrypter
      *
      * @return KeyEncryptionAlgorithmInterface
      */
-    private function getKeyEncryptionAlgorithm(array $complete_headers)
+    private function getKeyEncryptionAlgorithm(array $complete_headers): KeyEncryptionAlgorithmInterface
     {
         $key_encryption_algorithm = $this->keyEncryptionAlgorithmManager->get($complete_headers['alg']);
         if (!$key_encryption_algorithm instanceof KeyEncryptionAlgorithmInterface) {
@@ -293,7 +288,7 @@ final class Decrypter
      *
      * @return ContentEncryptionAlgorithmInterface
      */
-    private function getContentEncryptionAlgorithm(array $complete_headers)
+    private function getContentEncryptionAlgorithm(array $complete_headers): ContentEncryptionAlgorithmInterface
     {
         $content_encryption_algorithm = $this->contentEncryptionAlgorithmManager->get($complete_headers['enc']);
         if (!$content_encryption_algorithm instanceof ContentEncryptionAlgorithmInterface) {

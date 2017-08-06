@@ -21,9 +21,8 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES;
 use Jose\Component\Encryption\Compression\CompressionManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\Encrypter;
+use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\JWELoader;
-use Jose\Component\Factory\JWEFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -88,10 +87,10 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends TestCase
         $this->assertEquals($expected_iv, Base64Url::encode($loaded_json->getIV()));
         $this->assertEquals($expected_tag, Base64Url::encode($loaded_json->getTag()));
 
-        $decrypter->decryptUsingKey($loaded_compact_json, $private_key);
+        $loaded_compact_json = $decrypter->decryptUsingKey($loaded_compact_json, $private_key);
         $this->assertEquals($expected_payload, $loaded_compact_json->getPayload());
 
-        $decrypter->decryptUsingKey($loaded_json, $private_key);
+        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
         $this->assertEquals($expected_payload, $loaded_json->getPayload());
     }
 
@@ -127,22 +126,21 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends TestCase
             'enc' => 'A128CBC-HS256',
         ];
 
-        $jwe = JWEFactory::createJWE($expected_payload, $protected_headers);
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHES()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionManager::create([new Deflate()]);
-        $encrypter = new Encrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
-
-        $jwe = $jwe->addRecipientInformation(
-            $public_key
-        );
-
-        $encrypter->encrypt($jwe);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
+        $jwe = $jweBuilder
+            ->withPayload($expected_payload)
+            ->withSharedProtectedHeaders($protected_headers)
+            ->addRecipient($public_key)
+            ->build();
+
         $loaded_json = JWELoader::load($jwe->toJSON());
-        $decrypter->decryptUsingKey($loaded_json, $private_key);
+        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
 
         $this->assertTrue(array_key_exists('epk', $loaded_json->getSharedProtectedHeaders()));
 

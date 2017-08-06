@@ -51,17 +51,17 @@ final class JWE implements JWTInterface
     /**
      * @var array
      */
-    private $shared_headers = [];
+    private $sharedHeaders = [];
 
     /**
      * @var array
      */
-    private $shared_protected_headers = [];
+    private $sharedProtectedKeaders = [];
 
     /**
      * @var string|null
      */
-    private $encoded_shared_protected_headers = null;
+    private $encodedSharedProtectedKeaders = null;
 
     /**
      * @var mixed|null
@@ -75,21 +75,21 @@ final class JWE implements JWTInterface
      * @param null|string $iv
      * @param null|string $aad
      * @param null|string $tag
-     * @param array       $shared_headers
-     * @param array       $shared_protected_headers
-     * @param null|string $encoded_shared_protected_headers
+     * @param array       $sharedHeaders
+     * @param array       $sharedProtectedKeaders
+     * @param null|string $encodedSharedProtectedKeaders
      * @param mixed|null  $payload
      * @param array       $recipients
      */
-    private function __construct(?string $ciphertext = null, ?string $iv = null, ?string $aad = null, ?string $tag = null, array $shared_headers = [], array $shared_protected_headers = [], ?string $encoded_shared_protected_headers = null, $payload = null, array $recipients = [])
+    private function __construct(?string $ciphertext = null, ?string $iv = null, ?string $aad = null, ?string $tag = null, array $sharedHeaders = [], array $sharedProtectedKeaders = [], ?string $encodedSharedProtectedKeaders = null, $payload = null, array $recipients = [])
     {
         $this->ciphertext = $ciphertext;
         $this->iv = $iv;
         $this->aad = $aad;
         $this->tag = $tag;
-        $this->shared_headers = $shared_headers;
-        $this->shared_protected_headers = $shared_protected_headers;
-        $this->encoded_shared_protected_headers = $encoded_shared_protected_headers;
+        $this->sharedHeaders = $sharedHeaders;
+        $this->sharedProtectedKeaders = $sharedProtectedKeaders;
+        $this->encodedSharedProtectedKeaders = $encodedSharedProtectedKeaders;
         $this->payload = $payload;
         $this->recipients = $recipients;
     }
@@ -103,33 +103,20 @@ final class JWE implements JWTInterface
     }
 
     /**
-     * @param $payload
-     * @param array       $shared_protected_headers
-     * @param null|string $aad
-     * @param array       $shared_headers
-     *
-     * @return JWE
-     */
-    public static function create($payload, array $shared_protected_headers = [], array $shared_headers = [], ?string $aad = null): JWE
-    {
-        return new self(null, null, $aad, null, $shared_headers, $shared_protected_headers, null, $payload);
-    }
-
-    /**
      * @param null|string $ciphertext
      * @param null|string $iv
      * @param null|string $aad
      * @param null|string $tag
-     * @param array       $shared_headers
-     * @param array       $shared_protected_headers
-     * @param null|string $encoded_shared_protected_headers
+     * @param array       $sharedHeaders
+     * @param array       $sharedProtectedKeaders
+     * @param null|string $encodedSharedProtectedKeaders
      * @param array       $recipients
      *
      * @return JWE
      */
-    public static function createFromLoadedData(?string $ciphertext = null, ?string $iv = null, ?string $aad = null, ?string $tag = null, array $shared_headers = [], array $shared_protected_headers = [], ?string $encoded_shared_protected_headers = null, array $recipients = []): JWE
+    public static function create(?string $ciphertext = null, ?string $iv = null, ?string $aad = null, ?string $tag = null, array $sharedHeaders = [], array $sharedProtectedKeaders = [], ?string $encodedSharedProtectedKeaders = null, array $recipients = []): JWE
     {
-        return new self($ciphertext, $iv, $aad, $tag, $shared_headers, $shared_protected_headers, $encoded_shared_protected_headers, null, $recipients);
+        return new self($ciphertext, $iv, $aad, $tag, $sharedHeaders, $sharedProtectedKeaders, $encodedSharedProtectedKeaders, null, $recipients);
     }
 
     /**
@@ -211,32 +198,17 @@ final class JWE implements JWTInterface
     }
 
     /**
-     * @param JWK   $recipient_key
-     * @param array $recipient_headers
+     * @param array       $recipientHeaders
+     * @param string|null $encryptedKey
      *
      * @return JWE
      */
-    public function addRecipientInformation(JWK $recipient_key, array $recipient_headers = []): JWE
+    public function addRecipient(array $recipientHeaders = [], ?string $encryptedKey = null): JWE
     {
-        Assertion::true(null === $this->getCiphertext(), 'The JWE is encrypted. No additional recipient allowed.');
-        $jwe = clone $this;
-        $jwe->recipients[] = Recipient::createRecipient($recipient_key, $recipient_headers);
+        $clone = clone $this;
+        $clone->recipients[] = Recipient::create($recipientHeaders, $encryptedKey);
 
-        return $jwe;
-    }
-
-    /**
-     * @param string|null $encrypted_key
-     * @param array       $recipient_headers
-     *
-     * @return JWE
-     */
-    public function addRecipientWithEncryptedKey(?string $encrypted_key, array $recipient_headers): JWE
-    {
-        $jwe = clone $this;
-        $jwe->recipients[] = Recipient::createRecipientFromLoadedJWE($recipient_headers, $encrypted_key);
-
-        return $jwe;
+        return $clone;
     }
 
     /**
@@ -254,7 +226,7 @@ final class JWE implements JWTInterface
      *
      * @return Recipient
      */
-    public function &getRecipient(int $id): Recipient
+    public function getRecipient(int $id): Recipient
     {
         Assertion::keyExists($this->recipients, $id, 'The recipient does not exist.');
 
@@ -350,18 +322,18 @@ final class JWE implements JWTInterface
      */
     public function getEncodedSharedProtectedHeaders(): string
     {
-        return $this->encoded_shared_protected_headers ?? '';
+        return $this->encodedSharedProtectedKeaders ?? '';
     }
 
     /**
-     * @param string $encoded_shared_protected_headers
+     * @param string $encodedSharedProtectedKeaders
      *
      * @return JWE
      */
-    public function withEncodedSharedProtectedHeaders(string $encoded_shared_protected_headers): JWE
+    public function withEncodedSharedProtectedHeaders(string $encodedSharedProtectedKeaders): JWE
     {
         $jwe = clone $this;
-        $jwe->encoded_shared_protected_headers = $encoded_shared_protected_headers;
+        $jwe->encodedSharedProtectedKeaders = $encodedSharedProtectedKeaders;
 
         return $jwe;
     }
@@ -371,18 +343,18 @@ final class JWE implements JWTInterface
      */
     public function getSharedProtectedHeaders(): array
     {
-        return $this->shared_protected_headers;
+        return $this->sharedProtectedKeaders;
     }
 
     /**
-     * @param array $shared_protected_headers
+     * @param array $sharedProtectedKeaders
      *
      * @return JWE
      */
-    public function withSharedProtectedHeaders(array $shared_protected_headers): JWE
+    public function withSharedProtectedHeaders(array $sharedProtectedKeaders): JWE
     {
         $jwe = clone $this;
-        $jwe->shared_protected_headers = $shared_protected_headers;
+        $jwe->sharedProtectedKeaders = $sharedProtectedKeaders;
 
         return $jwe;
     }
@@ -396,7 +368,7 @@ final class JWE implements JWTInterface
     public function withSharedProtectedHeader(string $key, $value): JWE
     {
         $jwe = clone $this;
-        $jwe->shared_protected_headers[$key] = $value;
+        $jwe->sharedProtectedKeaders[$key] = $value;
 
         return $jwe;
     }
@@ -409,7 +381,7 @@ final class JWE implements JWTInterface
     public function getSharedProtectedHeader(string $key)
     {
         if ($this->hasSharedProtectedHeader($key)) {
-            return $this->shared_protected_headers[$key];
+            return $this->sharedProtectedKeaders[$key];
         }
         throw new \InvalidArgumentException(sprintf('The shared protected header "%s" does not exist.', $key));
     }
@@ -421,18 +393,18 @@ final class JWE implements JWTInterface
      */
     public function hasSharedProtectedHeader(string $key): bool
     {
-        return array_key_exists($key, $this->shared_protected_headers);
+        return array_key_exists($key, $this->sharedProtectedKeaders);
     }
 
     /**
-     * @param array $shared_headers
+     * @param array $sharedHeaders
      *
      * @return JWE
      */
-    public function withSharedHeaders(array $shared_headers): JWE
+    public function withSharedHeaders(array $sharedHeaders): JWE
     {
         $jwe = clone $this;
-        $jwe->shared_headers = $shared_headers;
+        $jwe->sharedHeaders = $sharedHeaders;
 
         return $jwe;
     }
@@ -446,7 +418,7 @@ final class JWE implements JWTInterface
     public function withSharedHeader(string $key, $value): JWE
     {
         $jwe = clone $this;
-        $jwe->shared_headers[$key] = $value;
+        $jwe->sharedHeaders[$key] = $value;
 
         return $jwe;
     }
@@ -456,7 +428,7 @@ final class JWE implements JWTInterface
      */
     public function getSharedHeaders(): array
     {
-        return $this->shared_headers;
+        return $this->sharedHeaders;
     }
 
     /**
@@ -467,7 +439,7 @@ final class JWE implements JWTInterface
     public function getSharedHeader(string $key)
     {
         if ($this->hasSharedHeader($key)) {
-            return $this->shared_headers[$key];
+            return $this->sharedHeaders[$key];
         }
         throw new \InvalidArgumentException(sprintf('The shared header "%s" does not exist.', $key));
     }
@@ -479,7 +451,7 @@ final class JWE implements JWTInterface
      */
     public function hasSharedHeader(string $key): bool
     {
-        return array_key_exists($key, $this->shared_headers);
+        return array_key_exists($key, $this->sharedHeaders);
     }
 
     /**

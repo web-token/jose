@@ -499,7 +499,7 @@ final class RSASignatureTest extends TestCase
         $this->assertEquals('A128CBC-HS256', $loaded->getSharedProtectedHeader('enc'));
         $this->assertNull($loaded->getPayload());
 
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
         $this->assertEquals('Live long and prosper.', $loaded->getPayload());
@@ -525,7 +525,7 @@ final class RSASignatureTest extends TestCase
         $this->assertEquals('A128KW', $loaded->getRecipient(1)->getHeader('alg'));
         $this->assertNull($loaded->getPayload());
 
-        $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
         $this->assertEquals('Live long and prosper.', $loaded->getPayload());
