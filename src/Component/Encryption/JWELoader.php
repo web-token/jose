@@ -127,106 +127,20 @@ final class JWELoader
      */
     private static function loadSerializedJsonJWE(array $data): JWE
     {
-        $jwe = JWE::createEmpty();
-        $jwe = $jwe->withCiphertext(Base64Url::decode($data['ciphertext']));
-
-        self::populateIV($jwe, $data);
-        self::populateAAD($jwe, $data);
-        self::populateTag($jwe, $data);
-        self::populateSharedProtectedHeaders($jwe, $data);
-        self::populateSharedHeaders($jwe, $data);
-
+        $ciphertext = Base64Url::decode($data['ciphertext']);
+        $iv = array_key_exists('iv', $data) ? Base64Url::decode($data['iv']) : null;
+        $aad = array_key_exists('aad', $data) ? Base64Url::decode($data['aad']) : null;
+        $tag = array_key_exists('tag', $data) ? Base64Url::decode($data['tag']) : null;
+        $encodedSharedProtectedHeader = array_key_exists('protected', $data) ? $data['protected'] : null;
+        $sharedProtectedHeader = $encodedSharedProtectedHeader ? json_decode(Base64Url::decode($encodedSharedProtectedHeader), true) : [];
+        $sharedHeader = array_key_exists('unprotected', $data) ? $data['unprotected'] : [];
+        $recipients = [];
         foreach ($data['recipients'] as $recipient) {
-            $encrypted_key = self::getRecipientEncryptedKey($recipient);
-            $recipient_headers = self::getRecipientHeaders($recipient);
-
-            $jwe = $jwe->addRecipient($recipient_headers, $encrypted_key);
+            $encryptedKey = array_key_exists('encrypted_key', $recipient) ? Base64Url::decode($recipient['encrypted_key']) : null;
+            $header = array_key_exists('header', $recipient) ? $recipient['header'] : [];
+            $recipients[] = Recipient::create($header, $encryptedKey);
         }
 
-        return $jwe;
-    }
-
-    /**
-     * @param JWE   $jwe
-     * @param array $data
-     */
-    private static function populateIV(JWE &$jwe, array $data)
-    {
-        if (array_key_exists('iv', $data)) {
-            $jwe = $jwe->withIV(Base64Url::decode($data['iv']));
-        }
-    }
-
-    /**
-     * @param JWE   $jwe
-     * @param array $data
-     */
-    private static function populateAAD(JWE &$jwe, array $data)
-    {
-        if (array_key_exists('aad', $data)) {
-            $jwe = $jwe->withAAD(Base64Url::decode($data['aad']));
-        }
-    }
-
-    /**
-     * @param JWE   $jwe
-     * @param array $data
-     */
-    private static function populateTag(JWE &$jwe, array $data)
-    {
-        if (array_key_exists('tag', $data)) {
-            $jwe = $jwe->withTag(Base64Url::decode($data['tag']));
-        }
-    }
-
-    /**
-     * @param JWE   $jwe
-     * @param array $data
-     */
-    private static function populateSharedProtectedHeaders(JWE &$jwe, array $data)
-    {
-        if (array_key_exists('protected', $data)) {
-            $jwe = $jwe->withEncodedSharedProtectedHeaders($data['protected']);
-            $jwe = $jwe->withSharedProtectedHeaders(json_decode(Base64Url::decode($data['protected']), true));
-        }
-    }
-
-    /**
-     * @param JWE   $jwe
-     * @param array $data
-     */
-    private static function populateSharedHeaders(JWE &$jwe, array $data)
-    {
-        if (array_key_exists('unprotected', $data)) {
-            $jwe = $jwe->withSharedHeaders($data['unprotected']);
-        }
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
-    private static function getRecipientHeaders(array $data): array
-    {
-        if (array_key_exists('header', $data)) {
-            return $data['header'];
-        }
-
-        return [];
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return null|string
-     */
-    private static function getRecipientEncryptedKey(array $data): ?string
-    {
-        if (array_key_exists('encrypted_key', $data)) {
-            return Base64Url::decode($data['encrypted_key']);
-        }
-
-        return null;
+        return JWE::create($ciphertext, $iv, $aad, $tag, $sharedHeader, $sharedProtectedHeader, $encodedSharedProtectedHeader, $recipients);
     }
 }

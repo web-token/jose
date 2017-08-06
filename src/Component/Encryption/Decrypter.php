@@ -86,25 +86,25 @@ final class Decrypter
     /**
      * @param JWE      $jwe             A JWE object to decrypt
      * @param JWK      $jwk             The key used to decrypt the input
-     * @param null|int $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
+     * @param null|int $recipientIndex  If the JWE has been decrypted, an integer that represents the ID of the recipient is set
      *
      * @return JWE
      */
-    public function decryptUsingKey(JWE $jwe, JWK $jwk, ?int &$recipient_index = null): JWE
+    public function decryptUsingKey(JWE $jwe, JWK $jwk, ?int &$recipientIndex = null): JWE
     {
         $jwkset = JWKSet::createFromKeys([$jwk]);
 
-        return $this->decryptUsingKeySet($jwe, $jwkset, $recipient_index);
+        return $this->decryptUsingKeySet($jwe, $jwkset, $recipientIndex);
     }
 
     /**
      * @param JWE      $jwe             A JWE object to decrypt
      * @param JWKSet   $jwkset          The key set used to decrypt the input
-     * @param null|int $recipient_index If the JWE has been decrypted, an integer that represents the ID of the recipient is set
+     * @param null|int $recipientIndex  If the JWE has been decrypted, an integer that represents the ID of the recipient is set
      *
      * @return JWE
      */
-    public function decryptUsingKeySet(JWE $jwe, JWKSet $jwkset, ?int &$recipient_index = null): JWE
+    public function decryptUsingKeySet(JWE $jwe, JWKSet $jwkset, ?int &$recipientIndex = null): JWE
     {
         $this->checkJWKSet($jwkset);
         $this->checkPayload($jwe);
@@ -115,7 +115,7 @@ final class Decrypter
         for ($i = 0; $i < $nb_recipients; ++$i) {
             $plaintext = $this->decryptRecipientKey($jwe, $jwkset, $i);
             if (null !== $plaintext) {
-                $recipient_index = $i;
+                $recipientIndex = $i;
 
                 return $jwe->withPayload($plaintext);
             }
