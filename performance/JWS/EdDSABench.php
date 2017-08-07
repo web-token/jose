@@ -42,6 +42,7 @@ final class EdDSABench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */

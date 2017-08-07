@@ -30,42 +30,42 @@ final class A128KWBench extends EncryptionBench
                     'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A128CBC-HS256'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ]
+                ],
             ],
             [
                 'data' => [
                     'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A192CBC-HS384'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ]
+                ],
             ],
             [
                 'data' => [
                     'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A256CBC-HS512'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ]
+                ],
             ],
             [
                 'data' => [
                     'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A128GCM'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ]
+                ],
             ],
             [
                 'data' => [
                     'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A192GCM'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ]
+                ],
             ],
             [
                 'data' => [
                     'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A256GCM'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ]
+                ],
             ],
         ];
     }

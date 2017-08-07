@@ -72,8 +72,8 @@ final class Decrypter
     /**
      * Decrypter constructor.
      *
-     * @param JWAManager         $keyEncryptionAlgorithmManager
-     * @param JWAManager         $contentEncryptionAlgorithmManager
+     * @param JWAManager                $keyEncryptionAlgorithmManager
+     * @param JWAManager                $contentEncryptionAlgorithmManager
      * @param CompressionMethodsManager $compressionManager
      */
     public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionMethodsManager $compressionManager)
