@@ -42,6 +42,7 @@ final class PS512Bench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */

@@ -42,6 +42,7 @@ final class ES512Bench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */

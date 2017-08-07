@@ -42,6 +42,7 @@ final class PS384Bench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */

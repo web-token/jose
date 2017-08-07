@@ -42,6 +42,7 @@ final class ES384Bench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */

@@ -42,6 +42,7 @@ final class PS256Bench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */

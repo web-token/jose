@@ -42,6 +42,7 @@ final class RS512Bench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */
