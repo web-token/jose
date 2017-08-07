@@ -42,6 +42,7 @@ final class HS512Bench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */

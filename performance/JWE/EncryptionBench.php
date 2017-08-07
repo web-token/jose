@@ -100,8 +100,6 @@ abstract class EncryptionBench
             ->toFlattenedJSON(0);
     }
 
-    /**
-     */
     public function benchDecryption()
     {
         /*$jws = JWSLoader::load($params['input']);

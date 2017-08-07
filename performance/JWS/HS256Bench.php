@@ -42,6 +42,7 @@ final class HS256Bench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */

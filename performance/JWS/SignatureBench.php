@@ -83,9 +83,6 @@ abstract class SignatureBench
         $verifier->verifyWithKey($jws, $this->getPublicKey(), null, $index);
     }
 
-    /**
-     *
-     */
     public function benchSignOnly()
     {
         $this->getAlgorithm()->sign($this->getPrivateKey(), $this->getInput());
