@@ -9,20 +9,43 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\JWS\Signature;
+namespace Jose\Performance\JWS;
 
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
- * @Groups({"Signature", "EdDSA"})
+ * @Groups({"JWS", "EdDSA", "Ed25519"})
  */
 final class EdDSABench extends SignatureBench
 {
     /**
      * @return array
      */
+    public function dataSignature(): array
+    {
+        return [
+            [
+                'algorithm' => 'EdDSA',
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function dataVerification(): array
+    {
+        return [
+            [
+                'input' => 'eyJhbGciOiJFZERTQSJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.zwhKxTMnLVgl0KSn9GT2ongThN0hOZkp046k3S296_TKwAXZH3n4OGMavgUgmuhXER3_zRz-nBqJMfUDIoRHBQ',
+            ],
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function dataVerify(): array
     {
         return [
             [
@@ -36,7 +59,7 @@ final class EdDSABench extends SignatureBench
      */
     protected function getAlgorithm(): SignatureAlgorithmInterface
     {
-        return $this->jwaManager->get('EdDSA');
+        return $this->getJWAManager()->get('EdDSA');
     }
 
     /**

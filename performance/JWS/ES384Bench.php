@@ -9,12 +9,13 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\JWS\Creation;
+namespace Jose\Performance\JWS;
 
 use Jose\Component\Core\JWK;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
- * @Groups({"JWS", "ECDSA"})
+ * @Groups({"JWS", "ECDSA", "ES384"})
  */
 final class ES384Bench extends SignatureBench
 {
@@ -40,6 +41,33 @@ final class ES384Bench extends SignatureBench
                 'input' => 'eyJhbGciOiJFUzM4NCJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.KYD8GcuF5obFaHyjMHJu-v55pfcJdTw_0DSWU1achSeVqbJsGT0wjkGqfr839ZxB5x-g7hbAHKIFzwZanWq9cxoORKgUSQC6NRhtwM-Y_21aauWhB3Zz1FrNcnpKTAIq',
             ],
         ];
+    }
+    /**
+     * @return array
+     */
+    public function dataVerify(): array
+    {
+        return [
+            [
+                'signature' => 'KYD8GcuF5obFaHyjMHJu-v55pfcJdTw_0DSWU1achSeVqbJsGT0wjkGqfr839ZxB5x-g7hbAHKIFzwZanWq9cxoORKgUSQC6NRhtwM-Y_21aauWhB3Zz1FrNcnpKTAIq',
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAlgorithm(): SignatureAlgorithmInterface
+    {
+        return $this->getJWAManager()->get('ES384');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getInput(): string
+    {
+        return 'eyJhbGciOiJFUzM4NCJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4';
     }
 
     /**

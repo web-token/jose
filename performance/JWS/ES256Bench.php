@@ -9,20 +9,43 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\JWS\Signature;
+namespace Jose\Performance\JWS;
 
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
- * @Groups({"Signature", "ECDSA"})
+ * @Groups({"JWS", "ECDSA", "ES256"})
  */
 final class ES256Bench extends SignatureBench
 {
     /**
      * @return array
      */
+    public function dataSignature(): array
+    {
+        return [
+            [
+                'algorithm' => 'ES256',
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function dataVerification(): array
+    {
+        return [
+            [
+                'input' => 'eyJhbGciOiJFUzI1NiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.PQcIuf_bZFoOChBj7z_6KQlfpfvZ4YSUvtVheoAKQJ_rjywLft5dqL79bOrGffW0CkGPvaKzBr3yGdQt3II54g',
+            ],
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function dataVerify(): array
     {
         return [
             [
@@ -36,7 +59,7 @@ final class ES256Bench extends SignatureBench
      */
     protected function getAlgorithm(): SignatureAlgorithmInterface
     {
-        return $this->jwaManager->get('ES256');
+        return $this->getJWAManager()->get('ES256');
     }
 
     /**

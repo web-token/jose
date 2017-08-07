@@ -9,16 +9,28 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\JWS\Signature;
+namespace Jose\Performance\JWS;
 
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
- * @Groups({"Signature", "RSA"})
+ * @Groups({"JWS", "RSA", "PS384"})
  */
-final class RS512Bench extends SignatureBench
+final class PS384Bench extends SignatureBench
 {
+    /**
+     * @return array
+     */
+    public function dataSignature(): array
+    {
+        return [
+            [
+                'algorithm' => 'PS384',
+            ],
+        ];
+    }
+
     /**
      * @return array
      */
@@ -26,7 +38,18 @@ final class RS512Bench extends SignatureBench
     {
         return [
             [
-                'signature' => 'cGjv9jlIZ1_p8-lvV1BwXecB72C1l9P2KztGjnE-YTzife6KRUvMBSIlPTtJQMJV-s3PzjWgaCyO0dtoizQKZXQLYFjb_lT1ryfy3bszzk4329RhF4YZ4vIU-O3K4ZRP22yhJ6uCxQ1dWrwQqLyRQkPRKN40ZjtgjG7MG0tHq16M7_iS58X7XgcXlYpGFIDcFRK604svbGEr8vy32iR42AFcAnHpTrWKqMxFEyPvq5EsIfSVmKXvo8PZPXmRYhoAAmi8Akwh4ib6Whz4U5WGT5n8furFN8mPegp7ROwYKCeLim4ct1zw7g4owddQzV9pe6EcloKcgnvhJtgRWCUwdQ',
+                'input' => 'eyJhbGciOiJQUzM4NCJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.BxijW6eiykTrbirUuVOfOxWCpl3u2JBzzitHWGgY4bUnbIcz8SBoTBmycbQ8I_xFVhdPiMjrZRF-7iaUGVHXbIGFijWLrJMSCAVjolI1EbNE3F0kvcf88V9Uy8b3ln0kDisWTwoEMt8gmQrIXPEHz3sWKxjTRCo0fRCFP6ibhlF5GLk8U46RvJt4uyMoS6aq_B9bLJVTCyMVHVipeIIp0gi_q_8MXBlqB2uVi5XkTChrc7gO-2sBgvH7V8iIkB2Cat5HiGFziim9LZyrgOYdbh5EScAwpe4TSJTEThagneb3Df7rMtDErd1dYFg7g9A0h8ranR3_4GTNhQwasA8_CA',
+            ],
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function dataVerify(): array
+    {
+        return [
+            [
+                'signature' => 'BxijW6eiykTrbirUuVOfOxWCpl3u2JBzzitHWGgY4bUnbIcz8SBoTBmycbQ8I_xFVhdPiMjrZRF-7iaUGVHXbIGFijWLrJMSCAVjolI1EbNE3F0kvcf88V9Uy8b3ln0kDisWTwoEMt8gmQrIXPEHz3sWKxjTRCo0fRCFP6ibhlF5GLk8U46RvJt4uyMoS6aq_B9bLJVTCyMVHVipeIIp0gi_q_8MXBlqB2uVi5XkTChrc7gO-2sBgvH7V8iIkB2Cat5HiGFziim9LZyrgOYdbh5EScAwpe4TSJTEThagneb3Df7rMtDErd1dYFg7g9A0h8ranR3_4GTNhQwasA8_CA',
             ],
         ];
     }
@@ -36,7 +59,7 @@ final class RS512Bench extends SignatureBench
      */
     protected function getAlgorithm(): SignatureAlgorithmInterface
     {
-        return $this->jwaManager->get('RS512');
+        return $this->getJWAManager()->get('PS384');
     }
 
     /**
@@ -44,7 +67,7 @@ final class RS512Bench extends SignatureBench
      */
     protected function getInput(): string
     {
-        return 'eyJhbGciOiJSUzUxMiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4';
+        return 'eyJhbGciOiJQUzM4NCJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4';
     }
 
     /**

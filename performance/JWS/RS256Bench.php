@@ -9,14 +9,15 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\JWS\Creation;
+namespace Jose\Performance\JWS;
 
 use Jose\Component\Core\JWK;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
- * @Groups({"JWS", "RSA"})
+ * @Groups({"JWS", "RSA", "RS256"})
  */
-final class RS384Bench extends SignatureBench
+final class RS256Bench extends SignatureBench
 {
     /**
      * @return array
@@ -25,7 +26,7 @@ final class RS384Bench extends SignatureBench
     {
         return [
             [
-                'algorithm' => 'RS384',
+                'algorithm' => 'RS256',
             ],
         ];
     }
@@ -37,9 +38,36 @@ final class RS384Bench extends SignatureBench
     {
         return [
             [
-                'input' => 'eyJhbGciOiJSUzM4NCJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.e2iCpnWAzNA4mLznUxZRsCe53Vn-0obMoRCfSF2WQ9KbQiZnTIuzmBHyM8B-bIrvsWgqIemR_eVyQf3qjwuzyCkfK-f7kQsHSwR9uBTzabBvPL-wKb3ouAZjKg_rl9LW48vTSi1ulvp3Et_rYeVjprfsg9oVlb3DOhr9RFK-nab7h4kli2LSBultKffDnW1cU8MO3E2xIPBzWuBOe0lRgxY-nFULxQHt5b4XJe3YtNf4hGgefhDoVXbgbhgC4KVM4YXLtZIGrmHA_9VxoTM0PUh2dJzphBQjZPL-mtuvhzHxB8Wb60M1089lzKheZf8DU19E2uhCKh2hSv1wjmGH2g',
+                'input' => 'eyJhbGciOiJSUzI1NiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.MIsjqtVlOpa71KE-Mss8_Nq2YH4FGhiocsqrgi5NvyG53uoimic1tcMdSg-qptrzZc7CG6Svw2Y13TDIqHzTUrL_lR2ZFcryNFiHkSw129EghGpwkpxaTn_THJTCglNbADko1MZBCdwzJxwqZc-1RlpO2HibUYyXSwO97BSe0_evZKdjvvKSgsIqjytKSeAMbhMBdMma622_BG5t4sdbuCHtFjp9iJmkio47AIwqkZV1aIZsv33uPUqBBCXbYoQJwt7mxPftHmNlGoOSMxR_3thmXTCm4US-xiNOyhbm8afKK64jU6_TPtQHiJeQJxz9G3Tx-083B745_AfYOnlC9w',
             ],
         ];
+    }
+    /**
+     * @return array
+     */
+    public function dataVerify(): array
+    {
+        return [
+            [
+                'signature' => 'MIsjqtVlOpa71KE-Mss8_Nq2YH4FGhiocsqrgi5NvyG53uoimic1tcMdSg-qptrzZc7CG6Svw2Y13TDIqHzTUrL_lR2ZFcryNFiHkSw129EghGpwkpxaTn_THJTCglNbADko1MZBCdwzJxwqZc-1RlpO2HibUYyXSwO97BSe0_evZKdjvvKSgsIqjytKSeAMbhMBdMma622_BG5t4sdbuCHtFjp9iJmkio47AIwqkZV1aIZsv33uPUqBBCXbYoQJwt7mxPftHmNlGoOSMxR_3thmXTCm4US-xiNOyhbm8afKK64jU6_TPtQHiJeQJxz9G3Tx-083B745_AfYOnlC9w',
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAlgorithm(): SignatureAlgorithmInterface
+    {
+        return $this->getJWAManager()->get('RS256');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getInput(): string
+    {
+        return 'eyJhbGciOiJSUzI1NiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4';
     }
 
     /**

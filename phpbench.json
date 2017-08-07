@@ -3,6 +3,7 @@
   "path": "performance",
   "progress": "dots",
   "time_unit": "microseconds",
+  "retry_threshold": 5,
   "reports": {
     "all": {
       "extends": "aggregate",

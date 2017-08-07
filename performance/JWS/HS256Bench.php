@@ -9,12 +9,13 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\JWS\Creation;
+namespace Jose\Performance\JWS;
 
 use Jose\Component\Core\JWK;
+use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
- * @Groups({"JWS", "hmac"})
+ * @Groups({"JWS", "hmac", "HS256"})
  */
 final class HS256Bench extends SignatureBench
 {
@@ -40,6 +41,33 @@ final class HS256Bench extends SignatureBench
                 'input' => 'eyJhbGciOiJIUzI1NiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.bWUSVaxorn7bEF1djytBd0kHv70Ly5pvbomzMWSOr20',
             ],
         ];
+    }
+    /**
+     * @return array
+     */
+    public function dataVerify(): array
+    {
+        return [
+            [
+                'signature' => 'bWUSVaxorn7bEF1djytBd0kHv70Ly5pvbomzMWSOr20',
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAlgorithm(): SignatureAlgorithmInterface
+    {
+        return $this->getJWAManager()->get('HS256');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getInput(): string
+    {
+        return 'eyJhbGciOiJIUzI1NiJ9.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4';
     }
 
     /**
