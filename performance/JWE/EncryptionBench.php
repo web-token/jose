@@ -58,7 +58,7 @@ abstract class EncryptionBench
             new KeyEncryption\ECDHESA256KW(),
             new KeyEncryption\PBES2HS256A128KW(),
             new KeyEncryption\PBES2HS384A192KW(),
-            new KeyEncryption\PBES2HS256A128KW(),
+            new KeyEncryption\PBES2HS512A256KW(),
             new KeyEncryption\RSA15(),
             new KeyEncryption\RSAOAEP(),
             new KeyEncryption\RSAOAEP256(),
