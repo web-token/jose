@@ -59,7 +59,7 @@ final class ES384Bench extends SignatureBench
      */
     protected function getAlgorithm(): SignatureAlgorithmInterface
     {
-        return $this->getJWAManager()->get('ES384');
+        return $this->getSignatureAlgorithmsManager()->get('ES384');
     }
 
     /**

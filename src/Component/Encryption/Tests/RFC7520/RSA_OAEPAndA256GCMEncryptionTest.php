@@ -18,7 +18,7 @@ use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
-use Jose\Component\Encryption\Compression\CompressionManager;
+use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWEBuilder;
@@ -71,7 +71,7 @@ final class RSA_OAEPAndA256GCMEncryptionTest extends TestCase
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loaded_compact_json = JWELoader::load($expected_compact_json);
@@ -136,7 +136,7 @@ final class RSA_OAEPAndA256GCMEncryptionTest extends TestCase
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 

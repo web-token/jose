@@ -25,7 +25,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Component\Encryption\Compression\CompressionInterface;
-use Jose\Component\Encryption\Compression\CompressionManager;
+use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 
 final class JWEBuilder
 {
@@ -55,7 +55,7 @@ final class JWEBuilder
     private $contentEncryptionAlgorithmManager;
 
     /**
-     * @var CompressionManager
+     * @var CompressionMethodsManager
      */
     private $compressionManager;
 
@@ -89,9 +89,9 @@ final class JWEBuilder
      *
      * @param JWAManager         $keyEncryptionAlgorithmManager
      * @param JWAManager         $contentEncryptionAlgorithmManager
-     * @param CompressionManager $compressionManager
+     * @param CompressionMethodsManager $compressionManager
      */
-    public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionManager $compressionManager)
+    public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionMethodsManager $compressionManager)
     {
         $this->keyEncryptionAlgorithmManager = $keyEncryptionAlgorithmManager;
         $this->contentEncryptionAlgorithmManager = $contentEncryptionAlgorithmManager;
@@ -136,11 +136,11 @@ final class JWEBuilder
     }
 
     /**
-     * @param string $aad
+     * @param string|null $aad
      *
      * @return JWEBuilder
      */
-    public function withAAD(string $aad): JWEBuilder
+    public function withAAD(?string $aad): JWEBuilder
     {
         $clone = clone $this;
         $clone->aad = $aad;

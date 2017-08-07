@@ -14,20 +14,7 @@ namespace Jose\Performance\JWS;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\Algorithm\EdDSA;
-use Jose\Component\Signature\Algorithm\ES256;
-use Jose\Component\Signature\Algorithm\ES384;
-use Jose\Component\Signature\Algorithm\ES512;
-use Jose\Component\Signature\Algorithm\HS256;
-use Jose\Component\Signature\Algorithm\HS384;
-use Jose\Component\Signature\Algorithm\HS512;
-use Jose\Component\Signature\Algorithm\None;
-use Jose\Component\Signature\Algorithm\PS256;
-use Jose\Component\Signature\Algorithm\PS384;
-use Jose\Component\Signature\Algorithm\PS512;
-use Jose\Component\Signature\Algorithm\RS256;
-use Jose\Component\Signature\Algorithm\RS384;
-use Jose\Component\Signature\Algorithm\RS512;
+use Jose\Component\Signature\Algorithm;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
@@ -47,25 +34,25 @@ abstract class SignatureBench
     /**
      * @param JWAManager
      */
-    protected $jwaManager;
+    private $signatureAlgorithmsManager;
 
     public function init()
     {
-        $this->jwaManager = JWAManager::create([
-            new HS256(),
-            new HS384(),
-            new HS512(),
-            new RS256(),
-            new RS384(),
-            new RS512(),
-            new PS256(),
-            new PS384(),
-            new PS512(),
-            new ES256(),
-            new ES384(),
-            new ES512(),
-            new None(),
-            new EdDSA(),
+        $this->signatureAlgorithmsManager = JWAManager::create([
+            new Algorithm\HS256(),
+            new Algorithm\HS384(),
+            new Algorithm\HS512(),
+            new Algorithm\RS256(),
+            new Algorithm\RS384(),
+            new Algorithm\RS512(),
+            new Algorithm\PS256(),
+            new Algorithm\PS384(),
+            new Algorithm\PS512(),
+            new Algorithm\ES256(),
+            new Algorithm\ES384(),
+            new Algorithm\ES512(),
+            new Algorithm\None(),
+            new Algorithm\EdDSA(),
         ]);
     }
 
@@ -76,7 +63,7 @@ abstract class SignatureBench
      */
     public function benchSignature($params)
     {
-        $jwsBuilder = new JWSBuilder($this->jwaManager);
+        $jwsBuilder = new JWSBuilder($this->signatureAlgorithmsManager);
         $jwsBuilder
             ->withPayload($this->payload)
             ->addSignature($this->getPrivateKey(), ['alg' => $params['algorithm']])
@@ -92,7 +79,7 @@ abstract class SignatureBench
     public function benchVerification($params)
     {
         $jws = JWSLoader::load($params['input']);
-        $verifier = new Verifier($this->jwaManager);
+        $verifier = new Verifier($this->signatureAlgorithmsManager);
         $verifier->verifyWithKey($jws, $this->getPublicKey(), null, $index);
     }
 
@@ -118,9 +105,9 @@ abstract class SignatureBench
     /**
      * @return JWAManager
      */
-    protected function getJWAManager(): JWAManager
+    protected function getSignatureAlgorithmsManager(): JWAManager
     {
-        return $this->jwaManager;
+        return $this->signatureAlgorithmsManager;
     }
 
     /**

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests;
 
 use Jose\Component\Encryption\Compression\CompressionInterface;
-use Jose\Component\Encryption\Compression\CompressionManager;
+use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Compression\GZip;
 use Jose\Component\Encryption\Compression\ZLib;
@@ -29,7 +29,7 @@ final class CompressionTest extends TestCase
 {
     public function testGetValidCompressionAlgorithm()
     {
-        $manager = new CompressionManager();
+        $manager = new CompressionMethodsManager();
         $manager->add(new Deflate());
         $manager->add(new GZip());
         $manager->add(new ZLib());
@@ -44,7 +44,7 @@ final class CompressionTest extends TestCase
      */
     public function testGetInvalidCompressionAlgorithm()
     {
-        $manager = new CompressionManager();
+        $manager = new CompressionMethodsManager();
         $this->assertFalse($manager->has('FOO'));
         $manager->get('FOO');
     }

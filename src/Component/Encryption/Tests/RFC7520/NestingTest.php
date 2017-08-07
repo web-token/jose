@@ -17,7 +17,7 @@ use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
-use Jose\Component\Encryption\Compression\CompressionManager;
+use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWELoader;
@@ -109,7 +109,7 @@ final class NestingTest extends TestCase
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loaded_compact_json = $decrypter->decryptUsingKey($loaded_compact_json, $encryption_key, $index);

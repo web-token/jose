@@ -59,7 +59,7 @@ final class NoneBench extends SignatureBench
      */
     protected function getAlgorithm(): SignatureAlgorithmInterface
     {
-        return $this->getJWAManager()->get('none');
+        return $this->getSignatureAlgorithmsManager()->get('none');
     }
 
     /**

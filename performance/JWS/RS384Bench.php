@@ -59,7 +59,7 @@ final class RS384Bench extends SignatureBench
      */
     protected function getAlgorithm(): SignatureAlgorithmInterface
     {
-        return $this->getJWAManager()->get('RS384');
+        return $this->getSignatureAlgorithmsManager()->get('RS384');
     }
 
     /**

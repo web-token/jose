@@ -59,7 +59,7 @@ final class PS256Bench extends SignatureBench
      */
     protected function getAlgorithm(): SignatureAlgorithmInterface
     {
-        return $this->getJWAManager()->get('PS256');
+        return $this->getSignatureAlgorithmsManager()->get('PS256');
     }
 
     /**

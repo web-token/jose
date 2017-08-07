@@ -18,7 +18,7 @@ use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW;
-use Jose\Component\Encryption\Compression\CompressionManager;
+use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWEBuilder;
@@ -72,7 +72,7 @@ final class ECDH_ES_A128KWAndA128GCMEncryptionTest extends TestCase
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA128KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loaded_compact_json = JWELoader::load($expected_compact_json);
@@ -141,7 +141,7 @@ final class ECDH_ES_A128KWAndA128GCMEncryptionTest extends TestCase
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA128KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 

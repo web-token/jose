@@ -16,7 +16,7 @@ namespace Jose\Component\Encryption\Compression;
 /**
  * Compression method manager.
  */
-final class CompressionManager
+final class CompressionMethodsManager
 {
     /**
      * @var CompressionInterface[]
@@ -26,9 +26,9 @@ final class CompressionManager
     /**
      * @param CompressionInterface[] $methods
      *
-     * @return CompressionManager
+     * @return CompressionMethodsManager
      */
-    public static function create(array $methods): CompressionManager
+    public static function create(array $methods): CompressionMethodsManager
     {
         $manager = new self();
         foreach ($methods as $method) {

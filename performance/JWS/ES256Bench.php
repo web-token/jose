@@ -59,7 +59,7 @@ final class ES256Bench extends SignatureBench
      */
     protected function getAlgorithm(): SignatureAlgorithmInterface
     {
-        return $this->getJWAManager()->get('ES256');
+        return $this->getSignatureAlgorithmsManager()->get('ES256');
     }
 
     /**

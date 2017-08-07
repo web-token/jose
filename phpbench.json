@@ -7,7 +7,7 @@
   "reports": {
     "all": {
       "extends": "aggregate",
-      "cols": ["benchmark", "groups", "subject", "mean", "best", "worst"]
+      "cols": ["benchmark", "groups", "subject", "params", "mean", "best", "worst"]
     }
   },
   "outputs": {

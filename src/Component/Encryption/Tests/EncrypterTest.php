@@ -25,7 +25,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\Dir;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256;
-use Jose\Component\Encryption\Compression\CompressionManager;
+use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWEBuilder;
@@ -45,7 +45,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -79,7 +79,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -112,7 +112,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -157,7 +157,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -195,7 +195,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
@@ -219,7 +219,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new Dir(), new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
@@ -240,7 +240,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
@@ -262,7 +262,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
@@ -280,7 +280,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -318,7 +318,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
@@ -340,7 +340,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
@@ -362,7 +362,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
@@ -385,7 +385,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
@@ -404,7 +404,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new Dir()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A192CBCHS384()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -437,7 +437,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHES()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A192CBCHS384()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -471,7 +471,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -506,7 +506,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder
@@ -525,7 +525,7 @@ final class EncrypterTest extends TestCase
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $this->assertInstanceOf(JWE::class, $loaded);
@@ -546,7 +546,7 @@ final class EncrypterTest extends TestCase
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256(), new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 

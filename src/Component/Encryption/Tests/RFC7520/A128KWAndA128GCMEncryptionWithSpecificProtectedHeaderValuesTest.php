@@ -18,7 +18,7 @@ use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
-use Jose\Component\Encryption\Compression\CompressionManager;
+use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWEBuilder;
@@ -66,7 +66,7 @@ final class A128KWAndA128GCMEncryptionWithSpecificProtectedHeaderValuesTest exte
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loaded_flattened_json = JWELoader::load($expected_flattened_json);
@@ -119,7 +119,7 @@ final class A128KWAndA128GCMEncryptionWithSpecificProtectedHeaderValuesTest exte
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
-        $compressionManager = CompressionManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 

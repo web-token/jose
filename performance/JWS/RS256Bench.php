@@ -59,7 +59,7 @@ final class RS256Bench extends SignatureBench
      */
     protected function getAlgorithm(): SignatureAlgorithmInterface
     {
-        return $this->getJWAManager()->get('RS256');
+        return $this->getSignatureAlgorithmsManager()->get('RS256');
     }
 
     /**

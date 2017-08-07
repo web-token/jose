@@ -59,7 +59,7 @@ final class RS512Bench extends SignatureBench
      */
     protected function getAlgorithm(): SignatureAlgorithmInterface
     {
-        return $this->getJWAManager()->get('RS512');
+        return $this->getSignatureAlgorithmsManager()->get('RS512');
     }
 
     /**

@@ -59,7 +59,7 @@ final class EdDSABench extends SignatureBench
      */
     protected function getAlgorithm(): SignatureAlgorithmInterface
     {
-        return $this->getJWAManager()->get('EdDSA');
+        return $this->getSignatureAlgorithmsManager()->get('EdDSA');
     }
 
     /**

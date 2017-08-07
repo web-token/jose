@@ -20,11 +20,11 @@ final class CompressionManagerFactory
     /**
      * @param string[]|CompressionInterface[] $methods
      *
-     * @return CompressionManager
+     * @return CompressionMethodsManager
      */
-    public static function createCompressionManager(array $methods): CompressionManager
+    public static function createCompressionManager(array $methods): CompressionMethodsManager
     {
-        $compression_manager = new CompressionManager();
+        $compression_manager = new CompressionMethodsManager();
 
         foreach ($methods as $method) {
             if ($method instanceof CompressionInterface) {

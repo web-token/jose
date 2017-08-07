@@ -59,7 +59,7 @@ final class ES512Bench extends SignatureBench
      */
     protected function getAlgorithm(): SignatureAlgorithmInterface
     {
-        return $this->getJWAManager()->get('ES512');
+        return $this->getSignatureAlgorithmsManager()->get('ES512');
     }
 
     /**
