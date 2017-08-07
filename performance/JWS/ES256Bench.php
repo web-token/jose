@@ -42,6 +42,7 @@ final class ES256Bench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */

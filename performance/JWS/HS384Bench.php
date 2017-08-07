@@ -42,6 +42,7 @@ final class HS384Bench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */

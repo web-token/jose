@@ -42,6 +42,7 @@ final class NoneBench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */

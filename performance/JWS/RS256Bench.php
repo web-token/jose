@@ -42,6 +42,7 @@ final class RS256Bench extends SignatureBench
             ],
         ];
     }
+
     /**
      * @return array
      */
