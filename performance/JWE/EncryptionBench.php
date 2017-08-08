@@ -25,7 +25,7 @@ use Jose\Component\Encryption\JWELoader;
 /**
  * @BeforeMethods({"init"})
  * @Groups({"JWE"})
- * @Revs(1)
+ * @Revs(100)
  */
 abstract class EncryptionBench
 {
