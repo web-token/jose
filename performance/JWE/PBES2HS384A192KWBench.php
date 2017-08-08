@@ -11,9 +11,6 @@
 
 namespace Jose\Performance\JWE;
 
-use Jose\Component\Core\JWK;
-use Jose\Performance\JWE\EncryptionBench;
-
 /**
  * @Groups({"JWE", "PBES2HS384A192KW"})
  */
@@ -74,7 +71,7 @@ final class PBES2HS384A192KWBench extends EncryptionBench
         return [
             [
                 'input' => '{"ciphertext":"eG8lMbMf784k-Vxb9Da6jci9O6GxT2aH88RhoKkmTslRrlsP6VCPTeQVj7-J0SPfuRYid9tFIft2taBGUKcCVO_Sx7hsQUUu0dvwo1L5F5biOzg0l1EdsSgiDBYAG5-vgHTq2_1SOeqtJ-m9Yk1LV_-SwFEnHd8il02bWq20l7LazfVy4pU1NCdS3Y2qwYET7RZeNetxR09LKf4XNY5GLy-vtDzou3w","iv":"3I-Tv6gEXNbjB48h","tag":"RwNOwY8c_cTHmwyIBckSUQ","aad":"QSxCLEMsRA","protected":"eyJwMnMiOiJaZThzQnUzdnd6Y0ZmVlJXOXhXSVdKN2tGYWxvSS1OUFZZUW85NW9kemF0VFAwRzN0RkVZVGVWVWFqelJzV2xXTGoyWmJXWnpHV2pOQzBsVDRQMVdJdyIsInAyYyI6NDA5NiwiYWxnIjoiUEJFUzItSFMzODQrQTE5MktXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"eGor6-Vqm9qVKpYHTmkZtQuUFeYSdkMmM9nx8_pq_dtm4NVlaXfaZg"}',
-            ]
+            ],
         ];
     }
 
