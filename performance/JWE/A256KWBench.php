@@ -11,9 +11,6 @@
 
 namespace Jose\Performance\JWE;
 
-use Jose\Component\Core\JWK;
-use Jose\Performance\JWE\EncryptionBench;
-
 /**
  * @Groups({"JWE", "A256KW"})
  */
@@ -74,7 +71,7 @@ final class A256KWBench extends EncryptionBench
         return [
             [
                 'input' => '{"ciphertext":"Js4OCNZs2s0En9-JTEzHntCLjUYHwd9mgEuMgTlQQCACrTcwctobqEyEXIEnHhFqQb6FDi7z6gXrY4pJdMnZAbY-DF2KlzPewPJdPCtncGMJ6Q-tJ7_aNoBQbR9yFpcdPqzZKG5l_g3JjI5n2z1pP2T3-tvwFN6UJvUBy-gQJgkosXlEXEcDcpGcGl41wLUwv-uVg-T6_i52_MDHg4CqST_5qugu6_Y","iv":"nqT3ZOuxL5i-6zFa","tag":"6XRD6atZ3kX1AXMFw9Np5g","aad":"QSxCLEMsRA","protected":"eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2R0NNIn0","encrypted_key":"L7ZhHtUPPSyrxyE36QFyt7dlb6GSmPZSoP-1HUkAe0d8PDKIXLwjAw"}',
-            ]
+            ],
         ];
     }
 

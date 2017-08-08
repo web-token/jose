@@ -103,7 +103,7 @@ abstract class EncryptionBench
             ->build()
             ->toFlattenedJSON(0);
 
-        file_put_contents(__DIR__.'/../../sss.txt', $jwe.PHP_EOL, FILE_APPEND|LOCK_EX);
+        file_put_contents(__DIR__.'/../../sss.txt', $jwe.PHP_EOL, FILE_APPEND | LOCK_EX);
     }
 
     /**
@@ -131,7 +131,7 @@ abstract class EncryptionBench
         return [
             [
                 'payload' => "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.",
-            ]
+            ],
         ];
     }
 
