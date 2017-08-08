@@ -102,8 +102,6 @@ abstract class EncryptionBench
             ->addRecipient(JWK::create($params['recipient_key']), $params['recipient_headers'])
             ->build()
             ->toFlattenedJSON(0);
-
-        file_put_contents(__DIR__.'/../../sss.txt', $jwe.PHP_EOL, FILE_APPEND|LOCK_EX);
     }
 
     /**
