@@ -78,7 +78,7 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
      */
     private function checkKeyLength(int $keyLength)
     {
-        if (!in_array($keyLength, [16, 24, 32])) {
+        if (!in_array($keyLength, [128, 192, 256])) {
             throw new \InvalidArgumentException('Invalid key length. Allowed sizes are 128, 192 and 256 bits.');
         }
     }
