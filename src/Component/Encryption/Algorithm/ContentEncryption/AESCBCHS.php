@@ -129,7 +129,7 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
      */
     private function getMode(int $keyLength): string
     {
-        return sprintf('aes-%d-cbc', 8 * $keyLength/2);
+        return sprintf('aes-%d-cbc', 8 * $keyLength / 2);
     }
 
     /**
