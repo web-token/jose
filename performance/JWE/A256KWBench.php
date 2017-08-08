@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\JWE\Creation;
+namespace Jose\Performance\JWE;
 
 use Jose\Component\Core\JWK;
 use Jose\Performance\JWE\EncryptionBench;
@@ -26,56 +26,36 @@ final class A256KWBench extends EncryptionBench
     {
         return [
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A128CBC-HS256'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A192CBC-HS384'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A256CBC-HS512'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A128GCM'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A192GCM'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A256GCM'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRecipientPublicKey(): JWK
-    {
-        return $this->getRecipientPrivateKey()->toPublic();
     }
 
     /**
@@ -89,14 +69,42 @@ final class A256KWBench extends EncryptionBench
     /**
      * {@inheritdoc}
      */
-    protected function getRecipientPrivateKey(): JWK
+    public function dataInputs(): array
     {
-        return JWK::create([
-            'kty' => 'oct',
-            'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
-            'use' => 'enc',
-            'alg' => 'A256KW',
-            'k' => 'OgUyABAPIkI-zFg3doqsv_GH-4GTGOu3HGnuG9wdxCo',
-        ]);
+        return [
+            [
+                'input' => '{"ciphertext":"Js4OCNZs2s0En9-JTEzHntCLjUYHwd9mgEuMgTlQQCACrTcwctobqEyEXIEnHhFqQb6FDi7z6gXrY4pJdMnZAbY-DF2KlzPewPJdPCtncGMJ6Q-tJ7_aNoBQbR9yFpcdPqzZKG5l_g3JjI5n2z1pP2T3-tvwFN6UJvUBy-gQJgkosXlEXEcDcpGcGl41wLUwv-uVg-T6_i52_MDHg4CqST_5qugu6_Y","iv":"nqT3ZOuxL5i-6zFa","tag":"6XRD6atZ3kX1AXMFw9Np5g","aad":"QSxCLEMsRA","protected":"eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2R0NNIn0","encrypted_key":"L7ZhHtUPPSyrxyE36QFyt7dlb6GSmPZSoP-1HUkAe0d8PDKIXLwjAw"}',
+            ]
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dataPrivateKeys(): array
+    {
+        return [
+            [
+                'recipient_keys' => ['keys' => [[
+                    'kty' => 'oct',
+                    'k' => 'OgUyABAPIkI-zFg3doqsv_GH-4GTGOu3HGnuG9wdxCo',
+                ]]],
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dataRecipientPublicKeys(): array
+    {
+        return [
+            [
+                'recipient_key' => [
+                    'kty' => 'oct',
+                    'k' => 'OgUyABAPIkI-zFg3doqsv_GH-4GTGOu3HGnuG9wdxCo',
+                ],
+            ],
+        ];
     }
 }

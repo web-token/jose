@@ -3,11 +3,15 @@
   "path": "performance",
   "progress": "dots",
   "time_unit": "microseconds",
-  "retry_threshold": 5,
+  "retry_threshold": 10,
   "reports": {
     "all": {
       "extends": "aggregate",
       "cols": ["benchmark", "groups", "subject", "params", "mean", "best", "worst"]
+    },
+    "simple": {
+      "extends": "aggregate",
+      "cols": ["benchmark", "groups", "subject", "mean"]
     }
   },
   "outputs": {

@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\JWE\Creation;
+namespace Jose\Performance\JWE;
 
 use Jose\Component\Core\JWK;
 use Jose\Performance\JWE\EncryptionBench;
@@ -26,56 +26,36 @@ final class A192GCMKWBench extends EncryptionBench
     {
         return [
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A128CBC-HS256'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A192CBC-HS384'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A256CBC-HS512'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A128GCM'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A192GCM'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A256GCM'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRecipientPublicKey(): JWK
-    {
-        return $this->getRecipientPrivateKey()->toPublic();
     }
 
     /**
@@ -89,14 +69,42 @@ final class A192GCMKWBench extends EncryptionBench
     /**
      * {@inheritdoc}
      */
-    protected function getRecipientPrivateKey(): JWK
+    public function dataInputs(): array
     {
-        return JWK::create([
-            'kty' => 'oct',
-            'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
-            'use' => 'enc',
-            'alg' => 'A192GCMKW',
-            'k' => 'KuFiR-n2ngkDNZfBXWS6cCGXrYonVUiH',
-        ]);
+        return [
+            [
+                'input' => '{"ciphertext":"8-zEiA24sXMcmZl33nvu7sdP5gIupkNAcWkg2qE5bfRdReOiocGlYOr0GPj9SjJDEJUCdbMbsn3qx6cFkZaPmV_G5w7dNfX8ALhLVhSkbypW2C2TGGxaEEAnGJgjwBhi-wDd-k1bAU0htRszUi_RsY3sfb5ssDJZQkyslxtubVSTqWkpH0tuotxQxac2mDHrWAp0VYnpGSJSKPy3q3UGlxY812zaEOc","iv":"dCoOw5_olUz_kCjN","tag":"TGiZO1fqeb0pfdTlc5VYJQ","aad":"QSxCLEMsRA","protected":"eyJpdiI6IkNST0xGWS1CbVVUSmoxQlIiLCJ0YWciOiJVVTFtdExPcldCeFRaYW5OM2FKZWpBIiwiYWxnIjoiQTE5MkdDTUtXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"Z8_qLErKWsleFJuq1jBXWcJovvHUdhvJfZa9ecDbLJw"}',
+            ]
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dataPrivateKeys(): array
+    {
+        return [
+            [
+                'recipient_keys' => ['keys' => [[
+                    'kty' => 'oct',
+                    'k' => 'KuFiR-n2ngkDNZfBXWS6cCGXrYonVUiH',
+                ]]],
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dataRecipientPublicKeys(): array
+    {
+        return [
+            [
+                'recipient_key' => [
+                    'kty' => 'oct',
+                    'k' => 'KuFiR-n2ngkDNZfBXWS6cCGXrYonVUiH',
+                ],
+            ],
+        ];
     }
 }

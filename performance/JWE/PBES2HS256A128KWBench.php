@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\JWE\Creation;
+namespace Jose\Performance\JWE;
 
 use Jose\Component\Core\JWK;
 use Jose\Performance\JWE\EncryptionBench;
@@ -26,56 +26,36 @@ final class PBES2HS256A128KWBench extends EncryptionBench
     {
         return [
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'PBES2-HS256+A128KW', 'enc' => 'A128CBC-HS256'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'PBES2-HS256+A128KW', 'enc' => 'A192CBC-HS384'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'PBES2-HS256+A128KW', 'enc' => 'A256CBC-HS512'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'PBES2-HS256+A128KW', 'enc' => 'A128GCM'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'PBES2-HS256+A128KW', 'enc' => 'A192GCM'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
             [
-                'data' => [
                     'shared_protected_headers' => ['alg' => 'PBES2-HS256+A128KW', 'enc' => 'A256GCM'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
-                ],
             ],
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRecipientPublicKey(): JWK
-    {
-        return $this->getRecipientPrivateKey()->toPublic();
     }
 
     /**
@@ -89,14 +69,42 @@ final class PBES2HS256A128KWBench extends EncryptionBench
     /**
      * {@inheritdoc}
      */
-    protected function getRecipientPrivateKey(): JWK
+    public function dataInputs(): array
     {
-        return JWK::create([
-            'kty' => 'oct',
-            'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
-            'use' => 'enc',
-            'alg' => 'PBES2-HS256+A128KW',
-            'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
-        ]);
+        return [
+            [
+                'input' => '{"ciphertext":"zDsBLNwrRjNHCEfiQ9exd62CC3ZF4XIXpW2pcVfME_ckTbCfrdCkMdhRLD6WZ0Ai-s2PF0esh536u56pJEWJkF5WKnCPCb4AowGleEBlh8yiR2i9KCLzIPUpyf3AH-ffKwIwEgYO33oGOJ55KBR6eYuFePhzxErgTTC4JA9KNxbRvoL-9TSqhOhYwYuMs9DoNmNTHPbh7AZiZyF-ZrZSZ7fEp4rMK8Y","iv":"B8c5oGxoX8I-7yKk","tag":"sh-wabbT17__NQqafuIKtQ","aad":"QSxCLEMsRA","protected":"eyJwMnMiOiJ2bG95RkN0MmhVc1hpQllDQVJlWGhHcjNYM3BOLWpldFFzVEFHc0doLUVBTThzbGFZMDNIUVNHQXVkaXFRV09pQndJSFdyTDdMcEFPMS1PQ0ttMEJEdyIsInAyYyI6NDA5NiwiYWxnIjoiUEJFUzItSFMyNTYrQTEyOEtXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"NYmhb9gVwG1AxG68L_jU4CuiuV7Z0UEg8vTpd0HVtkxCrF-oVzPmoQ"}',
+            ]
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dataPrivateKeys(): array
+    {
+        return [
+            [
+                'recipient_keys' => ['keys' => [[
+                    'kty' => 'oct',
+                    'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+                ]]],
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dataRecipientPublicKeys(): array
+    {
+        return [
+            [
+                'recipient_key' => [
+                    'kty' => 'oct',
+                    'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+                ],
+            ],
+        ];
     }
 }

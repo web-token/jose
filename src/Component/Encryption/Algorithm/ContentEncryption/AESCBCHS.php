@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Algorithm\ContentEncryption;
 
-use Assert\Assertion;
 use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
 
 abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
@@ -23,9 +22,14 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
      */
     public function encryptContent(string $data, string $cek, string $iv, ?string $aad, string $encoded_protected_header, ?string &$tag): string
     {
-        $k = mb_substr($cek, mb_strlen($cek, '8bit') / 2, null, '8bit');
+        $keyLength = mb_strlen($cek, '8bit');
+        $this->checkKeyLength($keyLength);
+        $k = mb_substr($cek, $keyLength / 2, null, '8bit');
 
-        $cyphertext = openssl_encrypt($data, $this->getMode($k), $k, OPENSSL_RAW_DATA, $iv);
+        $cyphertext = openssl_encrypt($data, $this->getMode($keyLength), $k, OPENSSL_RAW_DATA, $iv);
+        if (false === $cyphertext) {
+            throw new \RuntimeException('Unable to encrypt.');
+        }
 
         $tag = $this->calculateAuthenticationTag($cyphertext, $cek, $iv, $aad, $encoded_protected_header);
 
@@ -45,14 +49,20 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
      */
     public function decryptContent(string $data, string $cek, string $iv, ?string $aad, string $encoded_protected_header, string $tag): string
     {
-        Assertion::true(
-            $this->isTagValid($data, $cek, $iv, $aad, $encoded_protected_header, $tag),
-            'Unable to verify the tag.'
-        );
+        $keyLength = mb_strlen($cek, '8bit');
+        $this->checkKeyLength($keyLength);
 
-        $k = mb_substr($cek, mb_strlen($cek, '8bit') / 2, null, '8bit');
+        if (!$this->isTagValid($data, $cek, $iv, $aad, $encoded_protected_header, $tag)) {
+            throw new \InvalidArgumentException('Unable to verify the tag.');
+        }
+        $k = mb_substr($cek, $keyLength / 2, null, '8bit');
 
-        return openssl_decrypt($data, self::getMode($k), $k, OPENSSL_RAW_DATA, $iv);
+        $plaintext = openssl_decrypt($data, self::getMode($keyLength), $k, OPENSSL_RAW_DATA, $iv);
+        if (false === $plaintext) {
+            throw new \RuntimeException('Unable to decrypt.');
+        }
+
+        return $plaintext;
     }
 
     /**
@@ -113,12 +123,22 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
     }
 
     /**
-     * @param string $k
+     * @param int $keyLength
      *
      * @return string
      */
-    private function getMode(string $k): string
+    private function getMode(int $keyLength): string
     {
-        return 'aes-'.(8 * mb_strlen($k, '8bit')).'-cbc';
+        return sprintf('aes-%d-cbc', 8 * $keyLength/2);
+    }
+
+    /**
+     * @param int $keyLength
+     */
+    private function checkKeyLength(int $keyLength)
+    {
+        if (!in_array($keyLength, [32, 48, 64])) {
+            throw new \InvalidArgumentException('Invalid key length. Allowed sizes are 256, 384 and 512 bits.');
+        }
     }
 }

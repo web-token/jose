@@ -13,20 +13,22 @@ namespace Jose\Performance\JWE;
 
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
+use Jose\Component\Core\JWKSet;
 use Jose\Component\Encryption\Algorithm\KeyEncryption;
 use Jose\Component\Encryption\Algorithm\ContentEncryption;
 use Jose\Component\Encryption\Compression;
 use Jose\Component\Encryption\Compression\CompressionMethodsManager;
+use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWEBuilder;
+use Jose\Component\Encryption\JWELoader;
 
 /**
  * @BeforeMethods({"init"})
  * @Groups({"JWE"})
- * @Revs(100)
+ * @Revs(1)
  */
 abstract class EncryptionBench
 {
-    private $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
     /**
      * @param JWAManager
      */
@@ -81,7 +83,9 @@ abstract class EncryptionBench
     }
 
     /**
-     * @ParamProviders({"dataHeadersAndAlgorithms"})
+     * @param array $params
+     *
+     * @ParamProviders({"dataPayloads", "dataHeadersAndAlgorithms", "dataRecipientPublicKeys"})
      */
     public function benchEncryption($params)
     {
@@ -90,37 +94,61 @@ abstract class EncryptionBench
             $this->getContentEncryptionAlgorithmsManager(),
             $this->getCompressionMethodsManager()
         );
-        $jweBuilder
-            ->withPayload($this->payload)
+        $jwe = $jweBuilder
+            ->withPayload($params['payload'])
             ->withAAD($this->getAAD())
-            ->withSharedProtectedHeaders($params['data']['shared_protected_headers'])
-            ->withSharedHeaders($params['data']['shared_headers'])
-            ->addRecipient($this->getRecipientPublicKey(), $params['data']['recipient_headers'])
+            ->withSharedProtectedHeaders($params['shared_protected_headers'])
+            ->withSharedHeaders($params['shared_headers'])
+            ->addRecipient(JWK::create($params['recipient_key']), $params['recipient_headers'])
             ->build()
             ->toFlattenedJSON(0);
+
+        file_put_contents(__DIR__.'/../../sss.txt', $jwe.PHP_EOL, FILE_APPEND|LOCK_EX);
     }
 
-    public function benchDecryption()
+    /**
+     * @param array $params
+     *
+     * @ParamProviders({"dataInputs", "dataPrivateKeys"})
+     */
+    public function benchDecryption(array $params)
     {
-        /*$jws = JWSLoader::load($params['input']);
-        $verifier = new Verifier($this->jwaManager);
-        $verifier->verifyWithKey($jws, $this->getPublicKey(), null, $index);*/
+        $jwe = JWELoader::load($params['input']);
+        $decrypter = new Decrypter(
+            $this->getKeyEncryptionAlgorithmsManager(),
+            $this->getContentEncryptionAlgorithmsManager(),
+            $this->getCompressionMethodsManager()
+            );
+        $keyset = JWKSet::createFromKeyData($params['recipient_keys']);
+        $decrypter->decryptUsingKeySet($jwe, $keyset);
     }
+
+    /**
+     * @return array
+     */
+    public function dataPayloads(): array
+    {
+        return [
+            [
+                'payload' => "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.",
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    abstract public function dataHeadersAndAlgorithms(): array;
+
+    /**
+     * @return array
+     */
+    abstract public function dataRecipientPublicKeys(): array;
 
     /**
      * @return null|string
      */
     abstract protected function getAAD(): ?string;
-
-    /**
-     * @return JWK
-     */
-    abstract protected function getRecipientPrivateKey(): JWK;
-
-    /**
-     * @return JWK
-     */
-    abstract protected function getRecipientPublicKey(): JWK;
 
     /**
      * @return JWAManager

@@ -28,8 +28,9 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
             $calculated_aad .= '.'.$aad;
         }
 
-        $key_length = mb_strlen($cek, '8bit') * 8;
-        $mode = sprintf('aes-%d-gcm', $key_length);
+        $keyLength = mb_strlen($cek, '8bit') * 8;
+        $this->checkKeyLength($keyLength);
+        $mode = sprintf('aes-%d-gcm', $keyLength);
         $C = openssl_encrypt($data, $mode, $cek, OPENSSL_RAW_DATA, $iv, $tag, $calculated_aad);
         Assertion::true(false !== $C, 'Unable to encrypt the data.');
 
@@ -46,9 +47,10 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
             $calculated_aad .= '.'.$aad;
         }
 
-        $key_length = mb_strlen($cek, '8bit') * 8;
+        $keyLength = mb_strlen($cek, '8bit') * 8;
+        $this->checkKeyLength($keyLength);
 
-        $mode = 'aes-'.($key_length).'-gcm';
+        $mode = 'aes-'.($keyLength).'-gcm';
         $P = openssl_decrypt($data, $mode, $cek, OPENSSL_RAW_DATA, $iv, $tag, $calculated_aad);
         Assertion::true(false !== $P, 'Unable to decrypt or to verify the tag.');
 
@@ -69,6 +71,16 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
     public function getCEKSize(): int
     {
         return $this->getKeySize();
+    }
+
+    /**
+     * @param int $keyLength
+     */
+    private function checkKeyLength(int $keyLength)
+    {
+        if (!in_array($keyLength, [16, 24, 32])) {
+            throw new \InvalidArgumentException('Invalid key length. Allowed sizes are 128, 192 and 256 bits.');
+        }
     }
 
     /**
