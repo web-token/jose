@@ -69,9 +69,7 @@ final class PBES2HS512A256KWBench extends EncryptionBench
     public function dataInputs(): array
     {
         return [
-            [
-                'input' => '{"ciphertext":"GwXyadX97ssIytJawPP4112MOuBSxRXpiH-Ur7wtsThL3f0QZ2mjYoLYbFCql2A4j4avuSHjZH0LrIYX5Tt6zdLPVCZtUj_R_5mlFIfQW5cSVHTKBFLNA_xsn03eU3ANIq2CUdq6Sypk3f9UqJXgxN8XTR4wsFSSM11MEfWU3uSsgR1GTUOw04BPCMONi-gi-Fx1CTlTOGOQngDCNrLEnRR5KQpZ36c","iv":"byyjW61x3VFA2Bbi","tag":"cFjxlfvdpJqDepENC0bGNA","aad":"QSxCLEMsRA","protected":"eyJwMnMiOiI1QzI2YUpCZktVR2ZMaElkY0E0OVVONnNEX05aQnpjNC1xSDc0d1BNc0xhaTZUYnU0RXJRT2JRRFZxWFdtU2JvVzd4aGxFNUJUMkZ3VHFvY21NRHoydyIsInAyYyI6NDA5NiwiYWxnIjoiUEJFUzItSFM1MTIrQTI1NktXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"mxZpygw38j8rYa_qZP3Vb2RZf6n3s--7H1oxECBZGoaC_I0-qERoww"}',
-            ],
+            ['input' => '{"ciphertext":"GwXyadX97ssIytJawPP4112MOuBSxRXpiH-Ur7wtsThL3f0QZ2mjYoLYbFCql2A4j4avuSHjZH0LrIYX5Tt6zdLPVCZtUj_R_5mlFIfQW5cSVHTKBFLNA_xsn03eU3ANIq2CUdq6Sypk3f9UqJXgxN8XTR4wsFSSM11MEfWU3uSsgR1GTUOw04BPCMONi-gi-Fx1CTlTOGOQngDCNrLEnRR5KQpZ36c","iv":"byyjW61x3VFA2Bbi","tag":"cFjxlfvdpJqDepENC0bGNA","aad":"QSxCLEMsRA","protected":"eyJwMnMiOiI1QzI2YUpCZktVR2ZMaElkY0E0OVVONnNEX05aQnpjNC1xSDc0d1BNc0xhaTZUYnU0RXJRT2JRRFZxWFdtU2JvVzd4aGxFNUJUMkZ3VHFvY21NRHoydyIsInAyYyI6NDA5NiwiYWxnIjoiUEJFUzItSFM1MTIrQTI1NktXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"mxZpygw38j8rYa_qZP3Vb2RZf6n3s--7H1oxECBZGoaC_I0-qERoww"}',],
         ];
     }
 

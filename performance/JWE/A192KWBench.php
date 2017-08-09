@@ -69,9 +69,7 @@ final class A192KWBench extends EncryptionBench
     public function dataInputs(): array
     {
         return [
-            [
-                'input' => '{"ciphertext":"0TnU-JWyzWNe_u5lzwI1PmI1P1A_9rDJSy-1-aVqgu5I4h9L7nGaqMpfJ2VRnEky8BG8khRJ9ytdgPEr5xlMw5Me1OHhcALIvjdtUO_yQvj4ndn6VWSAuyfC4WzyBdRhwufh4RYPhXhh4mXYmvCzfQYD9KCiCB2PyA-WFg6vOgp5_kBbm1auxsarPkqFwfqNAMBavnKnuliaZviJE0708kWMJE8PuBA","iv":"4K9DpGqWCJ6MNNRn","tag":"s5EsBBRfzlFMnLuUU8TMPg","aad":"QSxCLEMsRA","protected":"eyJhbGciOiJBMTkyS1ciLCJlbmMiOiJBMjU2R0NNIn0","encrypted_key":"GU6WSPFGiMK2hMXOQv6jbSZlTQ0p1hQL3KOIPTr9BYw6PtoTbrdUrg"}',
-            ],
+            ['input' => '{"ciphertext":"0TnU-JWyzWNe_u5lzwI1PmI1P1A_9rDJSy-1-aVqgu5I4h9L7nGaqMpfJ2VRnEky8BG8khRJ9ytdgPEr5xlMw5Me1OHhcALIvjdtUO_yQvj4ndn6VWSAuyfC4WzyBdRhwufh4RYPhXhh4mXYmvCzfQYD9KCiCB2PyA-WFg6vOgp5_kBbm1auxsarPkqFwfqNAMBavnKnuliaZviJE0708kWMJE8PuBA","iv":"4K9DpGqWCJ6MNNRn","tag":"s5EsBBRfzlFMnLuUU8TMPg","aad":"QSxCLEMsRA","protected":"eyJhbGciOiJBMTkyS1ciLCJlbmMiOiJBMjU2R0NNIn0","encrypted_key":"GU6WSPFGiMK2hMXOQv6jbSZlTQ0p1hQL3KOIPTr9BYw6PtoTbrdUrg"}',],
         ];
     }
 
