@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Jose\Component\Checker;
 
 use Assert\Assertion;
-use Jose\Component\Core\JWTInterface;
 
 final class IssuedAtChecker implements ClaimCheckerInterface
 {

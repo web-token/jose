@@ -76,7 +76,7 @@ final class MultipleSignaturesTest extends TestCase
 
         $jws = $jwsBuilder
             ->addSignature($ecdsa_private_key, [], ['alg' => 'ES512', 'kid' => 'bilbo.baggins@hobbiton.example']) //@see https://tools.ietf.org/html/rfc7520#section-4.8.2
-            ->addSignature($rsa_private_key, ['alg' => 'RS256',], ['kid' => 'bilbo.baggins@hobbiton.example'])    //@see https://tools.ietf.org/html/rfc7520#section-4.8.3
+            ->addSignature($rsa_private_key, ['alg' => 'RS256'], ['kid' => 'bilbo.baggins@hobbiton.example'])    //@see https://tools.ietf.org/html/rfc7520#section-4.8.3
             ->addSignature($symmetric_key, ['alg' => 'HS256', 'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037'])   //@see https://tools.ietf.org/html/rfc7520#section-4.8.4
             ->build();
 
