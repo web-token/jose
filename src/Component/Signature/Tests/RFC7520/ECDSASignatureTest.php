@@ -65,11 +65,10 @@ final class ECDSASignatureTest extends TestCase
         $signatureAlgorithmManager = JWAManager::create([new ES512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
-        $jwsBuilder = $jwsBuilder
+        $jws = $jwsBuilder
             ->withPayload($payload)
-            ->addSignature($private_key, $headers);
-
-        $jws = $jwsBuilder->build();
+            ->addSignature($private_key, $headers)
+            ->build();
 
         $verifier->verifyWithKey($jws, $private_key);
 
@@ -82,12 +81,15 @@ final class ECDSASignatureTest extends TestCase
         $expected_json = '{"payload":"SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4","signatures":[{"protected":"eyJhbGciOiJFUzUxMiIsImtpZCI6ImJpbGJvLmJhZ2dpbnNAaG9iYml0b24uZXhhbXBsZSJ9","signature":"AE_R_YZCChjn4791jSQCrdPZCNYqHXCTZH0-JZGYNlaAjP2kqaluUIIUnC9qvbu9Plon7KRTzoNEuT4Va2cmL1eJAQy3mtPBu_u_sDDyYjnAMDxXPn7XrT0lw-kvAD890jl8e2puQens_IEKBpHABlsbEPX6sFY8OcGDqoRuBomu9xQ2"}]}';
 
         $loaded_compact_json = JWSLoader::load($expected_compact_json);
-        $verifier->verifyWithKey($loaded_compact_json, $private_key);
+        $verifier->verifyWithKey($loaded_compact_json, $private_key, null, $loaded_compact_json_index);
+        $this->assertEquals(0, $loaded_compact_json_index);
 
         $loaded_flattened_json = JWSLoader::load($expected_flattened_json);
-        $verifier->verifyWithKey($loaded_flattened_json, $private_key);
+        $verifier->verifyWithKey($loaded_flattened_json, $private_key, null, $loaded_flattened_json_index);
+        $this->assertEquals(0, $loaded_flattened_json_index);
 
         $loaded_json = JWSLoader::load($expected_json);
-        $verifier->verifyWithKey($loaded_json, $private_key);
+        $verifier->verifyWithKey($loaded_json, $private_key, null, $loaded_json_index);
+        $this->assertEquals(0, $loaded_json_index);
     }
 }

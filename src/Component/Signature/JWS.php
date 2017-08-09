@@ -38,18 +38,18 @@ final class JWS implements JWTInterface
     private $signatures = [];
 
     /**
-     * @var mixed|null
+     * @var string|null
      */
     private $payload = null;
 
     /**
      * JWS constructor.
      *
-     * @param mixed|null $payload
-     * @param mixed|null $encodedPayload
-     * @param bool       $isPayloadDetached
+     * @param string|null $payload
+     * @param string|null $encodedPayload
+     * @param bool        $isPayloadDetached
      */
-    private function __construct($payload = null, $encodedPayload = null, bool $isPayloadDetached = false)
+    private function __construct(?string $payload = null, ?string $encodedPayload = null, bool $isPayloadDetached = false)
     {
         $this->payload = $payload;
         $this->encodedPayload = $encodedPayload;
@@ -57,12 +57,12 @@ final class JWS implements JWTInterface
     }
 
     /**
-     * @param mixed|null $payload
-     * @param bool       $isPayloadDetached
+     * @param string|null $payload
+     * @param bool        $isPayloadDetached
      *
      * @return JWS
      */
-    public static function create($payload = null, bool $isPayloadDetached = false): JWS
+    public static function create(?string $payload = null, bool $isPayloadDetached = false): JWS
     {
         return new self($payload, null, $isPayloadDetached);
     }
@@ -70,61 +70,22 @@ final class JWS implements JWTInterface
     /**
      * {@inheritdoc}
      */
-    public function getPayload()
+    public function getPayload(): ?string
     {
         return $this->payload;
     }
 
     /**
-     * @param mixed $payload
+     * @param string $payload
      *
      * @return JWS
      */
-    public function withPayload($payload): JWS
+    public function withPayload(string $payload): JWS
     {
         $jwt = clone $this;
         $jwt->payload = $payload;
 
         return $jwt;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClaim(string $key)
-    {
-        if ($this->hasClaim($key)) {
-            return $this->payload[$key];
-        }
-        throw new \InvalidArgumentException(sprintf('The payload does not contain claim "%s".', $key));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClaims(): array
-    {
-        if (!$this->hasClaims()) {
-            throw new \InvalidArgumentException('The payload does not contain claims.');
-        }
-
-        return $this->payload;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasClaim(string $key): bool
-    {
-        return $this->hasClaims() && array_key_exists($key, $this->payload);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasClaims(): bool
-    {
-        return is_array($this->payload);
     }
 
     /**

@@ -63,7 +63,7 @@ final class JWE implements JWTInterface
     private $encodedSharedProtectedHeaders = null;
 
     /**
-     * @var mixed|null
+     * @var string|null
      */
     private $payload = null;
 
@@ -111,61 +111,22 @@ final class JWE implements JWTInterface
     /**
      * {@inheritdoc}
      */
-    public function getPayload()
+    public function getPayload(): ?string
     {
         return $this->payload;
     }
 
     /**
-     * @param $payload
+     * @param string $payload
      *
      * @return JWE
      */
-    public function withPayload($payload): JWE
+    public function withPayload(string $payload): JWE
     {
         $clone = clone $this;
         $clone->payload = $payload;
 
         return $clone;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClaim(string $key)
-    {
-        if ($this->hasClaim($key)) {
-            return $this->payload[$key];
-        }
-        throw new \InvalidArgumentException(sprintf('The payload does not contain claim "%s".', $key));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClaims(): array
-    {
-        if (!$this->hasClaims()) {
-            throw new \InvalidArgumentException('The payload does not contain claims.');
-        }
-
-        return $this->payload;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasClaim(string $key): bool
-    {
-        return $this->hasClaims() && array_key_exists($key, $this->payload);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasClaims(): bool
-    {
-        return is_array($this->payload);
     }
 
     /**

@@ -36,15 +36,10 @@ final class JWSTest extends TestCase
             'sub' => 'My friend',
         ];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create($claims)
+        $jws = JWS::create(json_encode($claims))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 
-        $this->assertTrue($jws->hasClaims());
-        $this->assertTrue($jws->hasClaim('nbf'));
-        $this->assertTrue($jws->hasClaim('iss'));
-        $this->assertEquals('Me', $jws->getClaim('iss'));
-        $this->assertEquals($claims, $jws->getPayload());
-        $this->assertEquals($claims, $jws->getClaims());
+        $this->assertEquals(json_encode($claims), $jws->getPayload());
         $this->assertEquals(1, $jws->countSignatures());
         $this->assertTrue($jws->getSignature(0)->hasProtectedHeader('alg'));
         $this->assertEquals($headers, $jws->getSignature(0)->getProtectedHeaders());
@@ -66,7 +61,7 @@ final class JWSTest extends TestCase
             'aud' => 'You',
             'sub' => 'My friend',
         ];
-        JWS::create($claims)->toCompactJSON(0);
+        JWS::create(json_encode($claims))->toCompactJSON(0);
     }
 
     /**
@@ -83,7 +78,7 @@ final class JWSTest extends TestCase
             'aud' => 'You',
             'sub' => 'My friend',
         ];
-        JWS::create($claims)->toFlattenedJSON(0);
+        JWS::create(json_encode($claims))->toFlattenedJSON(0);
     }
 
     /**
@@ -100,36 +95,7 @@ final class JWSTest extends TestCase
             'aud' => 'You',
             'sub' => 'My friend',
         ];
-        JWS::create($claims)->toJSON();
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The payload does not contain claims.
-     */
-    public function testNoClaims()
-    {
-        $payload = 'Hello World!';
-        $jws = JWS::create($payload)
-            ->withPayload($payload);
-        $jws->getClaims();
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The payload does not contain claim "foo".
-     */
-    public function testClaimDoesNotExist()
-    {
-        $claims = [
-            'nbf' => time(),
-            'iat' => time(),
-            'exp' => time() + 3600,
-            'iss' => 'Me',
-            'aud' => 'You',
-            'sub' => 'My friend',
-        ];
-        JWS::create($claims)->getClaim('foo');
+        JWS::create(json_encode($claims))->toJSON();
     }
 
     /**
@@ -147,7 +113,7 @@ final class JWSTest extends TestCase
             'sub' => 'My friend',
         ];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create($claims)
+        $jws = JWS::create(json_encode($claims))
             ->addSignature('', Base64Url::encode(json_encode($headers)), ['foo' => 'bar']);
 
         $jws->toCompactJSON(0);
@@ -168,7 +134,7 @@ final class JWSTest extends TestCase
             'sub' => 'My friend',
         ];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create($claims)
+        $jws = JWS::create(json_encode($claims))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
         $jws->getSignature(0)->getHeader('foo');
     }
@@ -188,7 +154,7 @@ final class JWSTest extends TestCase
             'sub' => 'My friend',
         ];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create($claims)
+        $jws = JWS::create(json_encode($claims))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
         $jws->getSignature(0)->getProtectedHeader('foo');
     }

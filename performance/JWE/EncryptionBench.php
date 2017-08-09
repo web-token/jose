@@ -94,7 +94,7 @@ abstract class EncryptionBench
             $this->getContentEncryptionAlgorithmsManager(),
             $this->getCompressionMethodsManager()
         );
-        $jwe = $jweBuilder
+        $jweBuilder
             ->withPayload($params['payload'])
             ->withAAD($this->getAAD())
             ->withSharedProtectedHeaders($params['shared_protected_headers'])

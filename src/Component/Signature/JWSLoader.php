@@ -96,10 +96,6 @@ final class JWSLoader
             if (false !== $isPayloadEncoded) {
                 $payload = Base64Url::decode($payload);
             }
-            $json = json_decode($payload, true);
-            if (null !== $json && !empty($payload)) {
-                $payload = $json;
-            }
             $jws = $jws->withPayload($payload);
         } else {
             $jws = $jws->withDetachedPayload();

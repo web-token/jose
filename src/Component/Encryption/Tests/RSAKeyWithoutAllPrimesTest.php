@@ -55,7 +55,7 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     {
         $key = $this->getPrivateKey();
 
-        $claims = ['foo' => 'bar'];
+        $claims = json_encode(['foo' => 'bar']);
 
         $algorithmManager = JWAManager::create([$signature_algorithm]);
         $builder = new JWSBuilder($algorithmManager);

@@ -21,11 +21,11 @@ use Jose\Component\Core\JWTInterface;
 interface ClaimCheckerInterface
 {
     /**
-     * @param JWTInterface $jwt
+     * @param array $claims
      *
      * @throws \InvalidArgumentException
      *
      * @return string[]
      */
-    public function checkClaim(JWTInterface $jwt): array;
+    public function checkClaim(array $claims): array;
 }

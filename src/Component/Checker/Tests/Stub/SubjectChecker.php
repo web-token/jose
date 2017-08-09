@@ -22,26 +22,26 @@ final class SubjectChecker implements ClaimCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWTInterface $jwt): array
+    public function checkClaim(array $claims): array
     {
-        if (!$jwt->hasClaim('sub')) {
+        if (!array_key_exists('sub', $claims)) {
             return [];
         }
 
-        $subject = $jwt->getClaim('sub');
-        Assertion::string($subject, 'Invalid claim "sub". The value must be a string.');
-        Assertion::true($this->isSubjectAllowed($subject), sprintf('The subject "%s" is not allowed.', $subject));
+        $sub = $claims['sub'];
+        Assertion::string($sub, 'Invalid claim "sub". The value must be a string.');
+        Assertion::true($this->isSubjectAllowed($sub), sprintf('The subject "%s" is not allowed.', $sub));
 
         return ['sub'];
     }
 
     /**
-     * @param string $subject
+     * @param string $sub
      *
      * @return bool
      */
-    private function isSubjectAllowed(string $subject): bool
+    private function isSubjectAllowed(string $sub): bool
     {
-        return in_array($subject, ['SUB1', 'SUB2']);
+        return in_array($sub, ['SUB1', 'SUB2']);
     }
 }

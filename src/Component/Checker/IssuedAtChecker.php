@@ -21,13 +21,13 @@ final class IssuedAtChecker implements ClaimCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWTInterface $jwt): array
+    public function checkClaim(array $claims): array
     {
-        if (!$jwt->hasClaim('iat')) {
+        if (!array_key_exists('iat', $claims)) {
             return [];
         }
 
-        $iat = $jwt->getClaim('iat');
+        $iat = $claims['iat'];
         Assertion::integer($iat, 'The claim "iat" must be an integer.');
         Assertion::lessOrEqualThan($iat, time(), 'The JWT is issued in the future.');
 

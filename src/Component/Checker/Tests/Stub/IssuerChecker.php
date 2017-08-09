@@ -22,26 +22,26 @@ final class IssuerChecker implements ClaimCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWTInterface $jwt): array
+    public function checkClaim(array $claims): array
     {
-        if (!$jwt->hasClaim('iss')) {
+        if (!array_key_exists('iss', $claims)) {
             return [];
         }
 
-        $issuer = $jwt->getClaim('iss');
-        Assertion::string($issuer, 'Invalid claim "iss". The value must be a string.');
-        Assertion::true($this->isIssuerAllowed($issuer), sprintf('The issuer "%s" is not allowed.', $issuer));
+        $iss = $claims['iss'];
+        Assertion::string($iss, 'Invalid claim "iss". The value must be a string.');
+        Assertion::true($this->isIssuerAllowed($iss), sprintf('The issuer "%s" is not allowed.', $iss));
 
         return ['iss'];
     }
 
     /**
-     * @param string $issuer
+     * @param string $iss
      *
      * @return bool
      */
-    private function isIssuerAllowed(string $issuer): bool
+    private function isIssuerAllowed(string $iss): bool
     {
-        return in_array($issuer, ['ISS1', 'ISS2']);
+        return in_array($iss, ['ISS1', 'ISS2']);
     }
 }

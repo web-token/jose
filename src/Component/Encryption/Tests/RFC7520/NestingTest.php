@@ -71,7 +71,7 @@ final class NestingTest extends TestCase
 
         $this->assertEquals(0, $index);
         $this->assertEquals($signature_header, $loaded_compact_json->getSignature($index)->getProtectedHeaders());
-        $this->assertEquals($payload, $loaded_compact_json->getPayload());
+        $this->assertEquals($payload, json_decode($loaded_compact_json->getPayload(), true));
     }
 
     public function testDecryption()

@@ -70,11 +70,15 @@ final class CheckerManager
     private function checkClaims(JWTInterface $jwt): array
     {
         $checked_claims = [];
+        $claims = json_decode($jwt->getPayload(), true);
+        if (!is_array($claims)) {
+            throw new \InvalidArgumentException('The payload is does not contain claims.');
+        }
 
         foreach ($this->claimCheckers as $claimChecker) {
             $checked_claims = array_merge(
                 $checked_claims,
-                $claimChecker->checkClaim($jwt)
+                $claimChecker->checkClaim($claims)
             );
         }
 

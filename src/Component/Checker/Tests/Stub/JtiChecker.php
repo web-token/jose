@@ -22,13 +22,13 @@ final class JtiChecker implements ClaimCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWTInterface $jwt): array
+    public function checkClaim(array $claims): array
     {
-        if (!$jwt->hasClaim('jti')) {
+        if (!array_key_exists('jti', $claims)) {
             return [];
         }
 
-        $jti = $jwt->getClaim('jti');
+        $jti = $claims['jti'];
         Assertion::string($jti, 'Invalid claim "jti". The value must be a string.');
         Assertion::true($this->isJtiValid($jti), sprintf('Invalid token ID "%s".', $jti));
 

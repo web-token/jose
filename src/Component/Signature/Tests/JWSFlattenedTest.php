@@ -33,6 +33,6 @@ final class JWSFlattenedTest extends TestCase
 
         $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals('ES256', $loaded->getSignature(0)->getProtectedHeader('alg'));
-        $this->assertEquals(['iss' => 'joe', 'exp' => 1300819380, 'http://example.com/is_root' => true], $loaded->getPayload());
+        $this->assertEquals(['iss' => 'joe', 'exp' => 1300819380, 'http://example.com/is_root' => true], json_decode($loaded->getPayload(), true));
     }
 }

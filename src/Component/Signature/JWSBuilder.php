@@ -21,7 +21,7 @@ use Jose\Component\Core\KeyChecker;
 final class JWSBuilder
 {
     /**
-     * @var mixed
+     * @var string
      */
     private $payload;
 
@@ -59,12 +59,12 @@ final class JWSBuilder
     }
 
     /**
-     * @param mixed $payload
-     * @param bool  $isPayloadDetached
+     * @param string $payload
+     * @param bool   $isPayloadDetached
      *
      * @return JWSBuilder
      */
-    public function withPayload($payload, bool $isPayloadDetached = false): JWSBuilder
+    public function withPayload(string $payload, bool $isPayloadDetached = false): JWSBuilder
     {
         $clone = clone $this;
         $clone->payload = $payload;
@@ -101,6 +101,12 @@ final class JWSBuilder
      */
     public function build(): JWS
     {
+        if (null === $this->payload) {
+            throw new \RuntimeException('The payload is not set.');
+        }
+        if (0 === count($this->signatures)) {
+            throw new \RuntimeException('At least one signature must be set.');
+        }
         $jws = JWS::create($this->payload, $this->isPayloadDetached);
         foreach ($this->signatures as $signature) {
             /** @var SignatureAlgorithmInterface $signatureAlgorithm */

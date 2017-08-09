@@ -35,13 +35,13 @@ final class AudienceChecker implements ClaimCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(JWTInterface $jwt): array
+    public function checkClaim(array $claims): array
     {
-        if (!$jwt->hasClaim('aud')) {
+        if (!array_key_exists('aud', $claims)) {
             return [];
         }
 
-        $audience = $jwt->getClaim('aud');
+        $audience = $claims['aud'];
         if (is_string($audience) && $audience !== $this->getAudience()) {
             throw new \InvalidArgumentException('Bad audience.');
         } elseif (!is_array($audience) || !in_array($this->getAudience(), $audience)) {

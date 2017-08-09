@@ -21,35 +21,7 @@ interface JWTInterface
     /**
      * Returns the payload of the JWT.
      *
-     * @return mixed|null
+     * @return string|null
      */
-    public function getPayload();
-
-    /**
-     * Returns the value of the claim at index $key.
-     *
-     * @param string $key The key
-     *
-     * @return mixed|null Payload value
-     */
-    public function getClaim(string $key);
-
-    /**
-     * Returns the claims.
-     *
-     * @return array Payload value
-     */
-    public function getClaims(): array;
-
-    /**
-     * @param string $key The key
-     *
-     * @return bool
-     */
-    public function hasClaim(string $key): bool;
-
-    /**
-     * @return bool
-     */
-    public function hasClaims(): bool;
+    public function getPayload(): ?string;
 }
