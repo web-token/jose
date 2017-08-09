@@ -271,6 +271,23 @@ final class JWKFactory
     }
 
     /**
+     * @param string      $file
+     * @param null|string $secret
+     * @param array       $additional_values
+     *
+     * @return JWK
+     */
+    public static function createFromPKCS12CertificateFile(string $file, ?string $secret, array $additional_values = []): JWK
+    {
+        $res = openssl_pkcs12_read(file_get_contents($file),$certs, $secret);
+        if (false === $res || !is_array($certs) || !array_key_exists('pkey', $certs)) {
+            throw new \RuntimeException('Unable to load the certificates.');
+        }
+
+        return JWKFactory::createFromKey($certs['pkey'], null, $additional_values);
+    }
+
+    /**
      * @param string $certificate
      * @param array  $additional_values
      *
