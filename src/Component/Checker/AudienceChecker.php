@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker;
 
-use Jose\Component\Core\JWTInterface;
-
 final class AudienceChecker implements ClaimCheckerInterface
 {
     /**
