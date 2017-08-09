@@ -15,7 +15,6 @@ namespace Jose\Component\Checker\Tests\Stub;
 
 use Assert\Assertion;
 use Jose\Component\Checker\ClaimCheckerInterface;
-use Jose\Component\Core\JWTInterface;
 
 final class JtiChecker implements ClaimCheckerInterface
 {

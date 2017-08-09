@@ -69,7 +69,7 @@ final class PBES2HS256A128KWBench extends EncryptionBench
     public function dataInputs(): array
     {
         return [
-            ['input' => '{"ciphertext":"zDsBLNwrRjNHCEfiQ9exd62CC3ZF4XIXpW2pcVfME_ckTbCfrdCkMdhRLD6WZ0Ai-s2PF0esh536u56pJEWJkF5WKnCPCb4AowGleEBlh8yiR2i9KCLzIPUpyf3AH-ffKwIwEgYO33oGOJ55KBR6eYuFePhzxErgTTC4JA9KNxbRvoL-9TSqhOhYwYuMs9DoNmNTHPbh7AZiZyF-ZrZSZ7fEp4rMK8Y","iv":"B8c5oGxoX8I-7yKk","tag":"sh-wabbT17__NQqafuIKtQ","aad":"QSxCLEMsRA","protected":"eyJwMnMiOiJ2bG95RkN0MmhVc1hpQllDQVJlWGhHcjNYM3BOLWpldFFzVEFHc0doLUVBTThzbGFZMDNIUVNHQXVkaXFRV09pQndJSFdyTDdMcEFPMS1PQ0ttMEJEdyIsInAyYyI6NDA5NiwiYWxnIjoiUEJFUzItSFMyNTYrQTEyOEtXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"NYmhb9gVwG1AxG68L_jU4CuiuV7Z0UEg8vTpd0HVtkxCrF-oVzPmoQ"}',],
+            ['input' => '{"ciphertext":"zDsBLNwrRjNHCEfiQ9exd62CC3ZF4XIXpW2pcVfME_ckTbCfrdCkMdhRLD6WZ0Ai-s2PF0esh536u56pJEWJkF5WKnCPCb4AowGleEBlh8yiR2i9KCLzIPUpyf3AH-ffKwIwEgYO33oGOJ55KBR6eYuFePhzxErgTTC4JA9KNxbRvoL-9TSqhOhYwYuMs9DoNmNTHPbh7AZiZyF-ZrZSZ7fEp4rMK8Y","iv":"B8c5oGxoX8I-7yKk","tag":"sh-wabbT17__NQqafuIKtQ","aad":"QSxCLEMsRA","protected":"eyJwMnMiOiJ2bG95RkN0MmhVc1hpQllDQVJlWGhHcjNYM3BOLWpldFFzVEFHc0doLUVBTThzbGFZMDNIUVNHQXVkaXFRV09pQndJSFdyTDdMcEFPMS1PQ0ttMEJEdyIsInAyYyI6NDA5NiwiYWxnIjoiUEJFUzItSFMyNTYrQTEyOEtXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"NYmhb9gVwG1AxG68L_jU4CuiuV7Z0UEg8vTpd0HVtkxCrF-oVzPmoQ"}'],
         ];
     }
 
