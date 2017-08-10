@@ -42,10 +42,10 @@ final class ECDHES implements KeyAgreementInterface
                 case 'P-256':
                 case 'P-384':
                 case 'P-521':
-                    $private_key = JWKFactory::createECKey(['crv' => $public_key->get('crv')]);
+                    $private_key = JWKFactory::createECKey($public_key->get('crv'));
                     break;
                 case 'X25519':
-                    $private_key = JWKFactory::createOKPKey(['crv' => 'X25519']);
+                    $private_key = JWKFactory::createOKPKey('X25519');
                     break;
                 default:
                     throw new \InvalidArgumentException(sprintf('The curve "%s" is not supported', $public_key->get('crv')));

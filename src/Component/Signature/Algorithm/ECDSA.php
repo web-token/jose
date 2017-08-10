@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Algorithm;
 
-use Assert\Assertion;
 use FG\ASN1\Object;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\Sequence;
@@ -42,18 +41,25 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     public function sign(JWK $key, string $input): string
     {
         $this->checkKey($key);
-        Assertion::true($key->has('d'), 'The EC key is not private');
+        if (!$key->has('d')) {
+            throw new \InvalidArgumentException('The EC key is not private');
+        }
 
         $result = openssl_sign($input, $signature, $key->toPEM(), $this->getHashAlgorithm());
-
-        Assertion::true($result, 'Signature failed');
+        if (false === $result) {
+            throw new \RuntimeException('Signature failed.');
+        }
 
         $asn = Object::fromBinary($signature);
-        Assertion::isInstanceOf($asn, Sequence::class, 'Invalid signature');
+        if (!$asn instanceof  Sequence) {
+            throw new \RuntimeException('Invalid signature');
+        }
 
         $res = '';
         foreach ($asn->getChildren() as $child) {
-            Assertion::isInstanceOf($child, Integer::class, 'Invalid signature');
+            if (!$child instanceof Integer) {
+                throw new \RuntimeException('Invalid signature');
+            }
             $res .= str_pad($this->convertDecToHex($child->getContent()), $this->getSignaturePartLength(), '0', STR_PAD_LEFT);
         }
 
@@ -141,9 +147,13 @@ abstract class ECDSA implements SignatureAlgorithmInterface
      */
     private function checkKey(JWK $key)
     {
-        Assertion::eq($key->get('kty'), 'EC', 'Wrong key type.');
-        Assertion::true($key->has('x'), 'The key parameter "x" is missing.');
-        Assertion::true($key->has('y'), 'The key parameter "y" is missing.');
-        Assertion::true($key->has('crv'), 'The key parameter "crv" is missing.');
+        if ('EC' !== $key->get('kty')) {
+            throw new \InvalidArgumentException('Wrong key type.');
+        }
+        foreach (['x', 'y', 'crv'] as $k) {
+            if (!$key->has($k)) {
+                throw new \InvalidArgumentException(sprintf('The key parameter "%s" is missing.', $k));
+            }
+        }
     }
 }

@@ -28,15 +28,15 @@ final class OKPKeysTest extends TestCase
      */
     public function testCreateOKPKeyWithInvalidKeySize()
     {
-        JWKFactory::createOKPKey(['crv' => 'Ed455']);
+        JWKFactory::createOKPKey('Ed455');
     }
 
     public function testCreateOKPKeyWithCurveX25519()
     {
         $jwk = JWKFactory::createOKPKey(
+            'X25519',
             [
                 'kid' => 'KEY',
-                'crv' => 'X25519',
                 'alg' => 'ECDH-ES',
                 'use' => 'enc',
             ]
@@ -53,9 +53,9 @@ final class OKPKeysTest extends TestCase
     public function testCreateOKPKeyWithCurveEd25519()
     {
         $jwk = JWKFactory::createOKPKey(
+            'Ed25519',
             [
                 'kid' => 'KEY',
-                'crv' => 'Ed25519',
                 'alg' => 'EdDSA',
                 'use' => 'sig',
             ]

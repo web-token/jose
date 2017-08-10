@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\KeyManagement\KeyConverter;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 use FG\ASN1\Exception\ParserException;
 use FG\ASN1\Universal\BitString;
@@ -247,10 +246,14 @@ final class RSAKey
         if (false === $res) {
             $res = openssl_pkey_get_public($data);
         }
-        Assertion::false(false === $res, 'Unable to load the key');
+        if (false === $res) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
 
         $details = openssl_pkey_get_details($res);
-        Assertion::keyExists($details, 'rsa', 'Unable to load the key');
+        if (!array_key_exists('rsa', $details)) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
 
         $this->values['kty'] = 'RSA';
         $keys = [
@@ -276,8 +279,12 @@ final class RSAKey
      */
     private function loadJWK(array $jwk)
     {
-        Assertion::keyExists($jwk, 'kty', 'The key parameter "kty" is missing.');
-        Assertion::eq($jwk['kty'], 'RSA', 'The JWK is not a RSA key');
+        if (!array_key_exists('kty', $jwk)) {
+            throw new \InvalidArgumentException('The key parameter "kty" is missing.');
+        }
+        if ('RSA' !== $jwk['kty']) {
+            throw new \InvalidArgumentException('The JWK is not a RSA key.');
+        }
 
         $this->values = $jwk;
         if (array_key_exists('d', $jwk)) {

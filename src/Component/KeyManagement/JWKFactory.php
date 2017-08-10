@@ -13,32 +13,29 @@ declare(strict_types=1);
 
 namespace Jose\Component\KeyManagement;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\KeyConverter\ECKey;
 use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
-use Mdanter\Ecc\Curves\CurveFactory;
-use Mdanter\Ecc\Curves\NistCurve;
-use Mdanter\Ecc\EccFactory;
 
 final class JWKFactory
 {
     /**
-     * @param array $values Values to configure the key. Must contain at least the index 'size' with the key size in bits
+     * @param int   $size   The key size in bits
+     * @param array $values Values to configure the key.
      *
      * @return JWK
      */
-    public static function createRSAKey(array $values): JWK
+    public static function createRSAKey(int $size, array $values = []): JWK
     {
-        Assertion::keyExists($values, 'size', 'The key size is not set.');
-        $size = $values['size'];
-        unset($values['size']);
-
-        Assertion::true(0 === $size % 8, 'Invalid key size.');
-        Assertion::greaterOrEqualThan($size, 384, 'Key length is too short. It needs to be at least 384 bits.');
+        if (0 !== $size % 8) {
+            throw new \InvalidArgumentException('Invalid key size.');
+        }
+        if (384 > $size) {
+            throw new \InvalidArgumentException('Key length is too short. It needs to be at least 384 bits.');
+        }
 
         $key = openssl_pkey_new([
             'private_key_bits' => $size,
@@ -55,61 +52,43 @@ final class JWKFactory
     }
 
     /**
-     * @param array $values Values to configure the key. Must contain at least the index 'crv' with the curve
+     * @param string $curve  The curve
+     * @param array  $values Values to configure the key.
      *
      * @return JWK
      */
-    public static function createECKey(array $values): JWK
+    public static function createECKey(string $curve, array $values = []): JWK
     {
-        Assertion::keyExists($values, 'crv', 'The curve is not set.');
-        $curve = $values['crv'];
-        if (function_exists('openssl_get_curve_names')) {
-            $args = [
-                'curve_name' => self::getOpensslName($curve),
-                'private_key_type' => OPENSSL_KEYTYPE_EC,
-            ];
-            $key = openssl_pkey_new($args);
-            $res = openssl_pkey_export($key, $out);
-            Assertion::true($res, 'Unable to create the key');
-
-            $rsa = ECKey::createFromPEM($out);
-            $values = array_merge(
-                $values,
-                $rsa->toArray()
-            );
-
-            return JWK::create($values);
-        } else {
-            $curve_name = self::getNistName($curve);
-            $generator = CurveFactory::getGeneratorByName($curve_name);
-            $private_key = $generator->createPrivateKey();
-
-            $values = array_merge(
-                $values,
-                [
-                    'kty' => 'EC',
-                    'crv' => $curve,
-                    'x' => self::encodeValue($private_key->getPublicKey()->getPoint()->getX()),
-                    'y' => self::encodeValue($private_key->getPublicKey()->getPoint()->getY()),
-                    'd' => self::encodeValue($private_key->getSecret()),
-                ]
-            );
+        $args = [
+            'curve_name' => self::getOpensslName($curve),
+            'private_key_type' => OPENSSL_KEYTYPE_EC,
+        ];
+        $key = openssl_pkey_new($args);
+        $res = openssl_pkey_export($key, $out);
+        if (false === $res) {
+            throw new \InvalidArgumentException('Unable to create the key');
         }
+
+        $rsa = ECKey::createFromPEM($out);
+        $values = array_merge(
+            $values,
+            $rsa->toArray()
+        );
 
         return JWK::create($values);
     }
 
     /**
-     * @param array $values Values to configure the key. Must contain at least the index 'size' with the key size in bits
+     * @param int   $size   The key size in bits
+     * @param array $values Values to configure the key.
      *
      * @return JWK
      */
-    public static function createOctKey(array $values): JWK
+    public static function createOctKey(int $size, array $values = []): JWK
     {
-        Assertion::keyExists($values, 'size', 'The key size is not set.');
-        $size = $values['size'];
-        unset($values['size']);
-        Assertion::true(0 === $size % 8, 'Invalid key size.');
+        if (0 !== $size % 8) {
+            throw new \InvalidArgumentException('Invalid key size.');
+        }
         $values = array_merge(
             $values,
             [
@@ -122,14 +101,13 @@ final class JWKFactory
     }
 
     /**
-     * @param array $values Values to configure the key. Must contain at least the index 'crv' with the curve
+     * @param string $curve  The curve
+     * @param array  $values Values to configure the key.
      *
      * @return JWK
      */
-    public static function createOKPKey(array $values): JWK
+    public static function createOKPKey(string $curve, array $values = []): JWK
     {
-        Assertion::keyExists($values, 'crv', 'The curve is not set.');
-        $curve = $values['crv'];
         switch ($curve) {
             case 'X25519':
                 $d = sodium_randombytes_buf(\Sodium\CRYPTO_BOX_SEEDBYTES);
@@ -177,30 +155,6 @@ final class JWKFactory
     }
 
     /**
-     * @param \GMP $value
-     *
-     * @return string
-     */
-    private static function encodeValue(\GMP $value): string
-    {
-        $value = gmp_strval($value);
-
-        return Base64Url::encode(self::convertDecToBin($value));
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    private static function convertDecToBin(string $value): string
-    {
-        $adapter = EccFactory::getAdapter();
-
-        return hex2bin($adapter->decHex($value));
-    }
-
-    /**
      * @param string $curve
      *
      * @throws \InvalidArgumentException
@@ -216,27 +170,6 @@ final class JWKFactory
                 return 'secp384r1';
             case 'P-521':
                 return 'secp521r1';
-            default:
-                throw new \InvalidArgumentException(sprintf('The curve "%s" is not supported.', $curve));
-        }
-    }
-
-    /**
-     * @param string $curve
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
-     */
-    private static function getNistName(string $curve): string
-    {
-        switch ($curve) {
-            case 'P-256':
-                return NistCurve::NAME_P256;
-            case 'P-384':
-                return NistCurve::NAME_P384;
-            case 'P-521':
-                return NistCurve::NAME_P521;
             default:
                 throw new \InvalidArgumentException(sprintf('The curve "%s" is not supported.', $curve));
         }
@@ -277,14 +210,14 @@ final class JWKFactory
      *
      * @return JWK
      */
-    public static function createFromPKCS12CertificateFile(string $file, ?string $secret, array $additional_values = []): JWK
+    public static function createFromPKCS12CertificateFile(string $file, ?string $secret = null, array $additional_values = []): JWK
     {
         $res = openssl_pkcs12_read(file_get_contents($file),$certs, $secret);
         if (false === $res || !is_array($certs) || !array_key_exists('pkey', $certs)) {
             throw new \RuntimeException('Unable to load the certificates.');
         }
 
-        return JWKFactory::createFromKey($certs['pkey'], null, $additional_values);
+        return self::createFromKey($certs['pkey'], null, $additional_values);
     }
 
     /**
@@ -367,8 +300,6 @@ final class JWKFactory
      */
     public static function createFromKeySet(JWKSet $jwk_set, int $key_index): JWK
     {
-        Assertion::integer($key_index);
-
         return $jwk_set->getKey($key_index);
     }
 }

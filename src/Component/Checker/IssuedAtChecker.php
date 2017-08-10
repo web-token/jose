@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker;
 
-use Assert\Assertion;
-
 final class IssuedAtChecker implements ClaimCheckerInterface
 {
     /**
@@ -27,8 +25,12 @@ final class IssuedAtChecker implements ClaimCheckerInterface
         }
 
         $iat = $claims['iat'];
-        Assertion::integer($iat, 'The claim "iat" must be an integer.');
-        Assertion::lessOrEqualThan($iat, time(), 'The JWT is issued in the future.');
+        if (!is_int($iat)) {
+            throw new \InvalidArgumentException('The claim "iat" must be an integer.');
+        }
+        if (time() < $iat) {
+            throw new \InvalidArgumentException('The JWT is issued in the future.');
+        }
 
         return ['iat'];
     }

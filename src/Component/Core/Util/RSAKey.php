@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Core\Util;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 use FG\ASN1\Universal\BitString;
 use FG\ASN1\Universal\Integer;
@@ -123,8 +122,12 @@ final class RSAKey
      */
     private function loadJWK(array $jwk)
     {
-        Assertion::keyExists($jwk, 'kty', 'The key parameter "kty" is missing.');
-        Assertion::eq($jwk['kty'], 'RSA', 'The JWK is not a RSA key');
+        if (!array_key_exists('kty', $jwk)) {
+            throw new \InvalidArgumentException('The key parameter "kty" is missing.');
+        }
+        if ('RSA' !== $jwk['kty']) {
+            throw new \InvalidArgumentException('The JWK is not a RSA key.');
+        }
 
         $this->values = $jwk;
         if (array_key_exists('d', $jwk)) {

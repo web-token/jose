@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker\Tests\Stub;
 
-use Assert\Assertion;
 use Jose\Component\Checker\ClaimCheckerInterface;
 
 final class JtiChecker implements ClaimCheckerInterface
@@ -28,8 +27,12 @@ final class JtiChecker implements ClaimCheckerInterface
         }
 
         $jti = $claims['jti'];
-        Assertion::string($jti, 'Invalid claim "jti". The value must be a string.');
-        Assertion::true($this->isJtiValid($jti), sprintf('Invalid token ID "%s".', $jti));
+        if (!is_string($jti)) {
+            throw new \InvalidArgumentException('The claim "jti" must be an string.');
+        }
+        if (!$this->isJtiValid($jti)) {
+            throw new \InvalidArgumentException(sprintf('Invalid token ID "%s".', $jti));
+        }
 
         return ['jti'];
     }

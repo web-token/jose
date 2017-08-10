@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\KeyManagement\KeyConverter;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 use FG\ASN1\Exception\ParserException;
 use FG\ASN1\ExplicitlyTaggedObject;
@@ -24,6 +23,7 @@ use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\OctetString;
 use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
+use function MongoDB\BSON\toJSON;
 
 final class ECKey
 {
@@ -94,7 +94,9 @@ final class ECKey
         $data = base64_decode(preg_replace('#-.*-|\r|\n#', '', $data));
         $asnObject = Object::fromBinary($data);
 
-        Assertion::isInstanceOf($asnObject, Sequence::class);
+        if (!$asnObject instanceof Sequence) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
         $children = $asnObject->getChildren();
         if (self::isPKCS8($children)) {
             $children = self::loadPKCS8($children);
@@ -109,7 +111,7 @@ final class ECKey
 
             return;
         }
-        throw new \Exception('Unable to load the key');
+        throw new \Exception('Unable to load the key.');
     }
 
     /**
@@ -121,7 +123,9 @@ final class ECKey
     {
         $binary = hex2bin($children[2]->getContent());
         $asnObject = Object::fromBinary($binary);
-        Assertion::isInstanceOf($asnObject, Sequence::class);
+        if (!$asnObject instanceof Sequence) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
 
         return $asnObject->getChildren();
     }
@@ -152,11 +156,14 @@ final class ECKey
      */
     private function loadJWK(array $jwk)
     {
-        Assertion::true(array_key_exists('kty', $jwk), 'JWK is not an Elliptic Curve key');
-        Assertion::eq($jwk['kty'], 'EC', 'JWK is not an Elliptic Curve key');
-        Assertion::true(array_key_exists('crv', $jwk), 'Curve parameter is missing');
-        Assertion::true(array_key_exists('x', $jwk), 'Point parameters are missing');
-        Assertion::true(array_key_exists('y', $jwk), 'Point parameters are missing');
+        foreach (['kty', 'x', 'y', 'crv'] as $k) {
+            if (!array_key_exists($k, $jwk)) {
+                throw new \InvalidArgumentException(sprintf('The key parameter "%s" is missing.', $k));
+            }
+        }
+        if ('EC' !== $jwk['kty']) {
+            throw new \InvalidArgumentException('JWK is not an Elliptic Curve key');
+        }
 
         $this->values = $jwk;
         if (array_key_exists('d', $jwk)) {
@@ -201,19 +208,29 @@ final class ECKey
      */
     private function loadPublicPEM(array $children)
     {
-        Assertion::isInstanceOf($children[0], Sequence::class, 'Unsupported key type');
+        if (!$children[0] instanceof Sequence) {
+            throw new \InvalidArgumentException('Unsupported key type.');
+        }
 
         $sub = $children[0]->getChildren();
-        Assertion::isInstanceOf($sub[0], ObjectIdentifier::class, 'Unsupported key type');
-        Assertion::eq('1.2.840.10045.2.1', $sub[0]->getContent(), 'Unsupported key type');
-
-        Assertion::isInstanceOf($sub[1], ObjectIdentifier::class, 'Unsupported key type');
-        Assertion::isInstanceOf($children[1], BitString::class, 'Unable to load the key');
+        if (!$sub[0] instanceof ObjectIdentifier) {
+            throw new \InvalidArgumentException('Unsupported key type.');
+        }
+        if ('1.2.840.10045.2.1' !== $sub[0]->getContent()) {
+            throw new \InvalidArgumentException('Unsupported key type.');
+        }
+        if (!$sub[1] instanceof ObjectIdentifier) {
+            throw new \InvalidArgumentException('Unsupported key type.');
+        }
+        if (!$children[1] instanceof BitString) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
 
         $bits = $children[1]->getContent();
         $bits_length = mb_strlen($bits, '8bit');
-
-        Assertion::eq('04', mb_substr($bits, 0, 2, '8bit'), 'Unsupported key type');
+        if ('04' !== mb_substr($bits, 0, 2, '8bit')) {
+            throw new \InvalidArgumentException('Unsupported key type');
+        }
 
         $this->values['kty'] = 'EC';
         $this->values['crv'] = $this->getCurve($sub[1]->getContent());
@@ -226,8 +243,9 @@ final class ECKey
      */
     private function verifyVersion(Object $children)
     {
-        Assertion::isInstanceOf($children, Integer::class, 'Unable to load the key');
-        Assertion::eq(1, $children->getContent(), 'Unable to load the key');
+        if (!$children instanceof Integer || '1' !== $children->getContent()) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
     }
 
     /**
@@ -237,14 +255,19 @@ final class ECKey
      */
     private function getXAndY(Object $children, ?string &$x, ?string &$y)
     {
-        Assertion::isInstanceOf($children, ExplicitlyTaggedObject::class, 'Unable to load the key');
-        Assertion::isArray($children->getContent(), 'Unable to load the key');
-        Assertion::isInstanceOf($children->getContent()[0], BitString::class, 'Unable to load the key');
+        if (!$children instanceof ExplicitlyTaggedObject || !is_array($children->getContent())) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
+        if (!$children->getContent()[0] instanceof BitString) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
 
         $bits = $children->getContent()[0]->getContent();
         $bits_length = mb_strlen($bits, '8bit');
 
-        Assertion::eq('04', mb_substr($bits, 0, 2, '8bit'), 'Unsupported key type');
+        if ('04' !== mb_substr($bits, 0, 2, '8bit')) {
+            throw new \InvalidArgumentException('Unsupported key type');
+        }
 
         $x = mb_substr($bits, 2, ($bits_length - 2) / 2, '8bit');
         $y = mb_substr($bits, ($bits_length - 2) / 2 + 2, ($bits_length - 2) / 2, '8bit');
@@ -257,7 +280,9 @@ final class ECKey
      */
     private function getD(Object $children): string
     {
-        Assertion::isInstanceOf($children, '\FG\ASN1\Universal\OctetString', 'Unable to load the key');
+        if (!$children instanceof OctetString) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
 
         return $children->getContent();
     }
@@ -273,9 +298,12 @@ final class ECKey
         $d = $this->getD($children[1]);
         $this->getXAndY($children[3], $x, $y);
 
-        Assertion::isInstanceOf($children[2], ExplicitlyTaggedObject::class, 'Unable to load the key');
-        Assertion::isArray($children[2]->getContent(), 'Unable to load the key');
-        Assertion::isInstanceOf($children[2]->getContent()[0], ObjectIdentifier::class, 'Unable to load the key');
+        if (!$children[2] instanceof ExplicitlyTaggedObject || !is_array($children[2]->getContent())) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
+        if (!$children[2]->getContent()[0] instanceof ObjectIdentifier) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
 
         $curve = $children[2]->getContent()[0]->getContent();
 
@@ -331,8 +359,9 @@ final class ECKey
     {
         $curves = $this->getSupportedCurves();
         $oid = array_key_exists($curve, $curves) ? $curves[$curve] : null;
-
-        Assertion::notNull($oid, 'Unsupported curve');
+        if (!is_string($oid)) {
+            throw new \InvalidArgumentException('Unsupported curve.');
+        }
 
         return $oid;
     }
@@ -346,7 +375,9 @@ final class ECKey
     {
         $curves = $this->getSupportedCurves();
         $curve = array_search($oid, $curves, true);
-        Assertion::string($curve, 'Unsupported OID');
+        if (!is_string($curve)) {
+            throw new \InvalidArgumentException('Unsupported OID.');
+        }
 
         return $curve;
     }

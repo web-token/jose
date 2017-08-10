@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker;
 
-use Assert\Assertion;
-
 final class ExpirationTimeChecker implements ClaimCheckerInterface
 {
     /**
@@ -27,8 +25,12 @@ final class ExpirationTimeChecker implements ClaimCheckerInterface
         }
 
         $exp = $claims['exp'];
-        Assertion::integer($exp, 'The claim "exp" must be an integer.');
-        Assertion::greaterThan($exp, time(), 'The JWT has expired.');
+        if (!is_int($exp)) {
+            throw new \InvalidArgumentException('The claim "exp" must be an integer.');
+        }
+        if (time() > $exp) {
+            throw new \InvalidArgumentException('The JWT has expired.');
+        }
 
         return ['exp'];
     }

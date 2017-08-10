@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker;
 
-use Assert\Assertion;
-
 final class NotBeforeChecker implements ClaimCheckerInterface
 {
     /**
@@ -27,8 +25,12 @@ final class NotBeforeChecker implements ClaimCheckerInterface
         }
 
         $nbf = $claims['nbf'];
-        Assertion::integer($nbf, 'The claim "nbf" must be an integer.');
-        Assertion::lessOrEqualThan($nbf, time(), 'The JWT can not be used yet.');
+        if (!is_int($nbf)) {
+            throw new \InvalidArgumentException('The claim "nbf" must be an integer.');
+        }
+        if (time() < $nbf) {
+            throw new \InvalidArgumentException('The JWT can not be used yet.');
+        }
 
         return ['nbf'];
     }

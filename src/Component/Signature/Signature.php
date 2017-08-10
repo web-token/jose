@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 
 final class Signature
@@ -49,7 +48,9 @@ final class Signature
     {
         if (null !== $encodedProtectedHeaders) {
             $protected_headers = json_decode(Base64Url::decode($encodedProtectedHeaders), true);
-            Assertion::isArray($protected_headers, 'Unable to decode the protected headers.');
+            if (!is_array($protected_headers)) {
+                throw new \InvalidArgumentException('Unable to decode the protected headers.');
+            }
             $this->protectedHeaders = $protected_headers;
         }
         $this->encodedProtectedHeaders = $encodedProtectedHeaders;

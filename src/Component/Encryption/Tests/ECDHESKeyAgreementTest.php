@@ -249,7 +249,7 @@ final class ECDHESKeyAgreementTest extends TestCase
      */
     public function testGetAgreementKeyWithX25519Curve()
     {
-        $receiver_private_key = JWKFactory::createOKPKey(['crv' => 'X25519']);
+        $receiver_private_key = JWKFactory::createOKPKey('X25519');
         $receiver_public_key = $receiver_private_key->toPublic();
 
         $header = [

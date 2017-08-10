@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Algorithm;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
@@ -29,7 +28,9 @@ final class EdDSA implements SignatureAlgorithmInterface
     public function sign(JWK $key, string $input): string
     {
         $this->checkKey($key);
-        Assertion::true($key->has('d'), 'The key is not private');
+        if (!$key->has('d')) {
+            throw new \InvalidArgumentException('The key is not private.');
+        }
         $secret = Base64Url::decode($key->get('d'));
         $keyPair = sodium_crypto_sign_seed_keypair($secret);
         $secretKey = sodium_crypto_sign_secretkey($keyPair);
@@ -64,10 +65,17 @@ final class EdDSA implements SignatureAlgorithmInterface
      */
     private function checkKey(JWK $key)
     {
-        Assertion::eq($key->get('kty'), 'OKP', 'Wrong key type.');
-        Assertion::true($key->has('x'), 'The key parameter "x" is missing.');
-        Assertion::true($key->has('crv'), 'The key parameter "crv" is missing.');
-        Assertion::inArray($key->get('crv'), ['Ed25519'], 'Unsupported curve');
+        if ('OKP' !== $key->get('kty')) {
+            throw new \InvalidArgumentException('Wrong key type.');
+        }
+        foreach (['x', 'crv'] as $k) {
+            if (!$key->has($k)) {
+                throw new \InvalidArgumentException(sprintf('The key parameter "%s" is missing.', $k));
+            }
+        }
+        if (!in_array($key->get('crv'), ['Ed25519'])) {
+            throw new \InvalidArgumentException('Unsupported curve.');
+        }
     }
 
     /**

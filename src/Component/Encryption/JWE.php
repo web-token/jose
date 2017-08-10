@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWTInterface;
 
@@ -164,7 +163,9 @@ final class JWE implements JWTInterface
      */
     public function getRecipient(int $id): Recipient
     {
-        Assertion::keyExists($this->recipients, $id, 'The recipient does not exist.');
+        if (!array_key_exists($id, $this->recipients)) {
+            throw new \InvalidArgumentException('The recipient does not exist.');
+        }
 
         return $this->recipients[$id];
     }
@@ -296,7 +297,9 @@ final class JWE implements JWTInterface
 
     private function checkHasNoAAD()
     {
-        Assertion::true(empty($this->getAAD()), 'This JWE has AAD and cannot be converted into Compact JSON.');
+        if (!empty($this->getAAD())) {
+            throw new \LogicException('This JWE has AAD and cannot be converted into Compact JSON.');
+        }
     }
 
     /**
@@ -304,18 +307,16 @@ final class JWE implements JWTInterface
      */
     private function checkRecipientHasNoHeaders(int $id)
     {
-        Assertion::true(
-            empty($this->getSharedHeaders()) && empty($this->getRecipient($id)->getHeaders()),
-            'This JWE has shared headers or recipient headers and cannot be converted into Compact JSON.'
-        );
+        if (!empty($this->getSharedHeaders()) || !empty($this->getRecipient($id)->getHeaders())) {
+            throw new \LogicException('This JWE has shared headers or recipient headers and cannot be converted into Compact JSON.');
+        }
     }
 
     private function checkHasSharedProtectedHeaders()
     {
-        Assertion::notEmpty(
-            $this->getSharedProtectedHeaders(),
-            'This JWE does not have shared protected headers and cannot be converted into Compact JSON.'
-        );
+        if (empty($this->getSharedProtectedHeaders())) {
+            throw new \LogicException('This JWE does not have shared protected headers and cannot be converted into Compact JSON.');
+        }
     }
 
     /**

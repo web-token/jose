@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Core\Util;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 use FG\ASN1\ExplicitlyTaggedObject;
 use FG\ASN1\Universal\BitString;
@@ -67,12 +66,21 @@ final class ECKey
      */
     private function loadJWK(array $jwk)
     {
-        Assertion::true(array_key_exists('kty', $jwk), 'JWK is not an Elliptic Curve key');
-        Assertion::eq($jwk['kty'], 'EC', 'JWK is not an Elliptic Curve key');
-        Assertion::true(array_key_exists('crv', $jwk), 'Curve parameter is missing');
-        Assertion::true(array_key_exists('x', $jwk), 'Point parameters are missing');
-        Assertion::true(array_key_exists('y', $jwk), 'Point parameters are missing');
+        $keys = [
+            'kty' => 'The key parameter "kty" is missing.',
+            'crv' => 'Curve parameter is missing',
+            'x' => 'Point parameters are missing.',
+            'y' => 'Point parameters are missing.',
+        ];
+        foreach ($keys as $k => $v) {
+            if (!array_key_exists($k, $jwk)) {
+                throw new \InvalidArgumentException($v);
+            }
+        }
 
+        if ('EC' !== $jwk['kty']) {
+            throw new \InvalidArgumentException('JWK is not an Elliptic Curve key.');
+        }
         $this->values = $jwk;
         if (array_key_exists('d', $jwk)) {
             $this->initPrivateKey();
@@ -131,7 +139,9 @@ final class ECKey
         $curves = $this->getSupportedCurves();
         $oid = array_key_exists($curve, $curves) ? $curves[$curve] : null;
 
-        Assertion::notNull($oid, 'Unsupported curve');
+        if (!is_string($oid)) {
+            throw new \InvalidArgumentException('Unsupported curve.');
+        }
 
         return $oid;
     }

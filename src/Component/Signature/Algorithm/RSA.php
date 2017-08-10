@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Algorithm;
 
-use Assert\Assertion;
 use Jose\Component\Core\JWK;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
@@ -66,7 +65,9 @@ abstract class RSA implements SignatureAlgorithmInterface
     public function sign(JWK $key, string $input): string
     {
         $this->checkKey($key);
-        Assertion::true($key->has('d'), 'The key is not a private key');
+        if (!$key->has('d')) {
+            throw new \InvalidArgumentException('The key is not a private key.');
+        }
 
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
             $priv = RSAKey::createFromJWK($key);
@@ -75,7 +76,9 @@ abstract class RSA implements SignatureAlgorithmInterface
         } else {
             $result = openssl_sign($input, $signature, $key->toPEM(), $this->getAlgorithm());
         }
-        Assertion::true($result, 'An error occurred during the creation of the signature');
+        if (false === $result) {
+            throw new \InvalidArgumentException('An error occurred during the creation of the signature.');
+        }
 
         return $signature;
     }
@@ -85,6 +88,13 @@ abstract class RSA implements SignatureAlgorithmInterface
      */
     private function checkKey(JWK $key)
     {
-        Assertion::eq($key->get('kty'), 'RSA', 'Wrong key type.');
+        if ('RSA' !== $key->get('kty')) {
+            throw new \InvalidArgumentException('Wrong key type.');
+        }
+        foreach (['n', 'e'] as $k) {
+            if (!$key->has($k)) {
+                throw new \InvalidArgumentException(sprintf('The key parameter "%s" is missing.', $k));
+            }
+        }
     }
 }

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker\Tests\Stub;
 
-use Assert\Assertion;
 use Jose\Component\Checker\ClaimCheckerInterface;
 
 final class IssuerChecker implements ClaimCheckerInterface
@@ -28,8 +27,12 @@ final class IssuerChecker implements ClaimCheckerInterface
         }
 
         $iss = $claims['iss'];
-        Assertion::string($iss, 'Invalid claim "iss". The value must be a string.');
-        Assertion::true($this->isIssuerAllowed($iss), sprintf('The issuer "%s" is not allowed.', $iss));
+        if (!is_string($iss)) {
+            throw new \InvalidArgumentException('The claim "iss" must be an string.');
+        }
+        if (!$this->isIssuerAllowed($iss)) {
+            throw new \InvalidArgumentException(sprintf('The issuer "%s" is not allowed.', $iss));
+        }
 
         return ['iss'];
     }

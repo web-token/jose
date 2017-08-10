@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Compression;
 
-use Assert\Assertion;
-
 /**
- * This class implements the compression algorithm DEF (defalte)
+ * This class implements the compression algorithm DEF (deflate)
  * This compression algorithm is part of the specification.
  */
 final class Deflate implements CompressionInterface
@@ -33,9 +31,9 @@ final class Deflate implements CompressionInterface
      */
     public function __construct(int $compression_level = -1)
     {
-        Assertion::integer($compression_level, 'The compression level can be given as 0 for no compression up to 9 for maximum compression. If -1 given, the default compression level will be the default compression level of the zlib library.');
-        Assertion::range($compression_level, -1, 9, 'The compression level can be given as 0 for no compression up to 9 for maximum compression. If -1 given, the default compression level will be the default compression level of the zlib library.');
-
+        if (-1 > $compression_level || 9 < $compression_level) {
+            throw new \InvalidArgumentException('The compression level can be given as 0 for no compression up to 9 for maximum compression. If -1 given, the default compression level will be the default compression level of the zlib library.');
+        }
         $this->compression_level = $compression_level;
     }
 
@@ -61,7 +59,9 @@ final class Deflate implements CompressionInterface
     public function compress(string $data): string
     {
         $data = gzdeflate($data, $this->getCompressionLevel());
-        Assertion::false(false === $data, 'Unable to compress data');
+        if (false === $data) {
+            throw new \InvalidArgumentException('Unable to compress data.');
+        }
 
         return $data;
     }
@@ -72,7 +72,9 @@ final class Deflate implements CompressionInterface
     public function uncompress(string $data): string
     {
         $data = gzinflate($data);
-        Assertion::false(false === $data, 'Unable to uncompress data');
+        if (false === $data) {
+            throw new \InvalidArgumentException('Unable to uncompress data.');
+        }
 
         return $data;
     }

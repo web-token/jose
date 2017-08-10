@@ -13,22 +13,24 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker;
 
-use Assert\Assertion;
-
 final class CriticalHeaderChecker implements HeaderCheckerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function checkHeader(array $protected_headers, array $headers, array $checked_claims)
+    public function checkHeader(array $protectedHeaders, array $headers, array $checkedClaims)
     {
-        if (!array_key_exists('crit', $protected_headers)) {
+        if (!array_key_exists('crit', $protectedHeaders)) {
             return;
         }
 
-        Assertion::isArray($protected_headers['crit'], 'The parameter "crit" must be a list.');
+        if (!is_array($protectedHeaders['crit'])) {
+            throw new \InvalidArgumentException('The parameter "crit" must be a list.');
+        }
 
-        $diff = array_diff($protected_headers['crit'], $checked_claims);
-        Assertion::true(empty($diff), sprintf('One or more claims are marked as critical, but they are missing or have not been checked (%s).', json_encode(array_values($diff))));
+        $diff = array_diff($protectedHeaders['crit'], $checkedClaims);
+        if (!empty($diff)) {
+            throw new \InvalidArgumentException(sprintf('One or more claims are marked as critical, but they are missing or have not been checked (%s).', json_encode(array_values($diff))));
+        }
     }
 }

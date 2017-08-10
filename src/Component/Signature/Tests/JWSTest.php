@@ -82,7 +82,7 @@ final class JWSTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \LogicException
      * @expectedExceptionMessage No signature.
      */
     public function testToJSONFailed()
@@ -99,7 +99,7 @@ final class JWSTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \LogicException
      * @expectedExceptionMessage The signature contains unprotected headers and cannot be converted into compact JSON
      */
     public function testSignatureContainsUnprotectedHeaders()

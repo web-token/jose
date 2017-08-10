@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker;
 
-use Assert\Assertion;
 use Jose\Component\Core\JWTInterface;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Signature\JWS;
@@ -39,11 +38,13 @@ final class CheckerManager
      */
     public function checkJWS(JWS $jws, int $signature)
     {
-        $checked_claims = $this->checkClaims($jws);
-        Assertion::lessThan($signature, $jws->countSignatures());
+        $checkedClaims = $this->checkClaims($jws);
+        if ($signature > $jws->countSignatures()) {
+            throw new \InvalidArgumentException('Unknown signature index.');
+        }
         $protectedHeaders = $jws->getSignature($signature)->getProtectedHeaders();
         $headers = $jws->getSignature($signature)->getHeaders();
-        $this->checkHeaders($protectedHeaders, $headers, $checked_claims);
+        $this->checkHeaders($protectedHeaders, $headers, $checkedClaims);
     }
 
     /**
@@ -52,14 +53,16 @@ final class CheckerManager
      */
     public function checkJWE(JWE $jwe, int $recipient)
     {
-        $checked_claims = $this->checkClaims($jwe);
-        Assertion::lessThan($recipient, $jwe->countRecipients());
+        $checkedClaims = $this->checkClaims($jwe);
+        if ($recipient > $jwe->countRecipients()) {
+            throw new \InvalidArgumentException('Unknown recipient index.');
+        }
         $protectedHeaders = $jwe->getSharedProtectedHeaders();
         $headers = array_merge(
             $jwe->getRecipient($recipient)->getHeaders(),
             $jwe->getSharedHeaders()
         );
-        $this->checkHeaders($protectedHeaders, $headers, $checked_claims);
+        $this->checkHeaders($protectedHeaders, $headers, $checkedClaims);
     }
 
     /**
@@ -69,31 +72,31 @@ final class CheckerManager
      */
     private function checkClaims(JWTInterface $jwt): array
     {
-        $checked_claims = [];
+        $checkedClaims = [];
         $claims = json_decode($jwt->getPayload(), true);
         if (!is_array($claims)) {
             throw new \InvalidArgumentException('The payload is does not contain claims.');
         }
 
         foreach ($this->claimCheckers as $claimChecker) {
-            $checked_claims = array_merge(
-                $checked_claims,
+            $checkedClaims = array_merge(
+                $checkedClaims,
                 $claimChecker->checkClaim($claims)
             );
         }
 
-        return $checked_claims;
+        return $checkedClaims;
     }
 
     /**
      * @param array $protectedHeaders
      * @param array $headers
-     * @param array $checked_claims
+     * @param array $checkedClaims
      */
-    private function checkHeaders(array $protectedHeaders, array $headers, array $checked_claims)
+    private function checkHeaders(array $protectedHeaders, array $headers, array $checkedClaims)
     {
         foreach ($this->headerCheckers as $headerChecker) {
-            $headerChecker->checkHeader($protectedHeaders, $headers, $checked_claims);
+            $headerChecker->checkHeader($protectedHeaders, $headers, $checkedClaims);
         }
     }
 

@@ -252,7 +252,7 @@ final class RSAKeysTest extends TestCase
 
     public function testCreateRSAKey()
     {
-        $jwk = JWKFactory::createRSAKey(['size' => 384]);
+        $jwk = JWKFactory::createRSAKey(384);
 
         $this->assertEquals('RSA', $jwk->get('kty'));
         $this->assertTrue($jwk->has('p'));

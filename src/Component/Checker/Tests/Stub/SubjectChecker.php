@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker\Tests\Stub;
 
-use Assert\Assertion;
 use Jose\Component\Checker\ClaimCheckerInterface;
 
 final class SubjectChecker implements ClaimCheckerInterface
@@ -28,8 +27,12 @@ final class SubjectChecker implements ClaimCheckerInterface
         }
 
         $sub = $claims['sub'];
-        Assertion::string($sub, 'Invalid claim "sub". The value must be a string.');
-        Assertion::true($this->isSubjectAllowed($sub), sprintf('The subject "%s" is not allowed.', $sub));
+        if (!is_string($sub)) {
+            throw new \InvalidArgumentException('The claim "sub" must be an string.');
+        }
+        if (!$this->isSubjectAllowed($sub)) {
+            throw new \InvalidArgumentException(sprintf('The subject "%s" is not allowed.', $sub));
+        }
 
         return ['sub'];
     }

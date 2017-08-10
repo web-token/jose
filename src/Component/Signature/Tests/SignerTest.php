@@ -361,7 +361,7 @@ final class SignerTest extends TestCase
     /**
      * @see https://tools.ietf.org/html/rfc7797#section-4
      * @see https://tools.ietf.org/html/rfc7797#section-4.2
-     * @expectedException \InvalidArgumentException
+     * @expectedException \LogicException
      * @expectedExceptionMessage Unable to convert the JWS with non-encoded payload.
      */
     public function testCompactJSONWithUnencodedPayload()
@@ -467,7 +467,7 @@ final class SignerTest extends TestCase
     /**
      * The library is able to support multiple payload encoding and conversion in JSON is not available if payload is not detached.
      *
-     * @expectedException \InvalidArgumentException
+     * @expectedException \LogicException
      * @expectedExceptionMessage  Foreign payload encoding detected. The JWS cannot be converted.
      */
     public function testCompactJSONWithUnencodedPayloadAndMultipleSignatures()

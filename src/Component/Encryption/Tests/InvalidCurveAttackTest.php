@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests;
 
 use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW;
 use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWELoader;
-use Jose\Component\KeyManagement\JWKFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,7 +42,7 @@ final class InvalidCurveAttackTest extends TestCase
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loaded_compact_json = JWELoader::load($maliciousJWE);
-        $privateKey = JWKFactory::createECKey([
+        $privateKey = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x' => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
@@ -66,7 +66,7 @@ final class InvalidCurveAttackTest extends TestCase
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loaded_compact_json = JWELoader::load($maliciousJWE);
-        $privateKey = JWKFactory::createECKey([
+        $privateKey = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x' => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',

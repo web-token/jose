@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 
 /**
@@ -88,7 +87,9 @@ final class JWSLoader
                 if (null === $isPayloadEncoded) {
                     $isPayloadEncoded = self::isPayloadEncoded($signature);
                 }
-                Assertion::eq($isPayloadEncoded, self::isPayloadEncoded($signature), 'Foreign payload encoding detected. The JWS cannot be loaded.');
+                if (self::isPayloadEncoded($signature) !== $isPayloadEncoded) {
+                    throw new \InvalidArgumentException('Foreign payload encoding detected. The JWS cannot be loaded.');
+                }
             }
             $payload = $data['payload'];
             $jws = $jws->withAttachedPayload();

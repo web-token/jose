@@ -83,12 +83,16 @@ final class KeyChecker
         switch ($usage) {
             case 'verification':
             case 'signature':
-                Assertion::eq('sig', $use, 'Key cannot be used to sign or verify a signature');
+                if ('sig' !== $use) {
+                    throw new \InvalidArgumentException('Key cannot be used to sign or verify a signature.');
+                }
 
                 return true;
             case 'encryption':
             case 'decryption':
-                Assertion::eq('enc', $use, 'Key cannot be used to encrypt or decrypt');
+                if ('enc' !== $use) {
+                    throw new \InvalidArgumentException('Key cannot be used to encrypt or decrypt.');
+                }
 
                 return true;
             default:
@@ -106,6 +110,8 @@ final class KeyChecker
             return;
         }
 
-        Assertion::eq($key->get('alg'), $algorithm, sprintf('Key is only allowed for algorithm "%s".', $key->get('alg')));
+        if ($key->get('alg') !== $algorithm) {
+            throw new \InvalidArgumentException(sprintf('Key is only allowed for algorithm "%s".', $key->get('alg')));
+        }
     }
 }

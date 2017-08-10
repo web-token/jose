@@ -28,12 +28,12 @@ final class OctKeysTest extends TestCase
      */
     public function testCreateOctKeyWithInvalidKeySize()
     {
-        JWKFactory::createOctKey(['size' => 12]);
+        JWKFactory::createOctKey(12);
     }
 
     public function testCreateOctKey()
     {
-        $jwk = JWKFactory::createOctKey(['size' => 64]);
+        $jwk = JWKFactory::createOctKey(64);
 
         $this->assertEquals('oct', $jwk->get('kty'));
         $this->assertTrue($jwk->has('k'));

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Algorithm\ContentEncryption;
 
-use Assert\Assertion;
 use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
 
 abstract class AESGCM implements ContentEncryptionAlgorithmInterface
@@ -32,7 +31,9 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
         $this->checkKeyLength($keyLength);
         $mode = sprintf('aes-%d-gcm', $keyLength);
         $C = openssl_encrypt($data, $mode, $cek, OPENSSL_RAW_DATA, $iv, $tag, $calculated_aad);
-        Assertion::true(false !== $C, 'Unable to encrypt the data.');
+        if (false === $C) {
+            throw new \InvalidArgumentException('Unable to encrypt the data.');
+        }
 
         return $C;
     }
@@ -52,7 +53,9 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
 
         $mode = 'aes-'.($keyLength).'-gcm';
         $P = openssl_decrypt($data, $mode, $cek, OPENSSL_RAW_DATA, $iv, $tag, $calculated_aad);
-        Assertion::true(false !== $P, 'Unable to decrypt or to verify the tag.');
+        if (false === $P) {
+            throw new \InvalidArgumentException('Unable to decrypt or to verify the tag.');
+        }
 
         return $P;
     }

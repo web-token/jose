@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWTInterface;
 
@@ -143,10 +142,6 @@ final class JWS implements JWTInterface
             return $this->encodedPayload;
         }
         $payload = $this->getPayload();
-        if (!is_string($payload)) {
-            $payload = json_encode($payload);
-        }
-        Assertion::notNull($payload, 'Unsupported payload.');
 
         return $this->isPayloadEncoded($signature) ? Base64Url::encode($payload) : $payload;
     }
@@ -208,12 +203,12 @@ final class JWS implements JWTInterface
     public function toCompactJSON(int $id): string
     {
         $signature = $this->getSignature($id);
-
-        Assertion::true(
-            empty($signature->getHeaders()),
-            'The signature contains unprotected headers and cannot be converted into compact JSON'
-        );
-        Assertion::true($this->isPayloadEncoded($signature) || empty($this->getEncodedPayload($signature)), 'Unable to convert the JWS with non-encoded payload.');
+        if (!empty($signature->getHeaders())) {
+            throw new \LogicException('The signature contains unprotected headers and cannot be converted into compact JSON.');
+        }
+        if (!$this->isPayloadEncoded($signature) && !empty($this->getEncodedPayload($signature))) {
+            throw new \LogicException('Unable to convert the JWS with non-encoded payload.');
+        }
 
         return sprintf(
             '%s.%s.%s',
@@ -254,7 +249,9 @@ final class JWS implements JWTInterface
      */
     public function toJSON(): string
     {
-        Assertion::greaterThan($this->countSignatures(), 0, 'No signature.');
+        if (0 === $this->countSignatures()) {
+            throw new \LogicException('No signature.');
+        }
 
         $data = [];
         $this->checkPayloadEncoding();
@@ -300,7 +297,9 @@ final class JWS implements JWTInterface
                 $is_encoded = $this->isPayloadEncoded($signature);
             }
             if (false === $this->isPayloadDetached()) {
-                Assertion::eq($is_encoded, $this->isPayloadEncoded($signature), 'Foreign payload encoding detected. The JWS cannot be converted.');
+                if ($is_encoded !== $this->isPayloadEncoded($signature)) {
+                    throw new \LogicException('Foreign payload encoding detected. The JWS cannot be converted.');
+                }
             }
         }
     }
