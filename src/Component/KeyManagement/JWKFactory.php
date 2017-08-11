@@ -24,7 +24,7 @@ final class JWKFactory
 {
     /**
      * @param int   $size   The key size in bits
-     * @param array $values Values to configure the key.
+     * @param array $values values to configure the key
      *
      * @return JWK
      */
@@ -53,7 +53,7 @@ final class JWKFactory
 
     /**
      * @param string $curve  The curve
-     * @param array  $values Values to configure the key.
+     * @param array  $values values to configure the key
      *
      * @return JWK
      */
@@ -80,7 +80,7 @@ final class JWKFactory
 
     /**
      * @param int   $size   The key size in bits
-     * @param array $values Values to configure the key.
+     * @param array $values values to configure the key
      *
      * @return JWK
      */
@@ -102,7 +102,7 @@ final class JWKFactory
 
     /**
      * @param string $curve  The curve
-     * @param array  $values Values to configure the key.
+     * @param array  $values values to configure the key
      *
      * @return JWK
      */

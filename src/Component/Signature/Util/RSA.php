@@ -132,18 +132,28 @@ final class RSA
         $emLen = ($emBits + 1) >> 3;
         $sLen = $hash->getLength();
         $mHash = $hash->hash($m);
-        if ($emLen < $hash->getLength() + $sLen + 2 ) {throw new \InvalidArgumentException();}
-        if ($em[mb_strlen($em, '8bit') - 1] !== chr(0xBC)) {throw new \InvalidArgumentException();}
+        if ($emLen < $hash->getLength() + $sLen + 2) {
+            throw new \InvalidArgumentException();
+        }
+        if ($em[mb_strlen($em, '8bit') - 1] !== chr(0xBC)) {
+            throw new \InvalidArgumentException();
+        }
         $maskedDB = mb_substr($em, 0, -$hash->getLength() - 1, '8bit');
         $h = mb_substr($em, -$hash->getLength() - 1, $hash->getLength(), '8bit');
         $temp = chr(0xFF << ($emBits & 7));
-        if ((~$maskedDB[0] & $temp) !== $temp) {throw new \InvalidArgumentException();}
+        if ((~$maskedDB[0] & $temp) !== $temp) {
+            throw new \InvalidArgumentException();
+        }
         $dbMask = self::getMGF1($h, $emLen - $hash->getLength() - 1, $hash/*MGF*/);
         $db = $maskedDB ^ $dbMask;
         $db[0] = ~chr(0xFF << ($emBits & 7)) & $db[0];
         $temp = $emLen - $hash->getLength() - $sLen - 2;
-        if (mb_substr($db, 0, $temp, '8bit') !== str_repeat(chr(0), $temp)) {throw new \InvalidArgumentException();}
-        if (1 !== ord($db[$temp])) {throw new \InvalidArgumentException();}
+        if (mb_substr($db, 0, $temp, '8bit') !== str_repeat(chr(0), $temp)) {
+            throw new \InvalidArgumentException();
+        }
+        if (1 !== ord($db[$temp])) {
+            throw new \InvalidArgumentException();
+        }
         $salt = mb_substr($db, $temp + 1, null, '8bit'); // should be $sLen long
         $m2 = "\0\0\0\0\0\0\0\0".$mHash.$salt;
         $h2 = $hash->hash($m2);
