@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Util\ConcatKDF;
@@ -55,7 +54,9 @@ final class ECDHES implements KeyAgreementInterface
                 'epk' => $epk,
             ]);
         }
-        Assertion::eq($private_key->get('crv'), $public_key->get('crv'), 'Curves are different');
+        if ($private_key->get('crv') !== $public_key->get('crv')) {
+            throw new \InvalidArgumentException('Curves are different');
+        }
 
         $agreed_key = $this->calculateAgreementKey($private_key, $public_key);
 
@@ -126,8 +127,12 @@ final class ECDHES implements KeyAgreementInterface
      */
     private function getPublicKey(array $complete_header)
     {
-        Assertion::keyExists($complete_header, 'epk', 'The header parameter "epk" is missing');
-        Assertion::isArray($complete_header['epk'], 'The header parameter "epk" is not an array of parameter');
+        if (!array_key_exists('epk', $complete_header)) {
+            throw new \InvalidArgumentException('The header parameter "epk" is missing');
+        }
+        if (!is_array($complete_header['epk'])) {
+            throw new \InvalidArgumentException('The header parameter "epk" is not an array of parameter');
+        }
 
         $public_key = JWK::create($complete_header['epk']);
         $this->checkKey($public_key, false);
@@ -141,24 +146,35 @@ final class ECDHES implements KeyAgreementInterface
      */
     private function checkKey(JWK $key, $is_private)
     {
-        Assertion::true($key->has('x'), 'The key parameter "x" is missing.');
-        Assertion::true($key->has('crv'), 'The key parameter "crv" is missing.');
+        foreach (['x', 'crv'] as $k) {
+            if (!$key->has($k)) {
+                throw new \InvalidArgumentException(sprintf('The key parameter "%s" is missing.', $k));
+            }
+        }
 
         switch ($key->get('crv')) {
             case 'P-256':
             case 'P-384':
             case 'P-521':
-                Assertion::eq($key->get('kty'), 'EC', 'Wrong key type.');
-                Assertion::true($key->has('y'), 'The key parameter "y" is missing.');
+                if ('EC' !== $key->get('kty')) {
+                    throw new \InvalidArgumentException('Wrong key type.');
+                }
+                if (!$key->has('y')) {
+                    throw new \InvalidArgumentException('The key parameter "y" is missing.');
+                }
                 break;
             case 'X25519':
-                Assertion::eq($key->get('kty'), 'OKP', 'Wrong key type.');
+                if ('OKP' !== $key->get('kty')) {
+                    throw new \InvalidArgumentException('Wrong key type.');
+                }
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('The curve "%s" is not supported', $key->get('crv')));
         }
         if (true === $is_private) {
-            Assertion::true($key->has('d'), 'The key parameter "d" is missing.');
+            if (!$key->has('d')) {
+                throw new \InvalidArgumentException('The key parameter "d" is missing.');
+            }
         }
     }
 

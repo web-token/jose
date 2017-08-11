@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Core;
 
-use Assert\Assertion;
-
 final class KeyChecker
 {
     /**
@@ -51,19 +49,27 @@ final class KeyChecker
         }
         switch ($usage) {
             case 'verification':
-                Assertion::inArray('verify', $ops, 'Key cannot be used to verify a signature');
+                if (!in_array('verify', $ops)) {
+                    throw new \InvalidArgumentException('Key cannot be used to verify a signature');
+                }
 
                 return true;
             case 'signature':
-                Assertion::inArray('sign', $ops, 'Key cannot be used to sign');
+                if (!in_array('sign', $ops)) {
+                    throw new \InvalidArgumentException('Key cannot be used to sign');
+                }
 
                 return true;
             case 'encryption':
-                Assertion::true(in_array('encrypt', $ops) || in_array('wrapKey', $ops), 'Key cannot be used to encrypt');
+                if (!in_array('encrypt', $ops) && !in_array('wrapKey', $ops)) {
+                    throw new \InvalidArgumentException('Key cannot be used to encrypt');
+                }
 
                 return true;
             case 'decryption':
-                Assertion::true(in_array('decrypt', $ops) || in_array('unwrapKey', $ops), 'Key cannot be used to decrypt');
+                if (!in_array('decrypt', $ops) && !in_array('unwrapKey', $ops)) {
+                    throw new \InvalidArgumentException('Key cannot be used to decrypt');
+                }
 
                 return true;
             default:

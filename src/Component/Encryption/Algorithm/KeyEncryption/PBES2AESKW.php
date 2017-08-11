@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 
@@ -97,8 +96,12 @@ abstract class PBES2AESKW implements KeyWrappingInterface
      */
     protected function checkKey(JWK $key)
     {
-        Assertion::eq($key->get('kty'), 'oct', 'Wrong key type.');
-        Assertion::true($key->has('k'), 'The key parameter "k" is missing.');
+        if ('oct' !== $key->get('kty')) {
+            throw new \InvalidArgumentException('Wrong key type.');
+        }
+        if (!$key->has('k')) {
+            throw new \InvalidArgumentException('The key parameter "k" is missing.');
+        }
     }
 
     /**
@@ -106,8 +109,12 @@ abstract class PBES2AESKW implements KeyWrappingInterface
      */
     protected function checkHeaderAlgorithm(array $header)
     {
-        Assertion::keyExists($header, 'alg', 'The header parameter "alg" is missing.');
-        Assertion::notEmpty($header['alg'], 'The header parameter "alg" is not valid.');
+        if (!array_key_exists('alg', $header)) {
+            throw new \InvalidArgumentException('The header parameter "alg" is missing.');
+        }
+        if (!is_string($header['alg'])) {
+            throw new \InvalidArgumentException('The header parameter "alg" is not valid.');
+        }
     }
 
     /**
@@ -115,10 +122,15 @@ abstract class PBES2AESKW implements KeyWrappingInterface
      */
     protected function checkHeaderAdditionalParameters(array $header)
     {
-        Assertion::keyExists($header, 'p2s', 'The header parameter "p2s" is missing.');
-        Assertion::notEmpty($header['p2s'], 'The header parameter "p2s" is not valid.');
-        Assertion::keyExists($header, 'p2c', 'The header parameter "p2c" is missing.');
-        Assertion::notEmpty($header['p2c'], 'The header parameter "p2c" is not valid.');
+        foreach (['p2s', 'p2c'] as $k) {
+            if (!array_key_exists($k, $header)) {
+                throw new \InvalidArgumentException(sprintf('The header parameter "%s" is missing.', $k));
+            }
+            if (empty($header[$k])) {
+                var_dump();
+                throw new \InvalidArgumentException(sprintf('The header parameter "%s" is not valid.', $k));
+            }
+        }
     }
 
     /**

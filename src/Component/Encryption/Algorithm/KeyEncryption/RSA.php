@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
-use Assert\Assertion;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Util\RSA as JoseRSA;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
@@ -43,13 +42,12 @@ abstract class RSA implements KeyEncryptionInterface
         $pub = RSAKey::toPublic(RSAKey::createFromJWK($key));
 
         if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
-            $encrypted = JoseRSA::encrypt($pub, $cek, $this->getHashAlgorithm());
-            Assertion::string($encrypted, 'Unable to encrypt the data.');
-
-            return $encrypted;
+            return JoseRSA::encrypt($pub, $cek, $this->getHashAlgorithm());
         } else {
             $res = openssl_public_encrypt($cek, $encrypted, $pub->toPEM(), OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
-            Assertion::true($res, 'Unable to encrypt the data.');
+            if (false === $res) {
+                throw new \RuntimeException('Unable to encrypt the data.');
+            }
 
             return $encrypted;
         }
@@ -61,18 +59,19 @@ abstract class RSA implements KeyEncryptionInterface
     public function decryptKey(JWK $key, string $encrypted_cek, array $header): string
     {
         $this->checkKey($key);
-        Assertion::true($key->has('d'), 'The key is not a private key');
+        if (!$key->has('d')) {
+            throw new \InvalidArgumentException('The key is not a private key');
+        }
 
         $priv = RSAKey::createFromJWK($key);
 
         if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
-            $decrypted = JoseRSA::decrypt($priv, $encrypted_cek, $this->getHashAlgorithm());
-            Assertion::string($decrypted, 'Unable to decrypt the data.');
-
-            return $decrypted;
+            return JoseRSA::decrypt($priv, $encrypted_cek, $this->getHashAlgorithm());
         } else {
             $res = openssl_private_decrypt($encrypted_cek, $decrypted, $priv->toPEM(), OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
-            Assertion::true($res, 'Unable to decrypt the data.');
+            if (false === $res) {
+                throw new \RuntimeException('Unable to decrypt the data.');
+            }
 
             return $decrypted;
         }
@@ -91,7 +90,9 @@ abstract class RSA implements KeyEncryptionInterface
      */
     protected function checkKey(JWK $key)
     {
-        Assertion::eq($key->get('kty'), 'RSA', 'Wrong key type.');
+        if ('RSA' !== $key->get('kty')) {
+            throw new \InvalidArgumentException('Wrong key type.');
+        }
     }
 
     /**

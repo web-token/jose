@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 
@@ -57,9 +56,15 @@ abstract class AESKW implements KeyWrappingInterface
      */
     protected function checkKey(JWK $key)
     {
-        Assertion::eq($key->get('kty'), 'oct', 'Wrong key type.');
-        Assertion::true($key->has('k'), 'The key parameter "k" is missing.');
-        Assertion::eq($this->getKeySize(), mb_strlen(Base64Url::decode($key->get('k')), '8bit'), 'The key size is not valid');
+        if ('oct' !== $key->get('kty')) {
+            throw new \InvalidArgumentException('Wrong key type.');
+        }
+        if (!$key->has('k')) {
+            throw new \InvalidArgumentException('The key parameter "k" is missing.');
+        }
+        if ($this->getKeySize() !== mb_strlen(Base64Url::decode($key->get('k')), '8bit')) {
+            throw new \InvalidArgumentException('The key size is not valid');
+        }
     }
 
     /**
