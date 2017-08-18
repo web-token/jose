@@ -40,7 +40,7 @@ final class JWEBuilder
     private $aad;
 
     /**
-     * @var array
+     * @var Recipient[]
      */
     private $recipients = [];
 
@@ -155,6 +155,10 @@ final class JWEBuilder
      */
     public function withSharedProtectedHeaders(array $sharedProtectedHeaders): JWEBuilder
     {
+        $this->checkDuplicatedHeaderParameters($sharedProtectedHeaders, $this->sharedHeaders);
+        foreach ($this->recipients as $recipient) {
+            $this->checkDuplicatedHeaderParameters($sharedProtectedHeaders, $recipient->getHeaders());
+        }
         $clone = clone $this;
         $clone->sharedProtectedHeaders = $sharedProtectedHeaders;
 
@@ -168,6 +172,10 @@ final class JWEBuilder
      */
     public function withSharedHeaders(array $sharedHeaders): JWEBuilder
     {
+        $this->checkDuplicatedHeaderParameters($this->sharedProtectedHeaders, $sharedHeaders);
+        foreach ($this->recipients as $recipient) {
+            $this->checkDuplicatedHeaderParameters($sharedHeaders, $recipient->getHeaders());
+        }
         $clone = clone $this;
         $clone->sharedHeaders = $sharedHeaders;
 
@@ -182,6 +190,8 @@ final class JWEBuilder
      */
     public function addRecipient(JWK $recipientKey, array $recipientHeaders = []): JWEBuilder
     {
+        $this->checkDuplicatedHeaderParameters($this->sharedProtectedHeaders, $recipientHeaders);
+        $this->checkDuplicatedHeaderParameters($this->sharedHeaders, $recipientHeaders);
         $clone = clone $this;
         $completeHeaders = array_merge($clone->sharedHeaders, $recipientHeaders, $clone->sharedProtectedHeaders);
         $clone->checkAndSetContentEncryptionAlgorithm($completeHeaders);
@@ -527,5 +537,17 @@ final class JWEBuilder
         }
 
         return $contentEncryptionAlgorithm;
+    }
+
+    /**
+     * @param array $header1
+     * @param array $header2
+     */
+    private function checkDuplicatedHeaderParameters(array $header1, array $header2)
+    {
+        $inter = array_intersect_key($header1, $header2);
+        if (!empty($inter)) {
+            throw new \InvalidArgumentException(sprintf('The header contains duplicated entries: %s.', json_encode(array_keys($inter))));
+        }
     }
 }

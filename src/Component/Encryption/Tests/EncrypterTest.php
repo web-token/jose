@@ -75,6 +75,30 @@ final class EncrypterTest extends TestCase
         $this->assertEquals('FOO', $loaded->getPayload());
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The header contains duplicated entries: ["zip"].
+     */
+    public function testDuplicatedHeader()
+    {
+        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);
+        $contentEncryptionAlgorithmManager = JWAManager::create([new A256CBCHS512()]);
+        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
+        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+
+        $jweBuilder
+            ->withPayload('FOO')
+            ->withSharedProtectedHeaders([
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'RSA-OAEP-256',
+                'zip' => 'DEF',
+            ])
+            ->addRecipient(
+                $this->getRSARecipientKey(),
+                ['zip' => 'DEF']
+            );
+    }
+
     public function testCreateCompactJWEUsingFactory()
     {
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP256()]);

@@ -13,25 +13,76 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker;
 
-final class NotBeforeChecker implements ClaimCheckerInterface
+final class NotBeforeChecker implements ClaimCheckerInterface, HeaderCheckerInterface
 {
+    private const CLAIM_NAME = 'nbf';
+
+    /**
+     * @var bool
+     */
+    private $protectedHeader = false;
+
+    /**
+     * NotBeforeChecker constructor.
+     * @param bool $protectedHeader
+     */
+    public function __construct(bool $protectedHeader = false)
+    {
+        $this->protectedHeader = $protectedHeader;
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(array $claims): array
+    public function checkClaim($value)
     {
-        if (!array_key_exists('nbf', $claims)) {
-            return [];
-        }
+        return $this->checkValue($value);
+    }
 
-        $nbf = $claims['nbf'];
-        if (!is_int($nbf)) {
+    /**
+     * {@inheritdoc}
+     */
+    public function checkHeader($value)
+    {
+        return $this->checkValue($value);
+    }
+
+    /**
+     * @param $value
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function checkValue($value)
+    {
+        if (!is_int($value)) {
             throw new \InvalidArgumentException('The claim "nbf" must be an integer.');
         }
-        if (time() < $nbf) {
+        if (time() < $value) {
             throw new \InvalidArgumentException('The JWT can not be used yet.');
         }
+    }
 
-        return ['nbf'];
+    /**
+     * {@inheritdoc}
+     */
+    public function supportedClaim(): string
+    {
+        return self::CLAIM_NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportedHeader(): string
+    {
+        return self::CLAIM_NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function protectedHeaderOnly(): bool
+    {
+        return $this->protectedHeader;
     }
 }

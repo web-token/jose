@@ -15,9 +15,10 @@ namespace Jose\Component\Checker\Tests;
 
 use Base64Url\Base64Url;
 use Jose\Component\Checker\AudienceChecker;
-use Jose\Component\Checker\CheckerManager;
+use Jose\Component\Checker\ClaimCheckerManager;
 use Jose\Component\Checker\CriticalHeaderChecker;
 use Jose\Component\Checker\ExpirationTimeChecker;
+use Jose\Component\Checker\HeaderCheckerManager;
 use Jose\Component\Checker\IssuedAtChecker;
 use Jose\Component\Checker\NotBeforeChecker;
 use Jose\Component\Checker\Tests\Stub\IssuerChecker;
@@ -27,11 +28,31 @@ use Jose\Component\Signature\JWS;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @group CheckerManager
+ * @group ClaimCheckerManager
  * @group Functional
  */
 final class JWSCheckTest extends TestCase
 {
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The header contains duplicated entries: ["alg"].
+     */
+    public function testDuplicatedHeaderParameters()
+    {
+        $payload = ['exp' => time() + 1000];
+        $protected = ['alg' => 'none'];
+        $unprotected = ['alg' => 'none'];
+        $jws = JWS::create(json_encode($payload))
+            ->addSignature(
+                '',
+                Base64Url::encode(json_encode($protected)),
+                $unprotected
+            );
+
+        $this->getClaimCheckerManager()->check($jws);
+        $this->getHeaderCheckerManager()->check($jws, 0);
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The JWT has expired.
@@ -43,7 +64,8 @@ final class JWSCheckTest extends TestCase
         $jws = JWS::create(json_encode($payload))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getClaimCheckerManager()->check($jws);
+        $this->getHeaderCheckerManager()->check($jws, 0);
     }
 
     /**
@@ -56,7 +78,8 @@ final class JWSCheckTest extends TestCase
         $headers = ['alg' => 'none'];
         $jws = JWS::create(json_encode($payload))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getClaimCheckerManager()->check($jws);
+        $this->getHeaderCheckerManager()->check($jws, 0);
     }
 
     /**
@@ -70,7 +93,8 @@ final class JWSCheckTest extends TestCase
         $jws = JWS::create(json_encode($payload))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getClaimCheckerManager()->check($jws);
+        $this->getHeaderCheckerManager()->check($jws, 0);
     }
 
     /**
@@ -84,7 +108,8 @@ final class JWSCheckTest extends TestCase
         $jws = JWS::create(json_encode($payload))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getClaimCheckerManager()->check($jws);
+        $this->getHeaderCheckerManager()->check($jws, 0);
     }
 
     /**
@@ -98,12 +123,13 @@ final class JWSCheckTest extends TestCase
         $jws = JWS::create(json_encode($payload))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getClaimCheckerManager()->check($jws);
+        $this->getHeaderCheckerManager()->check($jws, 0);
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage One or more claims are marked as critical, but they are missing or have not been checked (["iss"]).
+     * @expectedExceptionMessage One or more headers are marked as critical, but they are missing or have not been checked: ["iss"].
      */
     public function testJWSHasCriticalClaimsNotSatisfied()
     {
@@ -112,7 +138,8 @@ final class JWSCheckTest extends TestCase
         $jws = JWS::create(json_encode($payload))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getClaimCheckerManager()->check($jws);
+        $this->getHeaderCheckerManager()->check($jws, 0);
     }
 
     /**
@@ -126,7 +153,8 @@ final class JWSCheckTest extends TestCase
         $jws = JWS::create(json_encode($payload))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getClaimCheckerManager()->check($jws);
+        $this->getHeaderCheckerManager()->check($jws, 0);
     }
 
     /**
@@ -140,7 +168,8 @@ final class JWSCheckTest extends TestCase
         $jws = JWS::create(json_encode($payload))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getClaimCheckerManager()->check($jws);
+        $this->getHeaderCheckerManager()->check($jws, 0);
     }
 
     /**
@@ -154,17 +183,19 @@ final class JWSCheckTest extends TestCase
         $jws = JWS::create(json_encode($payload))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getClaimCheckerManager()->check($jws);
+        $this->getHeaderCheckerManager()->check($jws, 0);
     }
 
     public function testJWSSuccessfullyCheckedWithCriticalHeaders()
     {
         $payload = ['jti' => 'JTI1', 'exp' => time() + 3600, 'iat' => time() - 100, 'nbf' => time() - 100, 'iss' => 'ISS1', 'sub' => 'SUB1', 'aud' => ['My Service']];
-        $headers = ['alg' => 'none', 'crit' => ['exp', 'iss', 'sub', 'aud', 'jti']];
+        $headers = ['alg' => 'none','jti' => 'JTI1', 'exp' => time() + 3600, 'crit' => ['exp', 'jti']];
         $jws = JWS::create(json_encode($payload))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getClaimCheckerManager()->check($jws);
+        $this->getHeaderCheckerManager()->check($jws, 0);
         $this->assertEquals(json_encode($payload), $jws->getPayload());
     }
 
@@ -175,32 +206,56 @@ final class JWSCheckTest extends TestCase
         $jws = JWS::create(json_encode($payload))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 
-        $this->getCheckerManager()->checkJWS($jws, 0);
+        $this->getClaimCheckerManager()->check($jws);
+        $this->getHeaderCheckerManager()->check($jws, 0);
         $this->assertEquals(json_encode($payload), $jws->getPayload());
     }
 
     /**
-     * @var CheckerManager|null
+     * @var ClaimCheckerManager|null
      */
-    private $checker_manager = null;
+    private $claim_checker_manager = null;
 
     /**
-     * @return CheckerManager
+     * @return ClaimCheckerManager
      */
-    private function getCheckerManager(): CheckerManager
+    private function getClaimCheckerManager(): ClaimCheckerManager
     {
-        if (null === $this->checker_manager) {
-            $this->checker_manager = new CheckerManager();
-            $this->checker_manager->addClaimChecker(new ExpirationTimeChecker());
-            $this->checker_manager->addClaimChecker(new IssuedAtChecker());
-            $this->checker_manager->addClaimChecker(new NotBeforeChecker());
-            $this->checker_manager->addClaimChecker(new AudienceChecker('My Service'));
-            $this->checker_manager->addClaimChecker(new SubjectChecker());
-            $this->checker_manager->addClaimChecker(new IssuerChecker());
-            $this->checker_manager->addClaimChecker(new JtiChecker());
-            $this->checker_manager->addHeaderChecker(new CriticalHeaderChecker());
+        if (null === $this->claim_checker_manager) {
+            $this->claim_checker_manager = new ClaimCheckerManager();
+            $this->claim_checker_manager->add(new ExpirationTimeChecker());
+            $this->claim_checker_manager->add(new IssuedAtChecker());
+            $this->claim_checker_manager->add(new NotBeforeChecker());
+            $this->claim_checker_manager->add(new AudienceChecker('My Service'));
+            $this->claim_checker_manager->add(new SubjectChecker());
+            $this->claim_checker_manager->add(new IssuerChecker());
+            $this->claim_checker_manager->add(new JtiChecker());
         }
 
-        return $this->checker_manager;
+        return $this->claim_checker_manager;
+    }
+
+    /**
+     * @var HeaderCheckerManager|null
+     */
+    private $header_checker_manager = null;
+
+    /**
+     * @return HeaderCheckerManager
+     */
+    private function getHeaderCheckerManager(): HeaderCheckerManager
+    {
+        if (null === $this->header_checker_manager) {
+            $this->header_checker_manager = new HeaderCheckerManager();
+            $this->header_checker_manager->add(new ExpirationTimeChecker());
+            $this->header_checker_manager->add(new IssuedAtChecker());
+            $this->header_checker_manager->add(new NotBeforeChecker());
+            $this->header_checker_manager->add(new AudienceChecker('My Service'));
+            $this->header_checker_manager->add(new SubjectChecker());
+            $this->header_checker_manager->add(new IssuerChecker());
+            $this->header_checker_manager->add(new JtiChecker());
+        }
+
+        return $this->header_checker_manager;
     }
 }

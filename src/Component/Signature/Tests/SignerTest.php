@@ -62,6 +62,20 @@ final class SignerTest extends TestCase
             ->build();
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The header contains duplicated entries: ["foo"].
+     */
+    public function testDuplicatedHeader()
+    {
+        $signatureAlgorithmManager = JWAManager::create([]);
+        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+
+        $jwsBuilder
+            ->withPayload(json_encode($this->getKey3()))
+            ->addSignature($this->getKey1(), ['alg' => 'ES256', 'foo' => 'bar'], ['foo' => 'bar']);
+    }
+
     public function testSignAndLoadCompact()
     {
         $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);

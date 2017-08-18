@@ -82,6 +82,7 @@ final class JWSBuilder
      */
     public function addSignature(JWK $signatureKey, array $protectedHeaders, array $headers = []): JWSBuilder
     {
+        $this->checkDuplicatedHeaderParameters($protectedHeaders, $headers);
         KeyChecker::checkKeyUsage($signatureKey, 'signature');
         $signatureAlgorithm = $this->findSignatureAlgorithm($signatureKey, $protectedHeaders, $headers);
         KeyChecker::checkKeyAlgorithm($signatureKey, $signatureAlgorithm->name());
@@ -187,5 +188,16 @@ final class JWSBuilder
         }
 
         return $signatureAlgorithm;
+    }
+
+    /**
+     * @param array ...$headers
+     */
+    private function checkDuplicatedHeaderParameters(...$headers)
+    {
+        $inter = call_user_func_array('array_intersect_key', $headers);
+        if (!empty($inter)) {
+            throw new \InvalidArgumentException(sprintf('The header contains duplicated entries: %s.', json_encode(array_keys($inter))));
+        }
     }
 }

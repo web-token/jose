@@ -14,27 +14,79 @@ declare(strict_types=1);
 namespace Jose\Component\Checker\Tests\Stub;
 
 use Jose\Component\Checker\ClaimCheckerInterface;
+use Jose\Component\Checker\HeaderCheckerInterface;
 
-final class JtiChecker implements ClaimCheckerInterface
+final class JtiChecker implements ClaimCheckerInterface, HeaderCheckerInterface
 {
+    private const CLAIM_NAME = 'jti';
+
+    /**
+     * @var bool
+     */
+    private $protectedHeader = false;
+
+    /**
+     * JtiChecker constructor.
+     * @param bool $protectedHeader
+     */
+    public function __construct(bool $protectedHeader = false)
+    {
+        $this->protectedHeader = $protectedHeader;
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(array $claims): array
+    public function checkClaim($value)
     {
-        if (!array_key_exists('jti', $claims)) {
-            return [];
-        }
+        return $this->checkValue($value);
+    }
 
-        $jti = $claims['jti'];
-        if (!is_string($jti)) {
+    /**
+     * {@inheritdoc}
+     */
+    public function checkHeader($value)
+    {
+        return $this->checkValue($value);
+    }
+
+    /**
+     * @param $value
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function checkValue($value)
+    {
+        if (!is_string($value)) {
             throw new \InvalidArgumentException('The claim "jti" must be an string.');
         }
-        if (!$this->isJtiValid($jti)) {
-            throw new \InvalidArgumentException(sprintf('Invalid token ID "%s".', $jti));
+        if (!$this->isJtiValid($value)) {
+            throw new \InvalidArgumentException(sprintf('Invalid token ID "%s".', $value));
         }
+    }
 
-        return ['jti'];
+    /**
+     * {@inheritdoc}
+     */
+    public function supportedClaim(): string
+    {
+        return self::CLAIM_NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportedHeader(): string
+    {
+        return self::CLAIM_NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function protectedHeaderOnly(): bool
+    {
+        return $this->protectedHeader;
     }
 
     /**

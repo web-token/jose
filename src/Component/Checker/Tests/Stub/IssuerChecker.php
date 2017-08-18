@@ -14,27 +14,79 @@ declare(strict_types=1);
 namespace Jose\Component\Checker\Tests\Stub;
 
 use Jose\Component\Checker\ClaimCheckerInterface;
+use Jose\Component\Checker\HeaderCheckerInterface;
 
-final class IssuerChecker implements ClaimCheckerInterface
+final class IssuerChecker implements ClaimCheckerInterface, HeaderCheckerInterface
 {
+    private const CLAIM_NAME = 'iss';
+
+    /**
+     * @var bool
+     */
+    private $protectedHeader = false;
+
+    /**
+     * IssuerChecker constructor.
+     * @param bool $protectedHeader
+     */
+    public function __construct(bool $protectedHeader = false)
+    {
+        $this->protectedHeader = $protectedHeader;
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function checkClaim(array $claims): array
+    public function checkClaim($value)
     {
-        if (!array_key_exists('iss', $claims)) {
-            return [];
-        }
+        return $this->checkValue($value);
+    }
 
-        $iss = $claims['iss'];
-        if (!is_string($iss)) {
+    /**
+     * {@inheritdoc}
+     */
+    public function checkHeader($value)
+    {
+        return $this->checkValue($value);
+    }
+
+    /**
+     * @param $value
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function checkValue($value)
+    {
+        if (!is_string($value)) {
             throw new \InvalidArgumentException('The claim "iss" must be an string.');
         }
-        if (!$this->isIssuerAllowed($iss)) {
-            throw new \InvalidArgumentException(sprintf('The issuer "%s" is not allowed.', $iss));
+        if (!$this->isIssuerAllowed($value)) {
+            throw new \InvalidArgumentException(sprintf('The issuer "%s" is not allowed.', $value));
         }
+    }
 
-        return ['iss'];
+    /**
+     * {@inheritdoc}
+     */
+    public function supportedClaim(): string
+    {
+        return self::CLAIM_NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportedHeader(): string
+    {
+        return self::CLAIM_NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function protectedHeaderOnly(): bool
+    {
+        return $this->protectedHeader;
     }
 
     /**

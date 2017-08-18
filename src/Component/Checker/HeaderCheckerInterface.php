@@ -19,9 +19,19 @@ namespace Jose\Component\Checker;
 interface HeaderCheckerInterface
 {
     /**
-     * @param array $protected_headers
-     * @param array $headers
-     * @param array $checked_claims
+     * @param $value
+     *
+     * @throws \InvalidArgumentException
      */
-    public function checkHeader(array $protected_headers, array $headers, array $checked_claims);
+    public function checkHeader($value);
+
+    /**
+     * @return string
+     */
+    public function supportedHeader(): string;
+
+    /**
+     * @return bool
+     */
+    public function protectedHeaderOnly(): bool;
 }

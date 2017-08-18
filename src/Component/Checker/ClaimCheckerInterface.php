@@ -19,11 +19,14 @@ namespace Jose\Component\Checker;
 interface ClaimCheckerInterface
 {
     /**
-     * @param array $claims
+     * @param $value
      *
      * @throws \InvalidArgumentException
-     *
-     * @return string[]
      */
-    public function checkClaim(array $claims): array;
+    public function checkClaim($value);
+
+    /**
+     * @return string
+     */
+    public function supportedClaim(): string;
 }
