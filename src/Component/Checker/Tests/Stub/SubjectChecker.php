@@ -27,6 +27,7 @@ final class SubjectChecker implements ClaimCheckerInterface, HeaderCheckerInterf
 
     /**
      * SubjectChecker constructor.
+     *
      * @param bool $protectedHeader
      */
     public function __construct(bool $protectedHeader = false)

@@ -16,7 +16,6 @@ namespace Jose\Component\Checker\Tests;
 use Base64Url\Base64Url;
 use Jose\Component\Checker\AudienceChecker;
 use Jose\Component\Checker\ClaimCheckerManager;
-use Jose\Component\Checker\CriticalHeaderChecker;
 use Jose\Component\Checker\ExpirationTimeChecker;
 use Jose\Component\Checker\HeaderCheckerManager;
 use Jose\Component\Checker\IssuedAtChecker;
@@ -190,7 +189,7 @@ final class JWSCheckTest extends TestCase
     public function testJWSSuccessfullyCheckedWithCriticalHeaders()
     {
         $payload = ['jti' => 'JTI1', 'exp' => time() + 3600, 'iat' => time() - 100, 'nbf' => time() - 100, 'iss' => 'ISS1', 'sub' => 'SUB1', 'aud' => ['My Service']];
-        $headers = ['alg' => 'none','jti' => 'JTI1', 'exp' => time() + 3600, 'crit' => ['exp', 'jti']];
+        $headers = ['alg' => 'none', 'jti' => 'JTI1', 'exp' => time() + 3600, 'crit' => ['exp', 'jti']];
         $jws = JWS::create(json_encode($payload))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 

@@ -18,7 +18,7 @@ use Jose\Component\Encryption\JWE;
 use Jose\Component\Signature\JWS;
 
 /**
- * Class HeaderCheckerManager
+ * Class HeaderCheckerManager.
  */
 final class HeaderCheckerManager
 {
@@ -37,16 +37,18 @@ final class HeaderCheckerManager
 
     /**
      * @param JWTInterface $jwt
-     * @param int $component
+     * @param int          $component
      */
     public function check(JWTInterface $jwt, int $component)
     {
         switch (true) {
             case $jwt instanceof JWS:
                 $this->checkJWS($jwt, $component);
+
                 break;
             case $jwt instanceof JWE:
                 $this->checkJWE($jwt, $component);
+
                 break;
             default:
                 throw new \InvalidArgumentException('Unsupported argument');
@@ -129,7 +131,6 @@ final class HeaderCheckerManager
         }
 
         if (array_key_exists('crit', $protected)) {
-
             if (!is_array($protected['crit'])) {
                 throw new \InvalidArgumentException('The header "crit" mus be a list of header parameters.');
             }

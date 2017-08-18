@@ -23,7 +23,6 @@ use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\OctetString;
 use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
-use function MongoDB\BSON\toJSON;
 
 final class ECKey
 {
@@ -111,6 +110,7 @@ final class ECKey
 
             return;
         }
+
         throw new \Exception('Unable to load the key.');
     }
 

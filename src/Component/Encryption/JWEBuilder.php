@@ -351,6 +351,7 @@ final class JWEBuilder
         } elseif ($keyEncryptionAlgorithm instanceof DirectEncryptionInterface) {
             return null;
         }
+
         throw new \InvalidArgumentException('Unsupported key encryption algorithm.');
     }
 

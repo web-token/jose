@@ -303,6 +303,7 @@ final class RSAKey
 
                     if ($x->equals($one)) {
                         $found = true;
+
                         break;
                     }
 
@@ -316,6 +317,7 @@ final class RSAKey
                 $x = $y->modPow($two, $n);
                 if ($x->equals($one)) {
                     $found = true;
+
                     break;
                 }
             }

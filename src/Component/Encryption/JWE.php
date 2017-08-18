@@ -228,6 +228,7 @@ final class JWE implements JWTInterface
         if ($this->hasSharedProtectedHeader($key)) {
             return $this->sharedProtectedHeaders[$key];
         }
+
         throw new \InvalidArgumentException(sprintf('The shared protected header "%s" does not exist.', $key));
     }
 
@@ -259,6 +260,7 @@ final class JWE implements JWTInterface
         if ($this->hasSharedHeader($key)) {
             return $this->sharedHeaders[$key];
         }
+
         throw new \InvalidArgumentException(sprintf('The shared header "%s" does not exist.', $key));
     }
 

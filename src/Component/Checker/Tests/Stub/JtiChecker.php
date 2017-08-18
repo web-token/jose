@@ -27,6 +27,7 @@ final class JtiChecker implements ClaimCheckerInterface, HeaderCheckerInterface
 
     /**
      * JtiChecker constructor.
+     *
      * @param bool $protectedHeader
      */
     public function __construct(bool $protectedHeader = false)

@@ -16,7 +16,7 @@ namespace Jose\Component\Checker;
 use Jose\Component\Core\JWTInterface;
 
 /**
- * Class ClaimCheckerManager
+ * Class ClaimCheckerManager.
  */
 final class ClaimCheckerManager
 {
@@ -44,8 +44,9 @@ final class ClaimCheckerManager
         }
 
         foreach ($this->checkers as $claim => $checker) {
-            if (array_key_exists($claim, $claims))
-            $checker->checkClaim($claims[$claim]);
+            if (array_key_exists($claim, $claims)) {
+                $checker->checkClaim($claims[$claim]);
+            }
         }
     }
 }

@@ -49,6 +49,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
             $jwk = JWK::create($key);
             if ($jwk->has('kid')) {
                 $keys[$jwk->get('kid')] = $jwk;
+
                 continue;
             }
             $keys[] = $jwk;
