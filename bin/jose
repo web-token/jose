@@ -8,4 +8,6 @@ use Symfony\Component\Console\Application;
 
 $application = new Application('Jose', '@package_version@');
 $application->add(new Command\HelloCommand());
+$application->add(new Command\UpdateCommand());
+$application->add(new Command\RollbackCommand());
 $application->run();
