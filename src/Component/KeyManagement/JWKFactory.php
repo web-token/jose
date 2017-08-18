@@ -24,7 +24,7 @@ final class JWKFactory
 {
     /**
      * @param int   $size   The key size in bits
-     * @param array $values Values to configure the key.
+     * @param array $values values to configure the key
      *
      * @return JWK
      */
@@ -53,7 +53,7 @@ final class JWKFactory
 
     /**
      * @param string $curve  The curve
-     * @param array  $values Values to configure the key.
+     * @param array  $values values to configure the key
      *
      * @return JWK
      */
@@ -80,7 +80,7 @@ final class JWKFactory
 
     /**
      * @param int   $size   The key size in bits
-     * @param array $values Values to configure the key.
+     * @param array $values values to configure the key
      *
      * @return JWK
      */
@@ -102,7 +102,7 @@ final class JWKFactory
 
     /**
      * @param string $curve  The curve
-     * @param array  $values Values to configure the key.
+     * @param array  $values values to configure the key
      *
      * @return JWK
      */
@@ -112,11 +112,13 @@ final class JWKFactory
             case 'X25519':
                 $d = sodium_randombytes_buf(\Sodium\CRYPTO_BOX_SEEDBYTES);
                 $x = sodium_crypto_scalarmult_base($d);
+
                 break;
             case 'Ed25519':
                 $d = sodium_randombytes_buf(\Sodium\CRYPTO_SIGN_SEEDBYTES);
                 $keyPair = sodium_crypto_sign_seed_keypair($d);
                 $x = sodium_crypto_sign_publickey($keyPair);
+
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('Unsupported "%s" curve', $curve));

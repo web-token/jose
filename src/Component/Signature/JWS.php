@@ -166,6 +166,7 @@ final class JWS implements JWTInterface
         if (isset($this->signatures[$id])) {
             return $this->signatures[$id];
         }
+
         throw new \InvalidArgumentException('The signature does not exist.');
     }
 

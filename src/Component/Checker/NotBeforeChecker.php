@@ -24,6 +24,7 @@ final class NotBeforeChecker implements ClaimCheckerInterface, HeaderCheckerInte
 
     /**
      * NotBeforeChecker constructor.
+     *
      * @param bool $protectedHeader
      */
     public function __construct(bool $protectedHeader = false)

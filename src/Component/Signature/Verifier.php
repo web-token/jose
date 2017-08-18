@@ -84,6 +84,7 @@ final class Verifier
         $input = $this->getInputToVerify($jws, $signature, $detached_payload);
         foreach ($jwk_set->getKeys() as $jwk) {
             $algorithm = $this->getAlgorithm($signature);
+
             try {
                 KeyChecker::checkKeyUsage($jwk, 'verification');
                 KeyChecker::checkKeyAlgorithm($jwk, $algorithm->name());

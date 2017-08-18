@@ -53,6 +53,7 @@ final class JWELoader
         } elseif (is_string($input)) {
             return self::fromCompactSerializationToSerialization($input);
         }
+
         throw new \InvalidArgumentException('Unsupported input');
     }
 

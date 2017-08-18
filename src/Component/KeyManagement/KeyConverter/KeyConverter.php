@@ -90,6 +90,7 @@ final class KeyConverter
 
             return $values;
         }
+
         throw new \InvalidArgumentException('Unable to load the certificate');
     }
 
@@ -214,6 +215,7 @@ final class KeyConverter
             if (false === $x509) {
                 $last_issuer = null;
                 $last_subject = null;
+
                 break;
             }
             $parsed = openssl_x509_parse($x509);
@@ -222,6 +224,7 @@ final class KeyConverter
             if (false === $parsed) {
                 $last_issuer = null;
                 $last_subject = null;
+
                 break;
             }
             if (null === $last_subject) {
@@ -235,6 +238,7 @@ final class KeyConverter
                 } else {
                     $last_issuer = null;
                     $last_subject = null;
+
                     break;
                 }
             }

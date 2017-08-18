@@ -27,6 +27,7 @@ final class IssuerChecker implements ClaimCheckerInterface, HeaderCheckerInterfa
 
     /**
      * IssuerChecker constructor.
+     *
      * @param bool $protectedHeader
      */
     public function __construct(bool $protectedHeader = false)

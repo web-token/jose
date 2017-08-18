@@ -24,6 +24,7 @@ final class IssuedAtChecker implements ClaimCheckerInterface, HeaderCheckerInter
 
     /**
      * IssuedAtChecker constructor.
+     *
      * @param bool $protectedHeader
      */
     public function __construct(bool $protectedHeader = false)

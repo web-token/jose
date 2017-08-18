@@ -35,6 +35,7 @@ final class JWSConverter
         } elseif (is_string($input)) {
             return self::fromCompactSerializationToSerialization($input);
         }
+
         throw new \InvalidArgumentException('Unsupported input');
     }
 

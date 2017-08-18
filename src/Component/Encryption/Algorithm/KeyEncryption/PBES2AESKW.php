@@ -128,6 +128,7 @@ abstract class PBES2AESKW implements KeyWrappingInterface
             }
             if (empty($header[$k])) {
                 var_dump();
+
                 throw new \InvalidArgumentException(sprintf('The header parameter "%s" is not valid.', $k));
             }
         }

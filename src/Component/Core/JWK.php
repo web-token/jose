@@ -148,10 +148,12 @@ final class JWK implements \JsonSerializable
                 case 'RSA':
                     $rsa = RSAKey::createFromJWK($this);
                     $this->pem = $rsa->toPEM();
+
                     break;
                 case 'EC':
                     $rsa = ECKey::createFromJWK($this);
                     $this->pem = $rsa->toPEM();
+
                     break;
                 default:
                     throw new \LogicException('Only RSA and EC key can be converted into PEM.');

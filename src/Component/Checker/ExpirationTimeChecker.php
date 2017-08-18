@@ -24,6 +24,7 @@ final class ExpirationTimeChecker implements ClaimCheckerInterface, HeaderChecke
 
     /**
      * ExpirationTimeChecker constructor.
+     *
      * @param bool $protectedHeader
      */
     public function __construct(bool $protectedHeader = false)
