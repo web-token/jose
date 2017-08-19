@@ -16,8 +16,9 @@ matrix:
     - EXECUTE_DEPLOYMENT=true
   - php: nightly
 before_script:
-- chmod +x ./install_php_ext.sh
-- if [ "$TRAVIS_PHP_VERSION" = '7.1' ]; then ./install_php_ext.sh; fi
+- chmod +x ./bin/deploy.sh
+- chmod +x ./bin/install_php_ext.sh
+- if [ "$TRAVIS_PHP_VERSION" = '7.1' ]; then ./bin/install_php_ext.sh; fi
 - composer self-update
 - mkdir -p build/logs
 - if [[ $deps = low ]]; then composer update --no-interaction --prefer-lowest ; fi
@@ -25,9 +26,9 @@ before_script:
 script:
 - "./vendor/bin/phpunit --coverage-clover build/logs/clover.xml"
 after_success:
+- vendor/bin/coveralls --no-interaction
 - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_PULL_REQUEST == 'false' ]]; then composer install --no-dev ; fi
 - if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_PULL_REQUEST == 'false' ]]; then ./bin/deploy.sh ; fi
-- vendor/bin/coveralls --no-interaction
 before_install:
 - openssl aes-256-cbc -K $encrypted_e2c81977451a_key -iv $encrypted_e2c81977451a_iv
   -in .travis/secrets.tar.enc -out .travis/secrets.tar -d

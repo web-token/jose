@@ -12,7 +12,7 @@ git config --global user.email "florent@morselli.fr"
 git config --global user.name "Spomky"
 
 # Add SSH-based remote to GitHub repo:
-git remote add deploy git@github.com:spomky-labs/jose.git
+git remote add deploy git@github.com:Spomky-Labs/jose.git
 git fetch deploy
 
 # Get box and build PHAR
