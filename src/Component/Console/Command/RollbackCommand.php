@@ -16,7 +16,6 @@ namespace Jose\Component\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use Humbug\SelfUpdate\Updater;
 
 final class RollbackCommand extends Command
@@ -32,6 +31,7 @@ final class RollbackCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $updater = new Updater();
+
         try {
             $result = $updater->rollback();
             if (!$result) {
