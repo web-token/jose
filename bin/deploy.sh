@@ -27,7 +27,7 @@ chmod 755 box.phar
 mv jose.phar jose.phar.tmp
 
 # Checkout gh-pages and add PHAR file and version:
-git checkout -B gh-pages deploy/gh-pages
+git checkout -b gh-pages deploy/gh-pages
 mv jose.phar.tmp jose.phar
 sha1sum jose.phar > jose.phar.version
 git add jose.phar jose.phar.version
