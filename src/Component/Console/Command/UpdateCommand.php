@@ -16,7 +16,6 @@ namespace Jose\Component\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use Humbug\SelfUpdate\Updater;
 
 final class UpdateCommand extends Command
@@ -34,6 +33,7 @@ final class UpdateCommand extends Command
         $updater = new Updater();
         $updater->getStrategy()->setPharUrl('https://spomky-labs.github.io/jose/jose.phar');
         $updater->getStrategy()->setVersionUrl('https://spomky-labs.github.io/jose/jose.phar.version');
+
         try {
             $result = $updater->update();
             if ($result) {
