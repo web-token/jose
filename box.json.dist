@@ -2,9 +2,6 @@
   "algorithm": "OPENSSL",
   "chmod": "0755",
   "compression": "GZ",
-  "directories": [
-    "src"
-  ],
   "files": [
     "LICENSE"
   ],
@@ -17,7 +14,7 @@
         "test",
         "Test"
       ],
-      "in": "vendor"
+      "in": ["src/Component","vendor"]
     }
   ],
   "git-version": "package_version",

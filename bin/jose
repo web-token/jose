@@ -7,7 +7,20 @@ use Jose\Component\Console\Command;
 use Symfony\Component\Console\Application;
 
 $application = new Application('Jose', '@package_version@');
-$application->add(new Command\HelloCommand());
+$application->add(new Command\OctKeyGeneratorCommand());
+$application->add(new Command\RsaKeyGeneratorCommand());
+$application->add(new Command\EcKeyGeneratorCommand());
+$application->add(new Command\OkpKeyGeneratorCommand());
+$application->add(new Command\KeyFileLoaderCommand());
+$application->add(new Command\P12CertificateLoaderCommand());
+$application->add(new Command\X509CertificateLoaderCommand());
+
+$application->add(new Command\EcKeysetGeneratorCommand());
+$application->add(new Command\OkpKeysetGeneratorCommand());
+$application->add(new Command\OctKeysetGeneratorCommand());
+$application->add(new Command\RsaKeysetGeneratorCommand());
+
 $application->add(new Command\UpdateCommand());
 $application->add(new Command\RollbackCommand());
+
 $application->run();

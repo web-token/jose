@@ -2,33 +2,26 @@ language: php
 sudo: true
 cache:
   directories:
-  - "$HOME/.composer/cache"
-  - vendor
+    - "$HOME/.composer/cache"
+    - vendor
 matrix:
   allow_failures:
-  - php: nightly
+    - php: nightly
   fast_finish: true
   include:
-  - php: 7.1
-    env: deps=low
-  - php: 7.1
-    env:
-    - EXECUTE_DEPLOYMENT=true
-  - php: nightly
+    - php: 7.1
+      env: deps=low
+    - php: 7.1
+    - php: nightly
 before_script:
-- chmod +x ./bin/deploy.sh
-- chmod +x ./bin/install_php_ext.sh
-- if [ "$TRAVIS_PHP_VERSION" = '7.1' ]; then ./bin/install_php_ext.sh; fi
-- composer self-update
-- mkdir -p build/logs
-- if [[ $deps = low ]]; then composer update --no-interaction --prefer-lowest ; fi
-- if [[ !$deps ]]; then composer install --no-interaction ; fi
+  - chmod +x ./bin/deploy.sh
+  - chmod +x ./bin/install_php_ext.sh
+  - if [ "$TRAVIS_PHP_VERSION" = '7.1' ]; then ./bin/install_php_ext.sh; fi
+  - composer self-update
+  - mkdir -p build/logs
+  - if [[ $deps = low ]]; then composer update --no-interaction --prefer-lowest ; fi
+  - if [[ !$deps ]]; then composer install --no-interaction ; fi
 script:
-- "./vendor/bin/phpunit --coverage-clover build/logs/clover.xml"
+  - "./vendor/bin/phpunit --coverage-clover build/logs/clover.xml"
 after_success:
-- vendor/bin/coveralls --no-interaction
-- if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_PULL_REQUEST == 'false' ]]; then composer install --no-dev ; fi
-- if [[ $EXECUTE_DEPLOYMENT == 'true' && $TRAVIS_PULL_REQUEST == 'false' ]]; then ./bin/deploy.sh ; fi
-before_install:
-- openssl aes-256-cbc -K $encrypted_e2c81977451a_key -iv $encrypted_e2c81977451a_iv
-  -in .travis/secrets.tar.enc -out .travis/secrets.tar -d
+  - vendor/bin/coveralls --no-interaction
