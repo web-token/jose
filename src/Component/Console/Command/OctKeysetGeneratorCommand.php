@@ -59,7 +59,7 @@ final class OctKeysetGeneratorCommand extends Command
         }
 
         $keyset = JWKSet::createFromKeys([]);
-        for ($i = 0 ; $i < $quantity ; ++$i) {
+        for ($i = 0; $i < $quantity; ++$i) {
             $keyset = $keyset->withKey(JWKFactory::createOctKey($size, $args));
         }
         $json = json_encode($keyset);
