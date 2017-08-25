@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Humbug\SelfUpdate\Updater;
 
-final class UpdateCommand extends Command
+final class UpdateCommand extends AbstractGeneratorCommand
 {
     protected function configure()
     {

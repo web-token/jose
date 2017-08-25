@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class KeyFileLoaderCommand extends Command
+final class KeyFileLoaderCommand extends AbstractGeneratorCommand
 {
     /**
      * {@inheritdoc}
@@ -66,13 +66,5 @@ final class KeyFileLoaderCommand extends Command
         } else {
             $output->write($json);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEnabled()
-    {
-        return class_exists('\Jose\Component\KeyManagement\JWKFactory');
     }
 }

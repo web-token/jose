@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class OctKeyGeneratorCommand extends Command
+final class OctKeyGeneratorCommand extends AbstractGeneratorCommand
 {
     /**
      * {@inheritdoc}
@@ -64,13 +64,5 @@ final class OctKeyGeneratorCommand extends Command
         } else {
             $output->write($json);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEnabled()
-    {
-        return class_exists('\Jose\Component\KeyManagement\JWKFactory');
     }
 }

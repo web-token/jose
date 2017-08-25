@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Humbug\SelfUpdate\Updater;
 
-final class RollbackCommand extends Command
+final class RollbackCommand extends AbstractGeneratorCommand
 {
     protected function configure()
     {

@@ -21,7 +21,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class RsaKeysetGeneratorCommand extends Command
+final class RsaKeysetGeneratorCommand extends AbstractGeneratorCommand
 {
     /**
      * {@inheritdoc}
@@ -70,13 +70,5 @@ final class RsaKeysetGeneratorCommand extends Command
         } else {
             $output->write($json);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEnabled()
-    {
-        return class_exists('\Jose\Component\KeyManagement\JWKFactory');
     }
 }
