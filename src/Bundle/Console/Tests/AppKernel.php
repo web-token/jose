@@ -25,7 +25,7 @@ final class AppKernel extends Kernel
     {
         return [
             new FrameworkBundle(),
-            new ConsoleBundle()
+            new ConsoleBundle(),
         ];
     }
 
