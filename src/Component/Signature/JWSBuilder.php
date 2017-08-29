@@ -66,6 +66,9 @@ final class JWSBuilder
      */
     public function withPayload(string $payload, bool $isPayloadDetached = false): JWSBuilder
     {
+        if (false === mb_detect_encoding($payload, 'UTF-8', true)) {
+            throw new \InvalidArgumentException('The payload must be encoded in UTF-8');
+        }
         $clone = clone $this;
         $clone->payload = $payload;
         $clone->isPayloadDetached = $isPayloadDetached;

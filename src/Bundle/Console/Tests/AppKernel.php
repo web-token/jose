@@ -23,14 +23,10 @@ final class AppKernel extends Kernel
      */
     public function registerBundles()
     {
-        $bundles = [];
-
-        if (in_array($this->getEnvironment(), ['test'])) {
-            $bundles[] = new FrameworkBundle();
-            $bundles[] = new ConsoleBundle();
-        }
-
-        return $bundles;
+        return [
+            new FrameworkBundle(),
+            new ConsoleBundle()
+        ];
     }
 
     /**
@@ -46,7 +42,7 @@ final class AppKernel extends Kernel
      */
     public function getCacheDir()
     {
-        return sys_get_temp_dir().'/cache/'.$this->environment;
+        return sys_get_temp_dir().'/Jose/ConsoleBundle/cache';
     }
 
     /**
@@ -54,6 +50,6 @@ final class AppKernel extends Kernel
      */
     public function getLogDir()
     {
-        return sys_get_temp_dir().'/logs';
+        return sys_get_temp_dir().'/Jose/ConsoleBundle/logs';
     }
 }

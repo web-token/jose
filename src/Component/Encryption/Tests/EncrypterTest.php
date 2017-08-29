@@ -186,7 +186,7 @@ final class EncrypterTest extends TestCase
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder
-            ->withPayload($this->getKeyToEncrypt())
+            ->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
@@ -223,7 +223,7 @@ final class EncrypterTest extends TestCase
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
-            ->withPayload($this->getKeyToEncrypt())
+            ->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
@@ -309,7 +309,7 @@ final class EncrypterTest extends TestCase
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder
-            ->withPayload($this->getKeySetToEncrypt())
+            ->withPayload(json_encode($this->getKeySetToEncrypt()))
             ->withSharedProtectedHeaders([
                 'kid' => '123456789',
                 'enc' => 'A128CBC-HS256',
@@ -346,7 +346,7 @@ final class EncrypterTest extends TestCase
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
-            ->withPayload($this->getKeyToEncrypt())
+            ->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'kid' => '123456789',
                 'enc' => 'A256CBC-HS512',
@@ -368,7 +368,7 @@ final class EncrypterTest extends TestCase
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
-            ->withPayload($this->getKeyToEncrypt())
+            ->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'kid' => '123456789',
                 'alg' => 'RSA-OAEP-256',
@@ -390,7 +390,7 @@ final class EncrypterTest extends TestCase
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
-            ->withPayload($this->getKeyToEncrypt())
+            ->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'kid' => '123456789',
                 'enc' => 'A256CBC-HS512',
@@ -413,7 +413,7 @@ final class EncrypterTest extends TestCase
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jweBuilder
-            ->withPayload($this->getKeyToEncrypt())
+            ->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'kid' => '123456789',
                 'enc' => 'RSA-OAEP-256',
@@ -433,7 +433,7 @@ final class EncrypterTest extends TestCase
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder
-            ->withPayload($this->getKeyToEncrypt())
+            ->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'kid' => 'DIR_1',
                 'enc' => 'A192CBC-HS384',
@@ -465,7 +465,7 @@ final class EncrypterTest extends TestCase
         $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $payload = ['user_id' => '1234', 'exp' => time() + 3600];
+        $payload = json_encode(['user_id' => '1234', 'exp' => time() + 3600]);
         $jwe = $jweBuilder
             ->withPayload($payload)
             ->withSharedProtectedHeaders([
@@ -488,7 +488,7 @@ final class EncrypterTest extends TestCase
         $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         $this->assertEquals(0, $index);
-        $this->assertEquals($payload, json_decode($loaded->getPayload(), true));
+        $this->assertEquals($payload, $loaded->getPayload());
     }
 
     public function testEncryptAndLoadCompactKeyAgreementWithWrappingCompact()

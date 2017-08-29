@@ -109,7 +109,7 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     {
         $key = $this->getPrivateKey();
 
-        $claims = ['foo' => 'bar'];
+        $claims = json_encode(['foo' => 'bar']);
 
         $keyEncryptionAlgorithmManager = JWAManager::create([$encryption_algorithm]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
@@ -139,7 +139,7 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     {
         $key = $this->getMinimalPrivateKey();
 
-        $claims = ['foo' => 'bar'];
+        $claims = json_encode(['foo' => 'bar']);
 
         $keyEncryptionAlgorithmManager = JWAManager::create([$encryption_algorithm]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);

@@ -124,7 +124,7 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends TestCase
      */
     public function testPBES2_HS512_A256KWAndA128CBC_HS256EncryptionBis()
     {
-        $expected_payload = ['keys' => [
+        $expected_payload = json_encode(['keys' => [
             [
                 'kty' => 'oct',
                 'kid' => '77c7e2b8-6e13-45cf-8672-617b5b45243a',
@@ -144,7 +144,7 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends TestCase
                 'alg' => 'A256GCMKW',
                 'k' => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
             ],
-        ]];
+        ]]);
 
         $private_key = JWK::create([
             'kty' => 'oct',
@@ -182,7 +182,7 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends TestCase
         $this->assertTrue(array_key_exists('p2s', $loaded_json->getSharedProtectedHeaders()));
         $this->assertTrue(array_key_exists('p2c', $loaded_json->getSharedProtectedHeaders()));
 
-        $this->assertEquals($expected_payload, json_decode($loaded_flattened_json->getPayload(), true));
-        $this->assertEquals($expected_payload, json_decode($loaded_json->getPayload(), true));
+        $this->assertEquals($expected_payload, $loaded_flattened_json->getPayload());
+        $this->assertEquals($expected_payload, $loaded_json->getPayload());
     }
 }
