@@ -28,9 +28,31 @@ final class HeaderCheckerManager
     private $checkers = [];
 
     /**
+     * HeaderCheckerManager constructor.
+     *
+     * @param HeaderCheckerInterface[] $checkers
+     */
+    private function __construct(array $checkers)
+    {
+        foreach ($checkers as $checker) {
+            $this->add($checker);
+        }
+    }
+
+    /**
+     * @param HeaderCheckerInterface[] $checkers
+     *
+     * @return HeaderCheckerManager
+     */
+    public static function create(array $checkers): HeaderCheckerManager
+    {
+        return new self($checkers);
+    }
+
+    /**
      * @param HeaderCheckerInterface $checker
      */
-    public function add(HeaderCheckerInterface $checker)
+    private function add(HeaderCheckerInterface $checker)
     {
         $this->checkers[$checker->supportedHeader()] = $checker;
     }

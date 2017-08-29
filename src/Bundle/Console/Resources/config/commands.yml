@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Jose\Component\Console\:
+        resource: '../../../../Component/Console/*Command'
+        exclude: '../../../../Component/Console/{AbstractGeneratorCommand,RollbackCommand,UpdateCommand}'
+        tags:
+            - {name: 'console.command'}

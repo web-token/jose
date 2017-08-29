@@ -26,9 +26,31 @@ final class ClaimCheckerManager
     private $checkers = [];
 
     /**
+     * ClaimCheckerManager constructor.
+     *
+     * @param ClaimCheckerInterface[] $checkers
+     */
+    private function __construct(array $checkers)
+    {
+        foreach ($checkers as $checker) {
+            $this->add($checker);
+        }
+    }
+
+    /**
+     * @param ClaimCheckerInterface[] $checkers
+     *
+     * @return ClaimCheckerManager
+     */
+    public static function create(array $checkers): ClaimCheckerManager
+    {
+        return new self($checkers);
+    }
+
+    /**
      * @param ClaimCheckerInterface $checker
      */
-    public function add(ClaimCheckerInterface $checker)
+    private function add(ClaimCheckerInterface $checker)
     {
         $this->checkers[$checker->supportedClaim()] = $checker;
     }

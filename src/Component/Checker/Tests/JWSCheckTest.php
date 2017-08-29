@@ -16,8 +16,10 @@ namespace Jose\Component\Checker\Tests;
 use Base64Url\Base64Url;
 use Jose\Component\Checker\AudienceChecker;
 use Jose\Component\Checker\ClaimCheckerManager;
+use Jose\Component\Checker\ClaimCheckerManagerFactory;
 use Jose\Component\Checker\ExpirationTimeChecker;
 use Jose\Component\Checker\HeaderCheckerManager;
+use Jose\Component\Checker\HeaderCheckerManagerFactory;
 use Jose\Component\Checker\IssuedAtChecker;
 use Jose\Component\Checker\NotBeforeChecker;
 use Jose\Component\Checker\Tests\Stub\IssuerChecker;
@@ -221,17 +223,34 @@ final class JWSCheckTest extends TestCase
     private function getClaimCheckerManager(): ClaimCheckerManager
     {
         if (null === $this->claim_checker_manager) {
-            $this->claim_checker_manager = new ClaimCheckerManager();
-            $this->claim_checker_manager->add(new ExpirationTimeChecker());
-            $this->claim_checker_manager->add(new IssuedAtChecker());
-            $this->claim_checker_manager->add(new NotBeforeChecker());
-            $this->claim_checker_manager->add(new AudienceChecker('My Service'));
-            $this->claim_checker_manager->add(new SubjectChecker());
-            $this->claim_checker_manager->add(new IssuerChecker());
-            $this->claim_checker_manager->add(new JtiChecker());
+            $this->claim_checker_manager = $this->getClaimCheckerManagerFactory()->create(['exp', 'iat', 'nbf', 'aud', 'sub', 'iss', 'jti']);
         }
 
         return $this->claim_checker_manager;
+    }
+
+    /**
+     * @var ClaimCheckerManagerFactory|null
+     */
+    private $claim_checker_manager_factory = null;
+
+    /**
+     * @return ClaimCheckerManagerFactory
+     */
+    private function getClaimCheckerManagerFactory(): ClaimCheckerManagerFactory
+    {
+        if (null === $this->claim_checker_manager_factory) {
+            $this->claim_checker_manager_factory = new ClaimCheckerManagerFactory();
+            $this->claim_checker_manager_factory->add('exp', new ExpirationTimeChecker());
+            $this->claim_checker_manager_factory->add('iat', new IssuedAtChecker());
+            $this->claim_checker_manager_factory->add('nbf', new NotBeforeChecker());
+            $this->claim_checker_manager_factory->add('aud', new AudienceChecker('My Service'));
+            $this->claim_checker_manager_factory->add('sub', new SubjectChecker());
+            $this->claim_checker_manager_factory->add('iss', new IssuerChecker());
+            $this->claim_checker_manager_factory->add('jti', new JtiChecker());
+        }
+
+        return $this->claim_checker_manager_factory;
     }
 
     /**
@@ -245,16 +264,33 @@ final class JWSCheckTest extends TestCase
     private function getHeaderCheckerManager(): HeaderCheckerManager
     {
         if (null === $this->header_checker_manager) {
-            $this->header_checker_manager = new HeaderCheckerManager();
-            $this->header_checker_manager->add(new ExpirationTimeChecker());
-            $this->header_checker_manager->add(new IssuedAtChecker());
-            $this->header_checker_manager->add(new NotBeforeChecker());
-            $this->header_checker_manager->add(new AudienceChecker('My Service'));
-            $this->header_checker_manager->add(new SubjectChecker());
-            $this->header_checker_manager->add(new IssuerChecker());
-            $this->header_checker_manager->add(new JtiChecker());
+            $this->header_checker_manager = $this->getHeaderCheckerManagerFactory()->create(['exp', 'iat', 'nbf', 'aud', 'sub', 'iss', 'jti']);
         }
 
         return $this->header_checker_manager;
+    }
+
+    /**
+     * @var HeaderCheckerManagerFactory|null
+     */
+    private $header_checker_manager_factory = null;
+
+    /**
+     * @return HeaderCheckerManagerFactory
+     */
+    private function getHeaderCheckerManagerFactory(): HeaderCheckerManagerFactory
+    {
+        if (null === $this->header_checker_manager_factory) {
+            $this->header_checker_manager_factory = new HeaderCheckerManagerFactory();
+            $this->header_checker_manager_factory->add('exp', new ExpirationTimeChecker());
+            $this->header_checker_manager_factory->add('iat', new IssuedAtChecker());
+            $this->header_checker_manager_factory->add('nbf', new NotBeforeChecker());
+            $this->header_checker_manager_factory->add('aud', new AudienceChecker('My Service'));
+            $this->header_checker_manager_factory->add('sub', new SubjectChecker());
+            $this->header_checker_manager_factory->add('iss', new IssuerChecker());
+            $this->header_checker_manager_factory->add('jti', new JtiChecker());
+        }
+
+        return $this->header_checker_manager_factory;
     }
 }

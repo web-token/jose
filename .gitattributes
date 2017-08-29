@@ -3,8 +3,6 @@
 /performance export-ignore
 /doc export-ignore
 /examples export-ignore
-/tests export-ignore
-/.coveralls.yml export-ignore
 /.scrutinizer.yml export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore

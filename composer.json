@@ -1,9 +1,9 @@
 {
     "name": "spomky-labs/jose",
-    "description": "JSON Object Signing and Encryption library for PHP.",
+    "description": "JSON Object Signing and Encryption library for PHP and Symfony Bundle.",
     "type": "library",
     "license": "MIT",
-    "keywords": ["JWS", "JWT", "JWE", "JWA", "JWK", "JWKSet", "Jot", "Jose", "RFC7515", "RFC7516", "RFC7517", "RFC7518", "RFC7519", "RFC7520"],
+    "keywords": ["JWS", "JWT", "JWE", "JWA", "JWK", "JWKSet", "Jot", "Jose", "RFC7515", "RFC7516", "RFC7517", "RFC7518", "RFC7519", "RFC7520", "Bundle", "Symfony"],
     "homepage": "https://github.com/Spomky-Labs/Jose",
     "authors": [
         {
@@ -37,13 +37,20 @@
         "php-http/message-factory": "^1.0",
         "paragonie/sodium_compat": "^1.1",
         "symfony/console": "^3.3",
-        "padraic/phar-updater": "^1.0"
+        "padraic/phar-updater": "^1.0",
+        "symfony/http-kernel": "^3.3",
+        "symfony/framework-bundle": "^3.3",
+        "symfony/dependency-injection": "^3.3",
+        "symfony/config": "^3.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0",
         "mdanter/ecc": "0.4.*",
         "satooshi/php-coveralls": "^1.0",
-        "phpbench/phpbench": "^0.13.0"
+        "phpbench/phpbench": "^0.13.0",
+        "symfony/finder": "^3.3",
+        "symfony/var-dumper": "^3.3",
+        "ext-curl": "*"
     },
    "suggest":{
         "mdanter/ecc": "For ECDH-ES with P-256, P-384 and P-521 Elliptic Curves algorithms support."
@@ -52,5 +59,8 @@
         "branch-alias": {
             "dev-master": "7.0.x-dev"
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }
