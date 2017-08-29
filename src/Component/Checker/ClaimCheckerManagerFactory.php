@@ -40,8 +40,7 @@ final class ClaimCheckerManagerFactory
     }
 
     /**
-     * @param string $alias
-     *
+     * @param string                $alias
      * @param ClaimCheckerInterface $checker
      */
     public function add(string $alias, ClaimCheckerInterface $checker)

@@ -40,8 +40,7 @@ final class HeaderCheckerManagerFactory
     }
 
     /**
-     * @param string $alias
-     *
+     * @param string                 $alias
      * @param HeaderCheckerInterface $checker
      */
     public function add(string $alias, HeaderCheckerInterface $checker)
