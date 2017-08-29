@@ -21,7 +21,7 @@ final class CompressionMethodsManagerFactory
     private $compressionMethods = [];
 
     /**
-     * @param string $alias
+     * @param string                    $alias
      * @param CompressionMethodsManager $compressionMethod
      */
     public function add(string $alias, CompressionMethodsManager $compressionMethod)

@@ -21,7 +21,7 @@ final class JWAManagerFactory
     private $algorithms;
 
     /**
-     * @param string $alias
+     * @param string       $alias
      * @param JWAInterface $algorithm
      */
     public function add(string $alias, JWAInterface $algorithm)
