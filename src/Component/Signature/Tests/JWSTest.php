@@ -15,7 +15,6 @@ namespace Jose\Component\Signature\Tests;
 
 use Base64Url\Base64Url;
 use Jose\Component\Signature\JWS;
-use PHPUnit\Framework\TestCase;
 
 /**
  * final class JWSTest.

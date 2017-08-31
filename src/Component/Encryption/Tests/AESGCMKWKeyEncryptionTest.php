@@ -18,7 +18,6 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A128GCMKW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A192GCMKW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A256GCMKW;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @group AESGCMKW

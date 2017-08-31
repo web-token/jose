@@ -21,10 +21,8 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
 use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\JWELoader;
 use Jose\Component\Encryption\Tests\AbstractEncryptionTest;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-5.12

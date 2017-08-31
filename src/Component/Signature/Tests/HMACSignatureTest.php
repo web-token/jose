@@ -17,7 +17,6 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\Algorithm\HS384;
 use Jose\Component\Signature\Algorithm\HS512;
-use PHPUnit\Framework\TestCase;
 
 /**
  * final class HMACSignatureTest.
