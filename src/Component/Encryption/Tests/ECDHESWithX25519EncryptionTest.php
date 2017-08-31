@@ -22,7 +22,6 @@ use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\JWELoader;
 use Jose\Component\KeyManagement\JWKFactory;
-use PHPUnit\Framework\TestCase;
 
 /**
  * final class ECDHESWithX25519EncryptionTest.

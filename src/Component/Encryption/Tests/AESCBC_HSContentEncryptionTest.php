@@ -17,7 +17,6 @@ use Base64Url\Base64Url;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A192CBCHS384;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256CBCHS512;
-use PHPUnit\Framework\TestCase;
 
 /**
  * final class AESCBC_HSContentEncryptionTest.

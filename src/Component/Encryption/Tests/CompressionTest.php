@@ -18,7 +18,6 @@ use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Compression\GZip;
 use Jose\Component\Encryption\Compression\ZLib;
-use PHPUnit\Framework\TestCase;
 
 /**
  * final class CompressionTest.

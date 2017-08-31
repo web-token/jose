@@ -19,7 +19,6 @@ use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use Jose\Component\Signature\Algorithm\ES256;
 use Jose\Component\Signature\Algorithm\ES384;
 use Jose\Component\Signature\Algorithm\ES512;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @group ECDSA
