@@ -18,7 +18,6 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS256A128KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS384A192KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS512A256KW;
-use PHPUnit\Framework\TestCase;
 
 /**
  * final class PBES2_HS_AESKWKeyEncryptionTest.

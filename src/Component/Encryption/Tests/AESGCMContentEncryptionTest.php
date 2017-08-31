@@ -17,7 +17,6 @@ use Base64Url\Base64Url;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A192GCM;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
-use PHPUnit\Framework\TestCase;
 
 /**
  * final class AESGCMContentEncryptionTest.
