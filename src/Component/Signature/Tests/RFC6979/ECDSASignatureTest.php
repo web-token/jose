@@ -21,7 +21,6 @@ use Jose\Component\Signature\Algorithm\ES384;
 use Jose\Component\Signature\Algorithm\ES512;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\Signature\Tests\AbstractSignatureTest;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc6979#appendix-A.2.5

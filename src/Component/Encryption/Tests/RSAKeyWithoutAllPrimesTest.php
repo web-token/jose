@@ -24,7 +24,6 @@ use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWE;
-use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\JWELoader;
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\Algorithm\PS256;
@@ -38,7 +37,6 @@ use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\Signature\Verifier;
-use PHPUnit\Framework\TestCase;
 
 /**
  * final class RSAKeyWithoutAllPrimesTest.

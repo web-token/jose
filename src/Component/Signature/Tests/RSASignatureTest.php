@@ -34,10 +34,8 @@ use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\Algorithm\RS384;
 use Jose\Component\Signature\Algorithm\RS512;
 use Jose\Component\Signature\JWS;
-use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
-use PHPUnit\Framework\TestCase;
 
 /**
  * final class RSASignatureTest.

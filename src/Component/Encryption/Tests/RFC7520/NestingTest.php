@@ -25,7 +25,6 @@ use Jose\Component\Encryption\Tests\AbstractEncryptionTest;
 use Jose\Component\Signature\Algorithm\PS256;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-6

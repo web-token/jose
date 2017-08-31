@@ -23,10 +23,8 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
 use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\JWELoader;
 use Jose\Component\Encryption\Tests\AbstractEncryptionTest;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-5.13
@@ -216,7 +214,7 @@ final class MultipleRecipientEncryptionTest extends AbstractEncryptionTest
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15(), new ECDHESA256KW(), new A256GCMKW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionMethodsManager::create([new Deflate()]);
-        $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA1_5', 'ECDH-ES+A256KW', 'A256GCMKW', ], ['A128CBC-HS256'], ['DEF']);
+        $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA1_5', 'ECDH-ES+A256KW', 'A256GCMKW'], ['A128CBC-HS256'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder
