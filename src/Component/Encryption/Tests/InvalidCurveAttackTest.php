@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  * @group CVE
  * @group Functional
  */
-final class InvalidCurveAttackTest extends TestCase
+final class InvalidCurveAttackTest extends AbstractEncryptionTest
 {
     /**
      * @expectedException \InvalidArgumentException

@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  * @group AESKW
  * @group Unit
  */
-final class AESKWKeyEncryptionTest extends TestCase
+final class AESKWKeyEncryptionTest extends AbstractEncryptionTest
 {
     public function testA128KW()
     {

@@ -18,6 +18,7 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\PS384;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\Tests\AbstractSignatureTest;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-final class RSAPSSSignatureTest extends TestCase
+final class RSAPSSSignatureTest extends AbstractSignatureTest
 {
     /**
      * Please note that we cannot create the signature and get the same result as the example (RSA-PSS signatures are always different).
@@ -69,8 +70,8 @@ final class RSAPSSSignatureTest extends TestCase
         $signatureAlgorithmManager = JWAManager::create([new PS384()]);
         $verifier = new Verifier($signatureAlgorithmManager);
 
-        $builder = new JWSBuilder($signatureAlgorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['PS384']);
+        $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($privateKey, $headers)
             ->build();

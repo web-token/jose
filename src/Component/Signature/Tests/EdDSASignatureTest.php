@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  * @group EdDSA
  * @group Unit
  */
-final class EdDSASignatureTest extends TestCase
+final class EdDSASignatureTest extends AbstractSignatureTest
 {
     /**
      * @see https://tools.ietf.org/html/draft-ietf-jose-cfrg-curves-00#appendix-A.5
@@ -68,8 +68,8 @@ final class EdDSASignatureTest extends TestCase
         $input = Base64Url::decode('RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc');
 
         $signatureAlgorithmManager = JWAManager::create([new EdDSA()]);
-        $builder = new JWSBuilder($signatureAlgorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['EdDSA']);
+        $jws = $jwsBuilder
             ->withPayload($input)
             ->addSignature($key, $header)
             ->build()

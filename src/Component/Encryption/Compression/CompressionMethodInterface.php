@@ -16,7 +16,7 @@ namespace Jose\Component\Encryption\Compression;
 /**
  * This interface is used by all compression methods.
  */
-interface CompressionInterface
+interface CompressionMethodInterface
 {
     /**
      * @return string Return the name of the method

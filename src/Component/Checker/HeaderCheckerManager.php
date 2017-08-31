@@ -51,10 +51,14 @@ final class HeaderCheckerManager
 
     /**
      * @param HeaderCheckerInterface $checker
+     *
+     * @return HeaderCheckerManager
      */
-    private function add(HeaderCheckerInterface $checker)
+    private function add(HeaderCheckerInterface $checker): HeaderCheckerManager
     {
         $this->checkers[$checker->supportedHeader()] = $checker;
+
+        return $this;
     }
 
     /**

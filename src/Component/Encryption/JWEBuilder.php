@@ -16,7 +16,7 @@ namespace Jose\Component\Encryption;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\KeyChecker;
+use Jose\Component\Core\Util\KeyChecker;
 use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\DirectEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementInterface;
@@ -24,7 +24,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementWrappingInterf
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
-use Jose\Component\Encryption\Compression\CompressionInterface;
+use Jose\Component\Encryption\Compression\CompressionMethodInterface;
 use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 
 final class JWEBuilder
@@ -70,7 +70,7 @@ final class JWEBuilder
     private $sharedHeaders = [];
 
     /**
-     * @var null|CompressionInterface
+     * @var null|CompressionMethodInterface
      */
     private $compressionMethod = null;
 
@@ -455,9 +455,9 @@ final class JWEBuilder
     /**
      * @param array $completeHeaders
      *
-     * @return CompressionInterface|null
+     * @return CompressionMethodInterface|null
      */
-    private function getCompressionMethod(array $completeHeaders): ?CompressionInterface
+    private function getCompressionMethod(array $completeHeaders): ?CompressionMethodInterface
     {
         if (!array_key_exists('zip', $completeHeaders)) {
             return null;

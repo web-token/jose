@@ -49,10 +49,14 @@ final class ClaimCheckerManager
 
     /**
      * @param ClaimCheckerInterface $checker
+     *
+     * @return ClaimCheckerManager
      */
-    private function add(ClaimCheckerInterface $checker)
+    private function add(ClaimCheckerInterface $checker): ClaimCheckerManager
     {
         $this->checkers[$checker->supportedClaim()] = $checker;
+
+        return $this;
     }
 
     /**

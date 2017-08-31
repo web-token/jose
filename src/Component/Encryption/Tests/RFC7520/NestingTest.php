@@ -21,6 +21,7 @@ use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWELoader;
+use Jose\Component\Encryption\Tests\AbstractEncryptionTest;
 use Jose\Component\Signature\Algorithm\PS256;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
@@ -31,7 +32,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-final class NestingTest extends TestCase
+final class NestingTest extends AbstractEncryptionTest
 {
     public function testSignatureVerification()
     {

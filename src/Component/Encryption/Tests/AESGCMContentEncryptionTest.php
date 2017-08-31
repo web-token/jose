@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group Unit
  */
-final class AESGCMContentEncryptionTest extends TestCase
+final class AESGCMContentEncryptionTest extends AbstractEncryptionTest
 {
     public function testA128GCMEncryptAndDecrypt()
     {

@@ -20,6 +20,7 @@ use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\Tests\AbstractSignatureTest;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
@@ -28,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-final class MultipleSignaturesTest extends TestCase
+final class MultipleSignaturesTest extends AbstractSignatureTest
 {
     public function testMultipleSignatures()
     {
@@ -71,7 +72,7 @@ final class MultipleSignaturesTest extends TestCase
         ]);
 
         $signatureAlgorithmManager = JWAManager::create([new RS256(), new ES512(), new HS256()]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256', 'ES512', 'HS256']);
         $jwsBuilder = $jwsBuilder->withPayload($payload);
 
         $jws = $jwsBuilder

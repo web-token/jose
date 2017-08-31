@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  * @group JWS
  * @group Unit
  */
-final class JWSTest extends TestCase
+final class JWSTest extends AbstractSignatureTest
 {
     public function testJWS()
     {

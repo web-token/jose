@@ -30,7 +30,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group Functional
  */
-final class JWEFlattenedTest extends TestCase
+final class JWEFlattenedTest extends AbstractEncryptionTest
 {
     /**
      * @see https://tools.ietf.org/html/rfc7516#appendix-A.5

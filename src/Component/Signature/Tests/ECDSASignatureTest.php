@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  *
  * The values of these tests come from the JWS specification
  */
-final class ECDSASignatureTest extends TestCase
+final class ECDSASignatureTest extends AbstractSignatureTest
 {
     /**
      * @expectedException \InvalidArgumentException

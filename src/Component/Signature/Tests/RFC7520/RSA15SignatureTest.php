@@ -18,6 +18,7 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\Tests\AbstractSignatureTest;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-final class RSA15SignatureTest extends TestCase
+final class RSA15SignatureTest extends AbstractSignatureTest
 {
     public function testRS256()
     {
@@ -63,8 +64,8 @@ final class RSA15SignatureTest extends TestCase
         $signatureAlgorithmManager = JWAManager::create([new RS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
 
-        $builder = new JWSBuilder($signatureAlgorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256']);
+        $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($privateKey, $headers)
             ->build();

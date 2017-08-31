@@ -25,13 +25,12 @@ use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\Verifier;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @group Signer
  * @group Functional
  */
-final class SignerTest extends TestCase
+final class SignerTest extends AbstractSignatureTest
 {
     /**
      * @expectedException \InvalidArgumentException
@@ -39,8 +38,7 @@ final class SignerTest extends TestCase
      */
     public function testAlgParameterIsMissing()
     {
-        $signatureAlgorithmManager = JWAManager::create([]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create([]);
         $jwsBuilder
             ->withPayload(json_encode($this->getKey3()))
             ->addSignature($this->getKey1(), [])
@@ -53,8 +51,7 @@ final class SignerTest extends TestCase
      */
     public function testAlgParameterIsNotSupported()
     {
-        $signatureAlgorithmManager = JWAManager::create([]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create([]);
 
         $jwsBuilder
             ->withPayload(json_encode($this->getKey3()))
@@ -68,8 +65,7 @@ final class SignerTest extends TestCase
      */
     public function testDuplicatedHeader()
     {
-        $signatureAlgorithmManager = JWAManager::create([]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create([]);
 
         $jwsBuilder
             ->withPayload(json_encode($this->getKey3()))
@@ -78,8 +74,7 @@ final class SignerTest extends TestCase
 
     public function testSignAndLoadCompact()
     {
-        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
         $jws = $jwsBuilder
             ->withPayload(json_encode($this->getKey3()))
             ->addSignature($this->getKey1(), ['alg' => 'HS512'])
@@ -97,8 +92,7 @@ final class SignerTest extends TestCase
 
     public function testSignMultipleInstructionWithCompactRepresentation()
     {
-        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey1(), ['alg' => 'HS512'])
@@ -115,8 +109,7 @@ final class SignerTest extends TestCase
      */
     public function testSignMultipleInstructionWithCompactRepresentationUsingBuilder()
     {
-        $jwaManager = JWAManager::create([new HS512(), new RS512()]);
-        $jwsBuilder = new JWSBuilder($jwaManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey1(), ['alg' => 'HS512'])
@@ -133,8 +126,7 @@ final class SignerTest extends TestCase
      */
     public function testSignMultipleInstructionWithCompactRepresentationUsingBuilderAndDetachedPayload()
     {
-        $jwaManager = JWAManager::create([new HS512(), new RS512()]);
-        $jwsBuilder = new JWSBuilder($jwaManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.', true)
             ->addSignature($this->getKey1(), ['alg' => 'HS512'])
@@ -149,9 +141,9 @@ final class SignerTest extends TestCase
     public function testCreateCompactJWSUsingFactory()
     {
         $algorithmManager = JWAManager::create([new HS512(), new RS512()]);
-        $builder = new JWSBuilder($algorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
 
-        $jws = $builder
+        $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey1(), ['alg' => 'HS512'])
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
@@ -159,7 +151,7 @@ final class SignerTest extends TestCase
         $jws0 = $jws->toCompactJSON(0);
         $jws1 = $jws->toCompactJSON(1);
 
-        $jws = $builder
+        $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.', true)
             ->addSignature($this->getKey1(), ['alg' => 'HS512'])
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
@@ -188,8 +180,7 @@ final class SignerTest extends TestCase
 
     public function testSignMultipleInstructionWithFlattenedRepresentation()
     {
-        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey1(), ['alg' => 'HS512'])
@@ -204,8 +195,8 @@ final class SignerTest extends TestCase
     public function testCreateFlattenedJWSUsingFactory()
     {
         $algorithmManager = JWAManager::create([new HS512(), new RS512()]);
-        $builder = new JWSBuilder($algorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
+        $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
             ->addSignature($this->getKey2(), ['alg' => 'RS512'], ['plic' => 'ploc'])
@@ -213,7 +204,7 @@ final class SignerTest extends TestCase
         $jws0 = $jws->toFlattenedJSON(0);
         $jws1 = $jws->toFlattenedJSON(1);
 
-        $jws = $builder
+        $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.', true)
             ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
             ->addSignature($this->getKey2(), ['alg' => 'RS512'], ['plic' => 'ploc'])
@@ -246,8 +237,7 @@ final class SignerTest extends TestCase
      */
     public function testAlgorithmNotAllowedForTheKey()
     {
-        $signatureAlgorithmManager = JWAManager::create([]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create([]);
         $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey5(), ['alg' => 'RS512'])
@@ -260,8 +250,7 @@ final class SignerTest extends TestCase
      */
     public function testOperationNotAllowedForTheKey()
     {
-        $signatureAlgorithmManager = JWAManager::create([new PS512()]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['PS512']);
         $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey4(), ['alg' => 'PS512'])
@@ -270,8 +259,7 @@ final class SignerTest extends TestCase
 
     public function testSignAndLoadFlattened()
     {
-        $signatureAlgorithmManager = JWAManager::create([new HS512()]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512']);
         $jws = $jwsBuilder
             ->withPayload(json_encode(['baz', 'ban']))
             ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
@@ -288,7 +276,7 @@ final class SignerTest extends TestCase
     {
         $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
@@ -315,7 +303,7 @@ final class SignerTest extends TestCase
     {
         $signatureAlgorithmManager = JWAManager::create([new RS512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS512']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
@@ -337,7 +325,7 @@ final class SignerTest extends TestCase
     public function testSignAndLoadWithUnsupportedAlgorithm()
     {
         $verifier = new Verifier(JWAManager::create([new HS512()]));
-        $jwsBuilder = new JWSBuilder(JWAManager::create([new RS512()]));
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS512']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
@@ -391,8 +379,7 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($key, $protectedHeader)
@@ -420,8 +407,8 @@ final class SignerTest extends TestCase
         ]);
 
         $algorithmManager = JWAManager::create([new HS256()]);
-        $builder = new JWSBuilder($algorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
+        $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader)
             ->build()
@@ -457,8 +444,7 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader1)
@@ -501,8 +487,7 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($key, $protectedHeader1)
@@ -529,9 +514,8 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $algorithmManager = JWAManager::create([new HS256()]);
-        $builder = new JWSBuilder($algorithmManager);
-        $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
+        $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader)
             ->build()
@@ -556,9 +540,8 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $algorithmManager = JWAManager::create([new HS256()]);
-        $builder = new JWSBuilder($algorithmManager);
-        $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
+        $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader)
             ->build()
@@ -583,9 +566,8 @@ final class SignerTest extends TestCase
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $algorithmManager = JWAManager::create([new HS256()]);
-        $builder = new JWSBuilder($algorithmManager);
-        $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
+        $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader)
             ->build()
@@ -617,8 +599,8 @@ final class SignerTest extends TestCase
         ];
 
         $algorithmManager = JWAManager::create([new HS256()]);
-        $builder = new JWSBuilder($algorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
+        $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($key, $protectedHeader)
             ->build()
@@ -659,9 +641,8 @@ final class SignerTest extends TestCase
             'signature' => 'A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY',
         ];
 
-        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
-        $builder = new JWSBuilder($signatureAlgorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
+        $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader)
             ->build()
@@ -694,7 +675,7 @@ final class SignerTest extends TestCase
     {
         $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
         $jws = $jwsBuilder
             ->withPayload(json_encode($this->getKeyset()))
             ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
@@ -720,7 +701,7 @@ final class SignerTest extends TestCase
     {
         $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
         $jws = $jwsBuilder
             ->withPayload(json_encode($this->getKeyset()))
             ->addSignature($this->getKey1(), ['alg' => 'HS512', ['foo' => 'bar']])

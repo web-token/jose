@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group Unit
  */
-final class DirAlgorithmTest extends TestCase
+final class DirAlgorithmTest extends AbstractEncryptionTest
 {
     /**
      * @expectedException \InvalidArgumentException

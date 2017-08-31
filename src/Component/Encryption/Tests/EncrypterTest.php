@@ -39,7 +39,7 @@ use PHPUnit\Framework\TestCase;
  * @group Encrypter
  * @group Functional
  */
-final class EncrypterTest extends TestCase
+final class EncrypterTest extends AbstractEncryptionTest
 {
     public function testEncryptWithJWTInput()
     {

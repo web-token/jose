@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  * @group None
  * @group Unit
  */
-final class NoneSignatureTest extends TestCase
+final class NoneSignatureTest extends AbstractSignatureTest
 {
     public function testNoneSignAndVerifyAlgorithm()
     {
@@ -66,9 +66,8 @@ final class NoneSignatureTest extends TestCase
             'kty' => 'none',
         ]);
 
-        $signatureAlgorithmManager = JWAManager::create([new None()]);
-        $builder = new JWSBuilder($signatureAlgorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['none']);
+        $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($jwk, ['alg' => 'none'])
             ->build();

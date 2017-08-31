@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests;
 
 use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
@@ -45,7 +46,7 @@ use PHPUnit\Framework\TestCase;
  * @group RSA2
  * @group Unit
  */
-final class RSAKeyWithoutAllPrimesTest extends TestCase
+final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
 {
     /**
      * @param SignatureAlgorithmInterface $signature_algorithm
@@ -163,7 +164,7 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     /**
      * @return array
      */
-    public function dataEncryptionAlgorithms()
+    public function dataEncryptionAlgorithms(): array
     {
         return [
             [new RSA15()],
@@ -175,7 +176,7 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     /**
      * @return array
      */
-    public function dataEncryptionAlgorithmsWithSimpleKey()
+    public function dataEncryptionAlgorithmsWithSimpleKey(): array
     {
         return [
             [new RSAOAEP()],
@@ -184,9 +185,9 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWK
+     * @return JWK
      */
-    private function getPrivateKey()
+    private function getPrivateKey(): JWK
     {
         return JWKFactory::createFromValues(
             [
@@ -202,9 +203,9 @@ final class RSAKeyWithoutAllPrimesTest extends TestCase
     }
 
     /**
-     * @return \Jose\Component\Core\JWK
+     * @return JWK
      */
-    private function getMinimalPrivateKey()
+    private function getMinimalPrivateKey(): JWK
     {
         return JWKFactory::createFromValues(
             [

@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
  * @group PBES2HSAESKW
  * @group Unit
  */
-final class PBES2_HS_AESKWKeyEncryptionTest extends TestCase
+final class PBES2_HS_AESKWKeyEncryptionTest extends AbstractEncryptionTest
 {
     /**
      * @see https://tools.ietf.org/html/rfc7517#appendix-C

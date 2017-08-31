@@ -18,15 +18,22 @@ final class JWAManagerFactory
     /**
      * @var array
      */
-    private $algorithms;
+    private $algorithms = [];
 
     /**
      * @param string       $alias
      * @param JWAInterface $algorithm
+     *
+     * @return JWAManagerFactory
      */
-    public function add(string $alias, JWAInterface $algorithm)
+    public function add(string $alias, JWAInterface $algorithm): JWAManagerFactory
     {
+        if (array_key_exists($alias, $this->algorithms)) {
+            throw new \InvalidArgumentException(sprintf('The alias "%s" already exists.', $alias));
+        }
         $this->algorithms[$alias] = $algorithm;
+
+        return $this;
     }
 
     /**
@@ -46,5 +53,13 @@ final class JWAManagerFactory
         }
 
         return JWAManager::create($algorithms);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function aliases(): array
+    {
+        return array_keys($this->algorithms);
     }
 }

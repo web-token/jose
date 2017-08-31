@@ -42,10 +42,17 @@ final class ClaimCheckerManagerFactory
     /**
      * @param string                $alias
      * @param ClaimCheckerInterface $checker
+     *
+     * @return ClaimCheckerManagerFactory
      */
-    public function add(string $alias, ClaimCheckerInterface $checker)
+    public function add(string $alias, ClaimCheckerInterface $checker): ClaimCheckerManagerFactory
     {
+        if (array_key_exists($alias, $this->checkers)) {
+            throw new \InvalidArgumentException(sprintf('The alias "%s" already exists.', $alias));
+        }
         $this->checkers[$alias] = $checker;
+
+        return $this;
     }
 
     /**

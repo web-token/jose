@@ -11,7 +11,9 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Core;
+namespace Jose\Component\Core\Util;
+
+use Jose\Component\Core\JWK;
 
 final class KeyChecker
 {

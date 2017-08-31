@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Tests;
 
-use Jose\Component\Encryption\Compression\CompressionInterface;
+use Jose\Component\Encryption\Compression\CompressionMethodInterface;
 use Jose\Component\Encryption\Compression\CompressionMethodsManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Compression\GZip;
@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group Unit
  */
-final class CompressionTest extends TestCase
+final class CompressionTest extends AbstractEncryptionTest
 {
     public function testGetValidCompressionAlgorithm()
     {
@@ -35,7 +35,7 @@ final class CompressionTest extends TestCase
         $manager->add(new ZLib());
 
         $compression = $manager->get('DEF');
-        $this->assertInstanceOf(CompressionInterface::class, $compression);
+        $this->assertInstanceOf(CompressionMethodInterface::class, $compression);
     }
 
     /**

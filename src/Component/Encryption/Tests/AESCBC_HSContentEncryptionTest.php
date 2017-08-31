@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
  * @group AESCBC
  * @group Unit
  */
-final class AESCBC_HSContentEncryptionTest extends TestCase
+final class AESCBC_HSContentEncryptionTest extends AbstractEncryptionTest
 {
     /**
      * @see https://tools.ietf.org/html/rfc7516#appendix-B

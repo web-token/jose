@@ -35,7 +35,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group Unit
  */
-final class RSAKeyEncryptionTest extends TestCase
+final class RSAKeyEncryptionTest extends AbstractEncryptionTest
 {
     /**
      * @expectedException \InvalidArgumentException

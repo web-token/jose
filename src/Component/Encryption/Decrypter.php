@@ -18,7 +18,7 @@ use Jose\Component\Core\JWAInterface;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
-use Jose\Component\Core\KeyChecker;
+use Jose\Component\Core\Util\KeyChecker;
 use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\DirectEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementInterface;

@@ -16,7 +16,7 @@ namespace Jose\Component\Signature;
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\KeyChecker;
+use Jose\Component\Core\Util\KeyChecker;
 
 final class JWSBuilder
 {

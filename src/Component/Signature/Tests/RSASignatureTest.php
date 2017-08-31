@@ -45,7 +45,7 @@ use PHPUnit\Framework\TestCase;
  * @group RSA
  * @group Unit
  */
-final class RSASignatureTest extends TestCase
+final class RSASignatureTest extends AbstractSignatureTest
 {
     /**
      * @expectedException \InvalidArgumentException
@@ -224,9 +224,8 @@ final class RSASignatureTest extends TestCase
                 'qi' => 'BocuCOEOq-oyLDALwzMXU8gOf3IL1Q1_BWwsdoANoh6i179psxgE4JXToWcpXZQQqub8ngwE6uR9fpd3m6N_PL4T55vbDDyjPKmrL2ttC2gOtx9KrpPh-Z7LQRo4BE48nHJJrystKHfFlaH2G7JxHNgMBYVADyttN09qEoav8Os',
         ]);
 
-        $signatureAlgorithmManager = JWAManager::create([new RS256()]);
-        $builder = new JWSBuilder($signatureAlgorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256']);
+        $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature(
                 $key,
@@ -263,9 +262,8 @@ final class RSASignatureTest extends TestCase
                 'qi' => 'BocuCOEOq-oyLDALwzMXU8gOf3IL1Q1_BWwsdoANoh6i179psxgE4JXToWcpXZQQqub8ngwE6uR9fpd3m6N_PL4T55vbDDyjPKmrL2ttC2gOtx9KrpPh-Z7LQRo4BE48nHJJrystKHfFlaH2G7JxHNgMBYVADyttN09qEoav8Os',
         ]);
 
-        $signatureAlgorithmManager = JWAManager::create([new RS256()]);
-        $builder = new JWSBuilder($signatureAlgorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256']);
+        $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.', true)
             ->addSignature(
                 $key,
@@ -302,9 +300,8 @@ final class RSASignatureTest extends TestCase
                 'qi' => 'BocuCOEOq-oyLDALwzMXU8gOf3IL1Q1_BWwsdoANoh6i179psxgE4JXToWcpXZQQqub8ngwE6uR9fpd3m6N_PL4T55vbDDyjPKmrL2ttC2gOtx9KrpPh-Z7LQRo4BE48nHJJrystKHfFlaH2G7JxHNgMBYVADyttN09qEoav8Os',
         ]);
 
-        $signatureAlgorithmManager = JWAManager::create([new RS384()]);
-        $builder = new JWSBuilder($signatureAlgorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS384']);
+        $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature(
                 $key,
@@ -341,9 +338,8 @@ final class RSASignatureTest extends TestCase
                 'qi' => 'BocuCOEOq-oyLDALwzMXU8gOf3IL1Q1_BWwsdoANoh6i179psxgE4JXToWcpXZQQqub8ngwE6uR9fpd3m6N_PL4T55vbDDyjPKmrL2ttC2gOtx9KrpPh-Z7LQRo4BE48nHJJrystKHfFlaH2G7JxHNgMBYVADyttN09qEoav8Os',
         ]);
 
-        $signatureAlgorithmManager = JWAManager::create([new RS512()]);
-        $builder = new JWSBuilder($signatureAlgorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS512']);
+        $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature(
                 $key,
@@ -382,9 +378,8 @@ final class RSASignatureTest extends TestCase
                 'qi' => 'BocuCOEOq-oyLDALwzMXU8gOf3IL1Q1_BWwsdoANoh6i179psxgE4JXToWcpXZQQqub8ngwE6uR9fpd3m6N_PL4T55vbDDyjPKmrL2ttC2gOtx9KrpPh-Z7LQRo4BE48nHJJrystKHfFlaH2G7JxHNgMBYVADyttN09qEoav8Os',
         ]);
 
-        $signatureAlgorithmManager = JWAManager::create([new PS256()]);
-        $builder = new JWSBuilder($signatureAlgorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['PS256']);
+        $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature(
                 $key,
@@ -420,9 +415,8 @@ final class RSASignatureTest extends TestCase
                 'dq' => 'Swz1-m_vmTFN_pu1bK7vF7S5nNVrL4A0OFiEsGliCmuJWzOKdL14DiYxctvnw3H6qT2dKZZfV2tbse5N9-JecdldUjfuqAoLIe7dD7dKi42YOlTC9QXmqvTh1ohnJu8pmRFXEZQGUm_BVhoIb2_WPkjav6YSkguCUHt4HRd2YwE',
                 'qi' => 'BocuCOEOq-oyLDALwzMXU8gOf3IL1Q1_BWwsdoANoh6i179psxgE4JXToWcpXZQQqub8ngwE6uR9fpd3m6N_PL4T55vbDDyjPKmrL2ttC2gOtx9KrpPh-Z7LQRo4BE48nHJJrystKHfFlaH2G7JxHNgMBYVADyttN09qEoav8Os',
         ]);
-        $signatureAlgorithmManager = JWAManager::create([new PS384()]);
-        $builder = new JWSBuilder($signatureAlgorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['PS384']);
+        $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature(
                 $key,
@@ -458,9 +452,8 @@ final class RSASignatureTest extends TestCase
                 'qi' => 'BocuCOEOq-oyLDALwzMXU8gOf3IL1Q1_BWwsdoANoh6i179psxgE4JXToWcpXZQQqub8ngwE6uR9fpd3m6N_PL4T55vbDDyjPKmrL2ttC2gOtx9KrpPh-Z7LQRo4BE48nHJJrystKHfFlaH2G7JxHNgMBYVADyttN09qEoav8Os',
         ]);
 
-        $signatureAlgorithmManager = JWAManager::create([new PS512()]);
-        $builder = new JWSBuilder($signatureAlgorithmManager);
-        $jws = $builder
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['PS512']);
+        $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature(
                 $key,

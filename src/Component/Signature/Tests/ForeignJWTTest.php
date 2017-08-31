@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
  * @group ForeignJWT
  * @group Functional
  */
-final class ForeignJWTTest extends TestCase
+final class ForeignJWTTest extends AbstractSignatureTest
 {
     /*
      * The following test uses an assertion created with another library.

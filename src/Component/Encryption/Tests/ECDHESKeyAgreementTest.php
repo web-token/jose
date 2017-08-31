@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
  * @group ECDHES
  * @group Unit
  */
-final class ECDHESKeyAgreementTest extends TestCase
+final class ECDHESKeyAgreementTest extends AbstractEncryptionTest
 {
     /**
      * @see https://tools.ietf.org/html/rfc7518#appendix-C

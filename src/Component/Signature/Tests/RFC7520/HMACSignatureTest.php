@@ -18,6 +18,7 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\Tests\AbstractSignatureTest;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +31,7 @@ use PHPUnit\Framework\TestCase;
  * @group HMAC
  * @group RFC7520
  */
-final class HMACSignatureTest extends TestCase
+final class HMACSignatureTest extends AbstractSignatureTest
 {
     /**
      * @see https://tools.ietf.org/html/rfc7520#section-4.4
@@ -63,7 +64,7 @@ final class HMACSignatureTest extends TestCase
 
         $signatureAlgorithmManager = JWAManager::create([new HS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($key, $headers)
@@ -124,7 +125,7 @@ final class HMACSignatureTest extends TestCase
 
         $signatureAlgorithmManager = JWAManager::create([new HS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $headers)
@@ -188,7 +189,7 @@ final class HMACSignatureTest extends TestCase
 
         $signatureAlgorithmManager = JWAManager::create([new HS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($key, $protected_headers, $unprotected_headers)
@@ -243,7 +244,7 @@ final class HMACSignatureTest extends TestCase
 
         $signatureAlgorithmManager = JWAManager::create([new HS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($key, [], $unprotected_headers)

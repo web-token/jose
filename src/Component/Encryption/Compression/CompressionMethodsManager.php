@@ -19,12 +19,12 @@ namespace Jose\Component\Encryption\Compression;
 final class CompressionMethodsManager
 {
     /**
-     * @var CompressionInterface[]
+     * @var CompressionMethodInterface[]
      */
     private $compressionMethods = [];
 
     /**
-     * @param CompressionInterface[] $methods
+     * @param CompressionMethodInterface[] $methods
      *
      * @return CompressionMethodsManager
      */
@@ -39,11 +39,15 @@ final class CompressionMethodsManager
     }
 
     /**
-     * @param CompressionInterface $compressionMethod
+     * @param CompressionMethodInterface $compressionMethod
+     *
+     * @return CompressionMethodsManager
      */
-    public function add(CompressionInterface $compressionMethod)
+    public function add(CompressionMethodInterface $compressionMethod): CompressionMethodsManager
     {
         $this->compressionMethods[$compressionMethod->name()] = $compressionMethod;
+
+        return $this;
     }
 
     /**
@@ -61,9 +65,9 @@ final class CompressionMethodsManager
      *
      * @param string $name The name of the compression method
      *
-     * @return CompressionInterface
+     * @return CompressionMethodInterface
      */
-    public function get(string $name): CompressionInterface
+    public function get(string $name): CompressionMethodInterface
     {
         if (!$this->has($name)) {
             throw new \InvalidArgumentException(sprintf('The compression method "%s" is not supported.', $name));

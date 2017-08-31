@@ -25,6 +25,7 @@ use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\JWELoader;
+use Jose\Component\Encryption\Tests\AbstractEncryptionTest;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,7 +33,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-final class MultipleRecipientEncryptionTest extends TestCase
+final class MultipleRecipientEncryptionTest extends AbstractEncryptionTest
 {
     /**
      * Please note that we cannot the encryption and get the same result as the example (IV, TAG and other data are always different).

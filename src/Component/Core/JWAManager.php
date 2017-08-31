@@ -93,9 +93,8 @@ final class JWAManager
         if ($this->has($algorithm->name())) {
             return $this;
         }
-        $clone = clone $this;
-        $clone->algorithms[$algorithm->name()] = $algorithm;
+        $this->algorithms[$algorithm->name()] = $algorithm;
 
-        return $clone;
+        return $this;
     }
 }

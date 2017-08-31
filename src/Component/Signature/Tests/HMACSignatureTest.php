@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
  * @group HMAC
  * @group Unit
  */
-final class HMACSignatureTest extends TestCase
+final class HMACSignatureTest extends AbstractSignatureTest
 {
     /**
      * @expectedException \InvalidArgumentException

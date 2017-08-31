@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group Functional
  */
-final class JWSFlattenedTest extends TestCase
+final class JWSFlattenedTest extends AbstractSignatureTest
 {
     /**
      * @see https://tools.ietf.org/html/rfc7516#appendix-A.5

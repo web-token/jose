@@ -42,10 +42,17 @@ final class HeaderCheckerManagerFactory
     /**
      * @param string                 $alias
      * @param HeaderCheckerInterface $checker
+     *
+     * @return HeaderCheckerManagerFactory
      */
-    public function add(string $alias, HeaderCheckerInterface $checker)
+    public function add(string $alias, HeaderCheckerInterface $checker): HeaderCheckerManagerFactory
     {
+        if (array_key_exists($alias, $this->checkers)) {
+            throw new \InvalidArgumentException(sprintf('The alias "%s" already exists.', $alias));
+        }
         $this->checkers[$alias] = $checker;
+
+        return $this;
     }
 
     /**

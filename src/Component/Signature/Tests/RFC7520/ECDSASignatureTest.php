@@ -18,6 +18,7 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\ES512;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\Tests\AbstractSignatureTest;
 use Jose\Component\Signature\Verifier;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @group RFC7520
  */
-final class ECDSASignatureTest extends TestCase
+final class ECDSASignatureTest extends AbstractSignatureTest
 {
     /**
      * Please note that we cannot create the signature and get the same result as the example (ECDSA signatures are always different).
@@ -64,7 +65,7 @@ final class ECDSASignatureTest extends TestCase
 
         $signatureAlgorithmManager = JWAManager::create([new ES512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
-        $jwsBuilder = new JWSBuilder($signatureAlgorithmManager);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['ES512']);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($private_key, $headers)
