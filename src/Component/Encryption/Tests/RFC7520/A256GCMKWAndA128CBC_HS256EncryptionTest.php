@@ -132,7 +132,7 @@ final class A256GCMKWAndA128CBC_HS256EncryptionTest extends AbstractEncryptionTe
         $keyEncryptionAlgorithmManager = JWAManager::create([new A256GCMKW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionMethodsManager::create([new Deflate()]);
-        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = $this->getJWEBuilderFactory()->create(['A256GCMKW'], ['A128CBC-HS256'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder

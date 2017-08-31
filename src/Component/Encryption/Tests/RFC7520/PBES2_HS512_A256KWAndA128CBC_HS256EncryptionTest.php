@@ -162,7 +162,7 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends AbstractEnc
         $keyEncryptionAlgorithmManager = JWAManager::create([new PBES2HS512A256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionMethodsManager::create([new Deflate()]);
-        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = $this->getJWEBuilderFactory()->create(['PBES2-HS512+A256KW'], ['A128CBC-HS256'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder

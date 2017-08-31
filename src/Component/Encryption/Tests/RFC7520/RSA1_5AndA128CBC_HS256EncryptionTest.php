@@ -136,7 +136,7 @@ final class RSA1_5AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTest
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionMethodsManager::create([new Deflate()]);
-        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA1_5'], ['A128CBC-HS256'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder

@@ -216,7 +216,7 @@ final class MultipleRecipientEncryptionTest extends AbstractEncryptionTest
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15(), new ECDHESA256KW(), new A256GCMKW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionMethodsManager::create([new Deflate()]);
-        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA1_5', 'ECDH-ES+A256KW', 'A256GCMKW', ], ['A128CBC-HS256'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder

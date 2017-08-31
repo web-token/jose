@@ -138,7 +138,7 @@ final class RSA_OAEPAndA256GCMEncryptionTest extends AbstractEncryptionTest
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
         $compressionManager = CompressionMethodsManager::create([new Deflate()]);
-        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP'], ['A256GCM'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder

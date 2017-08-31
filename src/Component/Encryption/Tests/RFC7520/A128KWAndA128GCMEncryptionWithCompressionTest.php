@@ -127,7 +127,7 @@ final class A128KWAndA128GCMEncryptionWithCompressionTest extends AbstractEncryp
         $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
         $compressionManager = CompressionMethodsManager::create([new Deflate()]);
-        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = $this->getJWEBuilderFactory()->create(['A128KW'], ['A128GCM'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder

@@ -143,7 +143,7 @@ final class ECDH_ES_A128KWAndA128GCMEncryptionTest extends AbstractEncryptionTes
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA128KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
         $compressionManager = CompressionMethodsManager::create([new Deflate()]);
-        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = $this->getJWEBuilderFactory()->create(['ECDH-ES+A128KW'], ['A128GCM'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder

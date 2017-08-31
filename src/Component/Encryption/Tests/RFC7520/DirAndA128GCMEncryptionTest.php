@@ -110,7 +110,7 @@ class DirAndA128GCMEncryptionTest extends AbstractEncryptionTest
         $keyEncryptionAlgorithmManager = JWAManager::create([new Dir()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
         $compressionManager = CompressionMethodsManager::create([new Deflate()]);
-        $jweBuilder = new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweBuilder = $this->getJWEBuilderFactory()->create(['dir'], ['A128GCM'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $jwe = $jweBuilder
