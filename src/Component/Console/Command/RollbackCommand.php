@@ -32,15 +32,13 @@ final class RollbackCommand extends AbstractGeneratorCommand
         $updater = new Updater();
 
         try {
-            $result = $updater->rollback();
-            if (!$result) {
-                echo "Failure!\n";
-                exit(1);
+            if (!$updater->rollback()) {
+                $output->write('Failure!');
+            } else {
+                $output->write('Success!');
             }
-            echo "Success!\n";
         } catch (\Exception $e) {
-            echo "Well, something happened! Either an oopsie or something involving hackers.\n";
-            exit(1);
+            $output->write('Well, something happened! Either an oopsie or something involving hackers.');
         }
     }
 }
