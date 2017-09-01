@@ -38,15 +38,12 @@ final class UpdateCommand extends AbstractGeneratorCommand
             if ($result) {
                 $new = $updater->getNewVersion();
                 $old = $updater->getOldVersion();
-                printf(
-                    'Updated from SHA-1 %s to SHA-1 %s', $old, $new
-                );
+                $output->write(sprintf('Updated from SHA-1 %s to SHA-1 %s', $old, $new));
             } else {
-                echo "No update needed!\n";
+                $output->write('No update needed!');
             }
         } catch (\Exception $e) {
-            echo "Well, something happened! Either an oopsie or something involving hackers.\n";
-            exit(1);
+            $output->write('Well, something happened! Either an oopsie or something involving hackers.');
         }
     }
 }
