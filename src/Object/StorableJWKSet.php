@@ -219,7 +219,7 @@ class StorableJWKSet implements StorableInterface, JWKSetInterface
     protected function createNewObject()
     {
         $jwkset = new JWKSet();
-        for ($i = 0; $i < $this->nb_keys; $i++) {
+        for ($i = 0; $i < $this->nb_keys; ++$i) {
             $key = $this->createJWK();
             $jwkset->addKey($key);
         }

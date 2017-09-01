@@ -33,7 +33,7 @@ class JWKSetsTest extends \PHPUnit_Framework_TestCase
         $jwkset2 = JWKFactory::createStorableKeySet(
             sys_get_temp_dir().'/keyset2',
             [
-                'kty'  => 'RSA',
+                'kty' => 'RSA',
                 'size' => 4096,
             ],
             2
@@ -41,7 +41,7 @@ class JWKSetsTest extends \PHPUnit_Framework_TestCase
         $jwkset3 = JWKFactory::createStorableKeySet(
             sys_get_temp_dir().'/keyset3',
             [
-                'kty'  => 'oct',
+                'kty' => 'oct',
                 'size' => 512,
             ],
             2
@@ -58,13 +58,13 @@ class JWKSetsTest extends \PHPUnit_Framework_TestCase
         $jwkset->removeKey(0);
         $this->assertEquals(6, $jwkset->countKeys());
 
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < 2; ++$i) {
             $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset1->getKey($i)));
         }
-        for ($i = 2; $i < 4; $i++) {
+        for ($i = 2; $i < 4; ++$i) {
             $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset2->getKey($i - 2)));
         }
-        for ($i = 4; $i < 6; $i++) {
+        for ($i = 4; $i < 6; ++$i) {
             $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset3->getKey($i - 4)));
         }
 

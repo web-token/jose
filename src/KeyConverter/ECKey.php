@@ -77,6 +77,7 @@ final class ECKey extends Sequence
         } elseif (2 === count($children)) {
             return $this->loadPublicPEM($children);
         }
+
         throw new \Exception('Unable to load the key');
     }
 

@@ -36,7 +36,7 @@ function testContentEncryptionPerformance(ContentEncryptionAlgorithmInterface $a
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->encryptContent($data, $cek, $iv, $aad, $header, $tag);
     }
     $time_end = microtime(true);
@@ -62,7 +62,7 @@ function testContentDecryptionPerformance(ContentEncryptionAlgorithmInterface $a
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->decryptContent($encrypted_content, $cek, $iv, $aad, $header, $tag);
     }
     $time_end = microtime(true);

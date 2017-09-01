@@ -110,6 +110,7 @@ final class Signature implements SignatureInterface
         if ($this->hasProtectedHeader($key)) {
             return $this->getProtectedHeaders()[$key];
         }
+
         throw new \InvalidArgumentException(sprintf('The protected header "%s" does not exist', $key));
     }
 
@@ -129,6 +130,7 @@ final class Signature implements SignatureInterface
         if ($this->hasHeader($key)) {
             return $this->headers[$key];
         }
+
         throw new \InvalidArgumentException(sprintf('The header "%s" does not exist', $key));
     }
 

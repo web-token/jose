@@ -33,9 +33,9 @@ class InvalidCurveAttackTest extends TestCase
         $privateKey = \Jose\Factory\JWKFactory::createECKey([
             'kty' => 'EC',
             'crv' => 'P-256',
-            'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
-            'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
-            'd'   => 'VEmDZpDXXK8p8N0Cndsxs924q6nS1RXFASRl6BfUqdw',
+            'x' => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
+            'y' => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
+            'd' => 'VEmDZpDXXK8p8N0Cndsxs924q6nS1RXFASRl6BfUqdw',
         ]);
         $decrypter->decryptUsingKey($loaded_compact_json, $privateKey);
     }
@@ -55,9 +55,9 @@ class InvalidCurveAttackTest extends TestCase
         $privateKey = \Jose\Factory\JWKFactory::createECKey([
             'kty' => 'EC',
             'crv' => 'P-256',
-            'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
-            'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
-            'd'   => 'VEmDZpDXXK8p8N0Cndsxs924q6nS1RXFASRl6BfUqdw',
+            'x' => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
+            'y' => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
+            'd' => 'VEmDZpDXXK8p8N0Cndsxs924q6nS1RXFASRl6BfUqdw',
         ]);
         $decrypter->decryptUsingKey($loaded_compact_json, $privateKey);
     }

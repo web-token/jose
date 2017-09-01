@@ -136,7 +136,7 @@ class JWETest extends \PHPUnit_Framework_TestCase
     {
         $jwe = JWEFactory::createJWE([]);
         $jwe = $jwe->addRecipientWithEncryptedKey(null, [
-            'foo'  => 'bar',
+            'foo' => 'bar',
             'plic' => 'ploc',
         ]);
 

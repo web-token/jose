@@ -45,7 +45,7 @@ class LoaderAndCreatorTest extends TestCase
             ],
             new JWK([
                 'kty' => 'oct',
-                'k'   => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
+                'k' => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
             ])
         );
         $jwe = $jwt_creator->encrypt(
@@ -57,7 +57,7 @@ class LoaderAndCreatorTest extends TestCase
             new JWK([
                 'kty' => 'oct',
                 'use' => 'enc',
-                'k'   => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
+                'k' => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
             ])
         );
 
@@ -65,11 +65,11 @@ class LoaderAndCreatorTest extends TestCase
             'keys' => [
                 [
                     'kty' => 'oct',
-                    'k'   => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
+                    'k' => 'qC57l_uxcm7Nm3K-ct4GFjx8tM1U8CZ0NLBvdQstiS8',
                 ],
                 [
                     'kty' => 'oct',
-                    'k'   => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
+                    'k' => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
                 ],
             ],
         ]);

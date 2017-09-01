@@ -91,9 +91,9 @@ class FakeLogger implements LoggerInterface
     {
         $this->messages[] = [
             'timestamp' => microtime(true),
-            'level'     => $level,
-            'message'   => $message,
-            'context'   => $context,
+            'level' => $level,
+            'message' => $message,
+            'context' => $context,
         ];
     }
 

@@ -58,7 +58,7 @@ class PublicJWKSetTest extends \PHPUnit_Framework_TestCase
         $jwkset2 = JWKFactory::createRotatableKeySet(
             sys_get_temp_dir().'/keyset2.2',
             [
-                'kty'  => 'oct',
+                'kty' => 'oct',
                 'size' => 256,
             ],
             2
@@ -66,7 +66,7 @@ class PublicJWKSetTest extends \PHPUnit_Framework_TestCase
         $jwkset3 = JWKFactory::createRotatableKeySet(
             sys_get_temp_dir().'/keyset3.3',
             [
-                'kty'  => 'RSA',
+                'kty' => 'RSA',
                 'size' => 4096,
             ],
             4
@@ -88,10 +88,10 @@ class PublicJWKSetTest extends \PHPUnit_Framework_TestCase
         foreach ($public_jwkset as $key) {
             $this->assertEquals(json_encode($key), json_encode($key->toPublic()));
         }
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; ++$i) {
             $this->assertEquals(json_encode($public_jwkset[$i]), json_encode($jwkset1->getKey($i)->toPublic()));
         }
-        for ($i = 3; $i < 7; $i++) {
+        for ($i = 3; $i < 7; ++$i) {
             $this->assertEquals(json_encode($public_jwkset[$i]), json_encode($jwkset3->getKey($i - 3)->toPublic()));
         }
 

@@ -18,7 +18,7 @@ use Jose\Factory\JWKFactory;
 // Additional parameters ('kid' and 'use') are set for this key.
 $key = JWKFactory::createFromValues([
     'kty' => 'oct',
-    'k'   => 'saH0gFSP4XM_tAP_a5rU9ooHbltwLiJpL4LLLnrqQPw',
+    'k' => 'saH0gFSP4XM_tAP_a5rU9ooHbltwLiJpL4LLLnrqQPw',
     'alg' => 'A256GCM',
 ]);
 

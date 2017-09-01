@@ -41,7 +41,7 @@ $jws = JWSFactory::createJWSToCompactJSON(
     $key,
     [
         'crit' => ['exp', 'aud'],
-        'alg'  => 'RS256',
+        'alg' => 'RS256',
     ]
 );
 

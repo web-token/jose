@@ -25,8 +25,8 @@ class StorableJWKSetTest extends \PHPUnit_Framework_TestCase
         $jwkset = JWKFactory::createRotatableKeySet(
             sys_get_temp_dir().'/JWKSet.key',
             [
-                'kty'   => 'EC',
-                'crv'   => 'P-256',
+                'kty' => 'EC',
+                'crv' => 'P-256',
             ],
             3
         );

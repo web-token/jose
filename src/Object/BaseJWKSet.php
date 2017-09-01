@@ -98,7 +98,7 @@ trait BaseJWKSet
 
     public function next()
     {
-        $this->position++;
+        ++$this->position;
     }
 
     public function rewind()

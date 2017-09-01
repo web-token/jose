@@ -227,7 +227,7 @@ final class BigInteger
      *
      * @param BigInteger $y
      *
-     * @return int < 0 if $this is less than $y; > 0 if $this is greater than $y, and 0 if they are equal.
+     * @return int < 0 if $this is less than $y; > 0 if $this is greater than $y, and 0 if they are equal
      */
     public function compare(BigInteger $y)
     {

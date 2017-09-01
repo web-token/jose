@@ -66,8 +66,8 @@ final class CompressionManagerFactory
     private static function getSupportedMethods()
     {
         return [
-            'DEF'  => '\Jose\Compression\Deflate',
-            'GZ'   => '\Jose\Compression\GZip',
+            'DEF' => '\Jose\Compression\Deflate',
+            'GZ' => '\Jose\Compression\GZip',
             'ZLIB' => '\Jose\Compression\ZLib',
         ];
     }

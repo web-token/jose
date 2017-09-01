@@ -37,7 +37,7 @@ function testKeyWrappinPerformance(KeyWrappingInterface $alg, JWKInterface $reci
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->wrapKey($recipient_key, $cek, $header, $header);
     }
     $time_end = microtime(true);
@@ -61,7 +61,7 @@ function testKeyUnwrappingPerformance(KeyWrappingInterface $alg, JWKInterface $r
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->unwrapKey($recipient_key, $encrypted_cek, $header);
     }
     $time_end = microtime(true);
@@ -77,63 +77,63 @@ function dataKeyWrappinPerformance()
             new A128KW(),
             new JWK([
             'kty' => 'oct',
-            'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+            'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]),
         ],
         [
             new A192KW(),
             new JWK([
             'kty' => 'oct',
-            'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
+            'k' => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
         ]),
         ],
         [
             new A256KW(),
             new JWK([
             'kty' => 'oct',
-            'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
+            'k' => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
         ]),
         ],
         [
             new A128GCMKW(),
             new JWK([
             'kty' => 'oct',
-            'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+            'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]),
         ],
         [
             new A192GCMKW(),
             new JWK([
             'kty' => 'oct',
-            'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
+            'k' => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
         ]),
         ],
         [
             new A256GCMKW(),
             new JWK([
             'kty' => 'oct',
-            'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
+            'k' => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
         ]),
         ],
         [
             new PBES2HS256A128KW(),
             new JWK([
             'kty' => 'oct',
-            'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+            'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]),
         ],
         [
             new PBES2HS384A192KW(),
             new JWK([
             'kty' => 'oct',
-            'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
+            'k' => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYX',
         ]),
         ],
         [
             new PBES2HS512A256KW(),
             new JWK([
             'kty' => 'oct',
-            'k'   => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
+            'k' => 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8',
         ]),
         ],
     ];

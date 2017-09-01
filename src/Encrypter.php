@@ -62,7 +62,7 @@ final class Encrypter implements EncrypterInterface
         $key_management_mode = $this->getKeyManagementMode($jwe);
         $cek = $this->determineCEK($jwe, $content_encryption_algorithm, $key_management_mode, $additional_headers);
 
-        for ($i = 0; $i < $nb_recipients; $i++) {
+        for ($i = 0; $i < $nb_recipients; ++$i) {
             $this->processRecipient($jwe, $jwe->getRecipient($i), $cek, $content_encryption_algorithm, $additional_headers);
         }
 

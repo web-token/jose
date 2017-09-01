@@ -42,9 +42,11 @@ final class ECDHES implements KeyAgreementInterface
                 case 'P-384':
                 case 'P-521':
                     $private_key = JWKFactory::createECKey(['crv' => $public_key->get('crv')]);
+
                     break;
                 case 'X25519':
                     $private_key = JWKFactory::createOKPKey(['crv' => 'X25519']);
+
                     break;
                 default:
                     throw new \InvalidArgumentException(sprintf('The curve "%s" is not supported', $public_key->get('crv')));
@@ -149,9 +151,11 @@ final class ECDHES implements KeyAgreementInterface
             case 'P-521':
                 Assertion::eq($key->get('kty'), 'EC', 'Wrong key type.');
                 Assertion::true($key->has('y'), 'The key parameter "y" is missing.');
+
                 break;
             case 'X25519':
                 Assertion::eq($key->get('kty'), 'OKP', 'Wrong key type.');
+
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('The curve "%s" is not supported', $key->get('crv')));

@@ -52,6 +52,7 @@ final class JWK implements JWKInterface
         if ($this->has($key)) {
             return $this->values[$key];
         }
+
         throw new \InvalidArgumentException(sprintf('The value identified by "%s" does not exist.', $key));
     }
 

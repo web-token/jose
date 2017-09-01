@@ -27,7 +27,7 @@ $detached_payload = 'Live long and prosper.';
 // We create our key object (JWK) using a shared key
 $key = JWKFactory::createFromValues([
     'kty' => 'oct',
-    'k'   => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
+    'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
 ]);
 
 // We load the input and we verify it.

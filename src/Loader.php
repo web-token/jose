@@ -148,6 +148,7 @@ final class Loader implements LoaderInterface
         } elseif (is_string($input)) {
             return $this->fromCompactSerializationToSerialization($input);
         }
+
         throw new \InvalidArgumentException('Unsupported input');
     }
 

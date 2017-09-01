@@ -25,8 +25,8 @@ class StorableJWKTest extends \PHPUnit_Framework_TestCase
         $jwk = JWKFactory::createStorableKey(
             sys_get_temp_dir().'/JWK.key',
             [
-                'kty'   => 'EC',
-                'crv'   => 'P-256',
+                'kty' => 'EC',
+                'crv' => 'P-256',
             ]
         );
 

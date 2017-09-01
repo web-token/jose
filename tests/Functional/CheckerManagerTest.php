@@ -173,9 +173,9 @@ class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             new JWK(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss'],
             ]
         );
@@ -200,9 +200,9 @@ class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             new JWK(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss'],
             ]
         );
@@ -228,12 +228,11 @@ class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             new JWK(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud'],
             ]
-
         );
 
         $this->getCheckerManager()->checkJWS($jws, 0);
@@ -258,9 +257,9 @@ class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             new JWK(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud', 'jti'],
             ]
         );
@@ -284,12 +283,11 @@ class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             new JWK(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud', 'jti'],
             ]
-
         );
 
         $this->getCheckerManager()->checkJWS($jws, 0);
@@ -311,12 +309,11 @@ class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             new JWK(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
                 'crit' => ['exp', 'iss', 'sub', 'aud', 'jti'],
             ]
-
         );
 
         $this->getCheckerManager()->checkJWS($jws, 0);
@@ -338,9 +335,9 @@ class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             new JWK(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
             ]
         );
 
@@ -357,9 +354,9 @@ class CheckerManagerTest extends TestCase
         $jws = $jws->addSignatureInformation(
             new JWK(['kty' => 'none']),
             [
-                'enc'  => 'A256CBC-HS512',
-                'alg'  => 'HS512',
-                'zip'  => 'DEF',
+                'enc' => 'A256CBC-HS512',
+                'alg' => 'HS512',
+                'zip' => 'DEF',
             ]
         );
 

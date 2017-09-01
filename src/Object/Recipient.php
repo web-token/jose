@@ -71,6 +71,7 @@ final class Recipient implements RecipientInterface
         if ($this->hasHeader($key)) {
             return $this->headers[$key];
         }
+
         throw new \InvalidArgumentException(sprintf('The header "%s" does not exist.', $key));
     }
 

@@ -48,6 +48,7 @@ trait JWT
         if ($this->hasClaim($key)) {
             return $this->payload[$key];
         }
+
         throw new \InvalidArgumentException(sprintf('The payload does not contain claim "%s".', $key));
     }
 
@@ -59,6 +60,7 @@ trait JWT
         if (is_array($this->payload)) {
             return $this->payload;
         }
+
         throw new \InvalidArgumentException('The payload does not contain claims.');
     }
 

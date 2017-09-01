@@ -38,7 +38,7 @@ class A128KWAndA128GCMEncryptionProtectedContentOnlyTest extends \PHPUnit_Framew
             'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
             'use' => 'enc',
             'alg' => 'A128KW',
-            'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+            'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]);
 
         $protected_headers = [
@@ -96,7 +96,7 @@ class A128KWAndA128GCMEncryptionProtectedContentOnlyTest extends \PHPUnit_Framew
             'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
             'use' => 'enc',
             'alg' => 'A128KW',
-            'k'   => 'GZy6sIZ6wl9NJOKB-jnmVQ',
+            'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
         ]);
 
         $protected_headers = [

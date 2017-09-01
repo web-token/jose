@@ -23,7 +23,7 @@ interface LoaderInterface
      *
      * @param string $input A string that represents a JSON Web Token message
      *
-     * @return \Jose\Object\JWSInterface|\Jose\Object\JWEInterface If the data has been loaded.
+     * @return \Jose\Object\JWSInterface|\Jose\Object\JWEInterface if the data has been loaded
      */
     public function load($input);
 
@@ -34,7 +34,7 @@ interface LoaderInterface
      * @param string[]                  $allowed_content_encryption_algorithms
      * @param null|int                  $recipient_index
      *
-     * @return \Jose\Object\JWSInterface|\Jose\Object\JWEInterface If the data has been loaded.
+     * @return \Jose\Object\JWSInterface|\Jose\Object\JWEInterface if the data has been loaded
      */
     public function loadAndDecryptUsingKey($input, Object\JWKInterface $jwk, array $allowed_key_encryption_algorithms, array $allowed_content_encryption_algorithms, &$recipient_index = null);
 
@@ -45,7 +45,7 @@ interface LoaderInterface
      * @param string[]                     $allowed_content_encryption_algorithms
      * @param null|int                     $recipient_index
      *
-     * @return \Jose\Object\JWEInterface If the data has been loaded.
+     * @return \Jose\Object\JWEInterface if the data has been loaded
      */
     public function loadAndDecryptUsingKeySet($input, Object\JWKSetInterface $jwk_set, array $allowed_key_encryption_algorithms, array $allowed_content_encryption_algorithms, &$recipient_index = null);
 
@@ -55,7 +55,7 @@ interface LoaderInterface
      * @param string[]                  $allowed_algorithms
      * @param null|int                  $signature_index
      *
-     * @return \Jose\Object\JWSInterface If the data has been loaded.
+     * @return \Jose\Object\JWSInterface if the data has been loaded
      */
     public function loadAndVerifySignatureUsingKey($input, Object\JWKInterface $jwk, array $allowed_algorithms, &$signature_index = null);
 
@@ -65,7 +65,7 @@ interface LoaderInterface
      * @param string[]                     $allowed_algorithms
      * @param null|int                     $signature_index
      *
-     * @return \Jose\Object\JWSInterface If the data has been loaded.
+     * @return \Jose\Object\JWSInterface if the data has been loaded
      */
     public function loadAndVerifySignatureUsingKeySet($input, Object\JWKSetInterface $jwk_set, array $allowed_algorithms, &$signature_index = null);
 
@@ -76,7 +76,7 @@ interface LoaderInterface
      * @param string                    $detached_payload
      * @param null|int                  $signature_index
      *
-     * @return \Jose\Object\JWSInterface If the data has been loaded.
+     * @return \Jose\Object\JWSInterface if the data has been loaded
      */
     public function loadAndVerifySignatureUsingKeyAndDetachedPayload($input, Object\JWKInterface $jwk, array $allowed_algorithms, $detached_payload, &$signature_index = null);
 
@@ -87,7 +87,7 @@ interface LoaderInterface
      * @param string                       $detached_payload
      * @param null|int                     $signature_index
      *
-     * @return \Jose\Object\JWSInterface If the data has been loaded.
+     * @return \Jose\Object\JWSInterface if the data has been loaded
      */
     public function loadAndVerifySignatureUsingKeySetAndDetachedPayload($input, Object\JWKSetInterface $jwk_set, array $allowed_algorithms, $detached_payload, &$signature_index = null);
 }

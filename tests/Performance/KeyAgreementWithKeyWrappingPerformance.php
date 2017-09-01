@@ -32,7 +32,7 @@ function testKeyAgreementWithKeyWrappingEncryptionPerformance($message, KeyAgree
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->wrapAgreementKey($recipient_key, $cek, 128, $header, $ahv);
     }
     $time_end = microtime(true);
@@ -60,7 +60,7 @@ function testKeyAgreementWithKeyWrappingDecryptionPerformance($message, KeyAgree
     $nb = 100;
 
     $time_start = microtime(true);
-    for ($i = 0; $i < $nb; $i++) {
+    for ($i = 0; $i < $nb; ++$i) {
         $alg->unwrapAgreementKey($recipient_key, $encrypted_cek, 128, $header);
     }
     $time_end = microtime(true);
@@ -78,16 +78,16 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-256',
-                'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
-                'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
-                'd'   => 'VEmDZpDXXK8p8N0Cndsxs924q6nS1RXFASRl6BfUqdw',
+                'x' => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
+                'y' => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
+                'd' => 'VEmDZpDXXK8p8N0Cndsxs924q6nS1RXFASRl6BfUqdw',
             ]),
             [
                 'epk' => [
                     'kty' => 'EC',
                     'crv' => 'P-256',
-                    'x'   => 'TZ7_dXun_REsafV7tFkNayKPDyL6EdxZ8hQmvDeKH0Y',
-                    'y'   => 'Z84xZQisnNDKfstsCuKidm-u7WYUYTHzo2UGtYgTcJ4',
+                    'x' => 'TZ7_dXun_REsafV7tFkNayKPDyL6EdxZ8hQmvDeKH0Y',
+                    'y' => 'Z84xZQisnNDKfstsCuKidm-u7WYUYTHzo2UGtYgTcJ4',
                 ],
             ],
         ],
@@ -97,16 +97,16 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-384',
-                'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
-                'y'   => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
-                'd'   => 'GBwKLCdSIOz9I6_1Imogi_NvqrbTDMONi-tjpxNnJ4FTG5RfLurTgTfVyl0-WWBu',
+                'x' => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
+                'y' => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
+                'd' => 'GBwKLCdSIOz9I6_1Imogi_NvqrbTDMONi-tjpxNnJ4FTG5RfLurTgTfVyl0-WWBu',
             ]),
             [
                 'epk' => [
                     'kty' => 'EC',
                     'crv' => 'P-384',
-                    'x'   => 'Wyidjnd4VBA3nih1RZCJJ1EkKgHSApODejS_JCReqg6K0RhxaIzr9jh_NRslfjnd',
-                    'y'   => 'kcGQFUrRDHqcj1dTwL_SOyaf6cnkp8dL5NX70WiV3Ti97bFLrCE1dfRGpnCPW4R6',
+                    'x' => 'Wyidjnd4VBA3nih1RZCJJ1EkKgHSApODejS_JCReqg6K0RhxaIzr9jh_NRslfjnd',
+                    'y' => 'kcGQFUrRDHqcj1dTwL_SOyaf6cnkp8dL5NX70WiV3Ti97bFLrCE1dfRGpnCPW4R6',
                 ],
             ],
         ],
@@ -116,16 +116,16 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-521',
-                'x'   => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
-                'y'   => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
-                'd'   => 'Fp6KFKRiHIdR_7PP2VKxz6OkS_phyoQqwzv2I89-8zP7QScrx5r8GFLcN5mCCNJt3rN3SIgI4XoIQbNePlAj6vE',
+                'x' => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
+                'y' => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
+                'd' => 'Fp6KFKRiHIdR_7PP2VKxz6OkS_phyoQqwzv2I89-8zP7QScrx5r8GFLcN5mCCNJt3rN3SIgI4XoIQbNePlAj6vE',
             ]),
             [
                 'epk' => [
                     'kty' => 'EC',
                     'crv' => 'P-521',
-                    'x'   => 'Kv77LZEF4wD_L26EERJQ-iEZvEft-eWONIr2UjUNLoBZLhMvSV76lh3miGO0nzRGMi0vCx4OScDH3h-0I6wsF3Y',
-                    'y'   => 'V-h7CW1Rd_ylxI1qNNq4o0d_Hgu7x0l2WIeZDWXOW7kODJEfDZpxArNwp3x4NeIhfbYOEZRfu1Ho6dq5LKR80vM',
+                    'x' => 'Kv77LZEF4wD_L26EERJQ-iEZvEft-eWONIr2UjUNLoBZLhMvSV76lh3miGO0nzRGMi0vCx4OScDH3h-0I6wsF3Y',
+                    'y' => 'V-h7CW1Rd_ylxI1qNNq4o0d_Hgu7x0l2WIeZDWXOW7kODJEfDZpxArNwp3x4NeIhfbYOEZRfu1Ho6dq5LKR80vM',
                 ],
             ],
         ],
@@ -135,16 +135,16 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-256',
-                'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
-                'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
-                'd'   => 'VEmDZpDXXK8p8N0Cndsxs924q6nS1RXFASRl6BfUqdw',
+                'x' => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
+                'y' => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
+                'd' => 'VEmDZpDXXK8p8N0Cndsxs924q6nS1RXFASRl6BfUqdw',
             ]),
             [
                 'epk' => [
                     'kty' => 'EC',
                     'crv' => 'P-256',
-                    'x'   => 'TZ7_dXun_REsafV7tFkNayKPDyL6EdxZ8hQmvDeKH0Y',
-                    'y'   => 'Z84xZQisnNDKfstsCuKidm-u7WYUYTHzo2UGtYgTcJ4',
+                    'x' => 'TZ7_dXun_REsafV7tFkNayKPDyL6EdxZ8hQmvDeKH0Y',
+                    'y' => 'Z84xZQisnNDKfstsCuKidm-u7WYUYTHzo2UGtYgTcJ4',
                 ],
             ],
         ],
@@ -154,16 +154,16 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-384',
-                'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
-                'y'   => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
-                'd'   => 'GBwKLCdSIOz9I6_1Imogi_NvqrbTDMONi-tjpxNnJ4FTG5RfLurTgTfVyl0-WWBu',
+                'x' => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
+                'y' => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
+                'd' => 'GBwKLCdSIOz9I6_1Imogi_NvqrbTDMONi-tjpxNnJ4FTG5RfLurTgTfVyl0-WWBu',
             ]),
             [
                 'epk' => [
                     'kty' => 'EC',
                     'crv' => 'P-384',
-                    'x'   => 'Wyidjnd4VBA3nih1RZCJJ1EkKgHSApODejS_JCReqg6K0RhxaIzr9jh_NRslfjnd',
-                    'y'   => 'kcGQFUrRDHqcj1dTwL_SOyaf6cnkp8dL5NX70WiV3Ti97bFLrCE1dfRGpnCPW4R6',
+                    'x' => 'Wyidjnd4VBA3nih1RZCJJ1EkKgHSApODejS_JCReqg6K0RhxaIzr9jh_NRslfjnd',
+                    'y' => 'kcGQFUrRDHqcj1dTwL_SOyaf6cnkp8dL5NX70WiV3Ti97bFLrCE1dfRGpnCPW4R6',
                 ],
             ],
         ],
@@ -173,16 +173,16 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-521',
-                'x'   => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
-                'y'   => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
-                'd'   => 'Fp6KFKRiHIdR_7PP2VKxz6OkS_phyoQqwzv2I89-8zP7QScrx5r8GFLcN5mCCNJt3rN3SIgI4XoIQbNePlAj6vE',
+                'x' => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
+                'y' => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
+                'd' => 'Fp6KFKRiHIdR_7PP2VKxz6OkS_phyoQqwzv2I89-8zP7QScrx5r8GFLcN5mCCNJt3rN3SIgI4XoIQbNePlAj6vE',
             ]),
             [
                 'epk' => [
                     'kty' => 'EC',
                     'crv' => 'P-521',
-                    'x'   => 'Kv77LZEF4wD_L26EERJQ-iEZvEft-eWONIr2UjUNLoBZLhMvSV76lh3miGO0nzRGMi0vCx4OScDH3h-0I6wsF3Y',
-                    'y'   => 'V-h7CW1Rd_ylxI1qNNq4o0d_Hgu7x0l2WIeZDWXOW7kODJEfDZpxArNwp3x4NeIhfbYOEZRfu1Ho6dq5LKR80vM',
+                    'x' => 'Kv77LZEF4wD_L26EERJQ-iEZvEft-eWONIr2UjUNLoBZLhMvSV76lh3miGO0nzRGMi0vCx4OScDH3h-0I6wsF3Y',
+                    'y' => 'V-h7CW1Rd_ylxI1qNNq4o0d_Hgu7x0l2WIeZDWXOW7kODJEfDZpxArNwp3x4NeIhfbYOEZRfu1Ho6dq5LKR80vM',
                 ],
             ],
         ],
@@ -192,16 +192,16 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-256',
-                'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
-                'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
-                'd'   => 'VEmDZpDXXK8p8N0Cndsxs924q6nS1RXFASRl6BfUqdw',
+                'x' => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
+                'y' => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
+                'd' => 'VEmDZpDXXK8p8N0Cndsxs924q6nS1RXFASRl6BfUqdw',
             ]),
             [
                 'epk' => [
                     'kty' => 'EC',
                     'crv' => 'P-256',
-                    'x'   => 'TZ7_dXun_REsafV7tFkNayKPDyL6EdxZ8hQmvDeKH0Y',
-                    'y'   => 'Z84xZQisnNDKfstsCuKidm-u7WYUYTHzo2UGtYgTcJ4',
+                    'x' => 'TZ7_dXun_REsafV7tFkNayKPDyL6EdxZ8hQmvDeKH0Y',
+                    'y' => 'Z84xZQisnNDKfstsCuKidm-u7WYUYTHzo2UGtYgTcJ4',
                 ],
             ],
         ],
@@ -211,16 +211,16 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-384',
-                'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
-                'y'   => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
-                'd'   => 'GBwKLCdSIOz9I6_1Imogi_NvqrbTDMONi-tjpxNnJ4FTG5RfLurTgTfVyl0-WWBu',
+                'x' => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
+                'y' => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
+                'd' => 'GBwKLCdSIOz9I6_1Imogi_NvqrbTDMONi-tjpxNnJ4FTG5RfLurTgTfVyl0-WWBu',
             ]),
             [
                 'epk' => [
                     'kty' => 'EC',
                     'crv' => 'P-384',
-                    'x'   => 'Wyidjnd4VBA3nih1RZCJJ1EkKgHSApODejS_JCReqg6K0RhxaIzr9jh_NRslfjnd',
-                    'y'   => 'kcGQFUrRDHqcj1dTwL_SOyaf6cnkp8dL5NX70WiV3Ti97bFLrCE1dfRGpnCPW4R6',
+                    'x' => 'Wyidjnd4VBA3nih1RZCJJ1EkKgHSApODejS_JCReqg6K0RhxaIzr9jh_NRslfjnd',
+                    'y' => 'kcGQFUrRDHqcj1dTwL_SOyaf6cnkp8dL5NX70WiV3Ti97bFLrCE1dfRGpnCPW4R6',
                 ],
             ],
         ],
@@ -230,16 +230,16 @@ function dataPrivateKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-521',
-                'x'   => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
-                'y'   => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
-                'd'   => 'Fp6KFKRiHIdR_7PP2VKxz6OkS_phyoQqwzv2I89-8zP7QScrx5r8GFLcN5mCCNJt3rN3SIgI4XoIQbNePlAj6vE',
+                'x' => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
+                'y' => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
+                'd' => 'Fp6KFKRiHIdR_7PP2VKxz6OkS_phyoQqwzv2I89-8zP7QScrx5r8GFLcN5mCCNJt3rN3SIgI4XoIQbNePlAj6vE',
             ]),
             [
                 'epk' => [
                     'kty' => 'EC',
                     'crv' => 'P-521',
-                    'x'   => 'Kv77LZEF4wD_L26EERJQ-iEZvEft-eWONIr2UjUNLoBZLhMvSV76lh3miGO0nzRGMi0vCx4OScDH3h-0I6wsF3Y',
-                    'y'   => 'V-h7CW1Rd_ylxI1qNNq4o0d_Hgu7x0l2WIeZDWXOW7kODJEfDZpxArNwp3x4NeIhfbYOEZRfu1Ho6dq5LKR80vM',
+                    'x' => 'Kv77LZEF4wD_L26EERJQ-iEZvEft-eWONIr2UjUNLoBZLhMvSV76lh3miGO0nzRGMi0vCx4OScDH3h-0I6wsF3Y',
+                    'y' => 'V-h7CW1Rd_ylxI1qNNq4o0d_Hgu7x0l2WIeZDWXOW7kODJEfDZpxArNwp3x4NeIhfbYOEZRfu1Ho6dq5LKR80vM',
                 ],
             ],
         ],
@@ -255,8 +255,8 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-256',
-                'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
-                'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
+                'x' => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
+                'y' => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
             ]),
         ],
         [
@@ -265,8 +265,8 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-384',
-                'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
-                'y'   => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
+                'x' => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
+                'y' => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
             ]),
         ],
         [
@@ -275,8 +275,8 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-521',
-                'x'   => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
-                'y'   => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
+                'x' => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
+                'y' => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
             ]),
         ],
         [
@@ -285,8 +285,8 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-256',
-                'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
-                'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
+                'x' => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
+                'y' => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
             ]),
         ],
         [
@@ -295,8 +295,8 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-384',
-                'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
-                'y'   => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
+                'x' => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
+                'y' => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
             ]),
         ],
         [
@@ -305,8 +305,8 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-521',
-                'x'   => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
-                'y'   => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
+                'x' => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
+                'y' => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
             ]),
         ],
         [
@@ -315,8 +315,8 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-256',
-                'x'   => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
-                'y'   => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
+                'x' => 'weNJy2HscCSM6AEDTDg04biOvhFhyyWvOHQfeF_PxMQ',
+                'y' => 'e8lnCO-AlStT-NJVX-crhB7QRYhiix03illJOVAOyck',
             ]),
         ],
         [
@@ -325,8 +325,8 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-384',
-                'x'   => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
-                'y'   => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
+                'x' => 'IZ0VDYiwXq6qi19SdQe-rhX03T-hkGk7qZi7Y0sR-xXdngp2NCRkhE5eEqAUz2M0',
+                'y' => 'SLv3QXabqdNMY5Ezolm7VqOWjG7kg5tXoGVWf6ooIuuRmrmnLG7_RzBGySzPXYn3',
             ]),
         ],
         [
@@ -335,8 +335,8 @@ function dataPublicKeyAgreementWithKeyWrappingPerformance()
             new JWK([
                 'kty' => 'EC',
                 'crv' => 'P-521',
-                'x'   => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
-                'y'   => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
+                'x' => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
+                'y' => 'AIs-MoRmLaiPyG2xmPwQCHX2CGX_uCZiT3iOxTAJEZuUbeSA828K4WfAA4ODdGiB87YVShhPOkiQswV3LpbpPGhC',
             ]),
         ],
     ];

@@ -128,7 +128,7 @@ trait EncrypterTrait
         $method = null;
         $nb_recipients = $jwe->countRecipients();
 
-        for ($i = 0; $i < $nb_recipients; $i++) {
+        for ($i = 0; $i < $nb_recipients; ++$i) {
             $complete_headers = array_merge($jwe->getSharedProtectedHeaders(), $jwe->getSharedHeaders(), $jwe->getRecipient($i)->getHeaders());
             if (array_key_exists('zip', $complete_headers)) {
                 if (null === $method) {
@@ -192,7 +192,7 @@ trait EncrypterTrait
         $dir = Algorithm\KeyEncryptionAlgorithmInterface::MODE_DIRECT;
         $enc = Algorithm\KeyEncryptionAlgorithmInterface::MODE_ENCRYPT;
         $wrap = Algorithm\KeyEncryptionAlgorithmInterface::MODE_WRAP;
-        $supported_key_management_mode_combinations = [$enc.$enc     => true, $enc.$wrap    => true, $wrap.$enc    => true, $wrap.$wrap   => true, $agree.$agree => false, $agree.$dir   => false, $agree.$enc   => false, $agree.$wrap  => false, $dir.$agree   => false, $dir.$dir     => false, $dir.$enc     => false, $dir.$wrap    => false, $enc.$agree   => false, $enc.$dir     => false, $wrap.$agree  => false, $wrap.$dir    => false];
+        $supported_key_management_mode_combinations = [$enc.$enc => true, $enc.$wrap => true, $wrap.$enc => true, $wrap.$wrap => true, $agree.$agree => false, $agree.$dir => false, $agree.$enc => false, $agree.$wrap => false, $dir.$agree => false, $dir.$dir => false, $dir.$enc => false, $dir.$wrap => false, $enc.$agree => false, $enc.$dir => false, $wrap.$agree => false, $wrap.$dir => false];
 
         if (array_key_exists($current.$new, $supported_key_management_mode_combinations)) {
             return $supported_key_management_mode_combinations[$current.$new];

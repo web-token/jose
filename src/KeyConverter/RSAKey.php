@@ -241,11 +241,11 @@ final class RSAKey extends Sequence
 
         $this->values['kty'] = 'RSA';
         $keys = [
-            'n'  => 'n',
-            'e'  => 'e',
-            'd'  => 'd',
-            'p'  => 'p',
-            'q'  => 'q',
+            'n' => 'n',
+            'e' => 'e',
+            'd' => 'd',
+            'p' => 'p',
+            'q' => 'q',
             'dp' => 'dmp1',
             'dq' => 'dmq1',
             'qi' => 'iqmp',
@@ -427,7 +427,7 @@ final class RSAKey extends Sequence
             $found = false;
             $y = null;
 
-            for ($i = 1; $i <= 100; $i++) {
+            for ($i = 1; $i <= 100; ++$i) {
                 $g = BigInteger::random($n->subtract($one));
                 $y = $g->modPow($r, $n);
 
@@ -440,6 +440,7 @@ final class RSAKey extends Sequence
 
                     if ($x->equals($one)) {
                         $found = true;
+
                         break;
                     }
 
@@ -453,6 +454,7 @@ final class RSAKey extends Sequence
                 $x = $y->modPow($two, $n);
                 if ($x->equals($one)) {
                     $found = true;
+
                     break;
                 }
             }

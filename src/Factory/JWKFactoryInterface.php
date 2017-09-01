@@ -92,7 +92,7 @@ interface JWKFactoryInterface
     public static function createOKPKey(array $values);
 
     /**
-     * @param array $values Values to configure the key.
+     * @param array $values values to configure the key
      *
      * @return \Jose\Object\JWKInterface
      */

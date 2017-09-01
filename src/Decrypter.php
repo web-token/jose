@@ -69,7 +69,7 @@ final class Decrypter implements DecrypterInterface
 
         $nb_recipients = $jwe->countRecipients();
 
-        for ($i = 0; $i < $nb_recipients; $i++) {
+        for ($i = 0; $i < $nb_recipients; ++$i) {
             if (is_int($result = $this->decryptRecipientKey($jwe, $jwk_set, $i))) {
                 $recipient_index = $result;
 

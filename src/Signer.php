@@ -49,7 +49,7 @@ final class Signer implements SignerInterface
     {
         $nb_signatures = $jws->countSignatures();
 
-        for ($i = 0; $i < $nb_signatures; $i++) {
+        for ($i = 0; $i < $nb_signatures; ++$i) {
             $this->computeSignature($jws, $jws->getSignature($i));
         }
     }

@@ -21,7 +21,7 @@ use Jose\Loader;
 // My direct key.
 $key = JWKFactory::createFromValues([
     'kty' => 'oct',
-    'k'   => 'saH0gFSP4XM_tAP_a5rU9ooHbltwLiJpL4LLLnrqQPw',
+    'k' => 'saH0gFSP4XM_tAP_a5rU9ooHbltwLiJpL4LLLnrqQPw',
 ]);
 
 //The JWE
