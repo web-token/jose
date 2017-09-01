@@ -1,0 +1,16 @@
+default:
+    autoload:
+        '': %paths.base%/tests
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                env: test
+                debug: true
+                path: tests/app/AppKernel.php
+                bootstrap: tests/app/autoload.php
+    suites:
+        test_suite:
+            contexts:
+                - 'Jose\Test\Context\FeatureContext'
+            paths:
+                - %paths.base%/features
