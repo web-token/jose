@@ -14,23 +14,11 @@ declare(strict_types=1);
 namespace Jose\Component\KeyManagement\KeyConverter;
 
 use Base64Url\Base64Url;
-use FG\ASN1\Exception\ParserException;
-use FG\ASN1\Universal\BitString;
-use FG\ASN1\Universal\Integer;
-use FG\ASN1\Universal\NullObject;
-use FG\ASN1\Universal\ObjectIdentifier;
-use FG\ASN1\Universal\OctetString;
-use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\BigInteger;
 
 final class RSAKey
 {
-    /**
-     * @var Sequence
-     */
-    private $sequence;
-
     /**
      * @var array
      */
@@ -76,8 +64,6 @@ final class RSAKey
      */
     private function __construct($data)
     {
-        $this->sequence = new Sequence();
-
         if ($data instanceof JWK) {
             $this->loadJWK($data->all());
         } elseif (is_array($data)) {
@@ -223,22 +209,9 @@ final class RSAKey
     }
 
     /**
-     * @return string
-     */
-    public function toPEM(): string
-    {
-        $result = '-----BEGIN '.($this->isPrivate() ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
-        $result .= chunk_split(base64_encode($this->sequence->getBinary()), 64, PHP_EOL);
-        $result .= '-----END '.($this->isPrivate() ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
-
-        return $result;
-    }
-
-    /**
      * @param string $data
      *
      * @throws \Exception
-     * @throws ParserException
      */
     private function loadPEM(string $data)
     {
@@ -289,9 +262,6 @@ final class RSAKey
         $this->values = $jwk;
         if (array_key_exists('d', $jwk)) {
             $this->populateCRT();
-            $this->initPrivateKey();
-        } else {
-            $this->initPublicKey();
         }
     }
 
@@ -322,69 +292,6 @@ final class RSAKey
         $this->values['dp'] = Base64Url::encode($d->mod($p->subtract($one))->toBytes());
         $this->values['dq'] = Base64Url::encode($d->mod($q->subtract($one))->toBytes());
         $this->values['qi'] = Base64Url::encode($q->modInverse($p)->toBytes());
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function initPublicKey()
-    {
-        $oid_sequence = new Sequence();
-        $oid_sequence->addChild(new ObjectIdentifier('1.2.840.113549.1.1.1'));
-        $oid_sequence->addChild(new NullObject());
-        $this->sequence->addChild($oid_sequence);
-
-        $n = new Integer($this->fromBase64ToInteger($this->values['n']));
-        $e = new Integer($this->fromBase64ToInteger($this->values['e']));
-
-        $key_sequence = new Sequence();
-        $key_sequence->addChild($n);
-        $key_sequence->addChild($e);
-        $key_bit_string = new BitString(bin2hex($key_sequence->getBinary()));
-        $this->sequence->addChild($key_bit_string);
-    }
-
-    private function initPrivateKey()
-    {
-        $this->sequence->addChild(new Integer(0));
-
-        $oid_sequence = new Sequence();
-        $oid_sequence->addChild(new ObjectIdentifier('1.2.840.113549.1.1.1'));
-        $oid_sequence->addChild(new NullObject());
-        $this->sequence->addChild($oid_sequence);
-
-        $v = new Integer(0);
-        $n = new Integer($this->fromBase64ToInteger($this->values['n']));
-        $e = new Integer($this->fromBase64ToInteger($this->values['e']));
-        $d = new Integer($this->fromBase64ToInteger($this->values['d']));
-        $p = new Integer($this->fromBase64ToInteger($this->values['p']));
-        $q = new Integer($this->fromBase64ToInteger($this->values['q']));
-        $dp = array_key_exists('dp', $this->values) ? new Integer($this->fromBase64ToInteger($this->values['dp'])) : new Integer(0);
-        $dq = array_key_exists('dq', $this->values) ? new Integer($this->fromBase64ToInteger($this->values['dq'])) : new Integer(0);
-        $qi = array_key_exists('qi', $this->values) ? new Integer($this->fromBase64ToInteger($this->values['qi'])) : new Integer(0);
-
-        $key_sequence = new Sequence();
-        $key_sequence->addChild($v);
-        $key_sequence->addChild($n);
-        $key_sequence->addChild($e);
-        $key_sequence->addChild($d);
-        $key_sequence->addChild($p);
-        $key_sequence->addChild($q);
-        $key_sequence->addChild($dp);
-        $key_sequence->addChild($dq);
-        $key_sequence->addChild($qi);
-        $key_octet_string = new OctetString(bin2hex($key_sequence->getBinary()));
-        $this->sequence->addChild($key_octet_string);
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    private function fromBase64ToInteger(string $value): string
-    {
-        return gmp_strval(gmp_init(current(unpack('H*', Base64Url::decode($value))), 16), 10);
     }
 
     private function populateBigIntegers()

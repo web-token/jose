@@ -27,11 +27,6 @@ use Jose\Component\Core\JWK;
 final class ECKey
 {
     /**
-     * @var null|Sequence
-     */
-    private $sequence = null;
-
-    /**
      * @var bool
      */
     private $private = false;
@@ -48,8 +43,6 @@ final class ECKey
      */
     private function __construct($data)
     {
-        $this->sequence = new Sequence();
-
         if ($data instanceof JWK) {
             $this->loadJWK($data->all());
         } elseif (is_array($data)) {
@@ -166,39 +159,6 @@ final class ECKey
         }
 
         $this->values = $jwk;
-        if (array_key_exists('d', $jwk)) {
-            $this->initPrivateKey();
-        } else {
-            $this->initPublicKey();
-        }
-    }
-
-    private function initPublicKey()
-    {
-        $oid_sequence = new Sequence();
-        $oid_sequence->addChild(new ObjectIdentifier('1.2.840.10045.2.1'));
-        $oid_sequence->addChild(new ObjectIdentifier($this->getOID($this->values['crv'])));
-        $this->sequence->addChild($oid_sequence);
-
-        $bits = '04';
-        $bits .= bin2hex(Base64Url::decode($this->values['x']));
-        $bits .= bin2hex(Base64Url::decode($this->values['y']));
-        $this->sequence->addChild(new BitString($bits));
-    }
-
-    private function initPrivateKey()
-    {
-        $this->sequence->addChild(new Integer(1));
-        $this->sequence->addChild(new OctetString(bin2hex(Base64Url::decode($this->values['d']))));
-
-        $oid = new ObjectIdentifier($this->getOID($this->values['crv']));
-        $this->sequence->addChild(new ExplicitlyTaggedObject(0, $oid));
-
-        $bits = '04';
-        $bits .= bin2hex(Base64Url::decode($this->values['x']));
-        $bits .= bin2hex(Base64Url::decode($this->values['y']));
-        $bit = new BitString($bits);
-        $this->sequence->addChild(new ExplicitlyTaggedObject(1, $bit));
     }
 
     /**
@@ -336,34 +296,6 @@ final class ECKey
     public function toArray()
     {
         return $this->values;
-    }
-
-    /**
-     * @return string
-     */
-    public function toPEM(): string
-    {
-        $result = '-----BEGIN '.($this->private ? 'EC PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
-        $result .= chunk_split(base64_encode($this->sequence->getBinary()), 64, PHP_EOL);
-        $result .= '-----END '.($this->private ? 'EC PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
-
-        return $result;
-    }
-
-    /**
-     * @param $curve
-     *
-     * @return string
-     */
-    private function getOID(string $curve): string
-    {
-        $curves = $this->getSupportedCurves();
-        $oid = array_key_exists($curve, $curves) ? $curves[$curve] : null;
-        if (!is_string($oid)) {
-            throw new \InvalidArgumentException('Unsupported curve.');
-        }
-
-        return $oid;
     }
 
     /**

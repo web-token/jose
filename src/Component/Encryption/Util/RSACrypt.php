@@ -16,8 +16,117 @@ namespace Jose\Component\Encryption\Util;
 use Jose\Component\Core\Util\BigInteger;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
-final class RSA
+final class RSACrypt
 {
+    public static function encryptWithRSA15(RSAKey $key, string $data)
+    {
+        $mLen = mb_strlen($data, '8bit');
+
+        if ($mLen > $key->getModulusLength() - 11) {
+            throw new \InvalidArgumentException('Message too long');
+        }
+
+        $psLen = $key->getModulusLength() - $mLen - 3;
+        $ps = '';
+        while (mb_strlen($ps, '8bit') !== $psLen) {
+            $temp = random_bytes($psLen - mb_strlen($ps, '8bit'));
+            $temp = str_replace("\x00", '', $temp);
+            $ps .= $temp;
+        }
+        $type = 2;
+        //$ps = str_repeat("\xFF", $psLen);
+        $data = chr(0) . chr($type) . $ps . chr(0) . $data;
+
+        $data = BigInteger::createFromBinaryString($data);
+        $c = self::getRSAEP($key, $data);
+        $c = self::convertIntegerToOctetString($c, $key->getModulusLength());
+
+        return $c;
+    }
+
+    public static function decryptWithRSA15(RSAKey $key, $c)
+    {
+        if (mb_strlen($c, '8bit') !== $key->getModulusLength()) { // or if k < 11
+            return false;
+        }
+
+        $c = BigInteger::createFromBinaryString($c);
+        $m = self::getRSADP($key, $c);
+        $em = self::convertIntegerToOctetString($m, $key->getModulusLength());
+        if ($em === false) {
+            return false;
+        }
+
+        if (ord($em[0]) != 0 || ord($em[1]) > 2) {
+            return false;
+        }
+
+        $ps = substr($em, 2, strpos($em, chr(0), 2) - 2);
+        $m = substr($em, strlen($ps) + 3);
+
+        if (strlen($ps) < 8) {
+            return false;
+        }
+
+        // Output M
+
+        return $m;
+    }
+
+    /**
+     * Encryption.
+     *
+     * @param RSAKey $key
+     * @param string $plaintext
+     * @param string $hash_algorithm
+     *
+     * @return string
+     */
+    public static function encryptWithRSAOAEP(RSAKey $key, string $plaintext, string $hash_algorithm): string
+    {
+        /*
+         * @var Hash
+         */
+        $hash = Hash::$hash_algorithm();
+        $length = $key->getModulusLength() - 2 * $hash->getLength() - 2;
+        if (0 >= $length) {
+            throw new \RuntimeException();
+        }
+        $plaintext = str_split($plaintext, $length);
+        $ciphertext = '';
+        foreach ($plaintext as $m) {
+            $ciphertext .= self::encryptRSAESOAEP($key, $m, $hash);
+        }
+
+        return $ciphertext;
+    }
+
+    /**
+     * Decryption.
+     *
+     * @param RSAKey $key
+     * @param string $ciphertext
+     * @param string $hash_algorithm
+     *
+     * @return string
+     */
+    public static function decryptWithRSAOAEP(RSAKey $key, string $ciphertext, string $hash_algorithm): string
+    {
+        if (0 >= $key->getModulusLength()) {
+            throw new \RuntimeException();
+        }
+        $hash = Hash::$hash_algorithm();
+        $ciphertext = str_split($ciphertext, $key->getModulusLength());
+        $ciphertext[count($ciphertext) - 1] = str_pad($ciphertext[count($ciphertext) - 1], $key->getModulusLength(), chr(0), STR_PAD_LEFT);
+        $plaintext = '';
+        foreach ($ciphertext as $c) {
+            $temp = self::getRSAESOAEP($key, $c, $hash);
+            $plaintext .= $temp;
+        }
+
+        return $plaintext;
+    }
+
     /**
      * @param BigInteger $x
      * @param int        $xLen
@@ -191,59 +300,5 @@ final class RSA
         }
 
         return mb_substr($m, 1, null, '8bit');
-    }
-
-    /**
-     * Encryption.
-     *
-     * @param RSAKey $key
-     * @param string $plaintext
-     * @param string $hash_algorithm
-     *
-     * @return string
-     */
-    public static function encrypt(RSAKey $key, string $plaintext, string $hash_algorithm): string
-    {
-        /*
-         * @var Hash
-         */
-        $hash = Hash::$hash_algorithm();
-        $length = $key->getModulusLength() - 2 * $hash->getLength() - 2;
-        if (0 >= $length) {
-            throw new \RuntimeException();
-        }
-        $plaintext = str_split($plaintext, $length);
-        $ciphertext = '';
-        foreach ($plaintext as $m) {
-            $ciphertext .= self::encryptRSAESOAEP($key, $m, $hash);
-        }
-
-        return $ciphertext;
-    }
-
-    /**
-     * Decryption.
-     *
-     * @param RSAKey $key
-     * @param string $ciphertext
-     * @param string $hash_algorithm
-     *
-     * @return string
-     */
-    public static function decrypt(RSAKey $key, string $ciphertext, string $hash_algorithm): string
-    {
-        if (0 >= $key->getModulusLength()) {
-            throw new \RuntimeException();
-        }
-        $hash = Hash::$hash_algorithm();
-        $ciphertext = str_split($ciphertext, $key->getModulusLength());
-        $ciphertext[count($ciphertext) - 1] = str_pad($ciphertext[count($ciphertext) - 1], $key->getModulusLength(), chr(0), STR_PAD_LEFT);
-        $plaintext = '';
-        foreach ($ciphertext as $c) {
-            $temp = self::getRSAESOAEP($key, $c, $hash);
-            $plaintext .= $temp;
-        }
-
-        return $plaintext;
     }
 }

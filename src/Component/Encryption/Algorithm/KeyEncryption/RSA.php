@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Jose\Component\Core\JWK;
-use Jose\Component\Encryption\Util\RSA as JoseRSA;
+use Jose\Component\Encryption\Util\RSACrypt;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
 /**
@@ -42,14 +42,14 @@ abstract class RSA implements KeyEncryptionInterface
         $pub = RSAKey::toPublic(RSAKey::createFromJWK($key));
 
         if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
-            return JoseRSA::encrypt($pub, $cek, $this->getHashAlgorithm());
+            return RSACrypt::encryptWithRSAOAEP($pub, $cek, $this->getHashAlgorithm());
         } else {
-            $res = openssl_public_encrypt($cek, $encrypted, $pub->toPEM(), OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
+            $res = RSACrypt::encryptWithRSA15($pub, $cek);
             if (false === $res) {
                 throw new \RuntimeException('Unable to encrypt the data.');
             }
 
-            return $encrypted;
+            return $res;
         }
     }
 
@@ -66,14 +66,14 @@ abstract class RSA implements KeyEncryptionInterface
         $priv = RSAKey::createFromJWK($key);
 
         if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
-            return JoseRSA::decrypt($priv, $encrypted_cek, $this->getHashAlgorithm());
+            return RSACrypt::decryptWithRSAOAEP($priv, $encrypted_cek, $this->getHashAlgorithm());
         } else {
-            $res = openssl_private_decrypt($encrypted_cek, $decrypted, $priv->toPEM(), OPENSSL_PKCS1_PADDING | OPENSSL_RAW_DATA);
+            $res = RSACrypt::decryptWithRSA15($priv, $encrypted_cek);
             if (false === $res) {
                 throw new \RuntimeException('Unable to decrypt the data.');
             }
 
-            return $decrypted;
+            return $res;
         }
     }
 
