@@ -78,6 +78,7 @@ final class ECKey
      * @param string $data
      *
      * @return array
+     *
      * @throws \Exception
      */
     private static function loadPEM(string $data): array
@@ -120,6 +121,7 @@ final class ECKey
 
     /**
      * @param array $children
+     *
      * @return array
      */
     private static function loadPublicPEM(array $children): array
@@ -148,7 +150,7 @@ final class ECKey
             throw new \InvalidArgumentException('Unsupported key type');
         }
 
-        $values = ['kty' =>'EC'];
+        $values = ['kty' => 'EC'];
         $values['crv'] = self::getCurve($sub[1]->getContent());
         $values['x'] = Base64Url::encode(hex2bin(mb_substr($bits, 2, ($bits_length - 2) / 2, '8bit')));
         $values['y'] = Base64Url::encode(hex2bin(mb_substr($bits, ($bits_length - 2) / 2 + 2, ($bits_length - 2) / 2, '8bit')));

@@ -34,7 +34,7 @@ final class RSACrypt
             $ps .= $temp;
         }
         $type = 2;
-        $data = chr(0) . chr($type) . $ps . chr(0) . $data;
+        $data = chr(0).chr($type).$ps.chr(0).$data;
 
         $data = BigInteger::createFromBinaryString($data);
         $c = self::getRSAEP($key, $data);
