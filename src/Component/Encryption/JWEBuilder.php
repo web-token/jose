@@ -87,8 +87,8 @@ final class JWEBuilder
     /**
      * JWEBuilder constructor.
      *
-     * @param JWAManager                $keyEncryptionAlgorithmManager
-     * @param JWAManager                $contentEncryptionAlgorithmManager
+     * @param JWAManager               $keyEncryptionAlgorithmManager
+     * @param JWAManager               $contentEncryptionAlgorithmManager
      * @param CompressionMethodManager $compressionManager
      */
     public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionManager)

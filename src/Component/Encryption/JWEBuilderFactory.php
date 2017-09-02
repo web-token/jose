@@ -31,7 +31,7 @@ final class JWEBuilderFactory
     /**
      * JWEBuilder constructor.
      *
-     * @param JWAManagerFactory                $algorithmManagerFactory
+     * @param JWAManagerFactory               $algorithmManagerFactory
      * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
      */
     public function __construct(JWAManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory)
