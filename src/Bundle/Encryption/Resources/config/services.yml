@@ -5,4 +5,4 @@ services:
         public: true
 
     Jose\Component\Encryption\JWEBuilderFactory: ~
-    Jose\Component\Encryption\Compression\CompressionMethodsManagerFactory: ~
+    Jose\Component\Encryption\Compression\CompressionMethodManagerFactory: ~

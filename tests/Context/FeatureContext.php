@@ -13,7 +13,6 @@ namespace Jose\Test\Context;
 
 use Behat\Behat\Context\Context;
 use Behat\Symfony2Extension\Context\KernelDictionary;
-use Jose\Component\Encryption\Compression\CompressionMethodsManagerFactory;
 
 /**
  * Behat context class.
@@ -21,12 +20,4 @@ use Jose\Component\Encryption\Compression\CompressionMethodsManagerFactory;
 final class FeatureContext implements Context
 {
     use KernelDictionary;
-
-    /**
-     * @Given the compression methods manager factory is available
-     */
-    public function theCompressionMethodsManagerFactoryIsAvailable()
-    {
-        var_dump($this->getContainer()->has(CompressionMethodsManagerFactory::class));
-    }
 }

@@ -28,8 +28,7 @@ use PHPUnit\Framework\TestCase;
 final class JWAManagerTest extends TestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The array must contains JWAInterface objects.
+     * @expectedException \TypeError
      */
     public function testCreateManagerWithBadList()
     {

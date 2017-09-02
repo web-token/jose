@@ -18,7 +18,7 @@ use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
-use Jose\Component\Encryption\Compression\CompressionMethodsManager;
+use Jose\Component\Encryption\Compression\CompressionMethodManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWELoader;
@@ -69,7 +69,7 @@ final class RSA1_5AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTest
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loaded_compact_json = JWELoader::load($expected_compact_json);
@@ -133,7 +133,7 @@ final class RSA1_5AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTest
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA1_5'], ['A128CBC-HS256'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 

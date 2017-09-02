@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption;
 
 use Jose\Component\Core\JWAManagerFactory;
-use Jose\Component\Encryption\Compression\CompressionMethodsManagerFactory;
+use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
 
 final class JWEBuilderFactory
 {
@@ -24,7 +24,7 @@ final class JWEBuilderFactory
     private $algorithmManagerFactory;
 
     /**
-     * @var CompressionMethodsManagerFactory
+     * @var CompressionMethodManagerFactory
      */
     private $compressionMethodManagerFactory;
 
@@ -32,9 +32,9 @@ final class JWEBuilderFactory
      * JWEBuilder constructor.
      *
      * @param JWAManagerFactory                $algorithmManagerFactory
-     * @param CompressionMethodsManagerFactory $compressionMethodManagerFactory
+     * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
      */
-    public function __construct(JWAManagerFactory $algorithmManagerFactory, CompressionMethodsManagerFactory $compressionMethodManagerFactory)
+    public function __construct(JWAManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory)
     {
         $this->algorithmManagerFactory = $algorithmManagerFactory;
         $this->compressionMethodManagerFactory = $compressionMethodManagerFactory;

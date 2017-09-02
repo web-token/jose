@@ -11,6 +11,6 @@ default:
     suites:
         test_suite:
             contexts:
-                - 'Jose\Test\Context\FeatureContext'
+                - 'Jose\Test\Context\CompressionContext'
             paths:
                 - %paths.base%/features

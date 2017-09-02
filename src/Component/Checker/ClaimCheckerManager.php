@@ -52,11 +52,14 @@ final class ClaimCheckerManager
      *
      * @return ClaimCheckerManager
      */
-    private function add(ClaimCheckerInterface $checker): ClaimCheckerManager
+    private function add(ClaimCheckerInterface $checker)
     {
-        $this->checkers[$checker->supportedClaim()] = $checker;
+        $claim = $checker->supportedClaim();
+        if (array_key_exists($claim, $this->checkers)) {
+            throw new \InvalidArgumentException(sprintf('The claim checker "%s" is already supported.', $claim));
+        }
 
-        return $this;
+        $this->checkers[$claim] = $checker;
     }
 
     /**

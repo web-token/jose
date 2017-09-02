@@ -18,7 +18,7 @@ use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS512A256KW;
-use Jose\Component\Encryption\Compression\CompressionMethodsManager;
+use Jose\Component\Encryption\Compression\CompressionMethodManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWELoader;
@@ -83,7 +83,7 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends AbstractEnc
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new PBES2HS512A256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
         $loaded_compact_json = JWELoader::load($expected_compact_json);
@@ -159,7 +159,7 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends AbstractEnc
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new PBES2HS512A256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodsManager::create([new Deflate()]);
+        $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['PBES2-HS512+A256KW'], ['A128CBC-HS256'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 

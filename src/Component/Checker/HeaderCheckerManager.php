@@ -51,14 +51,15 @@ final class HeaderCheckerManager
 
     /**
      * @param HeaderCheckerInterface $checker
-     *
-     * @return HeaderCheckerManager
      */
-    private function add(HeaderCheckerInterface $checker): HeaderCheckerManager
+    private function add(HeaderCheckerInterface $checker)
     {
-        $this->checkers[$checker->supportedHeader()] = $checker;
+        $header = $checker->supportedHeader();
+        if (array_key_exists($header, $this->checkers)) {
+            throw new \InvalidArgumentException(sprintf('The header checker "%s" is already supported.', $header));
+        }
 
-        return $this;
+        $this->checkers[$header] = $checker;
     }
 
     /**

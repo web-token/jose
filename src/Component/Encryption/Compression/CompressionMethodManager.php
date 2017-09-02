@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Compression;
 
-/**
- * Compression method manager.
- */
-final class CompressionMethodsManager
+final class CompressionMethodManager
 {
     /**
      * @var CompressionMethodInterface[]
@@ -26,9 +23,9 @@ final class CompressionMethodsManager
     /**
      * @param CompressionMethodInterface[] $methods
      *
-     * @return CompressionMethodsManager
+     * @return CompressionMethodManager
      */
-    public static function create(array $methods): CompressionMethodsManager
+    public static function create(array $methods): CompressionMethodManager
     {
         $manager = new self();
         foreach ($methods as $method) {
@@ -40,14 +37,15 @@ final class CompressionMethodsManager
 
     /**
      * @param CompressionMethodInterface $compressionMethod
-     *
-     * @return CompressionMethodsManager
      */
-    public function add(CompressionMethodInterface $compressionMethod): CompressionMethodsManager
+    private function add(CompressionMethodInterface $compressionMethod)
     {
-        $this->compressionMethods[$compressionMethod->name()] = $compressionMethod;
+        $name = $compressionMethod->name();
+        if ($this->has($name)) {
+            throw new \InvalidArgumentException(sprintf('The compression method "%s" is already supported.', $name));
+        }
 
-        return $this;
+        $this->compressionMethods[$name] = $compressionMethod;
     }
 
     /**

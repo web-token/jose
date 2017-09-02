@@ -17,7 +17,7 @@ use Jose\Component\Core\JWKSet;
 use Jose\Component\Encryption\Algorithm\KeyEncryption;
 use Jose\Component\Encryption\Algorithm\ContentEncryption;
 use Jose\Component\Encryption\Compression;
-use Jose\Component\Encryption\Compression\CompressionMethodsManager;
+use Jose\Component\Encryption\Compression\CompressionMethodManager;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\JWELoader;
@@ -75,7 +75,7 @@ abstract class EncryptionBench
             new ContentEncryption\A256GCM(),
         ]);
 
-        $this->compressionMethodsManager = CompressionMethodsManager::create([
+        $this->compressionMethodsManager = CompressionMethodManager::create([
             new Compression\Deflate(),
             new Compression\GZip(),
             new Compression\ZLib(),
@@ -165,9 +165,9 @@ abstract class EncryptionBench
     }
 
     /**
-     * @return CompressionMethodsManager
+     * @return CompressionMethodManager
      */
-    private function getCompressionMethodsManager(): CompressionMethodsManager
+    private function getCompressionMethodsManager(): CompressionMethodManager
     {
         return $this->compressionMethodsManager;
     }

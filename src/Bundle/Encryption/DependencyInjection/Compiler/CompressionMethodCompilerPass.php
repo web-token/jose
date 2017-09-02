@@ -11,7 +11,7 @@
 
 namespace Jose\Bundle\Encryption\DependencyInjection\Compiler;
 
-use Jose\Component\Encryption\Compression\CompressionMethodsManagerFactory;
+use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -23,11 +23,11 @@ final class CompressionMethodCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition(CompressionMethodsManagerFactory::class)) {
+        if (!$container->hasDefinition(CompressionMethodManagerFactory::class)) {
             return;
         }
 
-        $definition = $container->getDefinition(CompressionMethodsManagerFactory::class);
+        $definition = $container->getDefinition(CompressionMethodManagerFactory::class);
 
         $taggedAlgorithmServices = $container->findTaggedServiceIds('jose.compression_method');
         foreach ($taggedAlgorithmServices as $id => $tags) {

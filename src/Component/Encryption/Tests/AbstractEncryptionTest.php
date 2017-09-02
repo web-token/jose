@@ -17,7 +17,7 @@ use Jose\Component\Core\JWAManagerFactory;
 use Jose\Component\Encryption\Algorithm\KeyEncryption;
 use Jose\Component\Encryption\Algorithm\ContentEncryption;
 use Jose\Component\Encryption\Compression;
-use Jose\Component\Encryption\Compression\CompressionMethodsManagerFactory;
+use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
 use Jose\Component\Encryption\JWEBuilderFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -65,17 +65,17 @@ abstract class AbstractEncryptionTest extends TestCase
     }
 
     /**
-     * @var CompressionMethodsManagerFactory
+     * @var CompressionMethodManagerFactory
      */
     private $compressionMethodManagerFactory;
 
     /**
-     * @return CompressionMethodsManagerFactory
+     * @return CompressionMethodManagerFactory
      */
-    protected function getCompressionMethodManagerFactory(): CompressionMethodsManagerFactory
+    protected function getCompressionMethodManagerFactory(): CompressionMethodManagerFactory
     {
         if (null === $this->compressionMethodManagerFactory) {
-            $this->compressionMethodManagerFactory = new CompressionMethodsManagerFactory();
+            $this->compressionMethodManagerFactory = new CompressionMethodManagerFactory();
             $this->compressionMethodManagerFactory
                 ->add('DEF', new Compression\Deflate())
                 ->add('ZLIB', new Compression\ZLib())

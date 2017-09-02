@@ -21,7 +21,7 @@ final class JWAManager
     /**
      * @var array
      */
-    private $algorithms;
+    private $algorithms = [];
 
     /**
      * JWAManager constructor.
@@ -30,7 +30,9 @@ final class JWAManager
      */
     private function __construct(array $algorithms)
     {
-        $this->algorithms = $algorithms;
+        foreach ($algorithms as $algorithm) {
+            $this->add($algorithm);
+        }
     }
 
     /**
@@ -40,14 +42,6 @@ final class JWAManager
      */
     public static function create(array $algorithms): JWAManager
     {
-        foreach ($algorithms as $k => $algorithm) {
-            if (!$algorithm instanceof JWAInterface) {
-                throw new \InvalidArgumentException('The array must contains JWAInterface objects.');
-            }
-            $algorithms[$algorithm->name()] = $algorithm;
-            unset($algorithms[$k]);
-        }
-
         return new self($algorithms);
     }
 
@@ -85,16 +79,14 @@ final class JWAManager
 
     /**
      * @param JWAInterface $algorithm
-     *
-     * @return JWAManager
      */
-    public function add(JWAInterface $algorithm): JWAManager
+    private function add(JWAInterface $algorithm)
     {
-        if ($this->has($algorithm->name())) {
-            return $this;
+        $name = $algorithm->name();
+        if ($this->has($name)) {
+            throw new \InvalidArgumentException(sprintf('The algorithm "%s" is already supported.', $name));
         }
-        $this->algorithms[$algorithm->name()] = $algorithm;
 
-        return $this;
+        $this->algorithms[$name] = $algorithm;
     }
 }

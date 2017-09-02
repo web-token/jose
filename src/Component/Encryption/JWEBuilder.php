@@ -25,7 +25,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Component\Encryption\Compression\CompressionMethodInterface;
-use Jose\Component\Encryption\Compression\CompressionMethodsManager;
+use Jose\Component\Encryption\Compression\CompressionMethodManager;
 
 final class JWEBuilder
 {
@@ -55,7 +55,7 @@ final class JWEBuilder
     private $contentEncryptionAlgorithmManager;
 
     /**
-     * @var CompressionMethodsManager
+     * @var CompressionMethodManager
      */
     private $compressionManager;
 
@@ -89,9 +89,9 @@ final class JWEBuilder
      *
      * @param JWAManager                $keyEncryptionAlgorithmManager
      * @param JWAManager                $contentEncryptionAlgorithmManager
-     * @param CompressionMethodsManager $compressionManager
+     * @param CompressionMethodManager $compressionManager
      */
-    public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionMethodsManager $compressionManager)
+    public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionManager)
     {
         $this->keyEncryptionAlgorithmManager = $keyEncryptionAlgorithmManager;
         $this->contentEncryptionAlgorithmManager = $contentEncryptionAlgorithmManager;
