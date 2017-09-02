@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Jose\Component\KeyManagement\KeyConverter;
 
 use Base64Url\Base64Url;
+use Jose\Component\Core\Util\ECKey;
+use Jose\Component\Core\Util\RSAKey;
 
 /**
  * This class will help you to load an EC key or a RSA key/certificate (private or public) and get values to create a JWK object.
@@ -185,7 +187,7 @@ final class KeyConverter
     }
 
     /**
-     * This method modify the PEM to get 64 char lines and fix bug with old OpenSSL versions.
+     * This method modifies the PEM to get 64 char lines and fix bug with old OpenSSL versions.
      *
      * @param string $pem
      */

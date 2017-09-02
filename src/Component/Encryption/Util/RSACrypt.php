@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Util;
 
 use Jose\Component\Core\Util\BigInteger;
-use Jose\Component\KeyManagement\KeyConverter\RSAKey;
+use Jose\Component\Core\Util\RSAKey;
 
 final class RSACrypt
 {
@@ -34,7 +34,6 @@ final class RSACrypt
             $ps .= $temp;
         }
         $type = 2;
-        //$ps = str_repeat("\xFF", $psLen);
         $data = chr(0) . chr($type) . $ps . chr(0) . $data;
 
         $data = BigInteger::createFromBinaryString($data);
@@ -61,14 +60,12 @@ final class RSACrypt
             return false;
         }
 
-        $ps = substr($em, 2, strpos($em, chr(0), 2) - 2);
-        $m = substr($em, strlen($ps) + 3);
+        $ps = mb_substr($em, 2, mb_strpos($em, chr(0), 2, '8bit') - 2, '8bit');
+        $m = mb_substr($em, mb_strlen($ps, '8bit') + 3, null, '8bit');
 
         if (strlen($ps) < 8) {
             return false;
         }
-
-        // Output M
 
         return $m;
     }
@@ -84,9 +81,7 @@ final class RSACrypt
      */
     public static function encryptWithRSAOAEP(RSAKey $key, string $plaintext, string $hash_algorithm): string
     {
-        /*
-         * @var Hash
-         */
+        /** @var Hash $hash */
         $hash = Hash::$hash_algorithm();
         $length = $key->getModulusLength() - 2 * $hash->getLength() - 2;
         if (0 >= $length) {

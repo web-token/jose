@@ -17,6 +17,7 @@ use FG\ASN1\Object;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
+use Jose\Component\Core\Util\ECKey;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Mdanter\Ecc\EccFactory;
 
@@ -45,7 +46,8 @@ abstract class ECDSA implements SignatureAlgorithmInterface
             throw new \InvalidArgumentException('The EC key is not private');
         }
 
-        $result = openssl_sign($input, $signature, $key->toPEM(), $this->getHashAlgorithm());
+        $eckey = ECKey::createFromJWK($key);
+        $result = openssl_sign($input, $signature, $eckey->toPEM(), $this->getHashAlgorithm());
         if (false === $result) {
             throw new \RuntimeException('Signature failed.');
         }
@@ -86,8 +88,9 @@ abstract class ECDSA implements SignatureAlgorithmInterface
             new Integer(gmp_strval($this->convertHexToGmp($R), 10)),
             new Integer(gmp_strval($this->convertHexToGmp($S), 10)),
         ]);
+        $eckey = ECKey::toPublic(ECKey::createFromJWK($key));
 
-        return 1 === openssl_verify($input, $oid_sequence->getBinary(), $key->toPublic()->toPEM(), $this->getHashAlgorithm());
+        return 1 === openssl_verify($input, $oid_sequence->getBinary(), $eckey->toPEM(), $this->getHashAlgorithm());
     }
 
     /**

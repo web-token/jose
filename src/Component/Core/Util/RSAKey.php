@@ -80,6 +80,59 @@ final class RSAKey
     }
 
     /**
+     * @param string $pem
+     *
+     * @return RSAKey
+     */
+    public static function createFromPEM(string $pem): RSAKey
+    {
+        $data = self::loadPEM($pem);
+
+        return new self(JWK::create($data));
+    }
+
+    /**
+     * @param string $data
+     *
+     * @return array
+     */
+    private static function loadPEM(string $data): array
+    {
+        $res = openssl_pkey_get_private($data);
+        if (false === $res) {
+            $res = openssl_pkey_get_public($data);
+        }
+        if (false === $res) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
+
+        $details = openssl_pkey_get_details($res);
+        if (!array_key_exists('rsa', $details)) {
+            throw new \InvalidArgumentException('Unable to load the key.');
+        }
+
+        $values['kty'] = 'RSA';
+        $keys = [
+            'n' => 'n',
+            'e' => 'e',
+            'd' => 'd',
+            'p' => 'p',
+            'q' => 'q',
+            'dp' => 'dmp1',
+            'dq' => 'dmq1',
+            'qi' => 'iqmp',
+        ];
+        foreach ($details['rsa'] as $key => $value) {
+            if (in_array($key, $keys)) {
+                $value = Base64Url::encode($value);
+                $values[array_search($key, $keys)] = $value;
+            }
+        }
+
+        return $values;
+    }
+
+    /**
      * @param JWK $jwk
      *
      * @return RSAKey
@@ -98,11 +151,98 @@ final class RSAKey
     }
 
     /**
+     * @return int
+     */
+    public function getModulusLength(): int
+    {
+        return $this->modulus_length;
+    }
+
+    /**
+     * @return BigInteger
+     */
+    public function getExponent(): BigInteger
+    {
+        $d = $this->getPrivateExponent();
+        if (null !== $d) {
+            return $d;
+        }
+
+        return $this->getPublicExponent();
+    }
+
+    /**
+     * @return BigInteger
+     */
+    public function getPublicExponent(): BigInteger
+    {
+        return $this->public_exponent;
+    }
+
+    /**
+     * @return BigInteger|null
+     */
+    public function getPrivateExponent(): ?BigInteger
+    {
+        return $this->private_exponent;
+    }
+
+    /**
+     * @return BigInteger[]
+     */
+    public function getPrimes(): array
+    {
+        return $this->primes;
+    }
+
+    /**
+     * @return BigInteger[]
+     */
+    public function getExponents(): array
+    {
+        return $this->exponents;
+    }
+
+    /**
+     * @return BigInteger|null
+     */
+    public function getCoefficient(): ?BigInteger
+    {
+        return $this->coefficient;
+    }
+
+    /**
      * @return bool
      */
-    public function isPrivate(): bool
+    public function isPublic(): bool
     {
-        return array_key_exists('d', $this->values);
+        return !array_key_exists('d', $this->values);
+    }
+
+    /**
+     * @param RSAKey $private
+     *
+     * @return RSAKey
+     */
+    public static function toPublic(RSAKey $private): RSAKey
+    {
+        $data = $private->toArray();
+        $keys = ['p', 'd', 'q', 'dp', 'dq', 'qi'];
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $data)) {
+                unset($data[$key]);
+            }
+        }
+
+        return new self(JWK::create($data));
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->values;
     }
 
     /**
@@ -110,9 +250,9 @@ final class RSAKey
      */
     public function toPEM(): string
     {
-        $result = '-----BEGIN '.($this->isPrivate() ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
+        $result = '-----BEGIN '.($this->isPublic() ? 'PUBLIC' : 'RSA PRIVATE').' KEY-----'.PHP_EOL;
         $result .= chunk_split(base64_encode($this->sequence->getBinary()), 64, PHP_EOL);
-        $result .= '-----END '.($this->isPrivate() ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
+        $result .= '-----END '.($this->isPublic() ? 'PUBLIC' : 'RSA PRIVATE').' KEY-----'.PHP_EOL;
 
         return $result;
     }
@@ -236,7 +376,7 @@ final class RSAKey
         $this->modulus_length = mb_strlen($this->getModulus()->toBytes(), '8bit');
         $this->public_exponent = $this->convertBase64StringToBigInteger($this->values['e']);
 
-        if (true === $this->isPrivate()) {
+        if (!$this->isPublic()) {
             $this->private_exponent = $this->convertBase64StringToBigInteger($this->values['d']);
 
             if (array_key_exists('p', $this->values) && array_key_exists('q', $this->values)) {

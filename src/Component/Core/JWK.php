@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Jose\Component\Core;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\Util\ECKey;
-use Jose\Component\Core\Util\RSAKey;
 
 /**
  * Class JWK.
@@ -26,11 +24,6 @@ final class JWK implements \JsonSerializable
      * @var array
      */
     private $values = [];
-
-    /**
-     * @var null|string
-     */
-    private $pem = null;
 
     /**
      * JWK constructor.
@@ -136,30 +129,5 @@ final class JWK implements \JsonSerializable
         $values = array_diff_key($this->values, array_flip(['p', 'd', 'q', 'dp', 'dq', 'qi']));
 
         return new self($values);
-    }
-
-    /**
-     * @return string
-     */
-    public function toPEM(): string
-    {
-        if (null === $this->pem) {
-            switch ($this->get('kty')) {
-                case 'RSA':
-                    $rsa = RSAKey::createFromJWK($this);
-                    $this->pem = $rsa->toPEM();
-
-                    break;
-                case 'EC':
-                    $rsa = ECKey::createFromJWK($this);
-                    $this->pem = $rsa->toPEM();
-
-                    break;
-                default:
-                    throw new \LogicException('Only RSA and EC key can be converted into PEM.');
-            }
-        }
-
-        return $this->pem;
     }
 }

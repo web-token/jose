@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Algorithm;
 
 use Jose\Component\Core\JWK;
-use Jose\Component\KeyManagement\KeyConverter\RSAKey;
+use Jose\Component\Core\Util\RSAKey;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\Signature\Util\RSA as JoseRSA;
 
@@ -50,12 +50,11 @@ abstract class RSA implements SignatureAlgorithmInterface
     {
         $this->checkKey($key);
 
+        $pub = RSAKey::createFromJWK($key->toPublic());
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
-            $pub = RSAKey::createFromJWK($key->toPublic());
-
             return JoseRSA::verify($pub, $input, $signature, $this->getAlgorithm());
         } else {
-            return 1 === openssl_verify($input, $signature, $key->toPublic()->toPEM(), $this->getAlgorithm());
+            return 1 === openssl_verify($input, $signature, $pub->toPEM(), $this->getAlgorithm());
         }
     }
 
@@ -69,12 +68,12 @@ abstract class RSA implements SignatureAlgorithmInterface
             throw new \InvalidArgumentException('The key is not a private key.');
         }
 
+        $priv = RSAKey::createFromJWK($key);
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
-            $priv = RSAKey::createFromJWK($key);
             $signature = JoseRSA::sign($priv, $input, $this->getAlgorithm());
             $result = is_string($signature);
         } else {
-            $result = openssl_sign($input, $signature, $key->toPEM(), $this->getAlgorithm());
+            $result = openssl_sign($input, $signature, $priv->toPEM(), $this->getAlgorithm());
         }
         if (false === $result) {
             throw new \InvalidArgumentException('An error occurred during the creation of the signature.');

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Jose\Component\Core\JWK;
+use Jose\Component\Core\Util\RSAKey;
 use Jose\Component\Encryption\Util\RSACrypt;
-use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
 /**
  * Class RSA.

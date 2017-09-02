@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Util;
 
 use Jose\Component\Core\Util\BigInteger;
-use Jose\Component\KeyManagement\KeyConverter\RSAKey;
+use Jose\Component\Core\Util\RSAKey;
 
 final class RSA
 {

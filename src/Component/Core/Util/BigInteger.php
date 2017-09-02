@@ -23,8 +23,6 @@ final class BigInteger
     private $value;
 
     /**
-     * Converts base-10 and binary strings (base-256) to BigIntegers.
-     *
      * @param \GMP $value
      */
     private function __construct(\GMP $value)
@@ -56,18 +54,6 @@ final class BigInteger
     }
 
     /**
-     * @param string $value
-     *
-     * @return BigInteger
-     */
-    public static function createFromDecimalString(string $value): BigInteger
-    {
-        $value = gmp_init($value, 10);
-
-        return new self($value, 10);
-    }
-
-    /**
      * @param int $value
      *
      * @return BigInteger
@@ -95,22 +81,6 @@ final class BigInteger
         $temp = hex2bin($temp);
 
         return ltrim($temp, chr(0));
-    }
-
-    /**
-     * Converts a BigInteger to a binary string.
-     *
-     * @return int
-     */
-    public function toInteger(): int
-    {
-        if (gmp_cmp($this->value, gmp_init(0)) === 0) {
-            return '';
-        }
-
-        $temp = gmp_strval(gmp_abs($this->value), 10);
-
-        return (int) $temp;
     }
 
     /**
@@ -267,36 +237,6 @@ final class BigInteger
     }
 
     /**
-     * @param BigInteger $y
-     *
-     * @return bool
-     */
-    public function lowerOrEqualThan(BigInteger $y): bool
-    {
-        return 0 >= $this->compare($y);
-    }
-
-    /**
-     * @param BigInteger $y
-     *
-     * @return bool
-     */
-    public function greaterThan(BigInteger $y): bool
-    {
-        return 0 < $this->compare($y);
-    }
-
-    /**
-     * @param BigInteger $y
-     *
-     * @return bool
-     */
-    public function greaterOrEqualThan(BigInteger $y): bool
-    {
-        return 0 <= $this->compare($y);
-    }
-
-    /**
      * @return bool
      */
     public function isEven(): bool
@@ -305,13 +245,5 @@ final class BigInteger
         $two = self::createFromDecimal(2);
 
         return $this->mod($two)->equals($zero);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isOdd(): bool
-    {
-        return !$this->isEven();
     }
 }
