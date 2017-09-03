@@ -47,7 +47,6 @@ final class ECKey
      */
     private function __construct(JWK $data)
     {
-        $this->sequence = new Sequence();
         $this->loadJWK($data->all());
         $this->private = isset($this->values['d']);
     }
@@ -331,15 +330,11 @@ final class ECKey
             throw new \InvalidArgumentException('JWK is not an Elliptic Curve key.');
         }
         $this->values = $jwk;
-        if (array_key_exists('d', $jwk)) {
-            $this->initPrivateKey();
-        } else {
-            $this->initPublicKey();
-        }
     }
 
     private function initPublicKey()
     {
+        $this->sequence = new Sequence();
         $oid_sequence = new Sequence();
         $oid_sequence->addChild(new ObjectIdentifier('1.2.840.10045.2.1'));
         $oid_sequence->addChild(new ObjectIdentifier($this->getOID($this->values['crv'])));
@@ -353,6 +348,7 @@ final class ECKey
 
     private function initPrivateKey()
     {
+        $this->sequence = new Sequence();
         $this->sequence->addChild(new Integer(1));
         $this->sequence->addChild(new OctetString(bin2hex(Base64Url::decode($this->values['d']))));
 
@@ -371,6 +367,13 @@ final class ECKey
      */
     public function toPEM(): string
     {
+        if (null === $this->sequence) {
+            if (array_key_exists('d', $this->values)) {
+                $this->initPrivateKey();
+            } else {
+                $this->initPublicKey();
+            }
+        }
         $result = '-----BEGIN '.($this->private ? 'EC PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
         $result .= chunk_split(base64_encode($this->sequence->getBinary()), 64, PHP_EOL);
         $result .= '-----END '.($this->private ? 'EC PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
@@ -386,12 +389,11 @@ final class ECKey
     private function getOID(string $curve): string
     {
         $curves = $this->getSupportedCurves();
-        $oid = array_key_exists($curve, $curves) ? $curves[$curve] : null;
-
-        if (!is_string($oid)) {
+        if (!array_key_exists($curve, $curves)) {
             throw new \InvalidArgumentException('Unsupported curve.');
+
         }
 
-        return $oid;
+        return $curves[$curve];
     }
 }
