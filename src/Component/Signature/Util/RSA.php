@@ -174,8 +174,8 @@ final class RSA
 
     /**
      * @param string $m
-     * @param int $emBits
-     * @param Hash $hash
+     * @param int    $emBits
+     * @param Hash   $hash
      *
      * @return string
      */
@@ -185,17 +185,20 @@ final class RSA
         switch ($hash->name()) {
             case 'sha256':
                 $t = "\x30\x31\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x01\x05\x00\x04\x20";
+
                 break;
             case 'sha384':
                 $t = "\x30\x41\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x02\x05\x00\x04\x30";
+
                 break;
             case 'sha512':
                 $t = "\x30\x51\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x03\x05\x00\x04\x40";
+
                 break;
             default:
                 throw new \InvalidArgumentException();
         }
-        $t.= $h;
+        $t .= $h;
         $tLen = mb_strlen($t, '8bit');
         if ($emBits < $tLen + 11) {
             throw new \RuntimeException();
@@ -210,7 +213,7 @@ final class RSA
      * @param RSAKey $key
      * @param string $message
      * @param string $hash
-     * @param int $mode
+     * @param int    $mode
      *
      * @return string
      */
@@ -273,7 +276,7 @@ final class RSA
      * @param string $message
      * @param string $signature
      * @param string $hash
-     * @param int $mode
+     * @param int    $mode
      *
      * @return bool
      */
