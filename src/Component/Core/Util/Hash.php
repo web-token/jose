@@ -90,4 +90,12 @@ final class Hash
     {
         return hash($this->hash, $text, true);
     }
+
+    /**
+     * @return string
+     */
+    public function name(): string
+    {
+        return $this->hash;
+    }
 }

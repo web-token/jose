@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
+use Jose\Component\Encryption\Util\RSACrypt;
+
 /**
  * Class RSAOAEP.
  */
@@ -23,7 +25,7 @@ final class RSAOAEP extends RSA
      */
     protected function getEncryptionMode(): int
     {
-        return self::ENCRYPTION_OAEP;
+        return RSACrypt::ENCRYPTION_OAEP;
     }
 
     /**

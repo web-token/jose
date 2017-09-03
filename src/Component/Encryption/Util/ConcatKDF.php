@@ -40,7 +40,7 @@ final class ConcatKDF
         $apu = !empty($apu) ? Base64Url::decode($apu) : '';
         $apv = !empty($apv) ? Base64Url::decode($apv) : '';
         $encryption_segments = [
-            self::toInt32Bits(1),                                        // Round number 1
+            self::toInt32Bits(1),                                  // Round number 1
             $Z,                                                          // Z (shared secret)
             self::toInt32Bits(mb_strlen($algorithm, '8bit')).$algorithm, // Size of algorithm's name and algorithm
             self::toInt32Bits(mb_strlen($apu, '8bit')).$apu,             // PartyUInfo

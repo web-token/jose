@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Algorithm;
 
+use Jose\Component\Signature\Util\RSA as JoseRSA;
+
 /**
  * Class RS256.
  */
@@ -31,7 +33,7 @@ final class RS256 extends RSA
      */
     protected function getSignatureMethod(): int
     {
-        return self::SIGNATURE_PKCS1;
+        return JoseRSA::SIGNATURE_PKCS1;
     }
 
     /**

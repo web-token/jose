@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
+use Jose\Component\Encryption\Util\RSACrypt;
+
 /**
  * Class RSA15.
  */
@@ -23,16 +25,15 @@ final class RSA15 extends RSA
      */
     protected function getEncryptionMode(): int
     {
-        return self::ENCRYPTION_PKCS1;
+        return RSACrypt::ENCRYPTION_PKCS1;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
-    protected function getHashAlgorithm(): string
+    protected function getHashAlgorithm(): ?string
     {
+        return null;
     }
 
     /**

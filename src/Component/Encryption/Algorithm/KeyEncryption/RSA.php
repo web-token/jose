@@ -23,34 +23,14 @@ use Jose\Component\Encryption\Util\RSACrypt;
 abstract class RSA implements KeyEncryptionInterface
 {
     /**
-     * Optimal Asymmetric Encryption Padding (OAEP).
-     */
-    const ENCRYPTION_OAEP = 1;
-
-    /**
-     * Use PKCS#1 padding.
-     */
-    const ENCRYPTION_PKCS1 = 2;
-
-    /**
      * {@inheritdoc}
      */
     public function encryptKey(JWK $key, string $cek, array $complete_headers, array &$additional_headers): string
     {
         $this->checkKey($key);
-
         $pub = RSAKey::toPublic(RSAKey::createFromJWK($key));
 
-        if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
-            return RSACrypt::encryptWithRSAOAEP($pub, $cek, $this->getHashAlgorithm());
-        } else {
-            $res = RSACrypt::encryptWithRSA15($pub, $cek);
-            if (false === $res) {
-                throw new \RuntimeException('Unable to encrypt the data.');
-            }
-
-            return $res;
-        }
+        return RSACrypt::encrypt($pub, $cek, $this->getEncryptionMode(), $this->getHashAlgorithm());
     }
 
     /**
@@ -62,19 +42,9 @@ abstract class RSA implements KeyEncryptionInterface
         if (!$key->has('d')) {
             throw new \InvalidArgumentException('The key is not a private key');
         }
-
         $priv = RSAKey::createFromJWK($key);
 
-        if (self::ENCRYPTION_OAEP === $this->getEncryptionMode()) {
-            return RSACrypt::decryptWithRSAOAEP($priv, $encrypted_cek, $this->getHashAlgorithm());
-        } else {
-            $res = RSACrypt::decryptWithRSA15($priv, $encrypted_cek);
-            if (false === $res) {
-                throw new \RuntimeException('Unable to decrypt the data.');
-            }
-
-            return $res;
-        }
+        return RSACrypt::decrypt($priv, $encrypted_cek, $this->getEncryptionMode(), $this->getHashAlgorithm());
     }
 
     /**
@@ -101,7 +71,7 @@ abstract class RSA implements KeyEncryptionInterface
     abstract protected function getEncryptionMode(): int;
 
     /**
-     * @return string
+     * @return null|string
      */
-    abstract protected function getHashAlgorithm(): string;
+    abstract protected function getHashAlgorithm(): ?string;
 }

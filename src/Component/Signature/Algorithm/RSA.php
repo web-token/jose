@@ -24,16 +24,6 @@ use Jose\Component\Signature\Util\RSA as JoseRSA;
 abstract class RSA implements SignatureAlgorithmInterface
 {
     /**
-     * Probabilistic Signature Scheme.
-     */
-    const SIGNATURE_PSS = 1;
-
-    /**
-     * Use the PKCS#1.
-     */
-    const SIGNATURE_PKCS1 = 2;
-
-    /**
      * @return mixed
      */
     abstract protected function getAlgorithm(): string;
@@ -49,13 +39,9 @@ abstract class RSA implements SignatureAlgorithmInterface
     public function verify(JWK $key, string $input, string $signature): bool
     {
         $this->checkKey($key);
-
         $pub = RSAKey::createFromJWK($key->toPublic());
-        if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
-            return JoseRSA::verifyWithPSS($pub, $input, $signature, $this->getAlgorithm());
-        } else {
-            return 1 === openssl_verify($input, $signature, $pub->toPEM(), $this->getAlgorithm());
-        }
+
+        return JoseRSA::verify($pub, $input, $signature, $this->getAlgorithm(), $this->getSignatureMethod());
     }
 
     /**
@@ -69,17 +55,8 @@ abstract class RSA implements SignatureAlgorithmInterface
         }
 
         $priv = RSAKey::createFromJWK($key);
-        if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
-            $signature = JoseRSA::signWithPSS($priv, $input, $this->getAlgorithm());
-            $result = is_string($signature);
-        } else {
-            $result = openssl_sign($input, $signature, $priv->toPEM(), $this->getAlgorithm());
-        }
-        if (false === $result) {
-            throw new \InvalidArgumentException('An error occurred during the creation of the signature.');
-        }
 
-        return $signature;
+        return JoseRSA::sign($priv, $input, $this->getAlgorithm(), $this->getSignatureMethod());
     }
 
     /**

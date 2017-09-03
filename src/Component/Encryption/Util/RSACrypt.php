@@ -19,7 +19,63 @@ use Jose\Component\Core\Util\RSAKey;
 
 final class RSACrypt
 {
-    public static function encryptWithRSA15(RSAKey $key, string $data)
+    /**
+     * Optimal Asymmetric Encryption Padding (OAEP).
+     */
+    public const ENCRYPTION_OAEP = 1;
+
+    /**
+     * Use PKCS#1 padding.
+     */
+    public const ENCRYPTION_PKCS1 = 2;
+
+    /**
+     * @param RSAKey $key
+     * @param string $data
+     * @param int $mode
+     * @param null|string $hash
+     *
+     * @return string
+     */
+    public static function encrypt(RSAKey $key, string $data, int $mode, ?string $hash = null): string
+    {
+        switch ($mode) {
+            case self::ENCRYPTION_OAEP:
+                return self::encryptWithRSAOAEP($key, $data, $hash);
+            case self::ENCRYPTION_PKCS1:
+                return self::encryptWithRSA15($key, $data);
+            default:
+                throw new \InvalidArgumentException('Unsupported mode.');
+        }
+    }
+
+    /**
+     * @param RSAKey $key
+     * @param string $plaintext
+     * @param int $mode
+     * @param null|string $hash
+     *
+     * @return string
+     */
+    public static function decrypt(RSAKey $key, string $plaintext, int $mode, ?string $hash = null): string
+    {
+        switch ($mode) {
+            case self::ENCRYPTION_OAEP:
+                return self::decryptWithRSAOAEP($key, $plaintext, $hash);
+            case self::ENCRYPTION_PKCS1:
+                return self::decryptWithRSA15($key, $plaintext);
+            default:
+                throw new \InvalidArgumentException('Unsupported mode.');
+        }
+    }
+
+    /**
+     * @param RSAKey $key
+     * @param string $data
+     *
+     * @return string
+     */
+    public static function encryptWithRSA15(RSAKey $key, string $data): string
     {
         $mLen = mb_strlen($data, '8bit');
 
@@ -44,28 +100,34 @@ final class RSACrypt
         return $c;
     }
 
-    public static function decryptWithRSA15(RSAKey $key, $c)
+    /**
+     * @param RSAKey $key
+     * @param string $c
+     *
+     * @return string
+     */
+    public static function decryptWithRSA15(RSAKey $key, string $c): string
     {
-        if (mb_strlen($c, '8bit') !== $key->getModulusLength()) { // or if k < 11
-            return false;
+        if (mb_strlen($c, '8bit') !== $key->getModulusLength()) {
+            throw new \InvalidArgumentException('Unable to decrypt');
         }
 
         $c = BigInteger::createFromBinaryString($c);
         $m = self::getRSADP($key, $c);
         $em = self::convertIntegerToOctetString($m, $key->getModulusLength());
         if ($em === false) {
-            return false;
+            throw new \InvalidArgumentException('Unable to decrypt');
         }
 
         if (ord($em[0]) != 0 || ord($em[1]) > 2) {
-            return false;
+            throw new \InvalidArgumentException('Unable to decrypt');
         }
 
         $ps = mb_substr($em, 2, mb_strpos($em, chr(0), 2, '8bit') - 2, '8bit');
         $m = mb_substr($em, mb_strlen($ps, '8bit') + 3, null, '8bit');
 
-        if (strlen($ps) < 8) {
-            return false;
+        if (mb_strlen($ps, '8bit') < 8) {
+            throw new \InvalidArgumentException('Unable to decrypt');
         }
 
         return $m;

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Algorithm;
 
+use Jose\Component\Signature\Util\RSA as JoseRSA;
+
 /**
  * Class PS512.
  */
@@ -31,7 +33,7 @@ final class PS512 extends RSA
      */
     protected function getSignatureMethod(): int
     {
-        return self::SIGNATURE_PSS;
+        return JoseRSA::SIGNATURE_PSS;
     }
 
     /**
