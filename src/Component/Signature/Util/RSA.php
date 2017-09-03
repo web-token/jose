@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Util;
 
 use Jose\Component\Core\Util\BigInteger;
+use Jose\Component\Core\Util\Hash;
 use Jose\Component\Core\Util\RSAKey;
 
 final class RSA
@@ -27,7 +28,7 @@ final class RSA
     private static function convertIntegerToOctetString(BigInteger $x, int $xLen): string
     {
         $x = $x->toBytes();
-        if (strlen($x) > $xLen) {
+        if (mb_strlen($x, '8bit') > $xLen) {
             throw new \RuntimeException();
         }
 
@@ -170,7 +171,7 @@ final class RSA
      *
      * @return string
      */
-    public static function sign(RSAKey $key, string $message, string $hash): string
+    public static function signWithPSS(RSAKey $key, string $message, string $hash): string
     {
         if (!in_array($hash, ['sha256', 'sha384', 'sha512'])) {
             throw new \InvalidArgumentException();
@@ -192,18 +193,18 @@ final class RSA
      *
      * @return bool
      */
-    public static function verify(RSAKey $key, string $message, string $signature, string $hash): bool
+    public static function verifyWithPSS(RSAKey $key, string $message, string $signature, string $hash): bool
     {
         if (!in_array($hash, ['sha256', 'sha384', 'sha512'])) {
             throw new \InvalidArgumentException();
         }
-        if (strlen($signature) !== $key->getModulusLength()) {
+        if (mb_strlen($signature, '8bit') !== $key->getModulusLength()) {
             throw new \InvalidArgumentException();
         }
-        $modBits = 8 * $key->getModulusLength();
         $s2 = BigInteger::createFromBinaryString($signature);
         $m2 = self::exponentiate($key, $s2);
-        $em = self::convertIntegerToOctetString($m2, $modBits >> 3);
+        $em = self::convertIntegerToOctetString($m2, $key->getModulusLength());
+        $modBits = 8 * $key->getModulusLength();
 
         return self::verifyEMSAPSS($message, $em, $modBits - 1, Hash::$hash());
     }

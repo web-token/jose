@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Util;
 
 use Jose\Component\Core\Util\BigInteger;
+use Jose\Component\Core\Util\Hash;
 use Jose\Component\Core\Util\RSAKey;
 
 final class RSACrypt

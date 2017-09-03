@@ -52,7 +52,7 @@ abstract class RSA implements SignatureAlgorithmInterface
 
         $pub = RSAKey::createFromJWK($key->toPublic());
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
-            return JoseRSA::verify($pub, $input, $signature, $this->getAlgorithm());
+            return JoseRSA::verifyWithPSS($pub, $input, $signature, $this->getAlgorithm());
         } else {
             return 1 === openssl_verify($input, $signature, $pub->toPEM(), $this->getAlgorithm());
         }
@@ -70,7 +70,7 @@ abstract class RSA implements SignatureAlgorithmInterface
 
         $priv = RSAKey::createFromJWK($key);
         if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
-            $signature = JoseRSA::sign($priv, $input, $this->getAlgorithm());
+            $signature = JoseRSA::signWithPSS($priv, $input, $this->getAlgorithm());
             $result = is_string($signature);
         } else {
             $result = openssl_sign($input, $signature, $priv->toPEM(), $this->getAlgorithm());
