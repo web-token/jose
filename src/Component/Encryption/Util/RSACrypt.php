@@ -224,7 +224,7 @@ final class RSACrypt
      */
     private static function exponentiate(RSAKey $key, BigInteger $c): BigInteger
     {
-        if ($key->isPublic() || empty($key->getPrimes())) {
+        if ($key->isPublic() || empty($key->getPrimes()) || empty($key->getExponents()) || null === $key->getCoefficient()) {
             return $c->modPow($key->getExponent(), $key->getModulus());
         }
 

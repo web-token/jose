@@ -14,21 +14,10 @@ declare(strict_types=1);
 namespace Jose\Component\Core\Util;
 
 use Base64Url\Base64Url;
-use FG\ASN1\Universal\BitString;
-use FG\ASN1\Universal\Integer;
-use FG\ASN1\Universal\NullObject;
-use FG\ASN1\Universal\ObjectIdentifier;
-use FG\ASN1\Universal\OctetString;
-use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
 
 final class RSAKey
 {
-    /**
-     * @var Sequence
-     */
-    private $sequence;
-
     /**
      * @var array
      */
@@ -74,62 +63,8 @@ final class RSAKey
      */
     private function __construct(JWK $data)
     {
-        $this->sequence = new Sequence();
         $this->loadJWK($data->all());
         $this->populateBigIntegers();
-    }
-
-    /**
-     * @param string $pem
-     *
-     * @return RSAKey
-     */
-    public static function createFromPEM(string $pem): RSAKey
-    {
-        $data = self::loadPEM($pem);
-
-        return new self(JWK::create($data));
-    }
-
-    /**
-     * @param string $data
-     *
-     * @return array
-     */
-    private static function loadPEM(string $data): array
-    {
-        $res = openssl_pkey_get_private($data);
-        if (false === $res) {
-            $res = openssl_pkey_get_public($data);
-        }
-        if (false === $res) {
-            throw new \InvalidArgumentException('Unable to load the key.');
-        }
-
-        $details = openssl_pkey_get_details($res);
-        if (!array_key_exists('rsa', $details)) {
-            throw new \InvalidArgumentException('Unable to load the key.');
-        }
-
-        $values['kty'] = 'RSA';
-        $keys = [
-            'n' => 'n',
-            'e' => 'e',
-            'd' => 'd',
-            'p' => 'p',
-            'q' => 'q',
-            'dp' => 'dmp1',
-            'dq' => 'dmq1',
-            'qi' => 'iqmp',
-        ];
-        foreach ($details['rsa'] as $key => $value) {
-            if (in_array($key, $keys)) {
-                $value = Base64Url::encode($value);
-                $values[array_search($key, $keys)] = $value;
-            }
-        }
-
-        return $values;
     }
 
     /**
@@ -246,18 +181,6 @@ final class RSAKey
     }
 
     /**
-     * @return string
-     */
-    public function toPEM(): string
-    {
-        $result = '-----BEGIN '.($this->isPublic() ? 'PUBLIC' : 'RSA PRIVATE').' KEY-----'.PHP_EOL;
-        $result .= chunk_split(base64_encode($this->sequence->getBinary()), 64, PHP_EOL);
-        $result .= '-----END '.($this->isPublic() ? 'PUBLIC' : 'RSA PRIVATE').' KEY-----'.PHP_EOL;
-
-        return $result;
-    }
-
-    /**
      * @param array $jwk
      */
     private function loadJWK(array $jwk)
@@ -270,104 +193,6 @@ final class RSAKey
         }
 
         $this->values = $jwk;
-        if (array_key_exists('d', $jwk)) {
-            $this->populateCRT();
-            $this->initPrivateKey();
-        } else {
-            $this->initPublicKey();
-        }
-    }
-
-    /**
-     * This method adds Chinese Remainder Theorem (CRT) parameters if primes 'p' and 'q' are available.
-     */
-    private function populateCRT()
-    {
-        if (!array_key_exists('p', $this->values) && !array_key_exists('q', $this->values)) {
-            $d = BigInteger::createFromBinaryString(Base64Url::decode($this->values['d']));
-            $e = BigInteger::createFromBinaryString(Base64Url::decode($this->values['e']));
-            $n = BigInteger::createFromBinaryString(Base64Url::decode($this->values['n']));
-
-            list($p, $q) = $this->findPrimeFactors($d, $e, $n);
-            $this->values['p'] = Base64Url::encode($p->toBytes());
-            $this->values['q'] = Base64Url::encode($q->toBytes());
-        }
-
-        if (array_key_exists('dp', $this->values) && array_key_exists('dq', $this->values) && array_key_exists('qi', $this->values)) {
-            return;
-        }
-
-        $one = BigInteger::createFromDecimal(1);
-        $d = BigInteger::createFromBinaryString(Base64Url::decode($this->values['d']));
-        $p = BigInteger::createFromBinaryString(Base64Url::decode($this->values['p']));
-        $q = BigInteger::createFromBinaryString(Base64Url::decode($this->values['q']));
-
-        $this->values['dp'] = Base64Url::encode($d->mod($p->subtract($one))->toBytes());
-        $this->values['dq'] = Base64Url::encode($d->mod($q->subtract($one))->toBytes());
-        $this->values['qi'] = Base64Url::encode($q->modInverse($p)->toBytes());
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function initPublicKey()
-    {
-        $oid_sequence = new Sequence();
-        $oid_sequence->addChild(new ObjectIdentifier('1.2.840.113549.1.1.1'));
-        $oid_sequence->addChild(new NullObject());
-        $this->sequence->addChild($oid_sequence);
-
-        $n = new Integer($this->fromBase64ToInteger($this->values['n']));
-        $e = new Integer($this->fromBase64ToInteger($this->values['e']));
-
-        $key_sequence = new Sequence();
-        $key_sequence->addChild($n);
-        $key_sequence->addChild($e);
-        $key_bit_string = new BitString(bin2hex($key_sequence->getBinary()));
-        $this->sequence->addChild($key_bit_string);
-    }
-
-    private function initPrivateKey()
-    {
-        $this->sequence->addChild(new Integer(0));
-
-        $oid_sequence = new Sequence();
-        $oid_sequence->addChild(new ObjectIdentifier('1.2.840.113549.1.1.1'));
-        $oid_sequence->addChild(new NullObject());
-        $this->sequence->addChild($oid_sequence);
-
-        $v = new Integer(0);
-        $n = new Integer($this->fromBase64ToInteger($this->values['n']));
-        $e = new Integer($this->fromBase64ToInteger($this->values['e']));
-        $d = new Integer($this->fromBase64ToInteger($this->values['d']));
-        $p = new Integer($this->fromBase64ToInteger($this->values['p']));
-        $q = new Integer($this->fromBase64ToInteger($this->values['q']));
-        $dp = array_key_exists('dp', $this->values) ? new Integer($this->fromBase64ToInteger($this->values['dp'])) : new Integer(0);
-        $dq = array_key_exists('dq', $this->values) ? new Integer($this->fromBase64ToInteger($this->values['dq'])) : new Integer(0);
-        $qi = array_key_exists('qi', $this->values) ? new Integer($this->fromBase64ToInteger($this->values['qi'])) : new Integer(0);
-
-        $key_sequence = new Sequence();
-        $key_sequence->addChild($v);
-        $key_sequence->addChild($n);
-        $key_sequence->addChild($e);
-        $key_sequence->addChild($d);
-        $key_sequence->addChild($p);
-        $key_sequence->addChild($q);
-        $key_sequence->addChild($dp);
-        $key_sequence->addChild($dq);
-        $key_sequence->addChild($qi);
-        $key_octet_string = new OctetString(bin2hex($key_sequence->getBinary()));
-        $this->sequence->addChild($key_octet_string);
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    private function fromBase64ToInteger(string $value): string
-    {
-        return gmp_strval(gmp_init(current(unpack('H*', Base64Url::decode($value))), 16), 10);
     }
 
     private function populateBigIntegers()
@@ -384,11 +209,13 @@ final class RSAKey
                     $this->convertBase64StringToBigInteger($this->values['p']),
                     $this->convertBase64StringToBigInteger($this->values['q']),
                 ];
-                $this->exponents = [
-                    $this->convertBase64StringToBigInteger($this->values['dp']),
-                    $this->convertBase64StringToBigInteger($this->values['dq']),
-                ];
-                $this->coefficient = $this->convertBase64StringToBigInteger($this->values['qi']);
+                if (array_key_exists('dp', $this->values) && array_key_exists('dq', $this->values) && array_key_exists('qi', $this->values)) {
+                    $this->exponents = [
+                        $this->convertBase64StringToBigInteger($this->values['dp']),
+                        $this->convertBase64StringToBigInteger($this->values['dq']),
+                    ];
+                    $this->coefficient = $this->convertBase64StringToBigInteger($this->values['qi']);
+                }
             }
         }
     }
@@ -401,75 +228,5 @@ final class RSAKey
     private function convertBase64StringToBigInteger(string $value): BigInteger
     {
         return BigInteger::createFromBinaryString(Base64Url::decode($value));
-    }
-
-    /**
-     * @param BigInteger $d
-     * @param BigInteger $e
-     * @param BigInteger $n
-     *
-     * @return BigInteger[]
-     */
-    private function findPrimeFactors(BigInteger $d, BigInteger $e, BigInteger $n): array
-    {
-        $zero = BigInteger::createFromDecimal(0);
-        $one = BigInteger::createFromDecimal(1);
-        $two = BigInteger::createFromDecimal(2);
-
-        $k = $d->multiply($e)->subtract($one);
-
-        if ($k->isEven()) {
-            $r = $k;
-            $t = $zero;
-
-            do {
-                $r = $r->divide($two);
-                $t = $t->add($one);
-            } while ($r->isEven());
-
-            $found = false;
-            $y = null;
-
-            for ($i = 1; $i <= 100; ++$i) {
-                $g = BigInteger::random($n->subtract($one));
-                $y = $g->modPow($r, $n);
-
-                if ($y->equals($one) || $y->equals($n->subtract($one))) {
-                    continue;
-                }
-
-                for ($j = $one; $j->lowerThan($t->subtract($one)); $j = $j->add($one)) {
-                    $x = $y->modPow($two, $n);
-
-                    if ($x->equals($one)) {
-                        $found = true;
-
-                        break;
-                    }
-
-                    if ($x->equals($n->subtract($one))) {
-                        continue;
-                    }
-
-                    $y = $x;
-                }
-
-                $x = $y->modPow($two, $n);
-                if ($x->equals($one)) {
-                    $found = true;
-
-                    break;
-                }
-            }
-
-            if (true === $found) {
-                $p = $y->subtract($one)->gcd($n);
-                $q = $n->divide($p);
-
-                return [$p, $q];
-            }
-        }
-
-        throw new \InvalidArgumentException('Unable to find prime factors.');
     }
 }

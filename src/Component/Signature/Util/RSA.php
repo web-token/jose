@@ -59,7 +59,7 @@ final class RSA
         if ($c->compare(BigInteger::createFromDecimal(0)) < 0 || $c->compare($key->getModulus()) > 0) {
             throw new \RuntimeException();
         }
-        if ($key->isPublic() || empty($key->getPrimes())) {
+        if ($key->isPublic() || empty($key->getPrimes()) || empty($key->getExponents()) || null === $key->getCoefficient()) {
             return $c->modPow($key->getExponent(), $key->getModulus());
         }
 

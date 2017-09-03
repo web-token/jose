@@ -17,8 +17,8 @@ use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\Util\ECKey;
-use Jose\Component\Core\Util\RSAKey;
 use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
+use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
 final class JWKFactory
 {
