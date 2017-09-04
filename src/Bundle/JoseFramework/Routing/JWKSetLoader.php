@@ -3,7 +3,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 Spomky-Labs
+ * Copyright (c) 2014-2017 Spomky-Labs
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -39,7 +39,7 @@ final class JWKSetLoader implements LoaderInterface
     {
         $controller_id = sprintf('jose.controller.%s', $name);
 
-        $defaults =['_controller' => $controller_id];
+        $defaults = ['_controller' => $controller_id];
         $route = new Route($pattern, $defaults);
         $this->routes->add(sprintf('jwkset_%s', $name), $route);
     }

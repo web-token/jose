@@ -109,7 +109,7 @@ final class JoseFrameworkExtension extends Extension implements PrependExtension
     }
 
     /**
-     * @param array $configs
+     * @param array            $configs
      * @param ContainerBuilder $container
      *
      * @return Configuration

@@ -30,9 +30,9 @@ final class RSACrypt
     public const ENCRYPTION_PKCS1 = 2;
 
     /**
-     * @param RSAKey $key
-     * @param string $data
-     * @param int $mode
+     * @param RSAKey      $key
+     * @param string      $data
+     * @param int         $mode
      * @param null|string $hash
      *
      * @return string
@@ -50,9 +50,9 @@ final class RSACrypt
     }
 
     /**
-     * @param RSAKey $key
-     * @param string $plaintext
-     * @param int $mode
+     * @param RSAKey      $key
+     * @param string      $plaintext
+     * @param int         $mode
      * @param null|string $hash
      *
      * @return string
