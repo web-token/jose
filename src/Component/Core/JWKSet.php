@@ -83,7 +83,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
      *
      * @return JWK[] An array of keys stored in the key set
      */
-    public function getKeys(): array
+    public function all(): array
     {
         return $this->keys;
     }
@@ -117,7 +117,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
      */
     public function withoutKey($key): JWKSet
     {
-        if (!$this->hasKey($key)) {
+        if (!$this->has($key)) {
             return $this;
         }
 
@@ -132,7 +132,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
      *
      * @return bool
      */
-    public function hasKey($index): bool
+    public function has($index): bool
     {
         return array_key_exists($index, $this->keys);
     }
@@ -142,9 +142,9 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
      *
      * @return JWK
      */
-    public function getKey($index): JWK
+    public function get($index): JWK
     {
-        if (!$this->hasKey($index)) {
+        if (!$this->has($index)) {
             throw new \InvalidArgumentException('Undefined index.');
         }
 
@@ -179,7 +179,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
             return null;
         }
 
-        return $this->hasKey($key) ? $this->getKey($key) : null;
+        return $this->has($key) ? $this->get($key) : null;
     }
 
     /**
@@ -225,37 +225,31 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
         foreach ($this->keys as $key) {
             $ind = 0;
 
-            // Check usage
             $can_use = $this->canKeyBeUsedFor($type, $key);
             if (false === $can_use) {
                 continue;
             }
             $ind += $can_use;
 
-            // Check algorithm
             $alg = $this->canKeyBeUsedWithAlgorithm($algorithm, $key);
             if (false === $alg) {
                 continue;
             }
             $ind += $alg;
 
-            // Validate restrictions
             if (false === $this->doesKeySatisfyRestrictions($restrictions, $key)) {
                 continue;
             }
 
-            // Add to the list with trust indicator
             $result[] = ['key' => $key, 'ind' => $ind];
         }
 
-        //Return null if no key
         if (empty($result)) {
             return null;
         }
 
-        //Sort by trust indicator
         usort($result, [$this, 'sortKeys']);
-        //Return the highest trust indicator (first key)
+
         return $result[0]['key'];
     }
 

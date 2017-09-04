@@ -109,8 +109,8 @@ final class JWKSetTest extends TestCase
         $jwkset = JWKFactory::createFromValues($values);
         $this->assertInstanceOf(JWKSet::class, $jwkset);
         $this->assertEquals(1, count($jwkset));
-        $this->assertTrue($jwkset->hasKey('71ee230371d19630bc17fb90ccf20ae632ad8cf8'));
-        $this->assertFalse($jwkset->hasKey(0));
+        $this->assertTrue($jwkset->has('71ee230371d19630bc17fb90ccf20ae632ad8cf8'));
+        $this->assertFalse($jwkset->has(0));
     }
 
     /**

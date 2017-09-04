@@ -177,6 +177,7 @@ final class KeyConverter
                 return $ec_key->toArray();
             case OPENSSL_KEYTYPE_RSA:
                  $rsa_key = RSAKey::createFromPEM($pem);
+                $rsa_key->optimize();
 
                  return $rsa_key->toArray();
             default:

@@ -69,10 +69,10 @@ final class JWKFactory
             throw new \InvalidArgumentException('Unable to create the key');
         }
 
-        $rsa = ECKey::createFromPEM($out);
+        $ec = ECKey::createFromPEM($out);
         $values = array_merge(
             $values,
-            $rsa->toArray()
+            $ec->toArray()
         );
 
         return JWK::create($values);
@@ -142,7 +142,7 @@ final class JWKFactory
      *
      * @return JWK
      */
-    public static function createNoneKey(array $values): JWK
+    public static function createNoneKey(array $values = []): JWK
     {
         $values = array_merge(
             $values,
@@ -302,6 +302,6 @@ final class JWKFactory
      */
     public static function createFromKeySet(JWKSet $jwk_set, int $key_index): JWK
     {
-        return $jwk_set->getKey($key_index);
+        return $jwk_set->get($key_index);
     }
 }

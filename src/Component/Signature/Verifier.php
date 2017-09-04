@@ -82,7 +82,7 @@ final class Verifier
     private function verifySignature(JWS $jws, JWKSet $jwk_set, Signature $signature, ?string $detached_payload = null): bool
     {
         $input = $this->getInputToVerify($jws, $signature, $detached_payload);
-        foreach ($jwk_set->getKeys() as $jwk) {
+        foreach ($jwk_set->all() as $jwk) {
             $algorithm = $this->getAlgorithm($signature);
 
             try {

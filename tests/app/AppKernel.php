@@ -22,10 +22,10 @@ final class AppKernel extends Kernel
         $bundles = [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
 
-            new \Jose\Bundle\Core\CoreBundle(),
-            new \Jose\Bundle\Checker\CheckerBundle(),
-            new \Jose\Bundle\Signature\SignatureBundle(),
-            new \Jose\Bundle\Encryption\EncryptionBundle(),
+            new Jose\Bundle\JoseFramework\JoseFrameworkBundle(),
+            new Jose\Bundle\Checker\CheckerBundle(),
+            new Jose\Bundle\Signature\SignatureBundle(),
+            new Jose\Bundle\Encryption\EncryptionBundle(),
         ];
 
         return $bundles;

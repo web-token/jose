@@ -44,17 +44,19 @@
         "symfony/config": "^3.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0",
-        "mdanter/ecc": "0.4.*",
-        "satooshi/php-coveralls": "^1.0",
-        "phpbench/phpbench": "^0.13.0",
-        "symfony/finder": "^3.3",
+        "ext-curl": "*",
         "behat/behat": "^3.1",
-        "behat/symfony2-extension":  "^2.1",
-        "ext-curl": "*"
+        "behat/symfony2-extension": "^2.1",
+        "bjeavons/zxcvbn-php": "^0.3.0",
+        "mdanter/ecc": "0.4.*",
+        "phpbench/phpbench": "^0.13.0",
+        "phpunit/phpunit": "^6.0",
+        "satooshi/php-coveralls": "^1.0",
+        "symfony/finder": "^3.3"
     },
    "suggest":{
-        "mdanter/ecc": "For ECDH-ES with P-256, P-384 and P-521 Elliptic Curves algorithms support."
+        "mdanter/ecc": "For ECDH-ES with P-256, P-384 and P-521 Elliptic Curves algorithms support.",
+        "bjeavons/zxcvbn-php": "Adds key quality check for oct keys."
    },
     "extra": {
         "branch-alias": {

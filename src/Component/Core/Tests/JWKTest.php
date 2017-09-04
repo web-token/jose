@@ -113,22 +113,22 @@ final class JWKTest extends TestCase
         $this->assertEquals('{"keys":{"0123456789":{"kty":"EC","crv":"P-256","x":"f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU","y":"x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0","use":"sign","key_ops":["sign"],"alg":"ES256","kid":"0123456789"},"9876543210":{"kty":"EC","crv":"P-256","x":"f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU","y":"x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0","d":"jpsQnnGQmL-YBIffH1136cspYG6-0iY7X1fCE9-E9LI","use":"sign","key_ops":["verify"],"alg":"ES256","kid":"9876543210"}}}', json_encode($jwkset));
         $this->assertEquals(2, count($jwkset));
         $this->assertEquals(2, $jwkset->count());
-        $this->assertTrue($jwkset->hasKey('0123456789'));
-        $this->assertTrue($jwkset->hasKey('9876543210'));
-        $this->assertFalse($jwkset->hasKey(0));
+        $this->assertTrue($jwkset->has('0123456789'));
+        $this->assertTrue($jwkset->has('9876543210'));
+        $this->assertFalse($jwkset->has(0));
 
         foreach ($jwkset as $key) {
             $this->assertEquals('EC', $key->get('kty'));
         }
         $this->assertEquals(null, $jwkset->key());
 
-        $this->assertEquals('9876543210', $jwkset->getKey('9876543210')->get('kid'));
+        $this->assertEquals('9876543210', $jwkset->get('9876543210')->get('kid'));
         $jwkset = $jwkset->withoutKey('9876543210');
         $jwkset = $jwkset->withoutKey('9876543210');
 
         $this->assertEquals(1, count($jwkset));
         $this->assertEquals(1, $jwkset->count());
-        $this->assertInstanceOf(JWK::class, $jwkset->getKey('0123456789'));
+        $this->assertInstanceOf(JWK::class, $jwkset->get('0123456789'));
 
         $jwkset = $jwkset->withoutKey('0123456789');
         $this->assertEquals(0, count($jwkset));
@@ -166,7 +166,7 @@ final class JWKTest extends TestCase
 
         $jwkset = JWKSet::createFromKeys([$jwk1, $jwk2]);
 
-        $jwkset->getKey(2);
+        $jwkset->get(2);
     }
 
     public function testPrivateToPublic()

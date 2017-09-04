@@ -9,13 +9,13 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Bundle\Core;
+namespace Jose\Bundle\JoseFramework;
 
-use Jose\Bundle\Core\DependencyInjection\Compiler\AlgorithmCompilerPass;
+use Jose\Bundle\JoseFramework\DependencyInjection\Compiler\AlgorithmCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-final class CoreBundle extends Bundle
+final class JoseFrameworkBundle extends Bundle
 {
     /**
      * {@inheritdoc}

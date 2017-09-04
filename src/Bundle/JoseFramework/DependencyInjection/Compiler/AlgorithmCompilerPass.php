@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Bundle\Core\DependencyInjection\Compiler;
+namespace Jose\Bundle\JoseFramework\DependencyInjection\Compiler;
 
 use Jose\Component\Core\JWAManagerFactory;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
