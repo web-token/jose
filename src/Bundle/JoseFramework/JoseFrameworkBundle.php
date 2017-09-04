@@ -12,11 +12,20 @@
 namespace Jose\Bundle\JoseFramework;
 
 use Jose\Bundle\JoseFramework\DependencyInjection\Compiler\AlgorithmCompilerPass;
+use Jose\Bundle\JoseFramework\DependencyInjection\JoseFrameworkExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 final class JoseFrameworkBundle extends Bundle
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getContainerExtension()
+    {
+        return new JoseFrameworkExtension('jose', __DIR__);
+    }
+
     /**
      * {@inheritdoc}
      */

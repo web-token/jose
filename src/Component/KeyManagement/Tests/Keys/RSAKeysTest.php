@@ -15,7 +15,7 @@ namespace Jose\Test\Unit\Keys;
 
 use Jose\Component\Core\JWK;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
-use Jose\Component\KeyManagement\JWKFactory;
+use Jose\Component\Core\JWKFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

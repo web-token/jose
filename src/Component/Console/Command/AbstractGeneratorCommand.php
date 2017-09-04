@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Console\Command;
 
+use Jose\Component\Core\JWKFactory;
 use Symfony\Component\Console\Command\Command;
 
 abstract class AbstractGeneratorCommand extends Command
@@ -22,6 +23,6 @@ abstract class AbstractGeneratorCommand extends Command
      */
     public function isEnabled()
     {
-        return class_exists('\Jose\Component\KeyManagement\JWKFactory');
+        return class_exists(JWKFactory::class);
     }
 }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Tests;
 
 use Jose\Component\Core\JWAManager;
-use Jose\Component\KeyManagement\JWKFactory;
+use Jose\Component\Core\JWKFactory;
 use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSLoader;

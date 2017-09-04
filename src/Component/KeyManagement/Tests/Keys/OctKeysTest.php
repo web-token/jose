@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Test\Unit\Keys;
 
-use Jose\Component\KeyManagement\JWKFactory;
+use Jose\Component\Core\JWKFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

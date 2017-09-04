@@ -54,7 +54,7 @@ final class JKUFactory
         $request = $this->requestFactory->createRequest('GET', $url, $headers);
         $response = $this->client->sendRequest($request);
 
-        if (200 > $response->getStatusCode() && 300 <= $response->getStatusCode()) {
+        if (200 !== $response->getStatusCode()) {
             throw new \HttpRuntimeException('Unable to get the key set.', $response->getStatusCode());
         }
 

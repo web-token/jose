@@ -5,3 +5,8 @@ services:
         public: true
 
     Jose\Component\Core\JWAManagerFactory: ~
+    Jose\Component\Core\JWKFactory: ~
+    Jose\Bundle\JoseFramework\Controller\JWKSetControllerFactory: ~
+    Jose\Bundle\JoseFramework\Routing\JWKSetLoader:
+        tags:
+            - {'name': 'routing.loader'}
