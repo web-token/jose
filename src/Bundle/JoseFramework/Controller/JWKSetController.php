@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 Spomky-Labs
+ * Copyright (c) 2014-2017 Spomky-Labs
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -34,7 +34,7 @@ final class JWKSetController
      * @param JWKSet $jwkset
      * @param int    $maxAge
      */
-    public function __construct(JWKSet $jwkset, int$maxAge)
+    public function __construct(JWKSet $jwkset, int $maxAge)
     {
         $this->jwkset = $jwkset;
         $this->maxAge = $maxAge;
@@ -49,8 +49,8 @@ final class JWKSetController
             json_encode($this->jwkset),
             Response::HTTP_OK,
             [
-                'Content-Type'  => 'application/jwk-set+json; charset=UTF-8',
-               'Cache-Control' =>  sprintf('public, max-age=%d, must-revalidate, no-transform', $this->maxAge)
+                'Content-Type' => 'application/jwk-set+json; charset=UTF-8',
+               'Cache-Control' => sprintf('public, max-age=%d, must-revalidate, no-transform', $this->maxAge),
             ]
         );
     }

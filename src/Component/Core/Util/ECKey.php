@@ -391,7 +391,6 @@ final class ECKey
         $curves = $this->getSupportedCurves();
         if (!array_key_exists($curve, $curves)) {
             throw new \InvalidArgumentException('Unsupported curve.');
-
         }
 
         return $curves[$curve];
