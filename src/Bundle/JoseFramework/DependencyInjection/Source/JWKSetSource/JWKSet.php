@@ -3,7 +3,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 Spomky-Labs
+ * Copyright (c) 2014-2017 Spomky-Labs
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -24,7 +24,7 @@ final class JWKSet extends AbstractJWKSetSource
      */
     public function createDefinition(ContainerBuilder $container, array $config): Definition
     {
-        $definition = new Definition(JWKSet::class);
+        $definition = new Definition(self::class);
         $definition->setFactory([
             new Reference(JWKFactory::class),
             'createFromValues',

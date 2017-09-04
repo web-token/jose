@@ -39,9 +39,11 @@ final class OctAnalyzer implements JWKAnalyzerInterface
             switch (true) {
                 case $strength['score'] < 3:
                     $messages[] = 'The octet string is weak and easily guessable. Please change your key as soon as possible.';
+
                     break;
                 case $strength['score'] === 3:
                     $messages[] = 'The octet string is safe, but a longer key is preferable.';
+
                     break;
                 default:
                     break;
