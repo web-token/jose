@@ -15,6 +15,7 @@ namespace Jose\Bundle\JoseFramework\DependencyInjection;
 
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWKSetSource;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWKSource;
+use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWSBuilder;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\SourceInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
@@ -125,6 +126,9 @@ final class JoseFrameworkExtension extends Extension implements PrependExtension
     {
         $this->addSource(new JWKSource($this->bundlePath));
         $this->addSource(new JWKSetSource($this->bundlePath));
+        if (class_exists(JWSBuilder::class)) {
+            $this->addSource(new JWSBuilder());
+        }
     }
 
     /**

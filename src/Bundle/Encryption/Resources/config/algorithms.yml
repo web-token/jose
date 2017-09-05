@@ -24,9 +24,9 @@ services:
         tags:
             - {'name': 'jose.algorithm', 'alias': 'A256GCM'}
 
-    Jose\Component\Encryption\Algorithm\KeyEncryption\A128CMKW:
+    Jose\Component\Encryption\Algorithm\KeyEncryption\A128GCMKW:
         tags:
-            - {'name': 'jose.algorithm', 'alias': 'A128CMKW'}
+            - {'name': 'jose.algorithm', 'alias': 'A128GCMKW'}
     Jose\Component\Encryption\Algorithm\KeyEncryption\A192GCMKW:
         tags:
             - {'name': 'jose.algorithm', 'alias': 'A192GCMKW'}
@@ -44,7 +44,7 @@ services:
     Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW:
         tags:
             - {'name': 'jose.algorithm', 'alias': 'ECDH-ES+A128KW'}
-    Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES192KW:
+    Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA192KW:
         tags:
             - {'name': 'jose.algorithm', 'alias': 'ECDH-ES+192KW'}
     Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW:
@@ -77,6 +77,6 @@ services:
     Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP:
         tags:
             - {'name': 'jose.algorithm', 'alias': 'RSA-OAEP'}
-    Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOEAP256:
+    Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256:
         tags:
-            - {'name': 'jose.algorithm', 'alias': 'RSA-OEAP-256'}
+            - {'name': 'jose.algorithm', 'alias': 'RSA-OAEP-256'}
