@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Bundle\JoseFramework\DependencyInjection;
 
+use Jose\Bundle\Encryption\DependencyInjection\Source\JWEBuilder;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWKSetSource;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWKSource;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWSBuilder;
@@ -73,25 +74,6 @@ final class JoseFrameworkExtension extends Extension implements PrependExtension
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        // A translator must always be registered (as support is included by
-        // default in the Form and Validator component). If disabled, an identity
-        // translator will be used and everything will still work as expected.
-        /*if ($this->isConfigEnabled($container, $config['translator']) || $this->isConfigEnabled($container, $config['form']) || $this->isConfigEnabled($container, $config['validation'])) {
-            if (!class_exists('Symfony\Component\Translation\Translator') && $this->isConfigEnabled($container, $config['translator'])) {
-                throw new LogicException('Translation support cannot be enabled as the Translation component is not installed.');
-            }
-
-            if (!class_exists('Symfony\Component\Translation\Translator') && $this->isConfigEnabled($container, $config['form'])) {
-                throw new LogicException('Form support cannot be enabled as the Translation component is not installed.');
-            }
-
-            if (!class_exists('Symfony\Component\Translation\Translator') && $this->isConfigEnabled($container, $config['validation'])) {
-                throw new LogicException('Validation support cannot be enabled as the Translation component is not installed.');
-            }
-
-            $loader->load('identity_translator.xml');
-        }*/
-
         foreach ($this->serviceSources as $serviceSource) {
             foreach ($config[$serviceSource->name()] as $name => $data) {
                 $serviceSource->createService($name, $data, $container);
@@ -128,6 +110,9 @@ final class JoseFrameworkExtension extends Extension implements PrependExtension
         $this->addSource(new JWKSetSource($this->bundlePath));
         if (class_exists(JWSBuilder::class)) {
             $this->addSource(new JWSBuilder());
+        }
+        if (class_exists(JWEBuilder::class)) {
+            $this->addSource(new JWEBuilder());
         }
     }
 

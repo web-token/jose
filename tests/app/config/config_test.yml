@@ -26,3 +26,8 @@ jose:
         jws_builder1:
             is_public: true
             signature_algorithms: ['RS256' ,'HS256' ,'PS256' ,'ES256']
+    jwe_builders:
+        jwe_builder1:
+            is_public: true
+            key_encryption_algorithms: ['A128GCMKW']
+            content_encryption_algorithms: ['A128GCM']

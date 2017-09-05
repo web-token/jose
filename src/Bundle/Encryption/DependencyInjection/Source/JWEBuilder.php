@@ -11,24 +11,24 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Bundle\Signature\DependencyInjection\Source;
+namespace Jose\Bundle\Encryption\DependencyInjection\Source;
 
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\SourceInterface;
-use Jose\Component\Signature\JWSBuilderFactory;
-use Jose\Component\Signature\JWSBuilder as JWSBuilderService;
+use Jose\Component\Encryption\JWEBuilderFactory;
+use Jose\Component\Encryption\JWEBuilder as JWEBuilderService;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-final class JWSBuilder implements SourceInterface
+final class JWEBuilder implements SourceInterface
 {
     /**
      * {@inheritdoc}
      */
     public function name(): string
     {
-        return 'jws_builders';
+        return 'jwe_builders';
     }
 
     /**
@@ -36,11 +36,15 @@ final class JWSBuilder implements SourceInterface
      */
     public function createService(string $name, array $config, ContainerBuilder $container)
     {
-        $service_id = sprintf('jose.jws_builder.%s', $name);
-        $definition = new Definition(JWSBuilderService::class);
+        $service_id = sprintf('jose.jwe_builder.%s', $name);
+        $definition = new Definition(JWEBuilderService::class);
         $definition
-            ->setFactory([new Reference(JWSBuilderFactory::class), 'create'])
-            ->setArguments([$config['signature_algorithms']])
+            ->setFactory([new Reference(JWEBuilderFactory::class), 'create'])
+            ->setArguments([
+                $config['key_encryption_algorithms'],
+                $config['content_encryption_algorithms'],
+                $config['compression_methods']
+            ])
             ->setPublic($config['is_public']);
 
         $container->setDefinition($service_id, $definition);
@@ -61,9 +65,22 @@ final class JWSBuilder implements SourceInterface
                                 ->info('If true, the service will be public, else private.')
                                 ->defaultTrue()
                             ->end()
-                            ->arrayNode('signature_algorithms')
+                            ->arrayNode('key_encryption_algorithms')
+                                ->info('A list of supported key encryption algorithms.')
                                 ->useAttributeAsKey('name')
                                 ->isRequired()
+                                ->prototype('scalar')->end()
+                            ->end()
+                            ->arrayNode('content_encryption_algorithms')
+                                ->info('A list of supported content encryption algorithms.')
+                                ->useAttributeAsKey('name')
+                                ->isRequired()
+                                ->prototype('scalar')->end()
+                            ->end()
+                            ->arrayNode('compression_methods')
+                                ->info('A list of supported compression methods.')
+                                ->useAttributeAsKey('name')
+                                ->defaultValue(['DEF'])
                                 ->prototype('scalar')->end()
                             ->end()
                         ->end()
