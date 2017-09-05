@@ -43,7 +43,7 @@ final class JWEBuilder implements SourceInterface
             ->setArguments([
                 $config['key_encryption_algorithms'],
                 $config['content_encryption_algorithms'],
-                $config['compression_methods']
+                $config['compression_methods'],
             ])
             ->setPublic($config['is_public']);
 
