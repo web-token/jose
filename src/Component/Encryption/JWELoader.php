@@ -33,10 +33,10 @@ final class JWELoader
     /**
      * JWELoader constructor.
      *
-     * @param JWAManager $keyEncryptionAlgorithmManager
-     * @param JWAManager $contentEncryptionAlgorithmManager
+     * @param JWAManager               $keyEncryptionAlgorithmManager
+     * @param JWAManager               $contentEncryptionAlgorithmManager
      * @param CompressionMethodManager $compressionMethodManager
-     * @param HeaderCheckerManager $headerCheckerManager
+     * @param HeaderCheckerManager     $headerCheckerManager
      */
     public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionMethodManager, HeaderCheckerManager $headerCheckerManager)
     {

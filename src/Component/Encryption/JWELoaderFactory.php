@@ -37,9 +37,9 @@ final class JWELoaderFactory
     /**
      * JWELoaderFactory constructor.
      *
-     * @param JWAManagerFactory $algorithmManagerFactory
+     * @param JWAManagerFactory               $algorithmManagerFactory
      * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
-     * @param HeaderCheckerManagerFactory $headerCheckerManagerFactory
+     * @param HeaderCheckerManagerFactory     $headerCheckerManagerFactory
      */
     public function __construct(JWAManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory, HeaderCheckerManagerFactory $headerCheckerManagerFactory)
     {
