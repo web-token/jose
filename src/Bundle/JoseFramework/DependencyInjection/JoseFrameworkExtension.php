@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace Jose\Bundle\JoseFramework\DependencyInjection;
 
 use Jose\Bundle\Encryption\DependencyInjection\Source\JWEBuilder;
+use Jose\Bundle\Encryption\DependencyInjection\Source\JWELoader;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWKSetSource;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWKSource;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWSBuilder;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\SourceInterface;
+use Jose\Bundle\Signature\DependencyInjection\Source\JWSLoader;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -111,8 +113,14 @@ final class JoseFrameworkExtension extends Extension implements PrependExtension
         if (class_exists(JWSBuilder::class)) {
             $this->addSource(new JWSBuilder());
         }
+        if (class_exists(JWSLoader::class)) {
+            $this->addSource(new JWSLoader());
+        }
         if (class_exists(JWEBuilder::class)) {
             $this->addSource(new JWEBuilder());
+        }
+        if (class_exists(JWELoader::class)) {
+            $this->addSource(new JWELoader());
         }
     }
 

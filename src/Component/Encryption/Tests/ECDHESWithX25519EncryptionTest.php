@@ -19,7 +19,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW;
 use Jose\Component\Encryption\Compression\CompressionMethodManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\JWELoader;
+use Jose\Component\Encryption\JWEParser;
 use Jose\Component\Core\JWKFactory;
 
 /**
@@ -56,7 +56,7 @@ final class ECDHESWithX25519EncryptionTest extends AbstractEncryptionTest
             ->build()
             ->toCompactJSON(0);
 
-        $jwe = JWELoader::load($jwt);
+        $jwe = JWEParser::parse($jwt);
         $jwe = $decrypter->decryptUsingKey($jwe, $receiverKey, $index);
         $this->assertEquals(0, $index);
         $this->assertTrue($jwe->hasSharedProtectedHeader('epk'));

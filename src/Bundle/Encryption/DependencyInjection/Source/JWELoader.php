@@ -14,21 +14,21 @@ declare(strict_types=1);
 namespace Jose\Bundle\Encryption\DependencyInjection\Source;
 
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\SourceInterface;
-use Jose\Component\Encryption\JWEBuilderFactory;
-use Jose\Component\Encryption\JWEBuilder as JWEBuilderService;
+use Jose\Component\Encryption\JWELoaderFactory;
+use Jose\Component\Encryption\JWELoader as JWELoaderService;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-final class JWEBuilder implements SourceInterface
+final class JWELoader implements SourceInterface
 {
     /**
      * {@inheritdoc}
      */
     public function name(): string
     {
-        return 'jwe_builders';
+        return 'jwe_loaders';
     }
 
     /**
@@ -36,14 +36,15 @@ final class JWEBuilder implements SourceInterface
      */
     public function createService(string $name, array $config, ContainerBuilder $container)
     {
-        $service_id = sprintf('jose.jwe_builder.%s', $name);
-        $definition = new Definition(JWEBuilderService::class);
+        $service_id = sprintf('jose.jwe_loader.%s', $name);
+        $definition = new Definition(JWELoaderService::class);
         $definition
-            ->setFactory([new Reference(JWEBuilderFactory::class), 'create'])
+            ->setFactory([new Reference(JWELoaderFactory::class), 'create'])
             ->setArguments([
                 $config['key_encryption_algorithms'],
                 $config['content_encryption_algorithms'],
                 $config['compression_methods'],
+                $config['header_checkers'],
             ])
             ->setPublic($config['is_public']);
 
@@ -81,6 +82,12 @@ final class JWEBuilder implements SourceInterface
                                 ->info('A list of supported compression methods.')
                                 ->useAttributeAsKey('name')
                                 ->defaultValue(['DEF'])
+                                ->prototype('scalar')->end()
+                            ->end()
+                            ->arrayNode('header_checkers')
+                                ->info('A list of headers to check.')
+                                ->useAttributeAsKey('name')
+                                ->isRequired()
                                 ->prototype('scalar')->end()
                             ->end()
                         ->end()

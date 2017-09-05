@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Tests;
 
 use Jose\Component\Signature\JWS;
-use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\JWSParser;
 
 /**
  * final class JWSFlattenedTest.
@@ -28,7 +28,7 @@ final class JWSFlattenedTest extends AbstractSignatureTest
      */
     public function testLoadFlattenedJWS()
     {
-        $loaded = JWSLoader::load('{"payload":"eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ","protected":"eyJhbGciOiJFUzI1NiJ9","header":{"kid":"e9bc097a-ce51-4036-9562-d2ade882db0d"},"signature":"DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q"}');
+        $loaded = JWSParser::parse('{"payload":"eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ","protected":"eyJhbGciOiJFUzI1NiJ9","header":{"kid":"e9bc097a-ce51-4036-9562-d2ade882db0d"},"signature":"DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q"}');
 
         $this->assertInstanceOf(JWS::class, $loaded);
         $this->assertEquals('ES256', $loaded->getSignature(0)->getProtectedHeader('alg'));

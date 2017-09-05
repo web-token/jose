@@ -21,7 +21,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES;
 use Jose\Component\Encryption\Compression\CompressionMethodManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\JWELoader;
+use Jose\Component\Encryption\JWEParser;
 use Jose\Component\Encryption\Tests\AbstractEncryptionTest;
 
 /**
@@ -72,9 +72,9 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTes
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $loaded_compact_json = JWELoader::load($expected_compact_json);
+        $loaded_compact_json = JWEParser::parse($expected_compact_json);
 
-        $loaded_json = JWELoader::load($expected_json);
+        $loaded_json = JWEParser::parse($expected_json);
 
         $this->assertEquals($expected_ciphertext, Base64Url::encode($loaded_compact_json->getCiphertext()));
         $this->assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());
@@ -137,7 +137,7 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTes
             ->addRecipient($public_key)
             ->build();
 
-        $loaded_json = JWELoader::load($jwe->toJSON());
+        $loaded_json = JWEParser::parse($jwe->toJSON());
         $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
 
         $this->assertTrue(array_key_exists('epk', $loaded_json->getSharedProtectedHeaders()));

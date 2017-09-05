@@ -20,7 +20,7 @@ use Jose\Component\Encryption\Compression;
 use Jose\Component\Encryption\Compression\CompressionMethodManager;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWEBuilder;
-use Jose\Component\Encryption\JWELoader;
+use Jose\Component\Encryption\JWEParser;
 
 /**
  * @BeforeMethods({"init"})
@@ -111,7 +111,7 @@ abstract class EncryptionBench
      */
     public function benchDecryption(array $params)
     {
-        $jwe = JWELoader::load($params['input']);
+        $jwe = JWEParser::parse($params['input']);
         $decrypter = new Decrypter(
             $this->getKeyEncryptionAlgorithmsManager(),
             $this->getContentEncryptionAlgorithmsManager(),

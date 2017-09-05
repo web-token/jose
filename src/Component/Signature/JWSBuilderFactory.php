@@ -17,6 +17,9 @@ use Jose\Component\Core\JWAManagerFactory;
 
 final class JWSBuilderFactory
 {
+    /**
+     * @var JWAManagerFactory
+     */
     private $signatureAlgorithmManagerFactory;
 
     /**

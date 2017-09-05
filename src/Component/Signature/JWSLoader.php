@@ -13,103 +13,51 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature;
 
-use Base64Url\Base64Url;
+use Jose\Component\Checker\HeaderCheckerManager;
+use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\JWKSet;
 
 /**
- * Class able to load JWS.
+ * Class able to load JWS and verify signatures and headers.
  */
 final class JWSLoader
 {
     /**
-     * Load data and return a JWS object.
-     * Compact, Flattened or complete serialization formats are supported.
+     * @var HeaderCheckerManager
+     */
+    private $headerCheckerManager;
+
+    /**
+     * @var Verifier
+     */
+    private $verifier;
+
+    /**
+     * JWSLoader constructor.
      *
-     * @param string $input A string that represents a JWS
+     * @param JWAManager $signatureAlgorithmManager
+     * @param HeaderCheckerManager $headerCheckerManager
+     */
+    public function __construct(JWAManager $signatureAlgorithmManager, HeaderCheckerManager $headerCheckerManager)
+    {
+        $this->verifier = new Verifier($signatureAlgorithmManager);
+        $this->headerCheckerManager = $headerCheckerManager;
+    }
+
+    /**
+     * @param string $input
+     * @param JWKSet $keyset
+     * @param null|string $detachedPayload
      *
      * @return JWS
      */
-    public static function load(string $input): JWS
+    public function load(string $input, JWKSet $keyset, ?string $detachedPayload = null): JWS
     {
-        $json = JWSConverter::convert($input);
-
-        $jws = JWS::create();
-
-        foreach ($json['signatures'] as $signature) {
-            $bin_signature = Base64Url::decode($signature['signature']);
-            $protected_headers = self::getProtectedHeaders($signature);
-            $headers = self::getHeaders($signature);
-
-            $jws = $jws->addSignature($bin_signature, $protected_headers, $headers);
-        }
-
-        self::populatePayload($jws, $json);
+        $jws = JWSParser::parse($input);
+        $index = null;
+        $this->verifier->verifyWithKeySet($jws, $keyset, $detachedPayload, $index);
+        $this->headerCheckerManager->checkJWS($jws, $index);
 
         return $jws;
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return string|null
-     */
-    private static function getProtectedHeaders(array $data): ?string
-    {
-        if (array_key_exists('protected', $data)) {
-            return $data['protected'];
-        }
-
-        return null;
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
-    private static function getHeaders(array $data): array
-    {
-        if (array_key_exists('header', $data)) {
-            return $data['header'];
-        }
-
-        return [];
-    }
-
-    /**
-     * @param JWS   $jws
-     * @param array $data
-     */
-    private static function populatePayload(JWS &$jws, array $data)
-    {
-        if (array_key_exists('payload', $data)) {
-            $isPayloadEncoded = null;
-            foreach ($jws->getSignatures() as $signature) {
-                if (null === $isPayloadEncoded) {
-                    $isPayloadEncoded = self::isPayloadEncoded($signature);
-                }
-                if (self::isPayloadEncoded($signature) !== $isPayloadEncoded) {
-                    throw new \InvalidArgumentException('Foreign payload encoding detected. The JWS cannot be loaded.');
-                }
-            }
-            $payload = $data['payload'];
-            $jws = $jws->withAttachedPayload();
-            $jws = $jws->withEncodedPayload($payload);
-            if (false !== $isPayloadEncoded) {
-                $payload = Base64Url::decode($payload);
-            }
-            $jws = $jws->withPayload($payload);
-        } else {
-            $jws = $jws->withDetachedPayload();
-        }
-    }
-
-    /**
-     * @param Signature $signature
-     *
-     * @return bool
-     */
-    private static function isPayloadEncoded(Signature $signature): bool
-    {
-        return !$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
     }
 }

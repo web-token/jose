@@ -13,135 +13,50 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption;
 
-use Base64Url\Base64Url;
+use Jose\Component\Checker\HeaderCheckerManager;
+use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\JWKSet;
+use Jose\Component\Encryption\Compression\CompressionMethodManager;
 
-/**
- * Class able to load JWS or JWE.
- * JWS object can also be verified.
- */
 final class JWELoader
 {
     /**
-     * Load data and try to return a JWS object, a JWE object or a list of these objects.
-     * If the result is a JWE (list), nothing is decrypted and method `decrypt` must be executed
-     * If the result is a JWS (list), no signature is verified and method `verifySignature` must be executed.
-     *
-     * @param string $input A string that represents a JSON Web Token message
-     *
-     * @return JWE if the data has been loaded
+     * @var HeaderCheckerManager
      */
-    public static function load(string $input): JWE
-    {
-        $json = self::convert($input);
+    private $headerCheckerManager;
 
-        return self::loadSerializedJsonJWE($json);
+    /**
+     * @var Decrypter
+     */
+    private $decrypter;
+
+    /**
+     * JWELoader constructor.
+     *
+     * @param JWAManager $keyEncryptionAlgorithmManager
+     * @param JWAManager $contentEncryptionAlgorithmManager
+     * @param CompressionMethodManager $compressionMethodManager
+     * @param HeaderCheckerManager $headerCheckerManager
+     */
+    public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionMethodManager, HeaderCheckerManager $headerCheckerManager)
+    {
+        $this->decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionMethodManager);
+        $this->headerCheckerManager = $headerCheckerManager;
     }
 
     /**
      * @param string $input
-     *
-     * @return array
-     */
-    private static function convert(string $input): array
-    {
-        if (is_array($data = json_decode($input, true))) {
-            if (array_key_exists('recipients', $data)) {
-                return $data;
-            } elseif (array_key_exists('ciphertext', $data)) {
-                return self::fromFlattenedSerializationRecipientToSerialization($data);
-            }
-        } elseif (is_string($input)) {
-            return self::fromCompactSerializationToSerialization($input);
-        }
-
-        throw new \InvalidArgumentException('Unsupported input');
-    }
-
-    /**
-     * @param array $input
-     *
-     * @return array
-     */
-    private static function fromFlattenedSerializationRecipientToSerialization(array $input): array
-    {
-        $recipient = [];
-        $recipient = array_merge(
-            $recipient,
-            array_intersect_key($input, array_flip(['header', 'encrypted_key']))
-        );
-        $recipients = [
-            'ciphertext' => $input['ciphertext'],
-            'recipients' => [$recipient],
-        ];
-        $recipients = array_merge(
-            $recipients,
-            array_intersect_key($input, array_flip(['protected', 'unprotected', 'iv', 'aad', 'tag']))
-        );
-
-        return $recipients;
-    }
-
-    /**
-     * @param string $input
-     *
-     * @return array
-     */
-    private static function fromCompactSerializationToSerialization(string $input): array
-    {
-        $parts = explode('.', $input);
-        switch (count($parts)) {
-            case 5:
-                return self::fromCompactSerializationRecipientToSerialization($parts);
-            default:
-                throw new \InvalidArgumentException('Unsupported input');
-        }
-    }
-
-    /**
-     * @param array $parts
-     *
-     * @return array
-     */
-    private static function fromCompactSerializationRecipientToSerialization(array $parts): array
-    {
-        $recipient = [];
-        if (!empty($parts[1])) {
-            $recipient['encrypted_key'] = $parts[1];
-        }
-
-        $recipients = [
-            'recipients' => [$recipient],
-        ];
-        foreach ([0 => 'protected', 2 => 'iv', 3 => 'ciphertext', 4 => 'tag'] as $part => $key) {
-            if (!empty($parts[$part])) {
-                $recipients[$key] = $parts[$part];
-            }
-        }
-
-        return $recipients;
-    }
-
-    /**
-     * @param array $data
+     * @param JWKSet $keyset
      *
      * @return JWE
      */
-    private static function loadSerializedJsonJWE(array $data): JWE
+    public function load(string $input, JWKSet $keyset): JWE
     {
-        $ciphertext = Base64Url::decode($data['ciphertext']);
-        $iv = array_key_exists('iv', $data) ? Base64Url::decode($data['iv']) : null;
-        $aad = array_key_exists('aad', $data) ? Base64Url::decode($data['aad']) : null;
-        $tag = array_key_exists('tag', $data) ? Base64Url::decode($data['tag']) : null;
-        $encodedSharedProtectedHeader = array_key_exists('protected', $data) ? $data['protected'] : null;
-        $sharedProtectedHeader = $encodedSharedProtectedHeader ? json_decode(Base64Url::decode($encodedSharedProtectedHeader), true) : [];
-        $sharedHeader = array_key_exists('unprotected', $data) ? $data['unprotected'] : [];
-        $recipients = [];
-        foreach ($data['recipients'] as $recipient) {
-            $encryptedKey = array_key_exists('encrypted_key', $recipient) ? Base64Url::decode($recipient['encrypted_key']) : null;
-            $header = array_key_exists('header', $recipient) ? $recipient['header'] : [];
-            $recipients[] = Recipient::create($header, $encryptedKey);
-        }
+        $jwe = JWEParser::parse($input);
+        $index = null;
+        $jwe = $this->decrypter->decryptUsingKeySet($jwe, $keyset, $index);
+        $this->headerCheckerManager->checkJWE($jwe, $index);
 
-        return JWE::create($ciphertext, $iv, $aad, $tag, $sharedHeader, $sharedProtectedHeader, $encodedSharedProtectedHeader, $recipients);
+        return $jwe;
     }
 }

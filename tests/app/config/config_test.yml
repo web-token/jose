@@ -15,7 +15,7 @@ jose:
     keys:
         key1:
             jwk:
-                value: '{"kty":"EC","crv":"P-256","x":"f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU","y":"x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0","use":"sig","key_ops":["sign"],"alg":"ES256","bar":"plic"}'
+                value: '{"kty":"oct","k":"dzI6nbW4OcNF-AtfxGAmuyz7IpHRudBI0WgGjZWgaRJt6prBn3DARXgUR8NVwKhfL43QBIU2Un3AvCGCHRgY4TbEqhOi8-i98xxmCggNjde4oaW6wkJ2NgM3Ss9SOX9zS3lcVzdCMdum-RwVJ301kbin4UtGztuzJBeg5oVN00MGxjC2xWwyI0tgXVs-zJs5WlafCuGfX1HrVkIf5bvpE0MQCSjdJpSeVao6-RSTYDajZf7T88a2eVjeW31mMAg-jzAWfUrii61T_bYPJFOXW8kkRWoa1InLRdG6bKB9wQs9-VdXZP60Q4Yuj_WZ-lO7qV9AEFrUkkjpaDgZT86w2g"}'
     key_sets:
         keyset1:
             jwkset:
@@ -25,9 +25,22 @@ jose:
     jws_builders:
         jws_builder1:
             is_public: true
-            signature_algorithms: ['RS256' ,'HS256' ,'PS256' ,'ES256']
+            signature_algorithms: ['RS256', 'HS256', 'PS256', 'ES256']
+    jws_loaders:
+        jws_loader1:
+            is_public: true
+            signature_algorithms: ['RS256', 'HS256', 'PS256', 'ES256']
+            header_checkers: ['exp', 'iat', 'nbf']
     jwe_builders:
         jwe_builder1:
             is_public: true
             key_encryption_algorithms: ['A128GCMKW']
             content_encryption_algorithms: ['A128GCM']
+            compression_methods: ['DEF']
+    jwe_loaders:
+        jwe_loader1:
+            is_public: true
+            key_encryption_algorithms: ['A128GCMKW']
+            content_encryption_algorithms: ['A128GCM']
+            compression_methods: ['DEF']
+            header_checkers: ['exp', 'iat', 'nbf']

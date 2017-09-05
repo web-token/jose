@@ -18,7 +18,7 @@ use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\EdDSA;
 use Jose\Component\Signature\JWS;
-use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\JWSParser;
 use Jose\Component\Signature\Verifier;
 
 /**
@@ -75,7 +75,7 @@ final class EdDSASignatureTest extends AbstractSignatureTest
 
         $this->assertEquals('eyJhbGciOiJFZERTQSJ9.RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc.hgyY0il_MGCjP0JzlnLWG1PPOt7-09PGcvMg3AIbQR6dWbhijcNR4ki4iylGjg5BhVsPt9g7sVvpAr_MuM0KAg', $jws);
 
-        $loaded = JWSLoader::load($jws);
+        $loaded = JWSParser::parse($jws);
         $verifier = new Verifier($signatureAlgorithmManager);
 
         $this->assertInstanceOf(JWS::class, $loaded);

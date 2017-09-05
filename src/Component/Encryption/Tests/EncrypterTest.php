@@ -29,7 +29,7 @@ use Jose\Component\Encryption\Compression\CompressionMethodManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWE;
-use Jose\Component\Encryption\JWELoader;
+use Jose\Component\Encryption\JWEParser;
 
 /**
  * final class EncrypterTest.
@@ -60,7 +60,7 @@ final class EncrypterTest extends AbstractEncryptionTest
 
         $jwe = $jwe->toFlattenedJSON(0);
 
-        $loaded = JWELoader::load($jwe);
+        $loaded = JWEParser::parse($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
@@ -113,7 +113,7 @@ final class EncrypterTest extends AbstractEncryptionTest
             ->build()
             ->toCompactJSON(0);
 
-        $loaded = JWELoader::load($jwe);
+        $loaded = JWEParser::parse($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
@@ -155,7 +155,7 @@ final class EncrypterTest extends AbstractEncryptionTest
             ->build()
             ->toFlattenedJSON(0);
 
-        $loaded = JWELoader::load($jwe);
+        $loaded = JWEParser::parse($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
@@ -192,7 +192,7 @@ final class EncrypterTest extends AbstractEncryptionTest
             ->build()
             ->toFlattenedJSON(0);
 
-        $loaded = JWELoader::load($jwe);
+        $loaded = JWEParser::parse($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
@@ -303,7 +303,7 @@ final class EncrypterTest extends AbstractEncryptionTest
             ->build()
             ->toCompactJSON(0);
 
-        $loaded = JWELoader::load($jwe);
+        $loaded = JWEParser::parse($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('RSA-OAEP-256', $loaded->getSharedProtectedHeader('alg'));
@@ -414,7 +414,7 @@ final class EncrypterTest extends AbstractEncryptionTest
             ->build()
             ->toFlattenedJSON(0);
 
-        $loaded = JWELoader::load($jwe);
+        $loaded = JWEParser::parse($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('dir', $loaded->getSharedProtectedHeader('alg'));
@@ -448,7 +448,7 @@ final class EncrypterTest extends AbstractEncryptionTest
             ->build()
             ->toFlattenedJSON(0);
 
-        $loaded = JWELoader::load($jwe);
+        $loaded = JWEParser::parse($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('ECDH-ES', $loaded->getSharedProtectedHeader('alg'));
@@ -481,7 +481,7 @@ final class EncrypterTest extends AbstractEncryptionTest
             ->build()
             ->toFlattenedJSON(0);
 
-        $loaded = JWELoader::load($jwe);
+        $loaded = JWEParser::parse($jwe);
 
         $this->assertInstanceOf(JWE::class, $loaded);
         $this->assertEquals('ECDH-ES+A256KW', $loaded->getSharedProtectedHeader('alg'));
@@ -513,7 +513,7 @@ final class EncrypterTest extends AbstractEncryptionTest
             ->build()
             ->toFlattenedJSON(0);
 
-        $loaded = JWELoader::load($jwe);
+        $loaded = JWEParser::parse($jwe);
 
         $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA256KW()]);
         $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
@@ -553,7 +553,7 @@ final class EncrypterTest extends AbstractEncryptionTest
             ->build()
             ->toJSON();
 
-        $loaded = JWELoader::load($jwe);
+        $loaded = JWEParser::parse($jwe);
 
         $this->assertEquals(2, $loaded->countRecipients());
 

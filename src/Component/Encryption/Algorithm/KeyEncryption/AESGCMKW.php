@@ -31,8 +31,7 @@ abstract class AESGCMKW implements KeyWrappingInterface
         $iv = random_bytes(96 / 8);
         $additional_headers['iv'] = Base64Url::encode($iv);
 
-        $key_length = mb_strlen($kek, '8bit') * 8;
-        $mode = 'aes-'.($key_length).'-gcm';
+        $mode = sprintf('aes-%d-gcm', $this->getKeySize());
         $tag = null;
         $encrypted_cek = openssl_encrypt($cek, $mode, $kek, OPENSSL_RAW_DATA, $iv, $tag, '');
         if (false === $encrypted_cek) {
@@ -55,9 +54,7 @@ abstract class AESGCMKW implements KeyWrappingInterface
         $tag = Base64Url::decode($complete_headers['tag']);
         $iv = Base64Url::decode($complete_headers['iv']);
 
-        $key_length = mb_strlen($kek, '8bit') * 8;
-
-        $mode = sprintf('aes-%d-gcm', $key_length);
+        $mode = sprintf('aes-%d-gcm', $this->getKeySize());
         $cek = openssl_decrypt($encrypted_cek, $mode, $kek, OPENSSL_RAW_DATA, $iv, $tag, '');
         if (false === $cek) {
             throw new \RuntimeException('Unable to decrypt or to verify the tag.');

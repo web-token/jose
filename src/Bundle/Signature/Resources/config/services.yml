@@ -5,3 +5,4 @@ services:
         public: true
 
     Jose\Component\Signature\JWSBuilderFactory: ~
+    Jose\Component\Signature\JWSLoaderFactory: ~

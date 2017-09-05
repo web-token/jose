@@ -24,7 +24,7 @@ use Jose\Component\Encryption\Compression\CompressionMethodManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWE;
-use Jose\Component\Encryption\JWELoader;
+use Jose\Component\Encryption\JWEParser;
 use Jose\Component\Core\JWKFactory;
 use Jose\Component\Signature\Algorithm\PS256;
 use Jose\Component\Signature\Algorithm\PS384;
@@ -34,7 +34,7 @@ use Jose\Component\Signature\Algorithm\RS384;
 use Jose\Component\Signature\Algorithm\RS512;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
-use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\JWSParser;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\Signature\Verifier;
 
@@ -65,7 +65,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
             ->build()
             ->toCompactJSON(0);
 
-        $loaded = JWSLoader::load($jws);
+        $loaded = JWSParser::parse($jws);
         $this->assertInstanceOf(JWS::class, $loaded);
 
         $verifier = new Verifier($algorithmManager);
@@ -123,7 +123,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
             ->build()
             ->toCompactJSON(0);
 
-        $loaded = JWELoader::load($jwt);
+        $loaded = JWEParser::parse($jwt);
         $this->assertInstanceOf(JWE::class, $loaded);
 
         $decrypter->decryptUsingKey($loaded, $key);
@@ -153,7 +153,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
             ->build()
             ->toCompactJSON(0);
 
-        $loaded = JWELoader::load($jwt);
+        $loaded = JWEParser::parse($jwt);
         $this->assertInstanceOf(JWE::class, $loaded);
 
         $decrypter->decryptUsingKey($loaded, $key);

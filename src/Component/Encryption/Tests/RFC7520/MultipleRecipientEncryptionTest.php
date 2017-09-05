@@ -23,7 +23,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
 use Jose\Component\Encryption\Compression\CompressionMethodManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\JWELoader;
+use Jose\Component\Encryption\JWEParser;
 use Jose\Component\Encryption\Tests\AbstractEncryptionTest;
 
 /**
@@ -116,13 +116,13 @@ final class MultipleRecipientEncryptionTest extends AbstractEncryptionTest
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $loaded_json = JWELoader::load($expected_json);
+        $loaded_json = JWEParser::parse($expected_json);
         $decrypter->decryptUsingKey($loaded_json, $recipient_1_private_key);
 
-        $loaded_json = JWELoader::load($expected_json);
+        $loaded_json = JWEParser::parse($expected_json);
         $decrypter->decryptUsingKey($loaded_json, $recipient_2_private_key);
 
-        $loaded_json = JWELoader::load($expected_json);
+        $loaded_json = JWEParser::parse($expected_json);
         $loaded_json = $decrypter->decryptUsingKey($loaded_json, $recipient_3_private_key);
 
         $this->assertEquals($expected_ciphertext, Base64Url::encode($loaded_json->getCiphertext()));
@@ -226,13 +226,13 @@ final class MultipleRecipientEncryptionTest extends AbstractEncryptionTest
             ->addRecipient($recipient_3_private_key, $recipient_3_headers)
             ->build();
 
-        $loaded_json = JWELoader::load($jwe->toJSON());
+        $loaded_json = JWEParser::parse($jwe->toJSON());
         $decrypter->decryptUsingKey($loaded_json, $recipient_1_private_key);
 
-        $loaded_json = JWELoader::load($jwe->toJSON());
+        $loaded_json = JWEParser::parse($jwe->toJSON());
         $decrypter->decryptUsingKey($loaded_json, $recipient_2_private_key);
 
-        $loaded_json = JWELoader::load($jwe->toJSON());
+        $loaded_json = JWEParser::parse($jwe->toJSON());
         $loaded_json = $decrypter->decryptUsingKey($loaded_json, $recipient_3_private_key);
 
         $this->assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());

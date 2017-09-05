@@ -20,7 +20,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW;
 use Jose\Component\Encryption\Compression\CompressionMethodManager;
 use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\JWELoader;
+use Jose\Component\Encryption\JWEParser;
 
 /**
  * @group CVE
@@ -40,7 +40,7 @@ final class InvalidCurveAttackTest extends AbstractEncryptionTest
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $loaded_compact_json = JWELoader::load($maliciousJWE);
+        $loaded_compact_json = JWEParser::parse($maliciousJWE);
         $privateKey = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',
@@ -64,7 +64,7 @@ final class InvalidCurveAttackTest extends AbstractEncryptionTest
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
-        $loaded_compact_json = JWELoader::load($maliciousJWE);
+        $loaded_compact_json = JWEParser::parse($maliciousJWE);
         $privateKey = JWK::create([
             'kty' => 'EC',
             'crv' => 'P-256',

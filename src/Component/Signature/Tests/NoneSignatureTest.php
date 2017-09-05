@@ -16,7 +16,7 @@ namespace Jose\Component\Signature\Tests;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\None;
 use Jose\Component\Signature\JWS;
-use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\JWSParser;
 
 /**
  * final class NoneSignatureTest.
@@ -74,7 +74,7 @@ final class NoneSignatureTest extends AbstractSignatureTest
         $compact = $jws->toCompactJSON(0);
         $this->assertTrue(is_string($compact));
 
-        $result = JWSLoader::load($compact);
+        $result = JWSParser::parse($compact);
 
         $this->assertInstanceOf(JWS::class, $result);
 

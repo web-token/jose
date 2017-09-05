@@ -16,7 +16,7 @@ use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm;
 use Jose\Component\Signature\JWSBuilder;
-use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\JWSParser;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\Signature\Verifier;
 
@@ -78,7 +78,7 @@ abstract class SignatureBench
      */
     public function benchVerification($params)
     {
-        $jws = JWSLoader::load($params['input']);
+        $jws = JWSParser::parse($params['input']);
         $verifier = new Verifier($this->signatureAlgorithmsManager);
         $verifier->verifyWithKey($jws, $this->getPublicKey(), null, $index);
     }
