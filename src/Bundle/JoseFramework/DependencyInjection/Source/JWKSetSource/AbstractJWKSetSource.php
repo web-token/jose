@@ -40,7 +40,7 @@ abstract class AbstractJWKSetSource extends AbstractSource implements JWKSetSour
             $container->setDefinition($controller_id, $controller_definition);
 
             $jwkset_loader_definition = $container->getDefinition(JWKSetLoader::class);
-            $jwkset_loader_definition->addMethodCall('add', [$config['path'], $config['max_age'], $name]);
+            $jwkset_loader_definition->addMethodCall('add', [$config['path'], $name]);
         }
     }
 

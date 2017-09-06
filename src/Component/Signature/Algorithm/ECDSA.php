@@ -53,7 +53,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
         }
 
         $asn = Object::fromBinary($signature);
-        if (!$asn instanceof  Sequence) {
+        if (!$asn instanceof Sequence) {
             throw new \RuntimeException('Invalid signature');
         }
 

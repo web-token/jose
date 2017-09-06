@@ -1,16 +1,22 @@
 default:
     autoload:
-        '': %paths.base%/tests
+        '': '%paths.base%/tests'
     extensions:
         Behat\Symfony2Extension:
             kernel:
-                env: test
+                env: 'test'
                 debug: true
-                path: tests/app/AppKernel.php
-                bootstrap: tests/app/autoload.php
+                path: 'tests/app/AppKernel.php'
+                bootstrap: 'tests/app/autoload.php'
+        Behat\MinkExtension:
+            base_url: 'https://www.example.com/'
+            sessions:
+                default:
+                    symfony2: ~
     suites:
         test_suite:
             contexts:
                 - 'Jose\Test\Context\CompressionContext'
+                - 'Jose\Test\Context\ControllerContext'
             paths:
-                - %paths.base%/features
+                - '%paths.base%/features'

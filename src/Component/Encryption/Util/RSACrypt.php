@@ -194,7 +194,7 @@ final class RSACrypt
     private static function convertIntegerToOctetString(BigInteger $x, int $xLen): string
     {
         $x = $x->toBytes();
-        if (strlen($x) > $xLen) {
+        if (mb_strlen($x, '8bit') > $xLen) {
             throw new \RuntimeException('Invalid length.');
         }
 
