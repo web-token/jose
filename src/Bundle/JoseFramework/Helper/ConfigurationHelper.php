@@ -47,7 +47,7 @@ final class ConfigurationHelper
             self::BUNDLE_ALIAS => [
                 'jws_builders' => [
                     $name => [
-                        'is_public'            => $is_public,
+                        'is_public' => $is_public,
                         'signature_algorithms' => $signatureAlgorithms,
                     ],
                 ],
