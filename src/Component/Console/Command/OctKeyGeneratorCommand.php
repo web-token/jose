@@ -29,7 +29,6 @@ final class OctKeyGeneratorCommand extends AbstractGeneratorCommand
             ->setName('key:generate:oct')
             ->setDescription('Generate a octet key (JWK format)')
             ->addArgument('size', InputArgument::REQUIRED, 'Key size.');
-        ;
     }
 
     /**

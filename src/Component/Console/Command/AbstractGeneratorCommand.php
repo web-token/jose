@@ -67,9 +67,9 @@ abstract class AbstractGeneratorCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
-     * @param string $json
+     * @param string          $json
      */
     protected function prepareOutput(InputInterface $input, OutputInterface $output, string $json)
     {
