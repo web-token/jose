@@ -28,6 +28,7 @@ final class AppKernel extends Kernel
             new Jose\Bundle\Checker\CheckerBundle(),
             new Jose\Bundle\Signature\SignatureBundle(),
             new Jose\Bundle\Encryption\EncryptionBundle(),
+            new Jose\Bundle\KeyManagement\KeyManagementBundle(),
         ];
 
         return $bundles;

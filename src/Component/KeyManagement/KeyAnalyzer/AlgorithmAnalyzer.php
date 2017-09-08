@@ -15,17 +15,15 @@ namespace Jose\Component\KeyManagement\KeyAnalyzer;
 
 use Jose\Component\Core\JWK;
 
-final class GeneralAnalyzer implements JWKAnalyzerInterface
+final class AlgorithmAnalyzer implements JWKAnalyzerInterface
 {
     /**
      * {@inheritdoc}
      */
     public function analyze(JWK $jwk, array &$messages)
     {
-        foreach (['alg', 'use', 'kid'] as $key) {
-            if (!$jwk->has($key)) {
-                $messages[] = sprintf('The parameter "%s" should be added.', $key);
-            }
+        if (!$jwk->has('alg')) {
+            $messages[] = 'The parameter "alg" should be added.';
         }
     }
 }
