@@ -49,7 +49,7 @@ final class KeysetAnalyzerCommand extends ContainerAwareCommand
         $sharedKeys = 0;
         $mixedKeys = false;
 
-        foreach($jwkset as $kid => $jwk) {
+        foreach ($jwkset as $kid => $jwk) {
             $output->writeln(sprintf('Analysing key with index/kid "%s"', $kid));
             $messages = $analyzerManager->analyze($jwk);
             if (!empty($messages)) {
@@ -63,22 +63,24 @@ final class KeysetAnalyzerCommand extends ContainerAwareCommand
             switch (true) {
                 case 'oct' === $jwk->get('kty'):
                     $sharedKeys++;
-                    if (0 !== $privateKeys+$publicKeys) {
+                    if (0 !== $privateKeys + $publicKeys) {
                         $mixedKeys = true;
                     }
+
                     break;
                 case in_array($jwk->get('kty'), ['RSA', 'EC', 'OKP']):
                     if ($jwk->has('d')) {
-                        $privateKeys++;
-                        if (0 !== $sharedKeys+$publicKeys) {
+                        ++$privateKeys;
+                        if (0 !== $sharedKeys + $publicKeys) {
                             $mixedKeys = true;
                         }
                     } else {
-                        $publicKeys++;
-                        if (0 !== $privateKeys+$sharedKeys) {
+                        ++$publicKeys;
+                        if (0 !== $privateKeys + $sharedKeys) {
                             $mixedKeys = true;
                         }
                     }
+
                     break;
                 default:
                     break;
