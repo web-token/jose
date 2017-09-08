@@ -44,7 +44,7 @@ final class RsaKeysetGeneratorCommand extends AbstractGeneratorCommand
 
         $keyset = JWKSet::createFromKeys([]);
         for ($i = 0; $i < $quantity; ++$i) {
-            $keyset = $keyset->withKey(JWKFactory::createRSAKey($size, $args));
+            $keyset = $keyset->with(JWKFactory::createRSAKey($size, $args));
         }
         $json = json_encode($keyset);
         $this->prepareOutput($input, $output, $json);

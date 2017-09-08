@@ -45,7 +45,7 @@ final class EcKeysetGeneratorCommand extends AbstractGeneratorCommand
 
         $keyset = JWKSet::createFromKeys([]);
         for ($i = 0; $i < $quantity; ++$i) {
-            $keyset = $keyset->withKey(JWKFactory::createECKey($curve, $args));
+            $keyset = $keyset->with(JWKFactory::createECKey($curve, $args));
         }
         $json = json_encode($keyset);
         $this->prepareOutput($input, $output, $json);

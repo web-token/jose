@@ -44,7 +44,7 @@ final class OkpKeysetGeneratorCommand extends AbstractGeneratorCommand
 
         $keyset = JWKSet::createFromKeys([]);
         for ($i = 0; $i < $quantity; ++$i) {
-            $keyset = $keyset->withKey(JWKFactory::createOKPKey($curve, $args));
+            $keyset = $keyset->with(JWKFactory::createOKPKey($curve, $args));
         }
         $json = json_encode($keyset);
         $this->prepareOutput($input, $output, $json);

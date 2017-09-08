@@ -95,7 +95,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
      *
      * @return JWKSet
      */
-    public function withKey(JWK $jwk): JWKSet
+    public function with(JWK $jwk): JWKSet
     {
         $clone = clone $this;
 
@@ -115,7 +115,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
      *
      * @return JWKSet
      */
-    public function withoutKey($key): JWKSet
+    public function without($key): JWKSet
     {
         if (!$this->has($key)) {
             return $this;

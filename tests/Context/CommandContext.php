@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Jose\Test\Context;
 
 use Behat\Gherkin\Node\PyStringNode;
-use Jose\Bundle\KeyManagement\Command\KeyAnalyzerCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Behat\Behat\Context\Context;
@@ -120,7 +119,6 @@ final class CommandContext implements Context
     {
         if (null === $this->application) {
             $this->application = new Application($this->getKernel());
-            $this->application->add(new KeyAnalyzerCommand());
         }
 
         return $this->application;

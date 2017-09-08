@@ -30,7 +30,7 @@ final class KeyAnalyzerCommand extends ContainerAwareCommand
         $this
             ->setName('key:analyze')
             ->setDescription('JWK quality analyzer.')
-            ->setHelp('This command will analyze a JWK object and find security issues or enhancement proposals.')
+            ->setHelp('This command will analyze a JWK object and find security issues.')
             ->addArgument('jwk', InputArgument::REQUIRED, 'The JWK object')
         ;
     }
@@ -42,11 +42,32 @@ final class KeyAnalyzerCommand extends ContainerAwareCommand
     {
         /** @var JWKAnalyzerManager $analyzerManager */
         $analyzerManager = $this->getContainer()->get(JWKAnalyzerManager::class);
-        $jwk = JWK::create(json_decode($input->getArgument('jwk'), true));
+        $jwk = $this->getKey($input);
 
         $result = $analyzerManager->analyze($jwk);
         foreach ($result as $message) {
             $output->writeln($message);
         }
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return JWK
+     */
+    private function getKey(InputInterface $input): JWK
+    {
+        $jwkset = $input->getArgument('jwk');
+        $json = json_decode($jwkset, true);
+        if (is_array($json)) {
+            return JWK::create($json);
+        } elseif ($this->getContainer()->has($jwkset)) {
+            $id = $this->getContainer()->get($jwkset);
+            if ($id instanceof JWK) {
+                return $id;
+            }
+        }
+
+        throw new \InvalidArgumentException('The argument must be a valid JWKSet or a service ID to a JWKSet.');
     }
 }
