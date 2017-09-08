@@ -1,0 +1,14 @@
+{
+    "bundles": {
+        "Jose\\Bundle\\Checker\\CheckerBundle": ["all"],
+        "Jose\\Bundle\\Console\\ConsoleBundle": ["all"],
+        "Jose\\Bundle\\Encryption\\EncryptionBundle": ["all"],
+        "Jose\\Bundle\\Signature\\SignatureBundle": ["all"],
+        "Jose\\Bundle\\JoseFramework\\JoseFrameworkBundle": ["all"]
+    },
+    "copy-from-recipe": {
+        "config/": "%CONFIG_DIR%/",
+        "public/": "%PUBLIC_DIR%/",
+        "src/": "%SRC_DIR%/"
+    }
+}
