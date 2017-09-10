@@ -20,7 +20,7 @@ use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\OctetString;
 use FG\ASN1\Universal\Sequence;
-use FG\ASN1\Object;
+use FG\ASN1\ASNObject;
 use Jose\Component\Core\JWK;
 
 final class ECKey
@@ -83,7 +83,7 @@ final class ECKey
     private static function loadPEM(string $data): array
     {
         $data = base64_decode(preg_replace('#-.*-|\r|\n#', '', $data));
-        $asnObject = Object::fromBinary($data);
+        $asnObject = ASNObject::fromBinary($data);
 
         if (!$asnObject instanceof Sequence) {
             throw new \InvalidArgumentException('Unable to load the key.');
@@ -110,7 +110,7 @@ final class ECKey
     private static function loadPKCS8(array $children): array
     {
         $binary = hex2bin($children[2]->getContent());
-        $asnObject = Object::fromBinary($binary);
+        $asnObject = ASNObject::fromBinary($binary);
         if (!$asnObject instanceof Sequence) {
             throw new \InvalidArgumentException('Unable to load the key.');
         }
@@ -186,9 +186,9 @@ final class ECKey
     }
 
     /**
-     * @param object $children
+     * @param ASNObject $children
      */
-    private static function verifyVersion(Object $children)
+    private static function verifyVersion(ASNObject $children)
     {
         if (!$children instanceof Integer || '1' !== $children->getContent()) {
             throw new \InvalidArgumentException('Unable to load the key.');
@@ -196,11 +196,11 @@ final class ECKey
     }
 
     /**
-     * @param object      $children
+     * @param ASNObject   $children
      * @param string|null $x
      * @param string|null $y
      */
-    private static function getXAndY(Object $children, ?string &$x, ?string &$y)
+    private static function getXAndY(ASNObject $children, ?string &$x, ?string &$y)
     {
         if (!$children instanceof ExplicitlyTaggedObject || !is_array($children->getContent())) {
             throw new \InvalidArgumentException('Unable to load the key.');
@@ -221,11 +221,11 @@ final class ECKey
     }
 
     /**
-     * @param object $children
+     * @param ASNObject $children
      *
      * @return string
      */
-    private static function getD(Object $children): string
+    private static function getD(ASNObject $children): string
     {
         if (!$children instanceof OctetString) {
             throw new \InvalidArgumentException('Unable to load the key.');

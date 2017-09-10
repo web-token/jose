@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Algorithm;
 
-use FG\ASN1\Object;
+use FG\ASN1\ASNObject;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
@@ -52,7 +52,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
             throw new \RuntimeException('Signature failed.');
         }
 
-        $asn = Object::fromBinary($signature);
+        $asn = ASNObject::fromBinary($signature);
         if (!$asn instanceof Sequence) {
             throw new \RuntimeException('Invalid signature');
         }

@@ -19,5 +19,6 @@ default:
                 - 'Jose\Test\Context\CompressionContext'
                 - 'Jose\Test\Context\ControllerContext'
                 - 'Jose\Test\Context\CommandContext'
+                - 'Jose\Test\Context\KeyContext'
             paths:
                 - '%paths.base%/features'

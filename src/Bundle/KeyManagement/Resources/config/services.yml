@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Jose\Component\KeyManagement\JKUFactory: ~
+    Jose\Bundle\KeyManagement\Service\RequestFactory: ~
+    Http\Adapter\Guzzle6\Client: ~
