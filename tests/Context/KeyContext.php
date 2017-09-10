@@ -13,16 +13,14 @@ declare(strict_types=1);
 
 namespace Jose\Test\Context;
 
-use Behat\Gherkin\Node\PyStringNode;
 use Jose\Component\KeyManagement\JKUFactory;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Tester\CommandTester;
 use Behat\Behat\Context\Context;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 
 final class KeyContext implements Context
 {
     use KernelDictionary;
+
     /**
      * @When I load a key set from an URI
      */

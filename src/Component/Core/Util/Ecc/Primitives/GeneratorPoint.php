@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Component\Core\Util\Ecc\Primitives;
 
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
@@ -21,9 +30,9 @@ final class GeneratorPoint extends Point
     /**
      * @param GmpMath               $adapter
      * @param CurveFp               $curve
-     * @param \GMP                           $x
-     * @param \GMP                           $y
-     * @param \GMP                           $order
+     * @param \GMP                  $x
+     * @param \GMP                  $y
+     * @param \GMP                  $order
      * @param RandomNumberGenerator $generator
      */
     public function __construct(
@@ -42,13 +51,14 @@ final class GeneratorPoint extends Point
      * Verifies validity of given coordinates against the current point and its point.
      *
      * @todo   Check if really necessary here (only used for testing in lib)
-     * @param  \GMP $x
-     * @param  \GMP $y
-     * @return boolean
+     *
+     * @param \GMP $x
+     * @param \GMP $y
+     *
+     * @return bool
      */
     public function isValid(\GMP $x, \GMP $y)
     {
-       
         $math = $this->getAdapter();
 
         $n = $this->getOrder();
@@ -59,13 +69,13 @@ final class GeneratorPoint extends Point
             return false;
         }
 
-        if (! $curve->contains($x, $y)) {
+        if (!$curve->contains($x, $y)) {
             return false;
         }
 
         $point = $curve->getPoint($x, $y)->mul($n);
 
-        if (! $point->isInfinity()) {
+        if (!$point->isInfinity()) {
             return false;
         }
 
@@ -86,16 +96,19 @@ final class GeneratorPoint extends Point
      * @param \GMP $x
      * @param \GMP $y
      * @param \GMP $order
+     *
      * @return PublicKey
      */
     public function getPublicKeyFrom(\GMP $x, \GMP $y, \GMP $order = null)
     {
         $pubPoint = $this->getCurve()->getPoint($x, $y, $order);
+
         return new PublicKey($this->getAdapter(), $this, $pubPoint);
     }
 
     /**
      * @param \GMP $secretMultiplier
+     *
      * @return PrivateKey
      */
     public function getPrivateKeyFrom(\GMP $secretMultiplier)
