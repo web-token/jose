@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Component\Core\Util\Ecc\Curves;
 
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
@@ -10,6 +19,7 @@ final class CurveFactory
 {
     /**
      * @param $name
+     *
      * @return NamedCurveFp|CurveFp
      */
     public static function getCurveByName($name)
@@ -35,6 +45,7 @@ final class CurveFactory
 
     /**
      * @param $name
+     *
      * @return \Jose\Component\Core\Util\Ecc\Primitives\GeneratorPoint
      */
     public static function getGeneratorByName($name)
