@@ -17,8 +17,8 @@ use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Util\ConcatKDF;
 use Jose\Component\Core\JWKFactory;
-use Mdanter\Ecc\Crypto\EcDH\EcDH;
-use Mdanter\Ecc\EccFactory;
+use Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH;
+use Jose\Component\Core\Util\Ecc\EccFactory;
 
 /**
  * Class ECDHES.
@@ -187,7 +187,7 @@ final class ECDHES implements KeyAgreementInterface
      *
      * @throws \InvalidArgumentException
      *
-     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
+     * @return \Jose\Component\Core\Util\Ecc\Primitives\GeneratorPoint
      */
     private function getGenerator(JWK $key)
     {

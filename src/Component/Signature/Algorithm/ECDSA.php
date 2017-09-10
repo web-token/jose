@@ -19,7 +19,7 @@ use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\ECKey;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
-use Mdanter\Ecc\EccFactory;
+use Jose\Component\Core\Util\Ecc\EccFactory;
 
 /**
  * Class ECDSA.
