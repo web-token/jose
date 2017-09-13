@@ -68,13 +68,11 @@ final class EcDH
     private $senderKey;
 
     /**
-     * Initialize a new exchange from a generator point.
-     *
-     * @param GmpMath $adapter A math adapter instance.
+     * EcDH constructor.
      */
-    public function __construct(GmpMath $adapter)
+    public function __construct()
     {
-        $this->adapter = $adapter;
+        $this->adapter = new GmpMath();
     }
 
     /**

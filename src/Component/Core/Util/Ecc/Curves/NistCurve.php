@@ -48,11 +48,11 @@ final class NistCurve
     private $adapter;
 
     /**
-     * @param GmpMath $adapter
+     * NistCurve constructor.
      */
-    public function __construct(GmpMath $adapter)
+    public function __construct()
     {
-        $this->adapter = $adapter;
+        $this->adapter = new GmpMath();
     }
 
     /**
@@ -73,10 +73,9 @@ final class NistCurve
     /**
      * Returns an NIST P-256 generator.
      *
-     * @param  RandomNumberGenerator $randomGenerator
      * @return GeneratorPoint
      */
-    public function generator256(RandomNumberGenerator $randomGenerator = null)
+    public function generator256()
     {
         $curve = $this->curve256();
         $order = gmp_init('115792089210356248762697446949407573529996955224135760342422259061068512044369', 10);
@@ -84,7 +83,7 @@ final class NistCurve
         $x = gmp_init('0x6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296', 16);
         $y = gmp_init('0x4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5', 16);
 
-        return $curve->getGenerator($x, $y, $order, $randomGenerator);
+        return $curve->getGenerator($x, $y, $order);
     }
 
     /**
@@ -105,10 +104,9 @@ final class NistCurve
     /**
      * Returns an NIST P-384 generator.
      *
-     * @param  RandomNumberGenerator $randomGenerator
      * @return GeneratorPoint
      */
-    public function generator384(RandomNumberGenerator $randomGenerator = null)
+    public function generator384()
     {
         $curve = $this->curve384();
         $order = gmp_init('39402006196394479212279040100143613805079739270465446667946905279627659399113263569398956308152294913554433653942643', 10);
@@ -116,7 +114,7 @@ final class NistCurve
         $x = gmp_init('0xaa87ca22be8b05378eb1c71ef320ad746e1d3b628ba79b9859f741e082542a385502f25dbf55296c3a545e3872760ab7', 16);
         $y = gmp_init('0x3617de4a96262c6f5d9e98bf9292dc29f8f41dbd289a147ce9da3113b5f0b8c00a60b1ce1d7e819d7a431d7c90ea0e5f', 16);
 
-        return $curve->getGenerator($x, $y, $order, $randomGenerator);
+        return $curve->getGenerator($x, $y, $order);
     }
 
     /**
@@ -137,10 +135,9 @@ final class NistCurve
     /**
      * Returns an NIST P-521 generator.
      *
-     * @param  RandomNumberGenerator $randomGenerator
      * @return GeneratorPoint
      */
-    public function generator521(RandomNumberGenerator $randomGenerator = null)
+    public function generator521()
     {
         $curve = $this->curve521();
         $order = gmp_init('6864797660130609714981900799081393217269435300143305409394463459185543183397655394245057746333217197532963996371363321113864768612440380340372808892707005449', 10);
@@ -148,6 +145,6 @@ final class NistCurve
         $x = gmp_init('0xc6858e06b70404e9cd9e3ecb662395b4429c648139053fb521f828af606b4d3dbaa14b5e77efe75928fe1dc127a2ffa8de3348b3c1856a429bf97e7e31c2e5bd66', 16);
         $y = gmp_init('0x11839296a789a3bc0045c8a5fb42c7d1bd998f54449579b446817afbd17273e662c97ee72995ef42640c550b9013fad0761353c7086a272c24088be94769fd16650', 16);
 
-        return $curve->getGenerator($x, $y, $order, $randomGenerator);
+        return $curve->getGenerator($x, $y, $order);
     }
 }

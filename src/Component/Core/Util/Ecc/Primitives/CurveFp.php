@@ -96,11 +96,10 @@ final class CurveFp
 
     /**
      * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\CurveFp::getGenerator()
      */
-    public function getGenerator(\GMP $x, \GMP $y, \GMP $order, RandomNumberGenerator $randomGenerator = null)
+    public function getGenerator(\GMP $x, \GMP $y, \GMP $order)
     {
-        return new GeneratorPoint($this->adapter, $this, $x, $y, $order, $randomGenerator);
+        return new GeneratorPoint($this->adapter, $this, $x, $y, $order);
     }
 
     /**
@@ -221,17 +220,5 @@ final class CurveFp
     public function __toString()
     {
         return 'curve(' . $this->adapter->toString($this->getA()) . ', ' . $this->adapter->toString($this->getB()) . ', ' . $this->adapter->toString($this->getPrime()) . ')';
-    }
-
-    /**
-     * @return array
-     */
-    public function __debugInfo()
-    {
-        return [
-            'a' => $this->adapter->toString($this->getA()),
-            'b' => $this->adapter->toString($this->getB()),
-            'prime' => $this->adapter->toString($this->getPrime())
-        ];
     }
 }

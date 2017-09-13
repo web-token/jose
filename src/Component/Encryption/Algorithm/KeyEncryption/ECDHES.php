@@ -15,6 +15,8 @@ namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
+use Jose\Component\Core\Util\Ecc\Curves\NistCurve;
+use Jose\Component\Core\Util\Ecc\Math\GmpMath;
 use Jose\Component\Encryption\Util\ConcatKDF;
 use Jose\Component\Core\JWKFactory;
 use Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH;
@@ -91,7 +93,7 @@ final class ECDHES implements KeyAgreementInterface
                 $priv_key = $p->getPrivateKeyFrom($sen_d);
                 $pub_key = $p->getPublicKeyFrom($rec_x, $rec_y);
 
-                $ecdh = new EcDH(EccFactory::getAdapter());
+                $ecdh = new EcDH();
                 $ecdh->setSenderKey($priv_key);
                 $ecdh->setRecipientKey($pub_key);
 
@@ -195,11 +197,11 @@ final class ECDHES implements KeyAgreementInterface
 
         switch ($crv) {
             case 'P-256':
-                return EccFactory::getNistCurves()->generator256();
+                return (new NistCurve())->generator256();
             case 'P-384':
-                return EccFactory::getNistCurves()->generator384();
+                return (new NistCurve())->generator384();
             case 'P-521':
-                return EccFactory::getNistCurves()->generator521();
+                return (new NistCurve())->generator521();
             default:
                 throw new \InvalidArgumentException(sprintf('The curve "%s" is not supported', $crv));
         }
@@ -225,7 +227,7 @@ final class ECDHES implements KeyAgreementInterface
     private function convertDecToBin($value)
     {
         $value = gmp_strval($value, 10);
-        $adapter = EccFactory::getAdapter();
+        $adapter = new GmpMath();
 
         return hex2bin($adapter->decHex($value));
     }

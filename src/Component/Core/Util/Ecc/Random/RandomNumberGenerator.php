@@ -14,11 +14,10 @@ final class RandomNumberGenerator
 
     /**
      * RandomNumberGenerator constructor.
-     * @param GmpMath $adapter
      */
-    public function __construct(GmpMath $adapter)
+    public function __construct()
     {
-        $this->adapter = $adapter;
+        $this->adapter = new GmpMath();
     }
 
     /**

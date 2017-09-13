@@ -17,6 +17,7 @@ use FG\ASN1\ASNObject;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
+use Jose\Component\Core\Util\Ecc\Math\GmpMath;
 use Jose\Component\Core\Util\ECKey;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\Core\Util\Ecc\EccFactory;
@@ -131,8 +132,9 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     private function convertDecToHex($value)
     {
         $value = gmp_strval($value, 10);
+        $adapter = new GmpMath();
 
-        return EccFactory::getAdapter()->decHex($value);
+        return $adapter->decHex($value);
     }
 
     /**

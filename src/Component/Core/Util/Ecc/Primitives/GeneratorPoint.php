@@ -5,7 +5,6 @@ namespace Jose\Component\Core\Util\Ecc\Primitives;
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
 use Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey;
 use Jose\Component\Core\Util\Ecc\Crypto\Key\PublicKey;
-use Jose\Component\Core\Util\Ecc\Random\RandomGeneratorFactory;
 use Jose\Component\Core\Util\Ecc\Random\RandomNumberGenerator;
 
 /**
@@ -14,27 +13,25 @@ use Jose\Component\Core\Util\Ecc\Random\RandomNumberGenerator;
 final class GeneratorPoint extends Point
 {
     /**
-     * @var \Jose\Component\Core\Util\Ecc\Random\DebugDecorator|RandomNumberGenerator|null
+     * @var RandomNumberGenerator|null
      */
     private $generator;
 
     /**
-     * @param GmpMath               $adapter
-     * @param CurveFp               $curve
-     * @param \GMP                           $x
-     * @param \GMP                           $y
-     * @param \GMP                           $order
-     * @param RandomNumberGenerator $generator
+     * @param GmpMath $adapter
+     * @param CurveFp $curve
+     * @param \GMP    $x
+     * @param \GMP    $y
+     * @param \GMP    $order
      */
     public function __construct(
         GmpMath $adapter,
         CurveFp $curve,
         \GMP $x,
         \GMP $y,
-        \GMP $order,
-        RandomNumberGenerator $generator = null
+        \GMP $order
     ) {
-        $this->generator = $generator ?: RandomGeneratorFactory::getRandomGenerator();
+        $this->generator = new RandomNumberGenerator();
         parent::__construct($adapter, $curve, $x, $y, $order);
     }
 

@@ -104,7 +104,7 @@ final class PrivateKey
      */
     public function createExchange(PublicKey $recipient = null)
     {
-        $ecdh = new EcDH($this->adapter);
+        $ecdh = new EcDH();
         $ecdh
             ->setSenderKey($this)
             ->setRecipientKey($recipient);

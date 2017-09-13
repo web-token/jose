@@ -387,25 +387,4 @@ class Point
 
         return "[ (" . $this->adapter->toString($this->x) . "," . $this->adapter->toString($this->y) . ') on ' . (string) $this->curve . ' ]';
     }
-
-    /**
-     * @return array
-     */
-    public function __debugInfo()
-    {
-        $info = [
-            'x' => $this->adapter->toString($this->x),
-            'y' => $this->adapter->toString($this->y),
-            'z' => $this->adapter->toString($this->order),
-            'curve' => $this->curve
-        ];
-
-        if ($this->infinity) {
-            $info['x'] = 'inf (' . $info['x'] . ')';
-            $info['y'] = 'inf (' . $info['y'] . ')';
-            $info['z'] = 'inf (' . $info['z'] . ')';
-        }
-
-        return $info;
-    }
 }

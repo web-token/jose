@@ -14,8 +14,7 @@ final class CurveFactory
      */
     public static function getCurveByName($name)
     {
-        $adapter = MathAdapterFactory::getAdapter();
-        $nistFactory = self::getNistFactory($adapter);
+        $nistFactory = self::getNistFactory();
 
         switch ($name) {
             case NistCurve::NAME_P192:
@@ -39,8 +38,7 @@ final class CurveFactory
      */
     public static function getGeneratorByName($name)
     {
-        $adapter = MathAdapterFactory::getAdapter();
-        $nistFactory = self::getNistFactory($adapter);
+        $nistFactory = self::getNistFactory();
 
         switch ($name) {
             case NistCurve::NAME_P192:
@@ -59,12 +57,10 @@ final class CurveFactory
     }
 
     /**
-     * @param GmpMath $math
-     *
      * @return NistCurve
      */
-    private static function getNistFactory(GmpMath $math): NistCurve
+    private static function getNistFactory(): NistCurve
     {
-        return new NistCurve($math);
+        return new NistCurve();
     }
 }
