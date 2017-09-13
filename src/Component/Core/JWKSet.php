@@ -70,8 +70,8 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
         });
         foreach ($keys as $k => $v) {
             if ($v->has('kid')) {
-                $keys[$v->get('kid')] = $v;
                 unset($keys[$k]);
+                $keys[$v->get('kid')] = $v;
             }
         }
 

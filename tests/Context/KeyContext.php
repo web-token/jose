@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace Jose\Test\Context;
 
-use Behat\Gherkin\Node\PyStringNode;
+use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\JKUFactory;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Tester\CommandTester;
+use Jose\Component\KeyManagement\X5UFactory;
 use Behat\Behat\Context\Context;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 
@@ -24,13 +23,44 @@ final class KeyContext implements Context
 {
     use KernelDictionary;
     /**
-     * @When I load a key set from an URI
+     * @When I load a JKU keyset from Yahoo
      */
-    public function iLoadAKeySetFromAnUri()
+    public function iLoadAJkuKeysetFromYahoo()
     {
         /** @var JKUFactory $jkuFactory */
         $jkuFactory = $this->getContainer()->get(JKUFactory::class);
 
-        var_dump($jkuFactory->loadFromUrl('https://login.yahoo.com/openid/v1/certs'));
+        $keyset = $jkuFactory->loadFromUrl('https://login.yahoo.com/openid/v1/certs');
+        if (!$keyset instanceof JWKSet) {
+            throw new \InvalidArgumentException('No key set received.');
+        }
+    }
+
+    /**
+     * @When I load a JKU keyset from Google
+     */
+    public function iLoadAJkuKeysetFromGoogle()
+    {
+        /** @var JKUFactory $jkuFactory */
+        $jkuFactory = $this->getContainer()->get(JKUFactory::class);
+
+        $keyset = $jkuFactory->loadFromUrl('https://www.googleapis.com/oauth2/v3/certs');
+        if (!$keyset instanceof JWKSet) {
+            throw new \InvalidArgumentException('No key set received.');
+        }
+    }
+
+    /**
+     * @When I load a X5U keyset from an Google
+     */
+    public function iLoadAX5UKeysetFromAnGoogle()
+    {
+        /** @var X5UFactory $x5uFactory */
+        $x5uFactory = $this->getContainer()->get( X5UFactory::class);
+
+        $keyset = $x5uFactory->loadFromUrl('https://www.googleapis.com/oauth2/v1/certs');
+        if (!$keyset instanceof JWKSet) {
+            throw new \InvalidArgumentException('No key set received.');
+        }
     }
 }
