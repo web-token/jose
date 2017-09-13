@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Component\Core\Util\Ecc\Math;
 
 use Jose\Component\Core\Util\Ecc\Util\BinaryString;
@@ -7,7 +16,6 @@ use Jose\Component\Core\Util\Ecc\Util\BinaryString;
 final class GmpMath
 {
     /**
-     * {@inheritDoc}
      * @see GmpMath::cmp()
      */
     public function cmp(\GMP $first, \GMP $other)
@@ -18,15 +26,15 @@ final class GmpMath
     /**
      * @param \GMP $first
      * @param \GMP $other
+     *
      * @return bool
      */
     public function equals(\GMP $first, \GMP $other)
     {
         return gmp_cmp($first, $other) === 0;
     }
-    
+
     /**
-     * {@inheritDoc}
      * @see GmpMath::mod()
      */
     public function mod(\GMP $number, \GMP $modulus)
@@ -35,7 +43,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::add()
      */
     public function add(\GMP $augend, \GMP $addend)
@@ -44,7 +51,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::sub()
      */
     public function sub(\GMP $minuend, \GMP $subtrahend)
@@ -53,7 +59,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::mul()
      */
     public function mul(\GMP $multiplier, \GMP $multiplicand)
@@ -62,7 +67,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::div()
      */
     public function div(\GMP $dividend, \GMP $divisor)
@@ -71,7 +75,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::pow()
      */
     public function pow(\GMP $base, $exponent)
@@ -80,7 +83,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::bitwiseAnd()
      */
     public function bitwiseAnd(\GMP $first, \GMP $other)
@@ -89,7 +91,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::rightShift()
      */
     public function rightShift(\GMP $number, $positions)
@@ -99,7 +100,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::bitwiseXor()
      */
     public function bitwiseXor(\GMP $first, \GMP $other)
@@ -108,7 +108,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::leftShift()
      */
     public function leftShift(\GMP $number, $positions)
@@ -118,7 +117,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::toString()
      */
     public function toString(\GMP $value)
@@ -127,7 +125,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::hexDec()
      */
     public function hexDec($hex)
@@ -136,7 +133,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::decHex()
      */
     public function decHex($dec)
@@ -157,20 +153,18 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::powmod()
      */
     public function powmod(\GMP $base, \GMP $exponent, \GMP $modulus)
     {
         if ($this->cmp($exponent, gmp_init(0, 10)) < 0) {
-            throw new \InvalidArgumentException("Negative exponents (" . $this->toString($exponent) . ") not allowed.");
+            throw new \InvalidArgumentException('Negative exponents ('.$this->toString($exponent).') not allowed.');
         }
 
         return gmp_powm($base, $exponent, $modulus);
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::isPrime()
      */
     public function isPrime(\GMP $n)
@@ -185,7 +179,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::nextPrime()
      */
     public function nextPrime(\GMP $starting_value)
@@ -194,7 +187,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::inverseMod()
      */
     public function inverseMod(\GMP $a, \GMP $m)
@@ -203,7 +195,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::jacobi()
      */
     public function jacobi(\GMP $a, \GMP $n)
@@ -212,7 +203,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::intToString()
      */
     public function intToString(\GMP $x)
@@ -231,7 +221,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::stringToInt()
      */
     public function stringToInt($s)
@@ -239,7 +228,7 @@ final class GmpMath
         $result = gmp_init(0, 10);
         $sLen = BinaryString::length($s);
 
-        for ($c = 0; $c < $sLen; $c ++) {
+        for ($c = 0; $c < $sLen; ++$c ) {
             $result = gmp_add(gmp_mul(256, $result), gmp_init(ord($s[$c]), 10));
         }
 
@@ -247,7 +236,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::digestInteger()
      */
     public function digestInteger(\GMP $m)
@@ -256,7 +244,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::gcd2()
      */
     public function gcd2(\GMP $a, \GMP $b)
@@ -271,7 +258,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::baseConvert()
      */
     public function baseConvert($number, $from, $to)
@@ -280,7 +266,6 @@ final class GmpMath
     }
 
     /**
-     * {@inheritDoc}
      * @see GmpMath::getNumberTheory()
      */
     public function getNumberTheory()
@@ -290,6 +275,7 @@ final class GmpMath
 
     /**
      * @param \GMP $modulus
+     *
      * @return ModularArithmetic
      */
     public function getModularArithmetic(\GMP $modulus)

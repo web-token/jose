@@ -1,8 +1,17 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Component\Core\Util\Ecc\Crypto\Key;
 
-/**
+/*
  * *********************************************************************
  * Copyright (C) 2012 Matyas Danter
  *
@@ -51,9 +60,9 @@ final class PrivateKey
     private $adapter;
 
     /**
-     * @param GmpMath $adapter
+     * @param GmpMath        $adapter
      * @param GeneratorPoint $generator
-     * @param \GMP $secretMultiplier
+     * @param \GMP           $secretMultiplier
      */
     public function __construct(GmpMath $adapter, GeneratorPoint $generator, \GMP $secretMultiplier)
     {
@@ -63,7 +72,6 @@ final class PrivateKey
     }
 
     /**
-     * {@inheritDoc}
      * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey::getPublicKey()
      */
     public function getPublicKey()
@@ -72,7 +80,6 @@ final class PrivateKey
     }
 
     /**
-     * {@inheritDoc}
      * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey::getPoint()
      */
     public function getPoint()
@@ -81,7 +88,6 @@ final class PrivateKey
     }
 
     /**
-     * {@inheritDoc}
      * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey::getCurve()
      */
     public function getCurve()
@@ -90,7 +96,6 @@ final class PrivateKey
     }
 
     /**
-     * {@inheritDoc}
      * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey::getSecret()
      */
     public function getSecret()
@@ -99,7 +104,6 @@ final class PrivateKey
     }
 
     /**
-     * {@inheritDoc}
      * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey::createExchange()
      */
     public function createExchange(PublicKey $recipient = null)

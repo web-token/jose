@@ -22,6 +22,7 @@ use Behat\Symfony2Extension\Context\KernelDictionary;
 final class KeyContext implements Context
 {
     use KernelDictionary;
+
     /**
      * @When I load a JKU keyset from Yahoo
      */
@@ -56,7 +57,7 @@ final class KeyContext implements Context
     public function iLoadAX5UKeysetFromAnGoogle()
     {
         /** @var X5UFactory $x5uFactory */
-        $x5uFactory = $this->getContainer()->get( X5UFactory::class);
+        $x5uFactory = $this->getContainer()->get(X5UFactory::class);
 
         $keyset = $x5uFactory->loadFromUrl('https://www.googleapis.com/oauth2/v1/certs');
         if (!$keyset instanceof JWKSet) {

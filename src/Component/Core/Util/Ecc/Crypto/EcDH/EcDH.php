@@ -1,8 +1,17 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Component\Core\Util\Ecc\Crypto\EcDH;
 
-/**
+/*
  * *********************************************************************
  * Copyright (C) 2012 Matyas Danter
  *
@@ -42,27 +51,25 @@ use Jose\Component\Core\Util\Ecc\Primitives\Point;
 final class EcDH
 {
     /**
-     * Adapter used for math calculations
+     * Adapter used for math calculations.
      *
      * @var GmpMath
      */
     private $adapter;
 
     /**
-     * Secret key between the two parties
+     * Secret key between the two parties.
      *
      * @var Point
      */
     private $secretKey = null;
 
     /**
-     *
      * @var PublicKey
      */
     private $recipientKey;
 
     /**
-     *
      * @var PrivateKey
      */
     private $senderKey;
@@ -76,7 +83,6 @@ final class EcDH
     }
 
     /**
-     * {@inheritDoc}
      * @see \Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH::calculateSharedKey()
      */
     public function calculateSharedKey()
@@ -87,7 +93,6 @@ final class EcDH
     }
 
     /**
-     * {@inheritDoc}
      * @see \Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH::createMultiPartyKey()
      */
     public function createMultiPartyKey()
@@ -98,28 +103,25 @@ final class EcDH
     }
 
     /**
-     * {@inheritDoc}
      * @see \Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH::setRecipientKey()
      */
     public function setRecipientKey(PublicKey $key = null)
     {
         $this->recipientKey = $key;
+
         return $this;
     }
 
     /**
-     * {@inheritDoc}
      * @see \Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH::setSenderKey()
      */
     public function setSenderKey(PrivateKey $key)
     {
         $this->senderKey = $key;
+
         return $this;
     }
 
-    /**
-     *
-     */
     private function calculateKey()
     {
         $this->checkExchangeState();
@@ -132,7 +134,8 @@ final class EcDH
     /**
      * Verifies that the shared secret is known, or that the required keys are available
      * to calculate the shared secret.
-     * @throws \RuntimeException when the exchange has not been made.
+     *
+     * @throws \RuntimeException when the exchange has not been made
      */
     private function checkExchangeState()
     {
