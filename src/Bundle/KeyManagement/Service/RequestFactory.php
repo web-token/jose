@@ -23,7 +23,6 @@ final class RequestFactory implements Psr7RequestFactory
      */
     public function createRequest($method, $uri, array $headers = [], $body = null, $protocolVersion = '1.1')
     {
-        return new Request($method,$uri,$headers, $body, $protocolVersion);
+        return new Request($method, $uri, $headers, $body, $protocolVersion);
     }
-
 }
