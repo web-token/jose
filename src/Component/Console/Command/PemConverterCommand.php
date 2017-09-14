@@ -47,11 +47,13 @@ final class PemConverterCommand extends AbstractObjectOutputCommand
         }
         $key = JWK::create($json);
         switch ($key->get('kty')) {
-            case 'RSA';
+            case 'RSA':
                 $pem = RSAKey::createFromJWK($key)->toPem();
+
                 break;
-            case 'EC';
+            case 'EC':
                 $pem = ECKey::createFromJWK($key)->toPem();
+
                 break;
             default:
                 throw new \InvalidArgumentException('Not a RSA or EC key.');

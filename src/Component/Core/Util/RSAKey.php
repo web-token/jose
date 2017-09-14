@@ -284,6 +284,7 @@ final class RSAKey
         $key_bit_string = new BitString(bin2hex($key_sequence->getBinary()));
         $this->sequence->addChild($key_bit_string);
     }
+
     private function initPrivateKey()
     {
         $this->sequence->addChild(new Integer(0));

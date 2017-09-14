@@ -92,7 +92,8 @@ final class JWEBuilder
 
     /**
      * JWEBuilder constructor.
-     * @param JsonConverterInterface  $jsonConverter
+     *
+     * @param JsonConverterInterface   $jsonConverter
      * @param JWAManager               $keyEncryptionAlgorithmManager
      * @param JWAManager               $contentEncryptionAlgorithmManager
      * @param CompressionMethodManager $compressionManager
