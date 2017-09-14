@@ -35,7 +35,7 @@ final class StandardJsonConverter implements JsonConverterInterface
      * @param int  $options
      * @param int  $depth
      */
-    public function __construct(int $options = 0, int $depth = 512)
+    public function __construct(int $options = JSON_UNESCAPED_UNICODE, int $depth = 512)
     {
         $this->options = $options;
         $this->depth = $depth;
