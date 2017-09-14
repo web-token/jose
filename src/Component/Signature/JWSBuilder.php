@@ -14,12 +14,18 @@ declare(strict_types=1);
 namespace Jose\Component\Signature;
 
 use Base64Url\Base64Url;
+use Jose\Component\Core\Encoder\PayloadEncoderInterface;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\KeyChecker;
 
 final class JWSBuilder
 {
+    /**
+     * @var PayloadEncoderInterface
+     */
+    private $payloadEncoder;
+
     /**
      * @var string
      */
@@ -43,10 +49,12 @@ final class JWSBuilder
     /**
      * JWSBuilder constructor.
      *
-     * @param JWAManager $signatureAlgorithmManager
+     * @param PayloadEncoderInterface $payloadEncoder
+     * @param JWAManager              $signatureAlgorithmManager
      */
-    public function __construct(JWAManager $signatureAlgorithmManager)
+    public function __construct(PayloadEncoderInterface $payloadEncoder, JWAManager $signatureAlgorithmManager)
     {
+        $this->payloadEncoder = $payloadEncoder;
         $this->signatureAlgorithmManager = $signatureAlgorithmManager;
     }
 
@@ -59,13 +67,14 @@ final class JWSBuilder
     }
 
     /**
-     * @param string $payload
-     * @param bool   $isPayloadDetached
+     * @param mixed $payload
+     * @param bool  $isPayloadDetached
      *
      * @return JWSBuilder
      */
-    public function withPayload(string $payload, bool $isPayloadDetached = false): JWSBuilder
+    public function withPayload($payload, bool $isPayloadDetached = false): JWSBuilder
     {
+        $payload = is_string($payload) ? $payload : $this->payloadEncoder->encode($payload);
         if (false === mb_detect_encoding($payload, 'UTF-8', true)) {
             throw new \InvalidArgumentException('The payload must be encoded in UTF-8');
         }

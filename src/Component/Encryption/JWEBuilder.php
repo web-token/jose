@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption;
 
 use Base64Url\Base64Url;
+use Jose\Component\Core\Encoder\PayloadEncoderInterface;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\KeyChecker;
@@ -29,6 +30,10 @@ use Jose\Component\Encryption\Compression\CompressionMethodManager;
 
 final class JWEBuilder
 {
+    /**
+     * @var PayloadEncoderInterface
+     */
+    private $payloadEncoder;
     /**
      * @var mixed
      */
@@ -86,13 +91,14 @@ final class JWEBuilder
 
     /**
      * JWEBuilder constructor.
-     *
+     * @param PayloadEncoderInterface  $payloadEncoder
      * @param JWAManager               $keyEncryptionAlgorithmManager
      * @param JWAManager               $contentEncryptionAlgorithmManager
      * @param CompressionMethodManager $compressionManager
      */
-    public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionManager)
+    public function __construct(PayloadEncoderInterface $payloadEncoder, JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionManager)
     {
+        $this->payloadEncoder = $payloadEncoder;
         $this->keyEncryptionAlgorithmManager = $keyEncryptionAlgorithmManager;
         $this->contentEncryptionAlgorithmManager = $contentEncryptionAlgorithmManager;
         $this->compressionManager = $compressionManager;
@@ -129,6 +135,7 @@ final class JWEBuilder
      */
     public function withPayload($payload): JWEBuilder
     {
+        $payload = is_string($payload) ? $payload : $this->payloadEncoder->encode($payload);
         if (false === mb_detect_encoding($payload, 'UTF-8', true)) {
             throw new \InvalidArgumentException('The payload must be encoded in UTF-8');
         }

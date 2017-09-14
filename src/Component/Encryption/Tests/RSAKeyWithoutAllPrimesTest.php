@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Tests;
 
+use Jose\Component\Core\Encoder\StandardJsonEncoder;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
@@ -58,7 +59,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
         $claims = json_encode(['foo' => 'bar']);
 
         $algorithmManager = JWAManager::create([$signature_algorithm]);
-        $builder = new JWSBuilder($algorithmManager);
+        $builder = new JWSBuilder(new StandardJsonEncoder(), $algorithmManager);
         $jws = $builder
             ->withPayload($claims)
             ->addSignature($key, ['alg' => $signature_algorithm->name()])

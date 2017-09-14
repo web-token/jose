@@ -53,6 +53,14 @@ final class Configuration implements ConfigurationInterface
             $serviceSource->getNodeDefinition($rootNode);
         }
 
+        $rootNode
+            ->children()
+                ->booleanNode('use_default_encoder')
+                    ->defaultTrue()
+                    ->info('Encoder used to convert the payload from object to string. If set to false, a service that implements PayloadEncoderInterface must be set.')
+                ->end()
+            ->end();
+
         return $treeBuilder;
     }
 }

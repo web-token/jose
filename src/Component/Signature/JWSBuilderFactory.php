@@ -13,10 +13,16 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature;
 
+use Jose\Component\Core\Encoder\PayloadEncoderInterface;
 use Jose\Component\Core\JWAManagerFactory;
 
 final class JWSBuilderFactory
 {
+    /**
+     * @var PayloadEncoderInterface
+     */
+    private $payloadEncoder;
+
     /**
      * @var JWAManagerFactory
      */
@@ -25,10 +31,12 @@ final class JWSBuilderFactory
     /**
      * JWSBuilderFactory constructor.
      *
-     * @param JWAManagerFactory $signatureAlgorithmManagerFactory
+     * @param PayloadEncoderInterface $payloadEncoder
+     * @param JWAManagerFactory       $signatureAlgorithmManagerFactory
      */
-    public function __construct(JWAManagerFactory $signatureAlgorithmManagerFactory)
+    public function __construct(PayloadEncoderInterface $payloadEncoder, JWAManagerFactory $signatureAlgorithmManagerFactory)
     {
+        $this->payloadEncoder = $payloadEncoder;
         $this->signatureAlgorithmManagerFactory = $signatureAlgorithmManagerFactory;
     }
 
@@ -41,6 +49,6 @@ final class JWSBuilderFactory
     {
         $algorithmManager = $this->signatureAlgorithmManagerFactory->create($algorithms);
 
-        return new JWSBuilder($algorithmManager);
+        return new JWSBuilder($this->payloadEncoder, $algorithmManager);
     }
 }

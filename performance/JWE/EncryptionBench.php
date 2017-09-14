@@ -11,6 +11,7 @@
 
 namespace Jose\Performance\JWE;
 
+use Jose\Component\Core\Encoder\StandardJsonEncoder;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
@@ -90,6 +91,7 @@ abstract class EncryptionBench
     public function benchEncryption($params)
     {
         $jweBuilder = new JWEBuilder(
+            new StandardJsonEncoder(),
             $this->getKeyEncryptionAlgorithmsManager(),
             $this->getContentEncryptionAlgorithmsManager(),
             $this->getCompressionMethodsManager()

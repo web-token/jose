@@ -12,6 +12,7 @@ framework:
     http_method_override: true
 
 jose:
+    use_default_encoder: false
     keys:
         key1:
             jwk:

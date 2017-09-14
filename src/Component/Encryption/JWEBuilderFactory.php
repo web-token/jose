@@ -13,11 +13,17 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption;
 
+use Jose\Component\Core\Encoder\PayloadEncoderInterface;
 use Jose\Component\Core\JWAManagerFactory;
 use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
 
 final class JWEBuilderFactory
 {
+    /**
+     * @var PayloadEncoderInterface
+     */
+    private $payloadEncoder;
+
     /**
      * @var JWAManagerFactory
      */
@@ -29,13 +35,15 @@ final class JWEBuilderFactory
     private $compressionMethodManagerFactory;
 
     /**
-     * JWEBuilder constructor.
+     * JWEBuilderFactory constructor.
      *
+     * @param PayloadEncoderInterface         $payloadEncoder
      * @param JWAManagerFactory               $algorithmManagerFactory
      * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
      */
-    public function __construct(JWAManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory)
+    public function __construct(PayloadEncoderInterface $payloadEncoder, JWAManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory)
     {
+        $this->payloadEncoder = $payloadEncoder;
         $this->algorithmManagerFactory = $algorithmManagerFactory;
         $this->compressionMethodManagerFactory = $compressionMethodManagerFactory;
     }
@@ -53,6 +61,6 @@ final class JWEBuilderFactory
         $contentEncryptionAlgorithmManager = $this->algorithmManagerFactory->create($contentEncryptionAlgorithm);
         $compressionMethodManager = $this->compressionMethodManagerFactory->create($compressionMethods);
 
-        return new JWEBuilder($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionMethodManager);
+        return new JWEBuilder($this->payloadEncoder, $keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionMethodManager);
     }
 }

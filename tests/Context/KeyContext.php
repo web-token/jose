@@ -52,9 +52,9 @@ final class KeyContext implements Context
     }
 
     /**
-     * @When I load a X5U keyset from an Google
+     * @When I load a X5U keyset from Google
      */
-    public function iLoadAX5UKeysetFromAnGoogle()
+    public function iLoadAX5UKeysetFromGoogle()
     {
         /** @var X5UFactory $x5uFactory */
         $x5uFactory = $this->getContainer()->get(X5UFactory::class);

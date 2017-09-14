@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Tests;
 
+use Jose\Component\Core\Encoder\StandardJsonEncoder;
 use Jose\Component\Core\JWAManagerFactory;
 use Jose\Component\Encryption\Algorithm\KeyEncryption;
 use Jose\Component\Encryption\Algorithm\ContentEncryption;
@@ -97,6 +98,7 @@ abstract class AbstractEncryptionTest extends TestCase
     {
         if (null === $this->jwsBuilderFactory) {
             $this->jwsBuilderFactory = new JWEBuilderFactory(
+                new StandardJsonEncoder(),
                 $this->getAlgorithmManagerFactory(),
                 $this->getCompressionMethodManagerFactory()
             );

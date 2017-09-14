@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Tests;
 
+use Jose\Component\Core\Encoder\StandardJsonEncoder;
 use Jose\Component\Core\JWAManagerFactory;
 use Jose\Component\Signature\Algorithm;
 use Jose\Component\Signature\JWSBuilderFactory;
@@ -64,6 +65,7 @@ abstract class AbstractSignatureTest extends TestCase
     {
         if (null === $this->jwsBuilderFactory) {
             $this->jwsBuilderFactory = new JWSBuilderFactory(
+                new StandardJsonEncoder(),
                 $this->getAlgorithmManagerFactory()
             );
         }
