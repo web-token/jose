@@ -34,7 +34,7 @@ final class ClaimCheckerManager
     /**
      * ClaimCheckerManager constructor.
      *
-     * @param JsonConverterInterface $payloadEncoder
+     * @param JsonConverterInterface  $payloadEncoder
      * @param ClaimCheckerInterface[] $checkers
      */
     public function __construct(JsonConverterInterface $payloadEncoder, array $checkers)

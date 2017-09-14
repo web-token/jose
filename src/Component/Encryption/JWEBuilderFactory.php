@@ -37,7 +37,7 @@ final class JWEBuilderFactory
     /**
      * JWEBuilderFactory constructor.
      *
-     * @param JsonConverterInterface         $payloadEncoder
+     * @param JsonConverterInterface          $payloadEncoder
      * @param JWAManagerFactory               $algorithmManagerFactory
      * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
      */

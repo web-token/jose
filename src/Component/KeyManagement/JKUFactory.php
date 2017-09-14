@@ -26,8 +26,8 @@ final class JKUFactory extends UrlKeySetFactory
      * X5UFactory constructor.
      *
      * @param JsonConverterInterface $jsonConverter
-     * @param HttpClient $client
-     * @param RequestFactory $requestFactory
+     * @param HttpClient             $client
+     * @param RequestFactory         $requestFactory
      */
     public function __construct(JsonConverterInterface $jsonConverter, HttpClient $client, RequestFactory $requestFactory)
     {

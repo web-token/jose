@@ -32,7 +32,7 @@ final class JWSBuilderFactory
      * JWSBuilderFactory constructor.
      *
      * @param JsonConverterInterface $payloadEncoder
-     * @param JWAManagerFactory       $signatureAlgorithmManagerFactory
+     * @param JWAManagerFactory      $signatureAlgorithmManagerFactory
      */
     public function __construct(JsonConverterInterface $payloadEncoder, JWAManagerFactory $signatureAlgorithmManagerFactory)
     {
