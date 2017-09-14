@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Jose\Component\Console\Command;
 
-use Jose\Component\Core\JWKFactory;
+use Jose\Component\Core\JWK;
+use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class X509CertificateLoaderCommand extends AbstractGeneratorCommand
+final class OptimizeRsaKeyCommand extends AbstractJsonObjectOutputCommand
 {
     /**
      * {@inheritdoc}
@@ -27,9 +28,9 @@ final class X509CertificateLoaderCommand extends AbstractGeneratorCommand
     {
         parent::configure();
         $this
-            ->setName('key:load:x509')
-            ->setDescription('Load a key from a X.509 certificate file.')
-            ->addArgument('file', InputArgument::REQUIRED, 'Filename of the X.509 certificate.');
+            ->setName('key:optimize')
+            ->setDescription('Optimize a RSA key by calculating additional primes (CRT).')
+            ->addArgument('jwk', InputArgument::REQUIRED, 'The RSA key.');
     }
 
     /**
@@ -37,16 +38,13 @@ final class X509CertificateLoaderCommand extends AbstractGeneratorCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $filename = $input->getArgument('file');
-        $args = [];
-        foreach (['use', 'alg'] as $key) {
-            $value = $input->getOption($key);
-            if (null !== $value) {
-                $args[$key] = $value;
-            }
+        $jwk = $input->getArgument('jwk');
+        $json = $this->jsonConverter->decode($jwk);
+        if (!is_array($json)) {
+            throw new \InvalidArgumentException('Invalid input.');
         }
-
-        $jwk = JWKFactory::createFromCertificateFile($filename, $args);
-        $this->prepareOutput($input, $output, $jwk);
+        $key = RSAKey::createFromJWK(JWK::create($json));
+        $key->optimize();
+        $this->prepareOutput($input, $output, $key->toJwk());
     }
 }

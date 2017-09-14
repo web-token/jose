@@ -25,6 +25,7 @@ final class AppKernel extends Kernel
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
 
             new Jose\Bundle\JoseFramework\JoseFrameworkBundle(),
+            new Jose\Bundle\Console\ConsoleBundle(),
             new Jose\Bundle\Checker\CheckerBundle(),
             new Jose\Bundle\Signature\SignatureBundle(),
             new Jose\Bundle\Encryption\EncryptionBundle(),

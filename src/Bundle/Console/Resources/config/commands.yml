@@ -47,3 +47,7 @@ services:
     Jose\Component\Console\Command\X509CertificateLoaderCommand:
         tags:
             - {name: 'console.command'}
+
+    Jose\Component\Console\Command\OptimizeRsaKeyCommand:
+        tags:
+            - {name: 'console.command'}

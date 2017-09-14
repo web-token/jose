@@ -13,30 +13,13 @@ declare(strict_types=1);
 
 namespace Jose\Component\Console\Command;
 
-use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWKFactory;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class AbstractGeneratorCommand extends Command
+abstract class AbstractGeneratorCommand extends AbstractJsonObjectOutputCommand
 {
-    private $jsonConverter;
-
-    /**
-     * AbstractGeneratorCommand constructor.
-     *
-     * @param JsonConverterInterface $jsonConverter
-     * @param null $name
-     */
-    public function __construct(JsonConverterInterface $jsonConverter, $name = null)
-    {
-        $this->jsonConverter = $jsonConverter;
-        parent::__construct($name);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -50,14 +33,12 @@ abstract class AbstractGeneratorCommand extends Command
      */
     protected function configure()
     {
+        parent::configure();
         $this
-            ->setName('key:generate:ec')
-            ->setDescription('Generate an EC key (JWK format)')
             ->setDefinition(
                 new InputDefinition([
                     new InputOption('use', 'u', InputOption::VALUE_OPTIONAL, 'Usage of the key. Must be either "sig" or "enc".'),
                     new InputOption('alg', 'a', InputOption::VALUE_OPTIONAL, 'Algorithm for the key.'),
-                    new InputOption('out', 'o', InputOption::VALUE_OPTIONAL, 'File where to save the key. Must be a valid and writable file name.'),
                 ])
             )
         ;
@@ -79,21 +60,5 @@ abstract class AbstractGeneratorCommand extends Command
         }
 
         return $args;
-    }
-
-    /**
-     * @param InputInterface    $input
-     * @param OutputInterface   $output
-     * @param \JsonSerializable $json
-     */
-    protected function prepareOutput(InputInterface $input, OutputInterface $output, \JsonSerializable $json)
-    {
-        $json = $this->jsonConverter->encode($json);
-        $file = $input->getOption('out');
-        if (null !== $file) {
-            file_put_contents($file, $json, LOCK_EX);
-        } else {
-            $output->write($json);
-        }
     }
 }

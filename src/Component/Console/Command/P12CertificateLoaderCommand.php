@@ -26,6 +26,7 @@ final class P12CertificateLoaderCommand extends AbstractGeneratorCommand
      */
     protected function configure()
     {
+        parent::configure();
         $this
             ->setName('key:load:p12')
             ->setDescription('Load a key from a P12 certificate file.')

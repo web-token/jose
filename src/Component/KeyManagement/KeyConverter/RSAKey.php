@@ -147,6 +147,14 @@ final class RSAKey
     }
 
     /**
+     * @return JWK
+     */
+    public function toJwk(): JWK
+    {
+        return JWK::create($this->values);
+    }
+
+    /**
      * This method will try to add Chinese Remainder Theorem (CRT) parameters.
      * With those primes, the decryption process is really fast.
      */

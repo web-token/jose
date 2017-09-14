@@ -26,6 +26,7 @@ final class OkpKeysetGeneratorCommand extends AbstractGeneratorCommand
      */
     protected function configure()
     {
+        parent::configure();
         $this
             ->setName('keyset:generate:okp')
             ->setDescription('Generate a key set with Octet Key Pairs keys (JWKSet format)')

@@ -21,6 +21,8 @@ $application->add(new Command\OkpKeysetGeneratorCommand(new StandardJsonConverte
 $application->add(new Command\OctKeysetGeneratorCommand(new StandardJsonConverter()));
 $application->add(new Command\RsaKeysetGeneratorCommand(new StandardJsonConverter()));
 
+$application->add(new Command\OptimizeRsaKeyCommand(new StandardJsonConverter()));
+
 $application->add(new Command\UpdateCommand());
 $application->add(new Command\RollbackCommand());
 

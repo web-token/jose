@@ -26,6 +26,7 @@ final class OctKeysetGeneratorCommand extends AbstractGeneratorCommand
      */
     protected function configure()
     {
+        parent::configure();
         $this
             ->setName('keyset:generate:oct')
             ->setDescription('Generate a key set with octet keys (JWK format)')

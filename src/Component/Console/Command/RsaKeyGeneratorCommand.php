@@ -25,6 +25,7 @@ final class RsaKeyGeneratorCommand extends AbstractGeneratorCommand
      */
     protected function configure()
     {
+        parent::configure();
         $this
             ->setName('key:generate:rsa')
             ->setDescription('Generate a RSA key (JWK format)')
