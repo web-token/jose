@@ -24,10 +24,14 @@ final class JWKAnalyzerManager
 
     /**
      * @param JWKAnalyzerInterface $analyzer
+     *
+     * @return JWKAnalyzerManager
      */
-    public function add(JWKAnalyzerInterface $analyzer)
+    public function add(JWKAnalyzerInterface $analyzer): JWKAnalyzerManager
     {
         $this->analyzers[] = $analyzer;
+
+        return $this;
     }
 
     /**

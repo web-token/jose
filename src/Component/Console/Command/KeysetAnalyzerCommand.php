@@ -11,22 +11,48 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Bundle\Console\Command;
+namespace Jose\Component\Console\Command;
 
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\KeyAnalyzer\JWKAnalyzerManager;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class KeysetAnalyzerCommand extends ContainerAwareCommand
+final class KeysetAnalyzerCommand extends Command
 {
+    /**
+     * @var JWKAnalyzerManager
+     */
+    private $analyzerManager;
+
+    /**
+     * @var JsonConverterInterface
+     */
+    private $jsonConverter;
+
+    /**
+     * KeyAnalyzerCommand constructor.
+     *
+     * @param JWKAnalyzerManager     $analyzerManager
+     * @param JsonConverterInterface $jsonConverter
+     * @param string|null            $name
+     */
+    public function __construct(JWKAnalyzerManager $analyzerManager, JsonConverterInterface $jsonConverter, string $name = null)
+    {
+        parent::__construct($name);
+        $this->analyzerManager = $analyzerManager;
+        $this->jsonConverter = $jsonConverter;
+    }
+
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
         $this
             ->setName('keyset:analyze')
             ->setDescription('JWKSet quality analyzer.')
@@ -40,8 +66,6 @@ final class KeysetAnalyzerCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var JWKAnalyzerManager $analyzerManager */
-        $analyzerManager = $this->getContainer()->get(JWKAnalyzerManager::class);
         $jwkset = $this->getKeyset($input);
 
         $privateKeys = 0;
@@ -51,7 +75,7 @@ final class KeysetAnalyzerCommand extends ContainerAwareCommand
 
         foreach ($jwkset as $kid => $jwk) {
             $output->writeln(sprintf('Analysing key with index/kid "%s"', $kid));
-            $messages = $analyzerManager->analyze($jwk);
+            $messages = $this->analyzerManager->analyze($jwk);
             if (!empty($messages)) {
                 foreach ($messages as $message) {
                     $output->writeln('    '.$message);
@@ -100,16 +124,11 @@ final class KeysetAnalyzerCommand extends ContainerAwareCommand
     private function getKeyset(InputInterface $input): JWKSet
     {
         $jwkset = $input->getArgument('jwkset');
-        $json = json_decode($jwkset, true);
+        $json = $this->jsonConverter->decode($jwkset);
         if (is_array($json)) {
             return JWKSet::createFromKeyData($json);
-        } elseif ($this->getContainer()->has($jwkset)) {
-            $id = $this->getContainer()->get($jwkset);
-            if ($id instanceof JWKSet) {
-                return $id;
-            }
         }
 
-        throw new \InvalidArgumentException('The argument must be a valid JWKSet or a service ID to a JWKSet.');
+        throw new \InvalidArgumentException('The argument must be a valid JWKSet.');
     }
 }

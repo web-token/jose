@@ -47,8 +47,10 @@ final class ClaimCheckerManager
 
     /**
      * @param ClaimCheckerInterface $checker
+     *
+     * @return ClaimCheckerManager
      */
-    private function add(ClaimCheckerInterface $checker)
+    private function add(ClaimCheckerInterface $checker): ClaimCheckerManager
     {
         $claim = $checker->supportedClaim();
         if (array_key_exists($claim, $this->checkers)) {
@@ -56,6 +58,8 @@ final class ClaimCheckerManager
         }
 
         $this->checkers[$claim] = $checker;
+
+        return $this;
     }
 
     /**

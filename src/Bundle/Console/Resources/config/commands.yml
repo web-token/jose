@@ -51,3 +51,19 @@ services:
     Jose\Component\Console\Command\OptimizeRsaKeyCommand:
         tags:
             - {name: 'console.command'}
+
+    Jose\Component\Console\Command\JKULoaderCommand:
+        tags:
+            - {name: 'console.command'}
+
+    Jose\Component\Console\Command\X5ULoaderCommand:
+        tags:
+            - {name: 'console.command'}
+
+    Jose\Component\Console\Command\KeyAnalyzerCommand:
+        tags:
+            - {name: 'console.command'}
+
+    Jose\Component\Console\Command\KeysetAnalyzerCommand:
+        tags:
+            - {name: 'console.command'}

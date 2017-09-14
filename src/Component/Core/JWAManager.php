@@ -79,8 +79,10 @@ final class JWAManager
 
     /**
      * @param JWAInterface $algorithm
+     *
+     * @return JWAManager
      */
-    private function add(JWAInterface $algorithm)
+    private function add(JWAInterface $algorithm): JWAManager
     {
         $name = $algorithm->name();
         if ($this->has($name)) {
@@ -88,5 +90,7 @@ final class JWAManager
         }
 
         $this->algorithms[$name] = $algorithm;
+
+        return $this;
     }
 }

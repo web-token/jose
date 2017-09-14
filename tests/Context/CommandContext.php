@@ -178,6 +178,8 @@ final class CommandContext implements Context
     {
         $output = $this->getCommandOutput();
         if ($result->getRaw() !== $output) {
+            dump($output);
+            dump($this->command_exception->getMessage());
             throw new \InvalidArgumentException(sprintf('The output of the command is not the same as expected. I got "%".', $output));
         }
     }

@@ -11,22 +11,48 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Bundle\Console\Command;
+namespace Jose\Component\Console\Command;
 
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWK;
 use Jose\Component\KeyManagement\KeyAnalyzer\JWKAnalyzerManager;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class KeyAnalyzerCommand extends ContainerAwareCommand
+final class KeyAnalyzerCommand extends Command
 {
+    /**
+     * @var JWKAnalyzerManager
+     */
+    private $analyzerManager;
+
+    /**
+     * @var JsonConverterInterface
+     */
+    private $jsonConverter;
+
+    /**
+     * KeyAnalyzerCommand constructor.
+     *
+     * @param JWKAnalyzerManager     $analyzerManager
+     * @param JsonConverterInterface $jsonConverter
+     * @param string|null            $name
+     */
+    public function __construct(JWKAnalyzerManager $analyzerManager, JsonConverterInterface $jsonConverter, string $name = null)
+    {
+        parent::__construct($name);
+        $this->analyzerManager = $analyzerManager;
+        $this->jsonConverter = $jsonConverter;
+    }
+
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
         $this
             ->setName('key:analyze')
             ->setDescription('JWK quality analyzer.')
@@ -40,11 +66,9 @@ final class KeyAnalyzerCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var JWKAnalyzerManager $analyzerManager */
-        $analyzerManager = $this->getContainer()->get(JWKAnalyzerManager::class);
         $jwk = $this->getKey($input);
 
-        $result = $analyzerManager->analyze($jwk);
+        $result = $this->analyzerManager->analyze($jwk);
         foreach ($result as $message) {
             $output->writeln($message);
         }
@@ -57,17 +81,12 @@ final class KeyAnalyzerCommand extends ContainerAwareCommand
      */
     private function getKey(InputInterface $input): JWK
     {
-        $jwkset = $input->getArgument('jwk');
-        $json = json_decode($jwkset, true);
+        $jwk = $input->getArgument('jwk');
+        $json = $this->jsonConverter->decode($jwk);
         if (is_array($json)) {
             return JWK::create($json);
-        } elseif ($this->getContainer()->has($jwkset)) {
-            $id = $this->getContainer()->get($jwkset);
-            if ($id instanceof JWK) {
-                return $id;
-            }
         }
 
-        throw new \InvalidArgumentException('The argument must be a valid JWKSet or a service ID to a JWKSet.');
+        throw new \InvalidArgumentException('The argument must be a valid JWKSet.');
     }
 }

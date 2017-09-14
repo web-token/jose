@@ -6,22 +6,44 @@ require __DIR__.'/../vendor/autoload.php';
 use Jose\Component\Console\Command;
 use Symfony\Component\Console\Application;
 use Jose\Component\Core\Converter\StandardJsonConverter;
+use Jose\Component\KeyManagement\KeyAnalyzer;
+//use Jose\Component\KeyManagement\X5UFactory;
+//use Jose\Component\KeyManagement\JKUFactory;
+use Jose\Component\KeyManagement\KeyAnalyzer\JWKAnalyzerManager;
+use Http\Adapter\Guzzle6\Client;
+
+$jsonConverter = new StandardJsonConverter();
+$httpClient = new Client();
+//$requestFactory =
+$jwkAnalyzerManager = new JWKAnalyzerManager();
+$jwkAnalyzerManager
+    ->add(new KeyAnalyzer\AlgorithmAnalyzer())
+    ->add(new KeyAnalyzer\UsageAnalyzer())
+    ->add(new KeyAnalyzer\KeyIdentifierAnalyzer())
+    ->add(new KeyAnalyzer\NoneAnalyzer())
+    ->add(new KeyAnalyzer\OctAnalyzer())
+    ->add(new KeyAnalyzer\RsaAnalyzer())
+;
 
 $application = new Application('Jose', '@package_version@');
-$application->add(new Command\OctKeyGeneratorCommand(new StandardJsonConverter()));
-$application->add(new Command\RsaKeyGeneratorCommand(new StandardJsonConverter()));
-$application->add(new Command\EcKeyGeneratorCommand(new StandardJsonConverter()));
-$application->add(new Command\OkpKeyGeneratorCommand(new StandardJsonConverter()));
-$application->add(new Command\KeyFileLoaderCommand(new StandardJsonConverter()));
-$application->add(new Command\P12CertificateLoaderCommand(new StandardJsonConverter()));
-$application->add(new Command\X509CertificateLoaderCommand(new StandardJsonConverter()));
+$application->add(new Command\OctKeyGeneratorCommand($jsonConverter));
+$application->add(new Command\RsaKeyGeneratorCommand($jsonConverter));
+$application->add(new Command\EcKeyGeneratorCommand($jsonConverter));
+$application->add(new Command\OkpKeyGeneratorCommand($jsonConverter));
+$application->add(new Command\KeyFileLoaderCommand($jsonConverter));
+$application->add(new Command\P12CertificateLoaderCommand($jsonConverter));
+$application->add(new Command\X509CertificateLoaderCommand($jsonConverter));
 
-$application->add(new Command\EcKeysetGeneratorCommand(new StandardJsonConverter()));
-$application->add(new Command\OkpKeysetGeneratorCommand(new StandardJsonConverter()));
-$application->add(new Command\OctKeysetGeneratorCommand(new StandardJsonConverter()));
-$application->add(new Command\RsaKeysetGeneratorCommand(new StandardJsonConverter()));
+$application->add(new Command\EcKeysetGeneratorCommand($jsonConverter));
+$application->add(new Command\OkpKeysetGeneratorCommand($jsonConverter));
+$application->add(new Command\OctKeysetGeneratorCommand($jsonConverter));
+$application->add(new Command\RsaKeysetGeneratorCommand($jsonConverter));
 
-$application->add(new Command\OptimizeRsaKeyCommand(new StandardJsonConverter()));
+$application->add(new Command\OptimizeRsaKeyCommand($jsonConverter));
+$application->add(new Command\KeyAnalyzerCommand($jwkAnalyzerManager, $jsonConverter));
+$application->add(new Command\KeysetAnalyzerCommand($jwkAnalyzerManager, $jsonConverter));
+//$application->add(new Command\X5ULoaderCommand(new X5UFactory($jsonConverter, $httpClient, $requestFactory), $jsonConverter));
+//$application->add(new Command\JKULoaderCommand(new JKUFactory($jsonConverter, $httpClient, $requestFactory), $jsonConverter));
 
 $application->add(new Command\UpdateCommand());
 $application->add(new Command\RollbackCommand());
