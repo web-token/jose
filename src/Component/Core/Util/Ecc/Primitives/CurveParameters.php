@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Component\Core\Util\Ecc\Primitives;
 
 final class CurveParameters
@@ -12,26 +21,24 @@ final class CurveParameters
     private $a;
 
     /**
-     *
      * @var \GMP
      */
     private $b;
 
     /**
-     *
      * @var \GMP
      */
     private $prime;
 
     /**
-     * Binary length of keys associated with these curve parameters
+     * Binary length of keys associated with these curve parameters.
      *
      * @var int
      */
     private $size;
 
     /**
-     * @param int $size
+     * @param int  $size
      * @param \GMP $prime
      * @param \GMP $a
      * @param \GMP $b

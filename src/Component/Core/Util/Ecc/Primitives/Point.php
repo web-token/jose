@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Component\Core\Util\Ecc\Primitives;
 
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
@@ -7,7 +16,7 @@ use Jose\Component\Core\Util\Ecc\Math\ModularArithmetic;
 
 /**
  * *********************************************************************
- * Copyright (C) 2012 Matyas Danter
+ * Copyright (C) 2012 Matyas Danter.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -74,34 +83,34 @@ class Point
     private $infinity = false;
 
     /**
-     * Initialize a new instance
+     * Initialize a new instance.
      *
-     * @param CurveFp     $curve
-     * @param \GMP        $x
-     * @param \GMP        $y
-     * @param \GMP        $order
-     * @param bool                 $infinity
+     * @param CurveFp $curve
+     * @param \GMP    $x
+     * @param \GMP    $y
+     * @param \GMP    $order
+     * @param bool    $infinity
      *
-     * @throws \RuntimeException    when either the curve does not contain the given coordinates or
-     *                                      when order is not null and P(x, y) * order is not equal to infinity.
+     * @throws \RuntimeException when either the curve does not contain the given coordinates or
+     *                           when order is not null and P(x, y) * order is not equal to infinity
      */
     public function __construct(CurveFp $curve, \GMP $x, \GMP $y, ?\GMP $order = null, bool $infinity = false)
     {
-        $this->adapter    = new GmpMath();
+        $this->adapter = new GmpMath();
         $this->modAdapter = $curve->getModAdapter();
-        $this->curve      = $curve;
-        $this->x          = $x;
-        $this->y          = $y;
-        $this->order      = null === $order ? gmp_init(0, 10) : $order;
-        $this->infinity   = (bool) $infinity;
-        if (! $infinity && ! $curve->contains($x, $y)) {
-            throw new \RuntimeException("Curve " . $curve . " does not contain point (" . $this->adapter->toString($x) . ", " . $this->adapter->toString($y) . ")");
+        $this->curve = $curve;
+        $this->x = $x;
+        $this->y = $y;
+        $this->order = null === $order ? gmp_init(0, 10) : $order;
+        $this->infinity = (bool) $infinity;
+        if (!$infinity && !$curve->contains($x, $y)) {
+            throw new \RuntimeException('Curve '.$curve.' does not contain point ('.$this->adapter->toString($x).', '.$this->adapter->toString($y).')');
         }
 
         if (!is_null($order)) {
             $mul = $this->mul($order);
             if (!$mul->isInfinity()) {
-                throw new \RuntimeException("SELF * ORDER MUST EQUAL INFINITY. (" . (string)$mul . " found instead)");
+                throw new \RuntimeException('SELF * ORDER MUST EQUAL INFINITY. ('.(string) $mul.' found instead)');
             }
         }
     }
@@ -153,8 +162,8 @@ class Point
      */
     public function add(Point $addend): Point
     {
-        if (! $this->curve->equals($addend->getCurve())) {
-            throw new \RuntimeException("The Elliptic Curves do not match.");
+        if (!$this->curve->equals($addend->getCurve())) {
+            throw new \RuntimeException('The Elliptic Curves do not match.');
         }
 
         if ($addend->isInfinity()) {
@@ -216,6 +225,7 @@ class Point
 
     /**
      * @param Point $other
+     *
      * @return bool
      */
     public function equals(Point $other): bool
@@ -247,13 +257,13 @@ class Point
         /** @var Point[] $r */
         $r = [
             $this->curve->getInfinity(),
-            clone $this
+            clone $this,
         ];
 
         $k = $this->curve->getSize();
         $n = str_pad($this->adapter->baseConvert($this->adapter->toString($n), 10, 2), $k, '0', STR_PAD_LEFT);
 
-        for ($i = 0; $i < $k; $i++) {
+        for ($i = 0; $i < $k; ++$i) {
             $j = $n[$i];
 
             $this->cswap($r[0], $r[1], $j ^ 1);
@@ -272,7 +282,7 @@ class Point
     /**
      * @param Point $a
      * @param Point $b
-     * @param int $cond
+     * @param int   $cond
      */
     private function cswap(Point $a, Point $b, int $cond)
     {
@@ -287,7 +297,7 @@ class Point
      * @param $b
      * @param $cond
      */
-    private function cswapValue(& $a, & $b, int $cond)
+    private function cswapValue(&$a, &$b, int $cond)
     {
         $isGMP = is_object($a) && $a instanceof \GMP;
 
@@ -315,12 +325,9 @@ class Point
         $b = $isGMP ? $sb : (bool) gmp_strval($sb, 10);
     }
 
-    /**
-     *
-     */
     private function validate()
     {
-        if (! $this->infinity && ! $this->curve->contains($this->x, $this->y)) {
+        if (!$this->infinity && !$this->curve->contains($this->x, $this->y)) {
             throw new \RuntimeException('Invalid point');
         }
     }

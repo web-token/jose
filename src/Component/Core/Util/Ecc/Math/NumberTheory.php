@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Component\Core\Util\Ecc\Math;
 
 /***********************************************************************
@@ -25,7 +34,7 @@ namespace Jose\Component\Core\Util\Ecc\Math;
      ************************************************************************/
 
 /**
- * Implementation of some number theoretic algorithms
+ * Implementation of some number theoretic algorithms.
  *
  * @author Matyas Danter
  */
@@ -64,7 +73,7 @@ final class NumberTheory
             $zero = gmp_init(0);
             while (count($poly) >= $count_polymod) {
                 if (!$adapter->equals(end($poly), $zero)) {
-                    for ($i = 2; $i < $count_polymod + 1; $i++) {
+                    for ($i = 2; $i < $count_polymod + 1; ++$i) {
                         $poly[count($poly) - $i] =
                             $adapter->mod(
                                 $adapter->sub(
@@ -92,7 +101,8 @@ final class NumberTheory
      * @param \GMP[] $m1
      * @param \GMP[] $m2
      * @param \GMP[] $polymod
-     * @param \GMP $p
+     * @param \GMP   $p
+     *
      * @return array
      */
     public function polynomialMultiplyMod(array $m1, array $m2, array $polymod, \GMP $p): array
@@ -102,8 +112,8 @@ final class NumberTheory
         $cm2 = count($m2);
         $zero = gmp_init(0, 10);
 
-        for ($i = 0; $i < $cm1; $i++) {
-            for ($j = 0; $j < $cm2; $j++) {
+        for ($i = 0; $i < $cm1; ++$i) {
+            for ($j = 0; $j < $cm2; ++$j) {
                 $index = $i + $j;
                 if (!isset($prod[$index])) {
                     $prod[$index] = $zero;
@@ -127,9 +137,10 @@ final class NumberTheory
 
     /**
      * @param array $base
-     * @param \GMP $exponent
+     * @param \GMP  $exponent
      * @param array $polymod
-     * @param \GMP $p
+     * @param \GMP  $p
+     *
      * @return array|int
      */
     public function polynomialPowMod($base, \GMP $exponent, $polymod, \GMP $p)
@@ -166,12 +177,12 @@ final class NumberTheory
         }
 
         throw new \InvalidArgumentException('Unable to calculate polynomialPowMod');
-
     }
 
     /**
      * @param \GMP $a
      * @param \GMP $p
+     *
      * @return \GMP
      */
     public function squareRootModP(\GMP $a, \GMP $p)
@@ -195,7 +206,7 @@ final class NumberTheory
 
             $jac = $math->jacobi($a, $p);
             if ($jac == -1) {
-                throw new \LogicException($math->toString($a)." has no square root modulo ".$math->toString($p));
+                throw new \LogicException($math->toString($a).' has no square root modulo '.$math->toString($p));
             }
 
             if ($math->equals($math->mod($p, $four), gmp_init(3, 10))) {
@@ -265,6 +276,5 @@ final class NumberTheory
         }
 
         throw new \InvalidArgumentException('Unable to calculate square root mod p!');
-
     }
 }
