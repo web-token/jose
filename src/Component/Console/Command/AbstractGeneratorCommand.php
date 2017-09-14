@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Jose\Component\Console\Command;
 
 use Jose\Component\Core\JWKFactory;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -35,12 +34,8 @@ abstract class AbstractGeneratorCommand extends AbstractObjectOutputCommand
     {
         parent::configure();
         $this
-            ->setDefinition(
-                new InputDefinition([
-                    new InputOption('use', 'u', InputOption::VALUE_OPTIONAL, 'Usage of the key. Must be either "sig" or "enc".'),
-                    new InputOption('alg', 'a', InputOption::VALUE_OPTIONAL, 'Algorithm for the key.'),
-                ])
-            )
+            ->addOption('use', 'u', InputOption::VALUE_OPTIONAL, 'Usage of the key. Must be either "sig" or "enc".')
+            ->addOption('alg', 'a', InputOption::VALUE_OPTIONAL, 'Algorithm for the key.')
         ;
     }
 

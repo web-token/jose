@@ -48,7 +48,7 @@ final class ECKey
     private function __construct(JWK $data)
     {
         $this->loadJWK($data->all());
-        $this->private = isset($this->values['d']);
+        $this->private = array_key_exists('d', $this->values);
     }
 
     /**
@@ -334,7 +334,6 @@ final class ECKey
 
     private function initPublicKey()
     {
-        $this->sequence = new Sequence();
         $oid_sequence = new Sequence();
         $oid_sequence->addChild(new ObjectIdentifier('1.2.840.10045.2.1'));
         $oid_sequence->addChild(new ObjectIdentifier($this->getOID($this->values['crv'])));
@@ -348,7 +347,6 @@ final class ECKey
 
     private function initPrivateKey()
     {
-        $this->sequence = new Sequence();
         $this->sequence->addChild(new Integer(1));
         $this->sequence->addChild(new OctetString(bin2hex(Base64Url::decode($this->values['d']))));
 
@@ -368,6 +366,7 @@ final class ECKey
     public function toPEM(): string
     {
         if (null === $this->sequence) {
+            $this->sequence = new Sequence();
             if (array_key_exists('d', $this->values)) {
                 $this->initPrivateKey();
             } else {

@@ -45,6 +45,8 @@ $application->add(new Command\KeysetAnalyzerCommand($jwkAnalyzerManager, $jsonCo
 //$application->add(new Command\X5ULoaderCommand(new X5UFactory($jsonConverter, $httpClient, $requestFactory), $jsonConverter));
 //$application->add(new Command\JKULoaderCommand(new JKUFactory($jsonConverter, $httpClient, $requestFactory), $jsonConverter));
 
+$application->add(new Command\PemConverterCommand($jsonConverter));
+
 $application->add(new Command\UpdateCommand());
 $application->add(new Command\RollbackCommand());
 

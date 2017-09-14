@@ -14,10 +14,26 @@ declare(strict_types=1);
 namespace Jose\Component\Core\Util;
 
 use Base64Url\Base64Url;
+use FG\ASN1\Universal\BitString;
+use FG\ASN1\Universal\Integer;
+use FG\ASN1\Universal\NullObject;
+use FG\ASN1\Universal\ObjectIdentifier;
+use FG\ASN1\Universal\OctetString;
+use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
 
 final class RSAKey
 {
+    /**
+     * @var Sequence
+     */
+    private $sequence;
+
+    /**
+     * @var bool
+     */
+    private $private = false;
+
     /**
      * @var array
      */
@@ -65,6 +81,7 @@ final class RSAKey
     {
         $this->loadJWK($data->all());
         $this->populateBigIntegers();
+        $this->private = array_key_exists('d', $this->values);
     }
 
     /**
@@ -228,5 +245,82 @@ final class RSAKey
     private function convertBase64StringToBigInteger(string $value): BigInteger
     {
         return BigInteger::createFromBinaryString(Base64Url::decode($value));
+    }
+
+    /**
+     * @return string
+     */
+    public function toPEM(): string
+    {
+        if (null === $this->sequence) {
+            $this->sequence = new Sequence();
+            if (array_key_exists('d', $this->values)) {
+                $this->initPrivateKey();
+            } else {
+                $this->initPublicKey();
+            }
+        }
+        $result = '-----BEGIN '.($this->private ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
+        $result .= chunk_split(base64_encode($this->sequence->getBinary()), 64, PHP_EOL);
+        $result .= '-----END '.($this->private ? 'RSA PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
+
+        return $result;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function initPublicKey()
+    {
+        $oid_sequence = new Sequence();
+        $oid_sequence->addChild(new ObjectIdentifier('1.2.840.113549.1.1.1'));
+        $oid_sequence->addChild(new NullObject());
+        $this->sequence->addChild($oid_sequence);
+        $n = new Integer($this->fromBase64ToInteger($this->values['n']));
+        $e = new Integer($this->fromBase64ToInteger($this->values['e']));
+        $key_sequence = new Sequence();
+        $key_sequence->addChild($n);
+        $key_sequence->addChild($e);
+        $key_bit_string = new BitString(bin2hex($key_sequence->getBinary()));
+        $this->sequence->addChild($key_bit_string);
+    }
+    private function initPrivateKey()
+    {
+        $this->sequence->addChild(new Integer(0));
+        $oid_sequence = new Sequence();
+        $oid_sequence->addChild(new ObjectIdentifier('1.2.840.113549.1.1.1'));
+        $oid_sequence->addChild(new NullObject());
+        $this->sequence->addChild($oid_sequence);
+        $v = new Integer(0);
+        $n = new Integer($this->fromBase64ToInteger($this->values['n']));
+        $e = new Integer($this->fromBase64ToInteger($this->values['e']));
+        $d = new Integer($this->fromBase64ToInteger($this->values['d']));
+        $p = new Integer($this->fromBase64ToInteger($this->values['p']));
+        $q = new Integer($this->fromBase64ToInteger($this->values['q']));
+        $dp = array_key_exists('dp', $this->values) ? new Integer($this->fromBase64ToInteger($this->values['dp'])) : new Integer(0);
+        $dq = array_key_exists('dq', $this->values) ? new Integer($this->fromBase64ToInteger($this->values['dq'])) : new Integer(0);
+        $qi = array_key_exists('qi', $this->values) ? new Integer($this->fromBase64ToInteger($this->values['qi'])) : new Integer(0);
+        $key_sequence = new Sequence();
+        $key_sequence->addChild($v);
+        $key_sequence->addChild($n);
+        $key_sequence->addChild($e);
+        $key_sequence->addChild($d);
+        $key_sequence->addChild($p);
+        $key_sequence->addChild($q);
+        $key_sequence->addChild($dp);
+        $key_sequence->addChild($dq);
+        $key_sequence->addChild($qi);
+        $key_octet_string = new OctetString(bin2hex($key_sequence->getBinary()));
+        $this->sequence->addChild($key_octet_string);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    private function fromBase64ToInteger($value)
+    {
+        return gmp_strval(gmp_init(current(unpack('H*', Base64Url::decode($value))), 16), 10);
     }
 }

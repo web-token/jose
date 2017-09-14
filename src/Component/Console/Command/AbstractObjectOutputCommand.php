@@ -15,7 +15,6 @@ namespace Jose\Component\Console\Command;
 
 use Jose\Component\Core\Converter\JsonConverterInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,11 +44,7 @@ abstract class AbstractObjectOutputCommand extends Command
     protected function configure()
     {
         $this
-            ->setDefinition(
-                new InputDefinition([
-                    new InputOption('out', 'o', InputOption::VALUE_OPTIONAL, 'File where to save the key. Must be a valid and writable file name.'),
-                ])
-            )
+            ->addOption('out', 'o', InputOption::VALUE_OPTIONAL, 'File where to save the key. Must be a valid and writable file name.')
         ;
     }
 
