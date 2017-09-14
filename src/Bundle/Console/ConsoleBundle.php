@@ -13,8 +13,19 @@ declare(strict_types=1);
 
 namespace Jose\Bundle\Console;
 
+use Jose\Bundle\Console\DependencyInjection\Compiler\KeyAnalyzerCompilerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 final class ConsoleBundle extends Bundle
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new KeyAnalyzerCompilerPass());
+    }
 }

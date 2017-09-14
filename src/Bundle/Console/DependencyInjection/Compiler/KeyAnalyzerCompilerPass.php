@@ -11,7 +11,7 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Bundle\KeyManagement\DependencyInjection\Compiler;
+namespace Jose\Bundle\Console\DependencyInjection\Compiler;
 
 use Jose\Component\KeyManagement\KeyAnalyzer\JWKAnalyzerManager;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

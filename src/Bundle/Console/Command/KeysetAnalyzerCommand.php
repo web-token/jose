@@ -11,7 +11,7 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Bundle\KeyManagement\Command;
+namespace Jose\Bundle\Console\Command;
 
 use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\KeyAnalyzer\JWKAnalyzerManager;
