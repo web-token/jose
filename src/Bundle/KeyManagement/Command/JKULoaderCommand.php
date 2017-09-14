@@ -51,7 +51,7 @@ final class JKULoaderCommand extends AbstractGeneratorCommand implements Contain
         $url = $input->getArgument('url');
 
         $result = $jkuFactory->loadFromUrl($url);
-        $this->prepareOutput($input, $output, json_encode($result));
+        $this->prepareOutput($input, $output, $result);
     }
 
     /**

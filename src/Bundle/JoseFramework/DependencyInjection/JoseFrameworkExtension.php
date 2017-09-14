@@ -76,8 +76,8 @@ final class JoseFrameworkExtension extends Extension implements PrependExtension
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        if (true === $config['use_default_encoder']) {
-            $loader->load('default_encoder.yml');
+        if (true === $config['use_default_json_converter']) {
+            $loader->load('json_converter.yml');
         }
 
         foreach ($this->serviceSources as $serviceSource) {

@@ -116,13 +116,11 @@ final class Verifier
             }
 
             $payload = empty($jws->getPayload()) ? $detached_payload : $jws->getPayload();
-            $payload = is_string($payload) ? $payload : json_encode($payload);
 
             return sprintf('%s.%s', $encoded_protected_headers, Base64Url::encode($payload));
         }
 
         $payload = empty($jws->getPayload()) ? $detached_payload : $jws->getPayload();
-        $payload = is_string($payload) ? $payload : json_encode($payload);
 
         return sprintf('%s.%s', $encoded_protected_headers, $payload);
     }

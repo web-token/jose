@@ -13,10 +13,26 @@ declare(strict_types=1);
 
 namespace Jose\Bundle\JoseFramework\Controller;
 
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWKSet;
 
 final class JWKSetControllerFactory
 {
+    /**
+     * @var JsonConverterInterface
+     */
+    private $jsonConverter;
+
+    /**
+     * JWKSetControllerFactory constructor.
+     *
+     * @param JsonConverterInterface $jsonConverter
+     */
+    public function __construct(JsonConverterInterface $jsonConverter)
+    {
+        $this->jsonConverter = $jsonConverter;
+    }
+
     /**
      * @param JWKSet $jwkset
      * @param int    $maxAge
@@ -25,6 +41,6 @@ final class JWKSetControllerFactory
      */
     public function create(JWKSet $jwkset, int $maxAge): JWKSetController
     {
-        return new JWKSetController($jwkset, $maxAge);
+        return new JWKSetController($this->jsonConverter->encode($jwkset), $maxAge);
     }
 }

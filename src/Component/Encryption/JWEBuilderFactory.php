@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption;
 
-use Jose\Component\Core\Encoder\PayloadEncoderInterface;
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWAManagerFactory;
 use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
 
 final class JWEBuilderFactory
 {
     /**
-     * @var PayloadEncoderInterface
+     * @var JsonConverterInterface
      */
     private $payloadEncoder;
 
@@ -37,11 +37,11 @@ final class JWEBuilderFactory
     /**
      * JWEBuilderFactory constructor.
      *
-     * @param PayloadEncoderInterface         $payloadEncoder
+     * @param JsonConverterInterface         $payloadEncoder
      * @param JWAManagerFactory               $algorithmManagerFactory
      * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
      */
-    public function __construct(PayloadEncoderInterface $payloadEncoder, JWAManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory)
+    public function __construct(JsonConverterInterface $payloadEncoder, JWAManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory)
     {
         $this->payloadEncoder = $payloadEncoder;
         $this->algorithmManagerFactory = $algorithmManagerFactory;

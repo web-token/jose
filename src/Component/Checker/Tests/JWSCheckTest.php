@@ -25,6 +25,7 @@ use Jose\Component\Checker\NotBeforeChecker;
 use Jose\Component\Checker\Tests\Stub\IssuerChecker;
 use Jose\Component\Checker\Tests\Stub\JtiChecker;
 use Jose\Component\Checker\Tests\Stub\SubjectChecker;
+use Jose\Component\Core\Converter\StandardJsonConverter;
 use Jose\Component\Signature\JWS;
 use PHPUnit\Framework\TestCase;
 
@@ -36,7 +37,7 @@ final class JWSCheckTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The header contains duplicated entries: ["alg"].
+     * @expectedExceptionMessage The header contains duplicated entries: alg.
      */
     public function testDuplicatedHeaderParameters()
     {
@@ -130,7 +131,7 @@ final class JWSCheckTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage One or more headers are marked as critical, but they are missing or have not been checked: ["iss"].
+     * @expectedExceptionMessage One or more headers are marked as critical, but they are missing or have not been checked: iss.
      */
     public function testJWSHasCriticalClaimsNotSatisfied()
     {
@@ -240,7 +241,7 @@ final class JWSCheckTest extends TestCase
     private function getClaimCheckerManagerFactory(): ClaimCheckerManagerFactory
     {
         if (null === $this->claim_checker_manager_factory) {
-            $this->claim_checker_manager_factory = new ClaimCheckerManagerFactory();
+            $this->claim_checker_manager_factory = new ClaimCheckerManagerFactory(new StandardJsonConverter());
             $this->claim_checker_manager_factory->add('exp', new ExpirationTimeChecker());
             $this->claim_checker_manager_factory->add('iat', new IssuedAtChecker());
             $this->claim_checker_manager_factory->add('nbf', new NotBeforeChecker());

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Console\Command;
 
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWKFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -22,6 +23,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractGeneratorCommand extends Command
 {
+    private $jsonConverter;
+
+    /**
+     * AbstractGeneratorCommand constructor.
+     *
+     * @param JsonConverterInterface $jsonConverter
+     * @param null $name
+     */
+    public function __construct(JsonConverterInterface $jsonConverter, $name = null)
+    {
+        $this->jsonConverter = $jsonConverter;
+        parent::__construct($name);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -67,12 +82,13 @@ abstract class AbstractGeneratorCommand extends Command
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param string          $json
+     * @param InputInterface    $input
+     * @param OutputInterface   $output
+     * @param \JsonSerializable $json
      */
-    protected function prepareOutput(InputInterface $input, OutputInterface $output, string $json)
+    protected function prepareOutput(InputInterface $input, OutputInterface $output, \JsonSerializable $json)
     {
+        $json = $this->jsonConverter->encode($json);
         $file = $input->getOption('out');
         if (null !== $file) {
             file_put_contents($file, $json, LOCK_EX);

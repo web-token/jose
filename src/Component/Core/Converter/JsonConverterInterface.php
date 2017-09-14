@@ -11,12 +11,12 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Core\Encoder;
+namespace Jose\Component\Core\Converter;
 
 /**
- * Interface PayloadEncoderInterface
+ * Interface JsonConverterInterface
  */
-interface PayloadEncoderInterface
+interface JsonConverterInterface
 {
     /**
      * @param $payload

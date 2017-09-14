@@ -127,7 +127,7 @@ final class HeaderCheckerManager
     {
         $inter = array_intersect_key($header1, $header2);
         if (!empty($inter)) {
-            throw new \InvalidArgumentException(sprintf('The header contains duplicated entries: %s.', json_encode(array_keys($inter))));
+            throw new \InvalidArgumentException(sprintf('The header contains duplicated entries: %s.', implode(', ', array_keys($inter))));
         }
     }
 
@@ -163,7 +163,7 @@ final class HeaderCheckerManager
             }
             $diff = array_diff($protected['crit'], $checkedHeaders);
             if (!empty($diff)) {
-                throw new \InvalidArgumentException(sprintf('One or more headers are marked as critical, but they are missing or have not been checked: %s.', json_encode(array_values($diff))));
+                throw new \InvalidArgumentException(sprintf('One or more headers are marked as critical, but they are missing or have not been checked: %s.', implode(', ', array_values($diff))));
             }
         } elseif (array_key_exists('crit', $headers)) {
             throw new \InvalidArgumentException('The header parameter "crit" must be protected.');

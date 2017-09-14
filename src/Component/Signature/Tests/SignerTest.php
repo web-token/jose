@@ -61,7 +61,7 @@ final class SignerTest extends AbstractSignatureTest
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The header contains duplicated entries: ["foo"].
+     * @expectedExceptionMessage The header contains duplicated entries: foo.
      */
     public function testDuplicatedHeader()
     {

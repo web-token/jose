@@ -75,7 +75,7 @@ final class EncrypterTest extends AbstractEncryptionTest
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The header contains duplicated entries: ["zip"].
+     * @expectedExceptionMessage The header contains duplicated entries: zip.
      */
     public function testDuplicatedHeader()
     {

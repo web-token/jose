@@ -6,5 +6,3 @@ services:
 
     Jose\Component\KeyManagement\JKUFactory: ~
     Jose\Component\KeyManagement\X5UFactory: ~
-    Jose\Bundle\KeyManagement\Service\RequestFactory: ~
-    Http\Adapter\Guzzle6\Client: ~

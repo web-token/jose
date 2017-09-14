@@ -55,9 +55,9 @@ final class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->booleanNode('use_default_encoder')
+                ->booleanNode('use_default_json_converter')
                     ->defaultTrue()
-                    ->info('Encoder used to convert the payload from object to string. If set to false, a service that implements PayloadEncoderInterface must be set.')
+                    ->info('Convert used to encode and decode JSON objects (JWT payloads, keys, key sets...). If set to false, a service that implements JsonConverterInterface must be set.')
                 ->end()
             ->end();
 

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Bundle\KeyManagement\Service;
+namespace Jose\Test\TestBundle\Service;
 
 use GuzzleHttp\Psr7\Request;
 use Http\Message\RequestFactory as Psr7RequestFactory;

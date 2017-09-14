@@ -41,7 +41,6 @@ final class EcKeyGeneratorCommand extends AbstractGeneratorCommand
         $args = $this->getOptions($input);
 
         $jwk = JWKFactory::createECKey($curve, $args);
-        $json = json_encode($jwk);
-        $this->prepareOutput($input, $output, $json);
+        $this->prepareOutput($input, $output, $jwk);
     }
 }

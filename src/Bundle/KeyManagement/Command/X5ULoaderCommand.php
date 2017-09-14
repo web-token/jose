@@ -51,7 +51,7 @@ final class X5ULoaderCommand extends AbstractGeneratorCommand implements Contain
         $url = $input->getArgument('url');
 
         $result = $x5uFactory->loadFromUrl($url);
-        $this->prepareOutput($input, $output, json_encode($result));
+        $this->prepareOutput($input, $output, $result);
     }
 
     /**

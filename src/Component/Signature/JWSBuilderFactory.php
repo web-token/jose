@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature;
 
-use Jose\Component\Core\Encoder\PayloadEncoderInterface;
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWAManagerFactory;
 
 final class JWSBuilderFactory
 {
     /**
-     * @var PayloadEncoderInterface
+     * @var JsonConverterInterface
      */
     private $payloadEncoder;
 
@@ -31,10 +31,10 @@ final class JWSBuilderFactory
     /**
      * JWSBuilderFactory constructor.
      *
-     * @param PayloadEncoderInterface $payloadEncoder
+     * @param JsonConverterInterface $payloadEncoder
      * @param JWAManagerFactory       $signatureAlgorithmManagerFactory
      */
-    public function __construct(PayloadEncoderInterface $payloadEncoder, JWAManagerFactory $signatureAlgorithmManagerFactory)
+    public function __construct(JsonConverterInterface $payloadEncoder, JWAManagerFactory $signatureAlgorithmManagerFactory)
     {
         $this->payloadEncoder = $payloadEncoder;
         $this->signatureAlgorithmManagerFactory = $signatureAlgorithmManagerFactory;

@@ -11,11 +11,11 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Test\TestBundle\Encoder;
+namespace Jose\Test\TestBundle\Converter;
 
-use Jose\Component\Core\Encoder\PayloadEncoderInterface;
+use Jose\Component\Core\Converter\JsonConverterInterface;
 
-final class CustomEncoder implements PayloadEncoderInterface
+final class CustomJsonConverter implements JsonConverterInterface
 {
     /**
      * @var int
@@ -23,7 +23,7 @@ final class CustomEncoder implements PayloadEncoderInterface
     private $options;
 
     /**
-     * CustomEncoder constructor.
+     * CustomJsonConverter constructor.
      */
     public function __construct()
     {

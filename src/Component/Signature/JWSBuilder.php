@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\Encoder\PayloadEncoderInterface;
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\KeyChecker;
@@ -22,9 +22,9 @@ use Jose\Component\Core\Util\KeyChecker;
 final class JWSBuilder
 {
     /**
-     * @var PayloadEncoderInterface
+     * @var JsonConverterInterface
      */
-    private $payloadEncoder;
+    private $jsonConverter;
 
     /**
      * @var string
@@ -49,12 +49,12 @@ final class JWSBuilder
     /**
      * JWSBuilder constructor.
      *
-     * @param PayloadEncoderInterface $payloadEncoder
+     * @param JsonConverterInterface $jsonConverter
      * @param JWAManager              $signatureAlgorithmManager
      */
-    public function __construct(PayloadEncoderInterface $payloadEncoder, JWAManager $signatureAlgorithmManager)
+    public function __construct(JsonConverterInterface $jsonConverter, JWAManager $signatureAlgorithmManager)
     {
-        $this->payloadEncoder = $payloadEncoder;
+        $this->jsonConverter = $jsonConverter;
         $this->signatureAlgorithmManager = $signatureAlgorithmManager;
     }
 
@@ -74,7 +74,7 @@ final class JWSBuilder
      */
     public function withPayload($payload, bool $isPayloadDetached = false): JWSBuilder
     {
-        $payload = is_string($payload) ? $payload : $this->payloadEncoder->encode($payload);
+        $payload = is_string($payload) ? $payload : $this->jsonConverter->encode($payload);
         if (false === mb_detect_encoding($payload, 'UTF-8', true)) {
             throw new \InvalidArgumentException('The payload must be encoded in UTF-8');
         }
@@ -130,7 +130,7 @@ final class JWSBuilder
             $protectedHeaders = $signature['protected_headers'];
             /** @var array $headers */
             $headers = $signature['headers'];
-            $encodedProtectedHeaders = empty($protectedHeaders) ? null : Base64Url::encode(json_encode($protectedHeaders));
+            $encodedProtectedHeaders = empty($protectedHeaders) ? null : Base64Url::encode($this->jsonConverter->encode($protectedHeaders));
             $input = $this->getInputToSign($protectedHeaders, $encodedProtectedHeaders);
 
             $s = $signatureAlgorithm->sign($signatureKey, $input);
@@ -150,7 +150,7 @@ final class JWSBuilder
     {
         $this->checkB64AndCriticalHeader($protectedHeaders);
         if (!array_key_exists('b64', $protectedHeaders) || (array_key_exists('b64', $protectedHeaders) && true === $protectedHeaders['b64'])) {
-            $encodedPayload = Base64Url::encode(is_string($this->payload) ? $this->payload : json_encode($this->payload));
+            $encodedPayload = Base64Url::encode($this->payload);
 
             return sprintf('%s.%s', $encodedProtectedHeaders, $encodedPayload);
         }
@@ -209,7 +209,7 @@ final class JWSBuilder
     {
         $inter = call_user_func_array('array_intersect_key', $headers);
         if (!empty($inter)) {
-            throw new \InvalidArgumentException(sprintf('The header contains duplicated entries: %s.', json_encode(array_keys($inter))));
+            throw new \InvalidArgumentException(sprintf('The header contains duplicated entries: %s.', implode(', ', array_keys($inter))));
         }
     }
 }

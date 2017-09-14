@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker;
 
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWTInterface;
 
 /**
@@ -21,6 +22,11 @@ use Jose\Component\Core\JWTInterface;
 final class ClaimCheckerManager
 {
     /**
+     * @var JsonConverterInterface
+     */
+    private $payloadEncoder;
+
+    /**
      * @var ClaimCheckerInterface[]
      */
     private $checkers = [];
@@ -28,29 +34,19 @@ final class ClaimCheckerManager
     /**
      * ClaimCheckerManager constructor.
      *
+     * @param JsonConverterInterface $payloadEncoder
      * @param ClaimCheckerInterface[] $checkers
      */
-    private function __construct(array $checkers)
+    public function __construct(JsonConverterInterface $payloadEncoder, array $checkers)
     {
+        $this->payloadEncoder = $payloadEncoder;
         foreach ($checkers as $checker) {
             $this->add($checker);
         }
     }
 
     /**
-     * @param ClaimCheckerInterface[] $checkers
-     *
-     * @return ClaimCheckerManager
-     */
-    public static function create(array $checkers): ClaimCheckerManager
-    {
-        return new self($checkers);
-    }
-
-    /**
      * @param ClaimCheckerInterface $checker
-     *
-     * @return ClaimCheckerManager
      */
     private function add(ClaimCheckerInterface $checker)
     {
@@ -67,7 +63,7 @@ final class ClaimCheckerManager
      */
     public function check(JWTInterface $jwt)
     {
-        $claims = json_decode($jwt->getPayload(), true);
+        $claims = $this->payloadEncoder->decode($jwt->getPayload());
         if (!is_array($claims)) {
             throw new \InvalidArgumentException('The payload is does not contain claims.');
         }

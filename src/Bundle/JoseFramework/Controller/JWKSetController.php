@@ -13,13 +13,12 @@ declare(strict_types=1);
 
 namespace Jose\Bundle\JoseFramework\Controller;
 
-use Jose\Component\Core\JWKSet;
 use Symfony\Component\HttpFoundation\Response;
 
 final class JWKSetController
 {
     /**
-     * @var JWKSet
+     * @var string
      */
     private $jwkset;
 
@@ -31,10 +30,10 @@ final class JWKSetController
     /**
      * JWKSetController constructor.
      *
-     * @param JWKSet $jwkset
+     * @param string $jwkset
      * @param int    $maxAge
      */
-    public function __construct(JWKSet $jwkset, int $maxAge)
+    public function __construct(string $jwkset, int $maxAge)
     {
         $this->jwkset = $jwkset;
         $this->maxAge = $maxAge;
@@ -46,7 +45,7 @@ final class JWKSetController
     public function __invoke(): Response
     {
         return new Response(
-            json_encode($this->jwkset),
+            $this->jwkset,
             Response::HTTP_OK,
             [
                 'Content-Type' => 'application/jwk-set+json; charset=UTF-8',

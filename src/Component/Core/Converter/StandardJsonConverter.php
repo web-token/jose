@@ -11,22 +11,17 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Core\Encoder;
+namespace Jose\Component\Core\Converter;
 
 /**
  * Class StandardJsonEncoder
  */
-final class StandardJsonEncoder implements PayloadEncoderInterface
+final class StandardJsonConverter implements JsonConverterInterface
 {
     /**
      * @var int
      */
     private $options;
-
-    /**
-     * @var bool
-     */
-    private $associative;
 
     /**
      * @var int
@@ -38,13 +33,11 @@ final class StandardJsonEncoder implements PayloadEncoderInterface
      * See also json_encode and json_decode parameters.
      *
      * @param int  $options
-     * @param bool $associative
      * @param int  $depth
      */
-    public function __construct(int $options = 0, bool $associative = false, int $depth = 512)
+    public function __construct(int $options = 0, int $depth = 512)
     {
         $this->options = $options;
-        $this->associative = $associative;
         $this->depth = $depth;
     }
 
@@ -61,6 +54,6 @@ final class StandardJsonEncoder implements PayloadEncoderInterface
      */
     public function decode(string $payload)
     {
-        return json_decode($payload,$this->associative, $this->depth, $this->options);
+        return json_decode($payload, true, $this->depth, $this->options);
     }
 }
