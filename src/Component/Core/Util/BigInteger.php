@@ -62,7 +62,7 @@ final class BigInteger
     {
         $value = gmp_init($value, 10);
 
-        return new self($value, 10);
+        return new self($value);
     }
 
     /**
