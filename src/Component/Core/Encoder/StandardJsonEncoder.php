@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Core\Encoder;
 
 /**
- * Class StandardJsonEncoder
+ * Class StandardJsonEncoder.
  */
 final class StandardJsonEncoder implements PayloadEncoderInterface
 {
@@ -61,6 +61,6 @@ final class StandardJsonEncoder implements PayloadEncoderInterface
      */
     public function decode(string $payload)
     {
-        return json_decode($payload,$this->associative, $this->depth, $this->options);
+        return json_decode($payload, $this->associative, $this->depth, $this->options);
     }
 }

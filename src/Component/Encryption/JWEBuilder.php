@@ -91,6 +91,7 @@ final class JWEBuilder
 
     /**
      * JWEBuilder constructor.
+     *
      * @param PayloadEncoderInterface  $payloadEncoder
      * @param JWAManager               $keyEncryptionAlgorithmManager
      * @param JWAManager               $contentEncryptionAlgorithmManager

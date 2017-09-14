@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Core\Encoder;
 
 /**
- * Interface PayloadEncoderInterface
+ * Interface PayloadEncoderInterface.
  */
 interface PayloadEncoderInterface
 {
