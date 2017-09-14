@@ -14,31 +14,25 @@ declare(strict_types=1);
 namespace Jose\Component\KeyManagement;
 
 use Http\Client\HttpClient;
-use Http\Message\RequestFactory;
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWKSet;
+use Jose\Test\TestBundle\Service\RequestFactory;
 
-final class JKUFactory
+final class JKUFactory extends UrlKeySetFactory
 {
-    /**
-     * @var HttpClient
-     */
-    private $client;
+    private $jsonConverter;
 
     /**
-     * @var RequestFactory
-     */
-    private $requestFactory;
-
-    /**
-     * JKUManager constructor.
+     * X5UFactory constructor.
      *
-     * @param HttpClient     $client
+     * @param JsonConverterInterface $jsonConverter
+     * @param HttpClient $client
      * @param RequestFactory $requestFactory
      */
-    public function __construct(HttpClient $client, RequestFactory $requestFactory)
+    public function __construct(JsonConverterInterface $jsonConverter, HttpClient $client, RequestFactory $requestFactory)
     {
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
+        $this->jsonConverter = $jsonConverter;
+        parent::__construct($client, $requestFactory);
     }
 
     /**
@@ -51,14 +45,8 @@ final class JKUFactory
      */
     public function loadFromUrl(string $url, array $headers = []): JWKSet
     {
-        $request = $this->requestFactory->createRequest('GET', $url, $headers);
-        $response = $this->client->sendRequest($request);
-
-        if (200 !== $response->getStatusCode()) {
-            throw new \HttpRuntimeException('Unable to get the key set.', $response->getStatusCode());
-        }
-
-        $data = json_decode($response->getBody()->getContents(), true);
+        $content = $this->getContent($url, $headers);
+        $data = $this->jsonConverter->decode($content);
         if (!is_array($data)) {
             throw new \InvalidArgumentException('Invalid content.');
         }
