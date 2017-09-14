@@ -34,7 +34,7 @@ final class ClaimCheckerManager
     /**
      * ClaimCheckerManager constructor.
      *
-     * @param JsonConverterInterface $jsonConverter
+     * @param JsonConverterInterface  $jsonConverter
      * @param ClaimCheckerInterface[] $checkers
      */
     public function __construct(JsonConverterInterface $jsonConverter, array $checkers)
