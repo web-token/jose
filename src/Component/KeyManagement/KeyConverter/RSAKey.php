@@ -76,7 +76,7 @@ final class RSAKey
             throw new \InvalidArgumentException('Unable to load the key.');
         }
 
-        $values['kty'] = 'RSA';
+        $values = ['kty' => 'RSA'];
         $keys = [
             'n' => 'n',
             'e' => 'e',
