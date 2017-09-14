@@ -103,7 +103,7 @@ final class ECKey
     }
 
     /**
-     * @param array $children
+     * @param ASNObject[] $children
      *
      * @return array
      */
@@ -266,7 +266,7 @@ final class ECKey
     }
 
     /**
-     * @param array $children
+     * @param ASNObject[] $children
      *
      * @return bool
      */
