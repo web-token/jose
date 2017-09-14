@@ -40,7 +40,7 @@ final class JWEBuilder
     private $aad;
 
     /**
-     * @var Recipient[]
+     * @var array
      */
     private $recipients = [];
 
