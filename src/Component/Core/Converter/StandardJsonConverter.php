@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Core\Converter;
 
 /**
- * Class StandardJsonEncoder
+ * Class StandardJsonEncoder.
  */
 final class StandardJsonConverter implements JsonConverterInterface
 {
@@ -32,8 +32,8 @@ final class StandardJsonConverter implements JsonConverterInterface
      * StandardJsonEncoder constructor.
      * See also json_encode and json_decode parameters.
      *
-     * @param int  $options
-     * @param int  $depth
+     * @param int $options
+     * @param int $depth
      */
     public function __construct(int $options = JSON_UNESCAPED_UNICODE, int $depth = 512)
     {
