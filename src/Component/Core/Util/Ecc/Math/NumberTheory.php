@@ -137,9 +137,9 @@ final class NumberTheory
 
     /**
      * @param \GMP[] $base
-     * @param \GMP  $exponent
+     * @param \GMP   $exponent
      * @param \GMP[] $polymod
-     * @param \GMP  $p
+     * @param \GMP   $p
      *
      * @return array|int
      */
