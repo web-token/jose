@@ -22,7 +22,7 @@ final class JWEBuilderFactory
     /**
      * @var JsonConverterInterface
      */
-    private $payloadEncoder;
+    private $jsonEncoder;
 
     /**
      * @var JWAManagerFactory
@@ -37,13 +37,13 @@ final class JWEBuilderFactory
     /**
      * JWEBuilderFactory constructor.
      *
-     * @param JsonConverterInterface         $payloadEncoder
+     * @param JsonConverterInterface         $jsonEncoder
      * @param JWAManagerFactory               $algorithmManagerFactory
      * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
      */
-    public function __construct(JsonConverterInterface $payloadEncoder, JWAManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory)
+    public function __construct(JsonConverterInterface $jsonEncoder, JWAManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory)
     {
-        $this->payloadEncoder = $payloadEncoder;
+        $this->jsonEncoder = $jsonEncoder;
         $this->algorithmManagerFactory = $algorithmManagerFactory;
         $this->compressionMethodManagerFactory = $compressionMethodManagerFactory;
     }
@@ -61,6 +61,6 @@ final class JWEBuilderFactory
         $contentEncryptionAlgorithmManager = $this->algorithmManagerFactory->create($contentEncryptionAlgorithm);
         $compressionMethodManager = $this->compressionMethodManagerFactory->create($compressionMethods);
 
-        return new JWEBuilder($this->payloadEncoder, $keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionMethodManager);
+        return new JWEBuilder($this->jsonEncoder, $keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionMethodManager);
     }
 }

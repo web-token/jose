@@ -24,16 +24,16 @@ final class ClaimCheckerManagerFactory
     /**
      * @var JsonConverterInterface
      */
-    private $payloadEncoder;
+    private $jsonConverter;
 
     /**
      * ClaimCheckerManager constructor.
      *
-     * @param JsonConverterInterface $payloadEncoder
+     * @param JsonConverterInterface $jsonConverter
      */
-    public function __construct(JsonConverterInterface $payloadEncoder)
+    public function __construct(JsonConverterInterface $jsonConverter)
     {
-        $this->payloadEncoder = $payloadEncoder;
+        $this->jsonConverter = $jsonConverter;
     }
 
     /**
@@ -52,7 +52,7 @@ final class ClaimCheckerManagerFactory
             }
         }
 
-        return new ClaimCheckerManager($this->payloadEncoder, $checkers);
+        return new ClaimCheckerManager($this->jsonConverter, $checkers);
     }
 
     /**

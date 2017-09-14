@@ -24,7 +24,7 @@ final class ClaimCheckerManager
     /**
      * @var JsonConverterInterface
      */
-    private $payloadEncoder;
+    private $jsonConverter;
 
     /**
      * @var ClaimCheckerInterface[]
@@ -34,12 +34,12 @@ final class ClaimCheckerManager
     /**
      * ClaimCheckerManager constructor.
      *
-     * @param JsonConverterInterface $payloadEncoder
+     * @param JsonConverterInterface $jsonConverter
      * @param ClaimCheckerInterface[] $checkers
      */
-    public function __construct(JsonConverterInterface $payloadEncoder, array $checkers)
+    public function __construct(JsonConverterInterface $jsonConverter, array $checkers)
     {
-        $this->payloadEncoder = $payloadEncoder;
+        $this->jsonConverter = $jsonConverter;
         foreach ($checkers as $checker) {
             $this->add($checker);
         }
@@ -63,7 +63,7 @@ final class ClaimCheckerManager
      */
     public function check(JWTInterface $jwt)
     {
-        $claims = $this->payloadEncoder->decode($jwt->getPayload());
+        $claims = $this->jsonConverter->decode($jwt->getPayload());
         if (!is_array($claims)) {
             throw new \InvalidArgumentException('The payload is does not contain claims.');
         }

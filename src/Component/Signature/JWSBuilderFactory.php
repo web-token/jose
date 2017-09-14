@@ -21,7 +21,7 @@ final class JWSBuilderFactory
     /**
      * @var JsonConverterInterface
      */
-    private $payloadEncoder;
+    private $jsonEncoder;
 
     /**
      * @var JWAManagerFactory
@@ -31,12 +31,12 @@ final class JWSBuilderFactory
     /**
      * JWSBuilderFactory constructor.
      *
-     * @param JsonConverterInterface $payloadEncoder
+     * @param JsonConverterInterface $jsonEncoder
      * @param JWAManagerFactory       $signatureAlgorithmManagerFactory
      */
-    public function __construct(JsonConverterInterface $payloadEncoder, JWAManagerFactory $signatureAlgorithmManagerFactory)
+    public function __construct(JsonConverterInterface $jsonEncoder, JWAManagerFactory $signatureAlgorithmManagerFactory)
     {
-        $this->payloadEncoder = $payloadEncoder;
+        $this->jsonEncoder = $jsonEncoder;
         $this->signatureAlgorithmManagerFactory = $signatureAlgorithmManagerFactory;
     }
 
@@ -49,6 +49,6 @@ final class JWSBuilderFactory
     {
         $algorithmManager = $this->signatureAlgorithmManagerFactory->create($algorithms);
 
-        return new JWSBuilder($this->payloadEncoder, $algorithmManager);
+        return new JWSBuilder($this->jsonEncoder, $algorithmManager);
     }
 }
