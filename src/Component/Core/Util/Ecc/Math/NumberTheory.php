@@ -39,23 +39,24 @@ final class NumberTheory
     /**
      * @var GmpMath
      */
-    protected $adapter;
+    private $adapter;
 
     /**
-     * @param GmpMath $adapter
+     * NumberTheory constructor.
      */
-    public function __construct(GmpMath $adapter)
+    public function __construct()
     {
-        $this->adapter = $adapter;
+        $this->adapter = new GmpMath();
     }
 
     /**
      * @param \GMP[] $poly
-     * @param $polymod
-     * @param $p
-     * @return array
+     * @param \GMP[] $polymod
+     * @param \GMP   $p
+     *
+     * @return \GMP[]
      */
-    public function polynomialReduceMod($poly, $polymod, $p): array
+    public function polynomialReduceMod(array $poly, array $polymod, \GMP $p): array
     {
         $adapter = $this->adapter;
         $count_polymod = count($polymod);
@@ -88,13 +89,13 @@ final class NumberTheory
     }
 
     /**
-     * @param $m1
-     * @param $m2
-     * @param $polymod
-     * @param $p
+     * @param \GMP[] $m1
+     * @param \GMP[] $m2
+     * @param \GMP[] $polymod
+     * @param \GMP $p
      * @return array
      */
-    public function polynomialMultiplyMod($m1, $m2, $polymod, $p): array
+    public function polynomialMultiplyMod(array $m1, array $m2, array $polymod, \GMP $p): array
     {
         $prod = array();
         $cm1 = count($m1);

@@ -197,11 +197,11 @@ final class ECDHES implements KeyAgreementInterface
 
         switch ($crv) {
             case 'P-256':
-                return (new NistCurve())->generator256();
+                return NistCurve::generator256();
             case 'P-384':
-                return (new NistCurve())->generator384();
+                return NistCurve::generator384();
             case 'P-521':
-                return (new NistCurve())->generator521();
+                return NistCurve::generator521();
             default:
                 throw new \InvalidArgumentException(sprintf('The curve "%s" is not supported', $crv));
         }

@@ -26,89 +26,29 @@ namespace Jose\Component\Core\Util\Ecc\Crypto\Key;
  * ***********************************************************************
  */
 
-use Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH;
-use Jose\Component\Core\Util\Ecc\Math\GmpMath;
-use Jose\Component\Core\Util\Ecc\Primitives\GeneratorPoint;
-
 /**
  * This class serves as public - private key exchange for signature verification.
  */
 final class PrivateKey
 {
     /**
-     * @var GeneratorPoint
-     */
-    private $generator;
-
-    /**
      * @var \GMP
      */
-    private $secretMultiplier;
+    private $secret;
 
     /**
-     * @var GmpMath
+     * @param \GMP $secret
      */
-    private $adapter;
-
-    /**
-     * @param GmpMath $adapter
-     * @param GeneratorPoint $generator
-     * @param \GMP $secretMultiplier
-     */
-    public function __construct(GmpMath $adapter, GeneratorPoint $generator, \GMP $secretMultiplier)
+    public function __construct( \GMP $secret)
     {
-        $this->adapter = $adapter;
-        $this->generator = $generator;
-        $this->secretMultiplier = $secretMultiplier;
+        $this->secret = $secret;
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey::getPublicKey()
+     * @return \GMP
      */
-    public function getPublicKey()
+    public function getSecret(): \GMP
     {
-        return new PublicKey($this->adapter, $this->generator, $this->generator->mul($this->secretMultiplier));
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey::getPoint()
-     */
-    public function getPoint()
-    {
-        return $this->generator;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey::getCurve()
-     */
-    public function getCurve()
-    {
-        return $this->generator->getCurve();
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey::getSecret()
-     */
-    public function getSecret()
-    {
-        return $this->secretMultiplier;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey::createExchange()
-     */
-    public function createExchange(PublicKey $recipient = null)
-    {
-        $ecdh = new EcDH();
-        $ecdh
-            ->setSenderKey($this)
-            ->setRecipientKey($recipient);
-
-        return $ecdh;
+        return $this->secret;
     }
 }

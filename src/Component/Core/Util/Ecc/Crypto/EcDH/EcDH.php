@@ -28,7 +28,6 @@ namespace Jose\Component\Core\Util\Ecc\Crypto\EcDH;
 
 use Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey;
 use Jose\Component\Core\Util\Ecc\Crypto\Key\PublicKey;
-use Jose\Component\Core\Util\Ecc\Math\GmpMath;
 use Jose\Component\Core\Util\Ecc\Primitives\Point;
 
 /**
@@ -41,13 +40,6 @@ use Jose\Component\Core\Util\Ecc\Primitives\Point;
  */
 final class EcDH
 {
-    /**
-     * Adapter used for math calculations
-     *
-     * @var GmpMath
-     */
-    private $adapter;
-
     /**
      * Secret key between the two parties
      *
@@ -68,18 +60,9 @@ final class EcDH
     private $senderKey;
 
     /**
-     * EcDH constructor.
+     * @return \GMP
      */
-    public function __construct()
-    {
-        $this->adapter = new GmpMath();
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH::calculateSharedKey()
-     */
-    public function calculateSharedKey()
+    public function calculateSharedKey(): \GMP
     {
         $this->calculateKey();
 
@@ -87,34 +70,19 @@ final class EcDH
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH::createMultiPartyKey()
+     * @param PublicKey|null $key
      */
-    public function createMultiPartyKey()
-    {
-        $this->calculateKey();
-
-        return new PublicKey($this->adapter, $this->senderKey->getPoint(), $this->secretKey);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH::setRecipientKey()
-     */
-    public function setRecipientKey(PublicKey $key = null)
+    public function setRecipientKey(?PublicKey $key = null)
     {
         $this->recipientKey = $key;
-        return $this;
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH::setSenderKey()
+     * @param PrivateKey $key
      */
     public function setSenderKey(PrivateKey $key)
     {
         $this->senderKey = $key;
-        return $this;
     }
 
     /**

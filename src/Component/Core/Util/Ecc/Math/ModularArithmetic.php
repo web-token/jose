@@ -15,12 +15,11 @@ final class ModularArithmetic
     private $modulus;
 
     /**
-     * @param GmpMath $adapter
      * @param \GMP $modulus
      */
-    public function __construct(GmpMath $adapter, \GMP $modulus)
+    public function __construct(\GMP $modulus)
     {
-        $this->adapter = $adapter;
+        $this->adapter = new GmpMath();
         $this->modulus = $modulus;
     }
 

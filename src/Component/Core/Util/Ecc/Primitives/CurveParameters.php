@@ -9,26 +9,26 @@ final class CurveParameters
      *
      * @var \GMP
      */
-    protected $a;
+    private $a;
 
     /**
      *
      * @var \GMP
      */
-    protected $b;
+    private $b;
 
     /**
      *
      * @var \GMP
      */
-    protected $prime;
+    private $prime;
 
     /**
      * Binary length of keys associated with these curve parameters
      *
      * @var int
      */
-    protected $size;
+    private $size;
 
     /**
      * @param int $size
@@ -36,7 +36,7 @@ final class CurveParameters
      * @param \GMP $a
      * @param \GMP $b
      */
-    public function __construct($size, \GMP $prime, \GMP $a, \GMP $b)
+    public function __construct(int $size, \GMP $prime, \GMP $a, \GMP $b)
     {
         $this->size = $size;
         $this->prime = $prime;
@@ -47,7 +47,7 @@ final class CurveParameters
     /**
      * @return \GMP
      */
-    public function getA()
+    public function getA(): \GMP
     {
         return $this->a;
     }
@@ -55,7 +55,7 @@ final class CurveParameters
     /**
      * @return \GMP
      */
-    public function getB()
+    public function getB(): \GMP
     {
         return $this->b;
     }
@@ -63,7 +63,7 @@ final class CurveParameters
     /**
      * @return \GMP
      */
-    public function getPrime()
+    public function getPrime(): \GMP
     {
         return $this->prime;
     }
@@ -71,7 +71,7 @@ final class CurveParameters
     /**
      * @return int
      */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->size;
     }

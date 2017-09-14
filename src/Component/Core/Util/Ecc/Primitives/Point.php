@@ -4,7 +4,6 @@ namespace Jose\Component\Core\Util\Ecc\Primitives;
 
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
 use Jose\Component\Core\Util\Ecc\Math\ModularArithmetic;
-use Jose\Component\Core\Util\Ecc\Util\BinaryString;
 
 /**
  * *********************************************************************
@@ -47,7 +46,7 @@ class Point
     /**
      * @var GmpMath
      */
-    private $adapter;
+    protected $adapter;
 
     /**
      * @var ModularArithmetic
@@ -77,7 +76,6 @@ class Point
     /**
      * Initialize a new instance
      *
-     * @param GmpMath     $adapter
      * @param CurveFp     $curve
      * @param \GMP        $x
      * @param \GMP        $y
@@ -87,17 +85,17 @@ class Point
      * @throws \RuntimeException    when either the curve does not contain the given coordinates or
      *                                      when order is not null and P(x, y) * order is not equal to infinity.
      */
-    public function __construct(GmpMath $adapter, CurveFp $curve, \GMP $x, \GMP $y, \GMP $order = null, $infinity = false)
+    public function __construct(CurveFp $curve, \GMP $x, \GMP $y, ?\GMP $order = null, bool $infinity = false)
     {
-        $this->adapter    = $adapter;
+        $this->adapter    = new GmpMath();
         $this->modAdapter = $curve->getModAdapter();
         $this->curve      = $curve;
         $this->x          = $x;
         $this->y          = $y;
-        $this->order      = $order !== null ? $order : gmp_init(0, 10);
+        $this->order      = null === $order ? gmp_init(0, 10) : $order;
         $this->infinity   = (bool) $infinity;
         if (! $infinity && ! $curve->contains($x, $y)) {
-            throw new \RuntimeException("Curve " . $curve . " does not contain point (" . $adapter->toString($x) . ", " . $adapter->toString($y) . ")");
+            throw new \RuntimeException("Curve " . $curve . " does not contain point (" . $this->adapter->toString($x) . ", " . $this->adapter->toString($y) . ")");
         }
 
         if (!is_null($order)) {
@@ -109,64 +107,51 @@ class Point
     }
 
     /**
-     * @return GmpMath
+     * @return bool
      */
-    public function getAdapter()
-    {
-        return $this->adapter;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Point::isInfinity()
-     */
-    public function isInfinity()
+    public function isInfinity(): bool
     {
         return (bool) $this->infinity;
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Point::getCurve()
+     * @return CurveFp
      */
-    public function getCurve()
+    public function getCurve(): CurveFp
     {
         return $this->curve;
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Point::getOrder()
+     * @return \GMP
      */
-    public function getOrder()
+    public function getOrder(): \GMP
     {
         return $this->order;
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Point::getX()
+     * @return \GMP
      */
-    public function getX()
+    public function getX(): \GMP
     {
         return $this->x;
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Point::getY()
+     * @return \GMP
      */
-    public function getY()
+    public function getY(): \GMP
     {
         return $this->y;
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Point::add()
-     * @return self
+     * @param Point $addend
+     *
+     * @return Point
      */
-    public function add(Point $addend)
+    public function add(Point $addend): Point
     {
         if (! $this->curve->equals($addend->getCurve())) {
             throw new \RuntimeException("The Elliptic Curves do not match.");
@@ -180,29 +165,26 @@ class Point
             return clone $addend;
         }
 
-        $math = $this->adapter;
-        $modMath = $this->modAdapter;
-
-        if ($math->equals($addend->getX(), $this->x)) {
-            if ($math->equals($addend->getY(), $this->y)) {
+        if ($this->adapter->equals($addend->getX(), $this->x)) {
+            if ($this->adapter->equals($addend->getY(), $this->y)) {
                 return $this->getDouble();
             } else {
                 return $this->curve->getInfinity();
             }
         }
 
-        $slope = $modMath->div(
-            $math->sub($addend->getY(), $this->y),
-            $math->sub($addend->getX(), $this->x)
+        $slope = $this->modAdapter->div(
+            $this->adapter->sub($addend->getY(), $this->y),
+            $this->adapter->sub($addend->getX(), $this->x)
         );
 
-        $xR = $modMath->sub(
-            $math->sub($math->pow($slope, 2), $this->x),
+        $xR = $this->modAdapter->sub(
+            $this->adapter->sub($this->adapter->pow($slope, 2), $this->x),
             $addend->getX()
         );
 
-        $yR = $modMath->sub(
-            $math->mul($slope, $math->sub($this->x, $xR)),
+        $yR = $this->modAdapter->sub(
+            $this->adapter->mul($slope, $this->adapter->sub($this->x, $xR)),
             $this->y
         );
 
@@ -210,10 +192,11 @@ class Point
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Point::cmp()
+     * @param Point $other
+     *
+     * @return int
      */
-    public function cmp(Point $other)
+    public function cmp(Point $other): int
     {
         if ($other->isInfinity() && $this->isInfinity()) {
             return 0;
@@ -223,38 +206,35 @@ class Point
             return 1;
         }
 
-        $math = $this->adapter;
-        $equal = ($math->equals($this->x, $other->getX()));
-        $equal &= ($math->equals($this->y, $other->getY()));
+        $equal = ($this->adapter->equals($this->x, $other->getX()));
+        $equal &= ($this->adapter->equals($this->y, $other->getY()));
         $equal &= $this->isInfinity() == $other->isInfinity();
         $equal &= $this->curve->equals($other->getCurve());
 
-        if ($equal) {
-            return 0;
-        }
-
-        return 1;
+        return $equal ? 0 : 1;
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Point::equals()
+     * @param Point $other
+     * @return bool
      */
-    public function equals(Point $other)
+    public function equals(Point $other): bool
     {
-        return $this->cmp($other) == 0;
+        return $this->cmp($other) === 0;
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Point::mul()
+     * @param \GMP $n
+     *
+     * @return Point
      */
-    public function mul(\GMP $n)
+    public function mul(\GMP $n): Point
     {
         if ($this->isInfinity()) {
             return $this->curve->getInfinity();
         }
 
+        /** @var \GMP $zero */
         $zero = gmp_init(0, 10);
         if ($this->adapter->cmp($this->order, $zero) > 0) {
             $n = $this->adapter->mod($n, $this->order);
@@ -294,7 +274,7 @@ class Point
      * @param Point $b
      * @param int $cond
      */
-    private function cswap(self $a, self $b, $cond)
+    private function cswap(Point $a, Point $b, int $cond)
     {
         $this->cswapValue($a->x, $b->x, $cond);
         $this->cswapValue($a->y, $b->y, $cond);
@@ -307,16 +287,21 @@ class Point
      * @param $b
      * @param $cond
      */
-    public function cswapValue(& $a, & $b, $cond)
+    private function cswapValue(& $a, & $b, int $cond)
     {
         $isGMP = is_object($a) && $a instanceof \GMP;
 
+        /** @var \GMP $sa */
         $sa = $isGMP ? $a : gmp_init(intval($a), 10);
+
+        /** @var \GMP $sb */
         $sb = $isGMP ? $b : gmp_init(intval($b), 10);
-        $size = max(BinaryString::length(gmp_strval($sa, 2)), BinaryString::length(gmp_strval($sb, 2)));
+        $size = max(mb_strlen(gmp_strval($sa, 2), '8bit'), mb_strlen(gmp_strval($sb, 2), '8bit'));
 
         $mask = 1 - intval($cond);
         $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
+
+        /** @var \GMP $mask */
         $mask = gmp_init($mask, 2);
 
         $taA = $this->adapter->bitwiseAnd($sa, $mask);
@@ -341,11 +326,9 @@ class Point
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Point::getDouble()
-     * @return self
+     * @return Point
      */
-    public function getDouble()
+    public function getDouble(): Point
     {
         if ($this->isInfinity()) {
             return $this->curve->getInfinity();
@@ -373,18 +356,5 @@ class Point
         );
 
         return $this->curve->getPoint($x3, $y3, $this->order);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Point::__toString()
-     */
-    public function __toString()
-    {
-        if ($this->infinity) {
-            return '[ (infinity) on ' . (string) $this->curve . ' ]';
-        }
-
-        return "[ (" . $this->adapter->toString($this->x) . "," . $this->adapter->toString($this->y) . ') on ' . (string) $this->curve . ' ]';
     }
 }

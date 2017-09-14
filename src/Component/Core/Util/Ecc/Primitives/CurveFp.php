@@ -21,11 +21,11 @@ OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
  *************************************************************************/
+
 namespace Jose\Component\Core\Util\Ecc\Primitives;
 
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
 use Jose\Component\Core\Util\Ecc\Math\ModularArithmetic;
-use Jose\Component\Core\Util\Ecc\Random\RandomNumberGenerator;
 
 /**
  * This class is a representation of an EC over a field modulo a prime number
@@ -40,100 +40,78 @@ final class CurveFp
     /**
      * @var CurveParameters
      */
-    protected $parameters;
+    private $parameters;
 
     /**
      *
      * @var GmpMath
      */
-    protected $adapter = null;
+    private $adapter;
 
     /**
      *
      * @var ModularArithmetic
      */
-    protected $modAdapter = null;
+    private $modAdapter;
 
     /**
      * Constructor that sets up the instance variables.
      *
      * @param CurveParameters $parameters
-     * @param GmpMath $adapter
      */
-    public function __construct(CurveParameters $parameters, GmpMath $adapter)
+    public function __construct(CurveParameters $parameters)
     {
         $this->parameters = $parameters;
-        $this->adapter = $adapter;
-        $this->modAdapter = new ModularArithmetic($this->adapter, $this->parameters->getPrime());
+        $this->adapter = new GmpMath();
+        $this->modAdapter = new ModularArithmetic($this->parameters->getPrime());
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\CurveFp::getModAdapter()
+     * @return ModularArithmetic
      */
-    public function getModAdapter()
+    public function getModAdapter(): ModularArithmetic
     {
         return $this->modAdapter;
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\CurveFp::getPoint()
+     * @param \GMP $x
+     * @param \GMP $y
+     * @param \GMP|null $order
+     *
+     * @return Point
      */
-    public function getPoint(\GMP $x, \GMP $y, \GMP $order = null)
+    public function getPoint(\GMP $x, \GMP $y, ?\GMP $order = null): Point
     {
-        return new Point($this->adapter, $this, $x, $y, $order);
-    }
-    
-    /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\CurveFp::getInfinity()
-     */
-    public function getInfinity()
-    {
-        return new Point($this->adapter, $this, gmp_init(0, 10), gmp_init(0, 10), null, true);
+        return new Point($this, $x, $y, $order);
     }
 
     /**
-     * {@inheritDoc}
+     * @return Point
      */
-    public function getGenerator(\GMP $x, \GMP $y, \GMP $order)
+    public function getInfinity(): Point
     {
-        return new GeneratorPoint($this->adapter, $this, $x, $y, $order);
+        return new Point($this, gmp_init(0, 10), gmp_init(0, 10), null, true);
     }
 
     /**
-     * @param bool $wasOdd
-     * @param \GMP $xCoord
-     * @return \GMP
+     * @param \GMP $x
+     * @param \GMP $y
+     * @param \GMP $order
+     *
+     * @return GeneratorPoint
      */
-    public function recoverYfromX($wasOdd, \GMP $xCoord)
+    public function getGenerator(\GMP $x, \GMP $y, \GMP $order): GeneratorPoint
     {
-        $math = $this->adapter;
-        $prime = $this->getPrime();
-
-        $root = $this->adapter->getNumberTheory()->squareRootModP(
-            $math->add(
-                $math->add(
-                    $this->modAdapter->pow($xCoord, gmp_init(3, 10)),
-                    $math->mul($this->getA(), $xCoord)
-                ),
-                $this->getB()
-            ),
-            $prime
-        );
-
-        if ($math->equals($math->mod($root, gmp_init(2, 10)), gmp_init(1)) === $wasOdd) {
-            return $root;
-        } else {
-            return $math->sub($prime, $root);
-        }
+        return new GeneratorPoint($this, $x, $y, $order);
     }
+
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\CurveFp::contains()
+     * @param \GMP $x
+     * @param \GMP $y
+     * @return bool
      */
-    public function contains(\GMP $x, \GMP $y)
+    public function contains(\GMP $x, \GMP $y): bool
     {
         $math = $this->adapter;
 
@@ -155,28 +133,25 @@ final class CurveFp
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\CurveFp::getA()
+     * @return \GMP
      */
-    public function getA()
+    public function getA(): \GMP
     {
         return $this->parameters->getA();
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\CurveFp::getB()
+     * @return \GMP
      */
-    public function getB()
+    public function getB(): \GMP
     {
         return $this->parameters->getB();
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\CurveFp::getPrime()
+     * @return \GMP
      */
-    public function getPrime()
+    public function getPrime(): \GMP
     {
         return $this->parameters->getPrime();
     }
@@ -184,16 +159,17 @@ final class CurveFp
     /**
      * @return int
      */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->parameters->getSize();
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\CurveFp::cmp()
+     * @param CurveFp $other
+     *
+     * @return int
      */
-    public function cmp(CurveFp $other)
+    public function cmp(CurveFp $other): int
     {
         $math = $this->adapter;
 
@@ -201,24 +177,16 @@ final class CurveFp
         $equal &= $math->equals($this->getB(), $other->getB());
         $equal &= $math->equals($this->getPrime(), $other->getPrime());
 
-        return ($equal) ? 0 : 1;
+        return $equal ? 0 : 1;
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\CurveFp::equals()
+     * @param CurveFp $other
+     *
+     * @return bool
      */
-    public function equals(CurveFp $other)
+    public function equals(CurveFp $other): bool
     {
-        return $this->cmp($other) == 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\CurveFp::__toString()
-     */
-    public function __toString()
-    {
-        return 'curve(' . $this->adapter->toString($this->getA()) . ', ' . $this->adapter->toString($this->getB()) . ', ' . $this->adapter->toString($this->getPrime()) . ')';
+        return $this->cmp($other) === 0;
     }
 }

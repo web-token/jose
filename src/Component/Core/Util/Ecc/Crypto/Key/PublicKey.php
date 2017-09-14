@@ -27,7 +27,6 @@ namespace Jose\Component\Core\Util\Ecc\Crypto\Key;
  */
 
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
-use Jose\Component\Core\Util\Ecc\Primitives\CurveFp;
 use Jose\Component\Core\Util\Ecc\Primitives\GeneratorPoint;
 use Jose\Component\Core\Util\Ecc\Primitives\Point;
 
@@ -38,43 +37,22 @@ final class PublicKey
 {
     /**
      *
-     * @var CurveFp
-     */
-    protected $curve;
-
-    /**
-     *
-     * @var GeneratorPoint
-     */
-    protected $generator;
-
-    /**
-     *
      * @var Point
      */
-    protected $point;
-
-    /**
-     *
-     * @var GmpMath
-     */
-    protected $adapter;
+    private $point;
 
     /**
      * Initialize a new instance.
      *
-     * @param  GmpMath  $adapter
      * @param  GeneratorPoint    $generator
      * @param  Point    $point
      * @throws \LogicException
      * @throws \RuntimeException
      */
-    public function __construct(GmpMath $adapter, GeneratorPoint $generator, Point $point)
+    public function __construct(GeneratorPoint $generator, Point $point)
     {
-        $this->curve = $generator->getCurve();
-        $this->generator = $generator;
         $this->point = $point;
-        $this->adapter = $adapter;
+        $adapter = new GmpMath();
 
         $n = $generator->getOrder();
 
@@ -86,28 +64,9 @@ final class PublicKey
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PublicKey::getCurve()
+     * @return Point
      */
-    public function getCurve()
-    {
-        return $this->curve;
-    }
-
-    /**
-     * {$inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PublicKey::getGenerator()
-     */
-    public function getGenerator()
-    {
-        return $this->generator;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Jose\Component\Core\Util\Ecc\Crypto\Key\PublicKey::getPoint()
-     */
-    public function getPoint()
+    public function getPoint(): Point
     {
         return $this->point;
     }
