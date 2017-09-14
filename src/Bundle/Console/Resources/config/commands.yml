@@ -67,3 +67,7 @@ services:
     Jose\Component\Console\Command\KeysetAnalyzerCommand:
         tags:
             - {name: 'console.command'}
+
+    Jose\Component\Console\Command\PemConverterCommand:
+        tags:
+            - {name: 'console.command'}

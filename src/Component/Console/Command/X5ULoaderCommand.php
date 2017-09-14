@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class X5ULoaderCommand extends AbstractJsonObjectOutputCommand
+final class X5ULoaderCommand extends AbstractObjectOutputCommand
 {
     /**
      * @var X5UFactory
@@ -60,6 +60,6 @@ final class X5ULoaderCommand extends AbstractJsonObjectOutputCommand
     {
         $url = $input->getArgument('url');
         $result = $this->x5uFactory->loadFromUrl($url);
-        $this->prepareOutput($input, $output, $result);
+        $this->prepareJsonOutput($input, $output, $result);
     }
 }

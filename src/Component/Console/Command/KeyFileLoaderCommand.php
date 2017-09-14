@@ -44,6 +44,6 @@ final class KeyFileLoaderCommand extends AbstractGeneratorCommand
         $args = $this->getOptions($input);
 
         $jwk = JWKFactory::createFromKeyFile($filename, $password, $args);
-        $this->prepareOutput($input, $output, $jwk);
+        $this->prepareJsonOutput($input, $output, $jwk);
     }
 }

@@ -47,6 +47,6 @@ final class OctKeysetGeneratorCommand extends AbstractGeneratorCommand
         for ($i = 0; $i < $quantity; ++$i) {
             $keyset = $keyset->with(JWKFactory::createOctKey($size, $args));
         }
-        $this->prepareOutput($input, $output, $keyset);
+        $this->prepareJsonOutput($input, $output, $keyset);
     }
 }

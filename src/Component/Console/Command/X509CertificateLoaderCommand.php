@@ -47,6 +47,6 @@ final class X509CertificateLoaderCommand extends AbstractGeneratorCommand
         }
 
         $jwk = JWKFactory::createFromCertificateFile($filename, $args);
-        $this->prepareOutput($input, $output, $jwk);
+        $this->prepareJsonOutput($input, $output, $jwk);
     }
 }

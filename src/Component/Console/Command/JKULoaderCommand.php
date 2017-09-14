@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class JKULoaderCommand extends AbstractJsonObjectOutputCommand
+final class JKULoaderCommand extends AbstractObjectOutputCommand
 {
     /**
      * @var JKUFactory
@@ -53,6 +53,6 @@ final class JKULoaderCommand extends AbstractJsonObjectOutputCommand
     {
         $url = $input->getArgument('url');
         $result = $this->jkuFactory->loadFromUrl($url);
-        $this->prepareOutput($input, $output, $result);
+        $this->prepareJsonOutput($input, $output, $result);
     }
 }

@@ -41,6 +41,6 @@ final class RsaKeyGeneratorCommand extends AbstractGeneratorCommand
         $args = $this->getOptions($input);
 
         $jwk = JWKFactory::createRSAKey($size, $args);
-        $this->prepareOutput($input, $output, $jwk);
+        $this->prepareJsonOutput($input, $output, $jwk);
     }
 }

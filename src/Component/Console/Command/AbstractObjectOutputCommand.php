@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class AbstractJsonObjectOutputCommand extends Command
+abstract class AbstractObjectOutputCommand extends Command
 {
     /**
      * @var JsonConverterInterface
@@ -58,14 +58,24 @@ abstract class AbstractJsonObjectOutputCommand extends Command
      * @param OutputInterface   $output
      * @param \JsonSerializable $json
      */
-    protected function prepareOutput(InputInterface $input, OutputInterface $output, \JsonSerializable $json)
+    protected function prepareJsonOutput(InputInterface $input, OutputInterface $output, \JsonSerializable $json)
     {
         $json = $this->jsonConverter->encode($json);
+        $this->prepareOutput($input, $output, $json);
+    }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param string          $data
+     */
+    protected function prepareOutput(InputInterface $input, OutputInterface $output, string $data)
+    {
         $file = $input->getOption('out');
         if (null !== $file) {
-            file_put_contents($file, $json, LOCK_EX);
+            file_put_contents($file, $data, LOCK_EX);
         } else {
-            $output->write($json);
+            $output->write($data);
         }
     }
 }

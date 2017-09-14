@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class OptimizeRsaKeyCommand extends AbstractJsonObjectOutputCommand
+final class OptimizeRsaKeyCommand extends AbstractObjectOutputCommand
 {
     /**
      * {@inheritdoc}
@@ -45,6 +45,6 @@ final class OptimizeRsaKeyCommand extends AbstractJsonObjectOutputCommand
         }
         $key = RSAKey::createFromJWK(JWK::create($json));
         $key->optimize();
-        $this->prepareOutput($input, $output, $key->toJwk());
+        $this->prepareJsonOutput($input, $output, $key->toJwk());
     }
 }
