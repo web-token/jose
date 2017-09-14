@@ -1,8 +1,17 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Component\Core\Util\Ecc\Crypto\Key;
 
-/**
+/*
  * *********************************************************************
  * Copyright (C) 2012 Matyas Danter
  *
@@ -31,12 +40,11 @@ use Jose\Component\Core\Util\Ecc\Primitives\GeneratorPoint;
 use Jose\Component\Core\Util\Ecc\Primitives\Point;
 
 /**
- * This class serves as public- private key exchange for signature verification
+ * This class serves as public- private key exchange for signature verification.
  */
 final class PublicKey
 {
     /**
-     *
      * @var Point
      */
     private $point;
@@ -44,8 +52,9 @@ final class PublicKey
     /**
      * Initialize a new instance.
      *
-     * @param  GeneratorPoint    $generator
-     * @param  Point    $point
+     * @param GeneratorPoint $generator
+     * @param Point          $point
+     *
      * @throws \LogicException
      * @throws \RuntimeException
      */
@@ -59,7 +68,7 @@ final class PublicKey
         if ($adapter->cmp($point->getX(), gmp_init(0, 10)) < 0 || $adapter->cmp($n, $point->getX()) <= 0
             || $adapter->cmp($point->getY(), gmp_init(0, 10)) < 0 || $adapter->cmp($n, $point->getY()) <= 0
         ) {
-            throw new \RuntimeException("Generator point has x and y out of range.");
+            throw new \RuntimeException('Generator point has x and y out of range.');
         }
     }
 

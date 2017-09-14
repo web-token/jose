@@ -20,7 +20,6 @@ use Jose\Component\Core\Util\Ecc\Math\GmpMath;
 use Jose\Component\Encryption\Util\ConcatKDF;
 use Jose\Component\Core\JWKFactory;
 use Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH;
-use Jose\Component\Core\Util\Ecc\EccFactory;
 
 /**
  * Class ECDHES.

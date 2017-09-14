@@ -1,4 +1,14 @@
 <?php
+
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Component\Core\Util\Ecc\Curves;
 
 use Jose\Component\Core\Util\Ecc\Primitives\CurveFp;
@@ -7,7 +17,7 @@ use Jose\Component\Core\Util\Ecc\Primitives\GeneratorPoint;
 
 /**
  * *********************************************************************
- * Copyright (C) 2012 Matyas Danter
+ * Copyright (C) 2012 Matyas Danter.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -32,7 +42,7 @@ use Jose\Component\Core\Util\Ecc\Primitives\GeneratorPoint;
 /**
  * This class encapsulates the NIST recommended curves
  * - fields are Mersenne primes, i.e.
- * for some p, Mersenne_prine = 2^p - 1
+ * for some p, Mersenne_prine = 2^p - 1.
  */
 final class NistCurve
 {

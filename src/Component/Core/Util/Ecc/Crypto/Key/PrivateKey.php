@@ -1,10 +1,19 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Component\Core\Util\Ecc\Crypto\Key;
 
 /**
  * *********************************************************************
- * Copyright (C) 2012 Matyas Danter
+ * Copyright (C) 2012 Matyas Danter.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -39,7 +48,7 @@ final class PrivateKey
     /**
      * @param \GMP $secret
      */
-    public function __construct( \GMP $secret)
+    public function __construct(\GMP $secret)
     {
         $this->secret = $secret;
     }

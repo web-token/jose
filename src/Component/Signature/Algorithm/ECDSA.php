@@ -20,7 +20,6 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
 use Jose\Component\Core\Util\ECKey;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
-use Jose\Component\Core\Util\Ecc\EccFactory;
 
 /**
  * Class ECDSA.
