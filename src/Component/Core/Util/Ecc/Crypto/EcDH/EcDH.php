@@ -37,7 +37,6 @@ namespace Jose\Component\Core\Util\Ecc\Crypto\EcDH;
 
 use Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey;
 use Jose\Component\Core\Util\Ecc\Crypto\Key\PublicKey;
-use Jose\Component\Core\Util\Ecc\Primitives\Point;
 
 /**
  * This class is the implementation of ECDH.
@@ -50,75 +49,13 @@ use Jose\Component\Core\Util\Ecc\Primitives\Point;
 final class EcDH
 {
     /**
-     * Secret key between the two parties.
+     * @param PublicKey $publicKey
+     * @param PrivateKey $privateKey
      *
-     * @var Point
-     */
-    private $secretKey = null;
-
-    /**
-     * @var PublicKey
-     */
-    private $recipientKey;
-
-    /**
-     * @var PrivateKey
-     */
-    private $senderKey;
-
-    /**
      * @return \GMP
      */
-    public function calculateSharedKey(): \GMP
+    public static function computeSharedKey(PublicKey $publicKey, PrivateKey $privateKey): \GMP
     {
-        $this->calculateKey();
-
-        return $this->secretKey->getX();
-    }
-
-    /**
-     * @param PublicKey|null $key
-     */
-    public function setRecipientKey(?PublicKey $key = null)
-    {
-        $this->recipientKey = $key;
-    }
-
-    /**
-     * @param PrivateKey $key
-     */
-    public function setSenderKey(PrivateKey $key)
-    {
-        $this->senderKey = $key;
-    }
-
-    private function calculateKey()
-    {
-        $this->checkExchangeState();
-
-        if ($this->secretKey === null) {
-            $this->secretKey = $this->recipientKey->getPoint()->mul($this->senderKey->getSecret());
-        }
-    }
-
-    /**
-     * Verifies that the shared secret is known, or that the required keys are available
-     * to calculate the shared secret.
-     *
-     * @throws \RuntimeException when the exchange has not been made
-     */
-    private function checkExchangeState()
-    {
-        if ($this->secretKey !== null) {
-            return;
-        }
-
-        if ($this->senderKey === null) {
-            throw new \RuntimeException('Sender key not set.');
-        }
-
-        if ($this->recipientKey === null) {
-            throw new \RuntimeException('Recipient key not set.');
-        }
+        return $publicKey->getPoint()->mul($privateKey->getSecret())->getX();
     }
 }

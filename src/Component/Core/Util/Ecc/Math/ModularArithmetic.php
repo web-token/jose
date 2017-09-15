@@ -14,48 +14,38 @@ namespace Jose\Component\Core\Util\Ecc\Math;
 final class ModularArithmetic
 {
     /**
-     * @var \GMP
-     */
-    private $modulus;
-
-    /**
-     * @param \GMP $modulus
-     */
-    public function __construct(\GMP $modulus)
-    {
-        $this->modulus = $modulus;
-    }
-
-    /**
      * @param \GMP $minuend
      * @param \GMP $subtrahend
+     * @param \GMP $modulus
      *
      * @return \GMP
      */
-    public function sub(\GMP $minuend, \GMP $subtrahend): \GMP
+    public static function sub(\GMP $minuend, \GMP $subtrahend, \GMP $modulus): \GMP
     {
-        return GmpMath::mod(GmpMath::sub($minuend, $subtrahend), $this->modulus);
+        return GmpMath::mod(GmpMath::sub($minuend, $subtrahend), $modulus);
     }
 
     /**
      * @param \GMP $multiplier
      * @param \GMP $muliplicand
+     * @param \GMP $modulus
      *
      * @return \GMP
      */
-    public function mul(\GMP $multiplier, \GMP $muliplicand): \GMP
+    public static function mul(\GMP $multiplier, \GMP $muliplicand, \GMP $modulus): \GMP
     {
-        return GmpMath::mod(GmpMath::mul($multiplier, $muliplicand), $this->modulus);
+        return GmpMath::mod(GmpMath::mul($multiplier, $muliplicand), $modulus);
     }
 
     /**
      * @param \GMP $dividend
      * @param \GMP $divisor
+     * @param \GMP $modulus
      *
      * @return \GMP
      */
-    public function div(\GMP $dividend, \GMP $divisor): \GMP
+    public static function div(\GMP $dividend, \GMP $divisor, \GMP $modulus): \GMP
     {
-        return $this->mul($dividend, GmpMath::inverseMod($divisor, $this->modulus));
+        return self::mul($dividend, GmpMath::inverseMod($divisor, $modulus), $modulus);
     }
 }

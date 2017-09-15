@@ -24,11 +24,6 @@ use Jose\Component\Core\Util\Ecc\Math\ModularArithmetic;
 final class Curve
 {
     /**
-     * @var ModularArithmetic
-     */
-    private $modAdapter;
-
-    /**
      * Elliptic curve over the field of integers modulo a prime.
      *
      * @var \GMP
@@ -64,15 +59,6 @@ final class Curve
         $this->prime = $prime;
         $this->a = $a;
         $this->b = $b;
-        $this->modAdapter = new ModularArithmetic($prime);
-    }
-
-    /**
-     * @return ModularArithmetic
-     */
-    public function getModAdapter(): ModularArithmetic
-    {
-        return $this->modAdapter;
     }
 
     /**
@@ -116,6 +102,10 @@ final class Curve
      */
     public function getPoint(\GMP $x, \GMP $y, ?\GMP $order = null): Point
     {
+        if (!$this->contains($x, $y)) {
+            throw new \RuntimeException('Curve '.$this->__toString().' does not contain point ('.GmpMath::toString($x).', '.GmpMath::toString($y).')');
+        }
+
         return new Point($this, $x, $y, $order);
     }
 
@@ -148,7 +138,7 @@ final class Curve
     public function contains(\GMP $x, \GMP $y): bool
     {
         $eq_zero = GmpMath::equals(
-            $this->modAdapter->sub(
+            ModularArithmetic::sub(
                 GmpMath::pow($y, 2),
                 GmpMath::add(
                     GmpMath::add(
@@ -156,7 +146,8 @@ final class Curve
                         GmpMath::mul($this->getA(), $x)
                     ),
                     $this->getB()
-                )
+                ),
+                $this->getPrime()
             ),
             gmp_init(0, 10)
         );

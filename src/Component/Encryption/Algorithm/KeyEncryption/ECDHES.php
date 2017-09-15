@@ -15,6 +15,7 @@ namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
+use Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey;
 use Jose\Component\Core\Util\Ecc\Curves\NistCurve;
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
 use Jose\Component\Core\Util\Ecc\Primitives\Point;
@@ -90,14 +91,10 @@ final class ECDHES implements KeyAgreementInterface
                 $rec_y = $this->convertBase64ToGmp($public_key->get('y'));
                 $sen_d = $this->convertBase64ToGmp($private_key->get('d'));
 
-                $priv_key = $p->getPrivateKeyFrom($sen_d);
+                $priv_key = PrivateKey::create($sen_d);
                 $pub_key = $p->getPublicKeyFrom($rec_x, $rec_y);
 
-                $ecdh = new EcDH();
-                $ecdh->setSenderKey($priv_key);
-                $ecdh->setRecipientKey($pub_key);
-
-                return $this->convertDecToBin($ecdh->calculateSharedKey());
+                return $this->convertDecToBin(EcDH::computeSharedKey($pub_key, $priv_key));
             case 'X25519':
                 $sKey = Base64Url::decode($private_key->get('d'));
                 $recipientPublickey = Base64Url::decode($public_key->get('x'));

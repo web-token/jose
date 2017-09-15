@@ -55,11 +55,6 @@ final class Point
     private $curve;
 
     /**
-     * @var ModularArithmetic
-     */
-    private $modAdapter;
-
-    /**
      * @var \GMP
      */
     private $x;
@@ -93,15 +88,15 @@ final class Point
      */
     public function __construct(Curve $curve, \GMP $x, \GMP $y, ?\GMP $order = null, bool $infinity = false)
     {
-        $this->modAdapter = $curve->getModAdapter();
+        /*if (!$infinity && !$curve->contains($x, $y)) {
+            throw new \RuntimeException('Curve '.$curve.' does not contain point ('.GmpMath::toString($x).', '.GmpMath::toString($y).')');
+        }*/
+
         $this->curve = $curve;
         $this->x = $x;
         $this->y = $y;
         $this->order = null === $order ? gmp_init(0, 10) : $order;
-        $this->infinity = (bool) $infinity;
-        if (!$infinity && !$curve->contains($x, $y)) {
-            throw new \RuntimeException('Curve '.$curve.' does not contain point ('.GmpMath::toString($x).', '.GmpMath::toString($y).')');
-        }
+        $this->infinity = $infinity;
 
         if (!is_null($order)) {
             $mul = $this->mul($order);
@@ -116,7 +111,7 @@ final class Point
      */
     public function isInfinity(): bool
     {
-        return (bool) $this->infinity;
+        return $this->infinity;
     }
 
     /**
@@ -178,19 +173,22 @@ final class Point
             }
         }
 
-        $slope = $this->modAdapter->div(
+        $slope = ModularArithmetic::div(
             GmpMath::sub($addend->getY(), $this->y),
-            GmpMath::sub($addend->getX(), $this->x)
+            GmpMath::sub($addend->getX(), $this->x),
+            $this->getCurve()->getPrime()
         );
 
-        $xR = $this->modAdapter->sub(
+        $xR = ModularArithmetic::sub(
             GmpMath::sub(GmpMath::pow($slope, 2), $this->x),
-            $addend->getX()
+            $addend->getX(),
+            $this->getCurve()->getPrime()
         );
 
-        $yR = $this->modAdapter->sub(
+        $yR = ModularArithmetic::sub(
             GmpMath::mul($slope, GmpMath::sub($this->x, $xR)),
-            $this->y
+            $this->y,
+            $this->getCurve()->getPrime()
         );
 
         return $this->curve->getPoint($xR, $yR, $this->order);
@@ -286,17 +284,7 @@ final class Point
     {
         $pubPoint = $this->getCurve()->getPoint($x, $y, $order);
 
-        return new PublicKey($this->getOrder(), $pubPoint);
-    }
-
-    /**
-     * @param \GMP $secret
-     *
-     * @return PrivateKey
-     */
-    public function getPrivateKeyFrom(\GMP $secret): PrivateKey
-    {
-        return new PrivateKey($secret);
+        return PublicKey::create($this->getOrder(), $pubPoint);
     }
 
     /**
@@ -361,24 +349,25 @@ final class Point
             return $this->curve->getInfinity();
         }
 
-        $modMath = $this->modAdapter;
-
         $a = $this->curve->getA();
         $threeX2 = GmpMath::mul(gmp_init(3, 10), GmpMath::pow($this->x, 2));
 
-        $tangent = $modMath->div(
+        $tangent = ModularArithmetic::div(
             GmpMath::add($threeX2, $a),
-            GmpMath::mul(gmp_init(2, 10), $this->y)
+            GmpMath::mul(gmp_init(2, 10), $this->y),
+            $this->getCurve()->getPrime()
         );
 
-        $x3 = $modMath->sub(
+        $x3 = ModularArithmetic::sub(
             GmpMath::pow($tangent, 2),
-            GmpMath::mul(gmp_init(2, 10), $this->x)
+            GmpMath::mul(gmp_init(2, 10), $this->x),
+            $this->getCurve()->getPrime()
         );
 
-        $y3 = $modMath->sub(
+        $y3 = ModularArithmetic::sub(
             GmpMath::mul($tangent, GmpMath::sub($this->x, $x3)),
-            $this->y
+            $this->y,
+            $this->getCurve()->getPrime()
         );
 
         return $this->curve->getPoint($x3, $y3, $this->order);

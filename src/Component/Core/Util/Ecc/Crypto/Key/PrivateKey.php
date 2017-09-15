@@ -48,9 +48,19 @@ final class PrivateKey
     /**
      * @param \GMP $secret
      */
-    public function __construct(\GMP $secret)
+    private function __construct(\GMP $secret)
     {
         $this->secret = $secret;
+    }
+
+    /**
+     * @param \GMP $secret
+     *
+     * @return PrivateKey
+     */
+    public static function create(\GMP $secret): PrivateKey
+    {
+        return new self($secret);
     }
 
     /**
