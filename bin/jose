@@ -7,14 +7,27 @@ use Jose\Component\Console\Command;
 use Symfony\Component\Console\Application;
 use Jose\Component\Core\Converter\StandardJsonConverter;
 use Jose\Component\KeyManagement\KeyAnalyzer;
-//use Jose\Component\KeyManagement\X5UFactory;
-//use Jose\Component\KeyManagement\JKUFactory;
+use Jose\Component\KeyManagement\X5UFactory;
+use Jose\Component\KeyManagement\JKUFactory;
 use Jose\Component\KeyManagement\KeyAnalyzer\JWKAnalyzerManager;
 use Http\Adapter\Guzzle6\Client;
+use GuzzleHttp\Psr7\Request;
+use Http\Message\RequestFactory as Psr7RequestFactory;
+
+final class RequestFactory implements Psr7RequestFactory
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function createRequest($method, $uri, array $headers = [], $body = null, $protocolVersion = '1.1')
+    {
+        return new Request($method, $uri, $headers, $body, $protocolVersion);
+    }
+}
 
 $jsonConverter = new StandardJsonConverter();
 $httpClient = new Client();
-//$requestFactory =
+$requestFactory = new RequestFactory();
 $jwkAnalyzerManager = new JWKAnalyzerManager();
 $jwkAnalyzerManager
     ->add(new KeyAnalyzer\AlgorithmAnalyzer())
@@ -42,8 +55,8 @@ $application->add(new Command\RsaKeysetGeneratorCommand($jsonConverter));
 $application->add(new Command\OptimizeRsaKeyCommand($jsonConverter));
 $application->add(new Command\KeyAnalyzerCommand($jwkAnalyzerManager, $jsonConverter));
 $application->add(new Command\KeysetAnalyzerCommand($jwkAnalyzerManager, $jsonConverter));
-//$application->add(new Command\X5ULoaderCommand(new X5UFactory($jsonConverter, $httpClient, $requestFactory), $jsonConverter));
-//$application->add(new Command\JKULoaderCommand(new JKUFactory($jsonConverter, $httpClient, $requestFactory), $jsonConverter));
+$application->add(new Command\X5ULoaderCommand(new X5UFactory($jsonConverter, $httpClient, $requestFactory), $jsonConverter));
+$application->add(new Command\JKULoaderCommand(new JKUFactory($jsonConverter, $httpClient, $requestFactory), $jsonConverter));
 
 $application->add(new Command\PemConverterCommand($jsonConverter));
 

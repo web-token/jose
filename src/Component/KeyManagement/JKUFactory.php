@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Jose\Component\KeyManagement;
 
 use Http\Client\HttpClient;
+use Http\Message\RequestFactory;
 use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWKSet;
-use Jose\Test\TestBundle\Service\RequestFactory;
 
 final class JKUFactory extends UrlKeySetFactory
 {
