@@ -121,8 +121,8 @@ final class Curve
     }
 
     /**
-     * @param \GMP  $x
-     * @param \GMP  $y
+     * @param \GMP $x
+     * @param \GMP $y
      *
      * @return PublicKey
      */
@@ -135,7 +135,6 @@ final class Curve
         ) {
             throw new \RuntimeException('Generator point has x and y out of range.');
         }
-
 
         return PublicKey::create($point);
     }
@@ -251,7 +250,7 @@ final class Curve
 
             Point::cswap($r[0], $r[1], $j ^ 1);
 
-            $r[0] = $this->add($r[0],$r[1]);
+            $r[0] = $this->add($r[0], $r[1]);
             $r[1] = $this->getDouble($r[1]);
 
             Point::cswap($r[0], $r[1], $j ^ 1);
@@ -291,7 +290,7 @@ final class Curve
      */
     public function __toString(): string
     {
-        return 'curve(' . GmpMath::toString($this->getA()) . ', ' . GmpMath::toString($this->getB()) . ', ' . GmpMath::toString($this->getPrime()) . ')';
+        return 'curve('.GmpMath::toString($this->getA()).', '.GmpMath::toString($this->getB()).', '.GmpMath::toString($this->getPrime()).')';
     }
 
     /**
