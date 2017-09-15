@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a96199e86555402031de47f63a54a439",
+    "content-hash": "008c5c33fc026adbcaee8f051f304229",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -3094,7 +3094,7 @@
             ],
             "authors": [
                 {
-                    "name": "Pádraic Brady",
+                    "name": "Padraic Brady",
                     "email": "padraic.brady@gmail.com",
                     "homepage": "http://blog.astrumfutura.com"
                 }
