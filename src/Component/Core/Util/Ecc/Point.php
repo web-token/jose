@@ -9,9 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Core\Util\Ecc\Primitives;
-
-use Jose\Component\Core\Util\Ecc\Math\GmpMath;
+namespace Jose\Component\Core\Util\Ecc;
 
 /**
  * *********************************************************************

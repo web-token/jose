@@ -9,11 +9,11 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Core\Util\Ecc\Crypto\EcDH;
+namespace Jose\Component\Core\Util\Ecc;
 
-/*
+/**
  * *********************************************************************
- * Copyright (C) 2012 Matyas Danter
+ * Copyright (C) 2012 Matyas Danter.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -35,29 +35,39 @@ namespace Jose\Component\Core\Util\Ecc\Crypto\EcDH;
  * ***********************************************************************
  */
 
-use Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey;
-use Jose\Component\Core\Util\Ecc\Crypto\Key\PublicKey;
-use Jose\Component\Core\Util\Ecc\Primitives\Curve;
-
 /**
- * This class is the implementation of ECDH.
- * EcDH is safe key exchange and achieves
- * that a key is transported securely between two parties.
- * The key then can be hashed and used as a basis in
- * a dual encryption scheme, along with AES for faster
- * two- way encryption.
+ * This class serves as public - private key exchange for signature verification.
  */
-final class EcDH
+final class PrivateKey
 {
     /**
-     * @param Curve      $curve
-     * @param PublicKey  $publicKey
-     * @param PrivateKey $privateKey
+     * @var \GMP
+     */
+    private $secret;
+
+    /**
+     * @param \GMP $secret
+     */
+    private function __construct(\GMP $secret)
+    {
+        $this->secret = $secret;
+    }
+
+    /**
+     * @param \GMP $secret
      *
+     * @return PrivateKey
+     */
+    public static function create(\GMP $secret): PrivateKey
+    {
+        return new self($secret);
+    }
+
+    /**
      * @return \GMP
      */
-    public static function computeSharedKey(Curve $curve, PublicKey $publicKey, PrivateKey $privateKey): \GMP
+    public function getSecret(): \GMP
     {
-        return $curve->mul($publicKey->getPoint(), $privateKey->getSecret())->getX();
+        return $this->secret;
     }
 }

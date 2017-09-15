@@ -15,13 +15,12 @@ namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey;
-use Jose\Component\Core\Util\Ecc\Curves\NistCurve;
-use Jose\Component\Core\Util\Ecc\Math\GmpMath;
-use Jose\Component\Core\Util\Ecc\Primitives\Curve;
+use Jose\Component\Core\Util\Ecc\EcDH;
+use Jose\Component\Core\Util\Ecc\PrivateKey;
+use Jose\Component\Core\Util\Ecc\NistCurve;
+use Jose\Component\Core\Util\Ecc\Curve;
 use Jose\Component\Encryption\Util\ConcatKDF;
 use Jose\Component\Core\JWKFactory;
-use Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH;
 
 /**
  * Class ECDHES.
@@ -217,14 +216,22 @@ final class ECDHES implements KeyAgreementInterface
     }
 
     /**
-     * @param \GMP $value
+     * @param \GMP $dec
      *
      * @return string
      */
-    private function convertDecToBin(\GMP $value): string
+    private function convertDecToBin(\GMP $dec): string
     {
-        $value = gmp_strval($value, 10);
+        if (gmp_cmp($dec, 0) < 0) {
+            throw new \InvalidArgumentException('Unable to convert negative integer to string');
+        }
 
-        return hex2bin(GmpMath::decHex($value));
+        $hex = gmp_strval($dec, 16);
+
+        if (mb_strlen($hex, '8bit') % 2 !== 0) {
+            $hex = '0'.$hex;
+        }
+
+        return hex2bin($hex);
     }
 }

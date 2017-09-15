@@ -9,10 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Core\Util\Ecc\Curves;
-
-use Jose\Component\Core\Util\Ecc\Primitives\Curve;
-use Jose\Component\Core\Util\Ecc\Primitives\Point;
+namespace Jose\Component\Core\Util\Ecc;
 
 /**
  * *********************************************************************

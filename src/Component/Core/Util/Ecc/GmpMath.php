@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Core\Util\Ecc\Math;
+namespace Jose\Component\Core\Util\Ecc;
 
 final class GmpMath
 {
@@ -120,28 +120,6 @@ final class GmpMath
     public static function toString(\GMP $value): string
     {
         return gmp_strval($value);
-    }
-
-    /**
-     * @param string $dec
-     *
-     * @return string
-     */
-    public static function decHex(string $dec): string
-    {
-        $dec = gmp_init($dec, 10);
-
-        if (gmp_cmp($dec, 0) < 0) {
-            throw new \InvalidArgumentException('Unable to convert negative integer to string');
-        }
-
-        $hex = gmp_strval($dec, 16);
-
-        if (mb_strlen($hex, '8bit') % 2 !== 0) {
-            $hex = '0'.$hex;
-        }
-
-        return $hex;
     }
 
     /**

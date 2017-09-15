@@ -17,7 +17,6 @@ use FG\ASN1\ASNObject;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\Util\Ecc\Math\GmpMath;
 use Jose\Component\Core\Util\ECKey;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 
@@ -124,15 +123,24 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     }
 
     /**
-     * @param $value
+     * @param string $dec
      *
      * @return string
      */
-    private function convertDecToHex($value)
+    private function convertDecToHex(string $dec): string
     {
-        $value = gmp_strval($value, 10);
+        $dec = gmp_init($dec, 10);
+        if (gmp_cmp($dec, 0) < 0) {
+            throw new \InvalidArgumentException('Unable to convert negative integer to string');
+        }
 
-        return GmpMath::decHex($value);
+        $hex = gmp_strval($dec, 16);
+
+        if (mb_strlen($hex, '8bit') % 2 !== 0) {
+            $hex = '0'.$hex;
+        }
+
+        return $hex;
     }
 
     /**

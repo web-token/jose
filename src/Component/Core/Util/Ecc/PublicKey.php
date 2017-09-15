@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Core\Util\Ecc\Crypto\Key;
+namespace Jose\Component\Core\Util\Ecc;
 
 /*
  * *********************************************************************
@@ -34,8 +34,6 @@ namespace Jose\Component\Core\Util\Ecc\Crypto\Key;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
-
-use Jose\Component\Core\Util\Ecc\Primitives\Point;
 
 /**
  * This class serves as public- private key exchange for signature verification.

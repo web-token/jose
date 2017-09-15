@@ -9,11 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Core\Util\Ecc\Primitives;
-
-use Jose\Component\Core\Util\Ecc\Crypto\Key\PublicKey;
-use Jose\Component\Core\Util\Ecc\Math\GmpMath;
-use Jose\Component\Core\Util\Ecc\Math\ModularArithmetic;
+namespace Jose\Component\Core\Util\Ecc;
 
 /**
  * This class is a representation of an EC over a field modulo a prime number.
