@@ -24,24 +24,47 @@ use Jose\Component\Core\Util\Ecc\Math\ModularArithmetic;
 final class Curve
 {
     /**
-     * @var CurveParameters
-     */
-    private $parameters;
-
-    /**
      * @var ModularArithmetic
      */
     private $modAdapter;
 
     /**
-     * Constructor that sets up the instance variables.
+     * Elliptic curve over the field of integers modulo a prime.
      *
-     * @param CurveParameters $parameters
+     * @var \GMP
      */
-    public function __construct(CurveParameters $parameters)
+    private $a;
+
+    /**
+     * @var \GMP
+     */
+    private $b;
+
+    /**
+     * @var \GMP
+     */
+    private $prime;
+
+    /**
+     * Binary length of keys associated with these curve parameters.
+     *
+     * @var int
+     */
+    private $size;
+
+    /**
+     * @param int  $size
+     * @param \GMP $prime
+     * @param \GMP $a
+     * @param \GMP $b
+     */
+    public function __construct(int $size, \GMP $prime, \GMP $a, \GMP $b)
     {
-        $this->parameters = $parameters;
-        $this->modAdapter = new ModularArithmetic($this->parameters->getPrime());
+        $this->size = $size;
+        $this->prime = $prime;
+        $this->a = $a;
+        $this->b = $b;
+        $this->modAdapter = new ModularArithmetic($prime);
     }
 
     /**
@@ -50,6 +73,38 @@ final class Curve
     public function getModAdapter(): ModularArithmetic
     {
         return $this->modAdapter;
+    }
+
+    /**
+     * @return \GMP
+     */
+    public function getA(): \GMP
+    {
+        return $this->a;
+    }
+
+    /**
+     * @return \GMP
+     */
+    public function getB(): \GMP
+    {
+        return $this->b;
+    }
+
+    /**
+     * @return \GMP
+     */
+    public function getPrime(): \GMP
+    {
+        return $this->prime;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSize(): int
+    {
+        return $this->size;
     }
 
     /**
@@ -107,38 +162,6 @@ final class Curve
         );
 
         return $eq_zero;
-    }
-
-    /**
-     * @return \GMP
-     */
-    public function getA(): \GMP
-    {
-        return $this->parameters->getA();
-    }
-
-    /**
-     * @return \GMP
-     */
-    public function getB(): \GMP
-    {
-        return $this->parameters->getB();
-    }
-
-    /**
-     * @return \GMP
-     */
-    public function getPrime(): \GMP
-    {
-        return $this->parameters->getPrime();
-    }
-
-    /**
-     * @return int
-     */
-    public function getSize(): int
-    {
-        return $this->parameters->getSize();
     }
 
     /**

@@ -47,7 +47,7 @@ use Jose\Component\Core\Util\Ecc\Math\ModularArithmetic;
  * - double: doubles a point on the ec field mod p
  * - mul: uses double and add to achieve multiplication The rest of the methods are there for supporting the ones above.
  */
-class Point
+final class Point
 {
     /**
      * @var Curve

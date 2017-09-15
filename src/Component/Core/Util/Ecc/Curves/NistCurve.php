@@ -12,7 +12,6 @@
 namespace Jose\Component\Core\Util\Ecc\Curves;
 
 use Jose\Component\Core\Util\Ecc\Primitives\Curve;
-use Jose\Component\Core\Util\Ecc\Primitives\CurveParameters;
 use Jose\Component\Core\Util\Ecc\Primitives\Point;
 
 /**
@@ -56,9 +55,7 @@ final class NistCurve
         $p = gmp_init('115792089210356248762697446949407573530086143415290314195533631308867097853951', 10);
         $b = gmp_init('0x5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b', 16);
 
-        $parameters = new CurveParameters(256, $p, gmp_init(-3, 10), $b);
-
-        return new Curve($parameters);
+        return new Curve(256, $p, gmp_init(-3, 10), $b);
     }
 
     /**
@@ -87,9 +84,7 @@ final class NistCurve
         $p = gmp_init('39402006196394479212279040100143613805079739270465446667948293404245721771496870329047266088258938001861606973112319', 10);
         $b = gmp_init('0xb3312fa7e23ee7e4988e056be3f82d19181d9c6efe8141120314088f5013875ac656398d8a2ed19d2a85c8edd3ec2aef', 16);
 
-        $parameters = new CurveParameters(384, $p, gmp_init(-3, 10), $b);
-
-        return new Curve($parameters);
+        return new Curve(384, $p, gmp_init(-3, 10), $b);
     }
 
     /**
@@ -118,9 +113,7 @@ final class NistCurve
         $p = gmp_init('6864797660130609714981900799081393217269435300143305409394463459185543183397656052122559640661454554977296311391480858037121987999716643812574028291115057151', 10);
         $b = gmp_init('0x051953eb9618e1c9a1f929a21a0b68540eea2da725b99b315f3b8b489918ef109e156193951ec7e937b1652c0bd3bb1bf073573df883d2c34f1ef451fd46b503f00', 16);
 
-        $parameters = new CurveParameters(521, $p, gmp_init(-3, 10), $b);
-
-        return new Curve($parameters);
+        return new Curve(521, $p, gmp_init(-3, 10), $b);
     }
 
     /**

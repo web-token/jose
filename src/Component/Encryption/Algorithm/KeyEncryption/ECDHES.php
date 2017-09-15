@@ -17,6 +17,7 @@ use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\Ecc\Curves\NistCurve;
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
+use Jose\Component\Core\Util\Ecc\Primitives\Point;
 use Jose\Component\Encryption\Util\ConcatKDF;
 use Jose\Component\Core\JWKFactory;
 use Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH;
@@ -188,9 +189,9 @@ final class ECDHES implements KeyAgreementInterface
      *
      * @throws \InvalidArgumentException
      *
-     * @return \Jose\Component\Core\Util\Ecc\Primitives\PointGenerator
+     * @return Point
      */
-    private function getGenerator(JWK $key)
+    private function getGenerator(JWK $key): Point
     {
         $crv = $key->get('crv');
 
