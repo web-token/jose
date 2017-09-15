@@ -11,6 +11,8 @@
 
 namespace Jose\Component\Core\Util\Ecc\Primitives;
 
+use Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey;
+use Jose\Component\Core\Util\Ecc\Crypto\Key\PublicKey;
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
 use Jose\Component\Core\Util\Ecc\Math\ModularArithmetic;
 
@@ -48,14 +50,9 @@ use Jose\Component\Core\Util\Ecc\Math\ModularArithmetic;
 class Point
 {
     /**
-     * @var CurveFp
+     * @var Curve
      */
     private $curve;
-
-    /**
-     * @var GmpMath
-     */
-    protected $adapter;
 
     /**
      * @var ModularArithmetic
@@ -85,7 +82,7 @@ class Point
     /**
      * Initialize a new instance.
      *
-     * @param CurveFp $curve
+     * @param Curve $curve
      * @param \GMP    $x
      * @param \GMP    $y
      * @param \GMP    $order
@@ -94,9 +91,8 @@ class Point
      * @throws \RuntimeException when either the curve does not contain the given coordinates or
      *                           when order is not null and P(x, y) * order is not equal to infinity
      */
-    public function __construct(CurveFp $curve, \GMP $x, \GMP $y, ?\GMP $order = null, bool $infinity = false)
+    public function __construct(Curve $curve, \GMP $x, \GMP $y, ?\GMP $order = null, bool $infinity = false)
     {
-        $this->adapter = new GmpMath();
         $this->modAdapter = $curve->getModAdapter();
         $this->curve = $curve;
         $this->x = $x;
@@ -104,7 +100,7 @@ class Point
         $this->order = null === $order ? gmp_init(0, 10) : $order;
         $this->infinity = (bool) $infinity;
         if (!$infinity && !$curve->contains($x, $y)) {
-            throw new \RuntimeException('Curve '.$curve.' does not contain point ('.$this->adapter->toString($x).', '.$this->adapter->toString($y).')');
+            throw new \RuntimeException('Curve '.$curve.' does not contain point ('.GmpMath::toString($x).', '.GmpMath::toString($y).')');
         }
 
         if (!is_null($order)) {
@@ -124,9 +120,9 @@ class Point
     }
 
     /**
-     * @return CurveFp
+     * @return Curve
      */
-    public function getCurve(): CurveFp
+    public function getCurve(): Curve
     {
         return $this->curve;
     }
@@ -174,8 +170,8 @@ class Point
             return clone $addend;
         }
 
-        if ($this->adapter->equals($addend->getX(), $this->x)) {
-            if ($this->adapter->equals($addend->getY(), $this->y)) {
+        if (GmpMath::equals($addend->getX(), $this->x)) {
+            if (GmpMath::equals($addend->getY(), $this->y)) {
                 return $this->getDouble();
             } else {
                 return $this->curve->getInfinity();
@@ -183,17 +179,17 @@ class Point
         }
 
         $slope = $this->modAdapter->div(
-            $this->adapter->sub($addend->getY(), $this->y),
-            $this->adapter->sub($addend->getX(), $this->x)
+            GmpMath::sub($addend->getY(), $this->y),
+            GmpMath::sub($addend->getX(), $this->x)
         );
 
         $xR = $this->modAdapter->sub(
-            $this->adapter->sub($this->adapter->pow($slope, 2), $this->x),
+            GmpMath::sub(GmpMath::pow($slope, 2), $this->x),
             $addend->getX()
         );
 
         $yR = $this->modAdapter->sub(
-            $this->adapter->mul($slope, $this->adapter->sub($this->x, $xR)),
+            GmpMath::mul($slope, GmpMath::sub($this->x, $xR)),
             $this->y
         );
 
@@ -215,8 +211,8 @@ class Point
             return 1;
         }
 
-        $equal = ($this->adapter->equals($this->x, $other->getX()));
-        $equal &= ($this->adapter->equals($this->y, $other->getY()));
+        $equal = (GmpMath::equals($this->x, $other->getX()));
+        $equal &= (GmpMath::equals($this->y, $other->getY()));
         $equal &= $this->isInfinity() == $other->isInfinity();
         $equal &= $this->curve->equals($other->getCurve());
 
@@ -246,11 +242,11 @@ class Point
 
         /** @var \GMP $zero */
         $zero = gmp_init(0, 10);
-        if ($this->adapter->cmp($this->order, $zero) > 0) {
-            $n = $this->adapter->mod($n, $this->order);
+        if (GmpMath::cmp($this->order, $zero) > 0) {
+            $n = GmpMath::mod($n, $this->order);
         }
 
-        if ($this->adapter->equals($n, $zero)) {
+        if (GmpMath::equals($n, $zero)) {
             return $this->curve->getInfinity();
         }
 
@@ -261,7 +257,7 @@ class Point
         ];
 
         $k = $this->curve->getSize();
-        $n = str_pad($this->adapter->baseConvert($this->adapter->toString($n), 10, 2), $k, '0', STR_PAD_LEFT);
+        $n = str_pad(GmpMath::baseConvert(GmpMath::toString($n), 10, 2), $k, '0', STR_PAD_LEFT);
 
         for ($i = 0; $i < $k; ++$i) {
             $j = $n[$i];
@@ -277,6 +273,30 @@ class Point
         $r[0]->validate();
 
         return $r[0];
+    }
+
+    /**
+     * @param \GMP $x
+     * @param \GMP $y
+     * @param \GMP $order
+     *
+     * @return PublicKey
+     */
+    public function getPublicKeyFrom(\GMP $x, \GMP $y, ?\GMP $order = null): PublicKey
+    {
+        $pubPoint = $this->getCurve()->getPoint($x, $y, $order);
+
+        return new PublicKey($this->getOrder(), $pubPoint);
+    }
+
+    /**
+     * @param \GMP $secret
+     *
+     * @return PrivateKey
+     */
+    public function getPrivateKeyFrom(\GMP $secret): PrivateKey
+    {
+        return new PrivateKey($secret);
     }
 
     /**
@@ -314,12 +334,12 @@ class Point
         /** @var \GMP $mask */
         $mask = gmp_init($mask, 2);
 
-        $taA = $this->adapter->bitwiseAnd($sa, $mask);
-        $taB = $this->adapter->bitwiseAnd($sb, $mask);
+        $taA = GmpMath::bitwiseAnd($sa, $mask);
+        $taB = GmpMath::bitwiseAnd($sb, $mask);
 
-        $sa = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($sa, $sb), $taB);
-        $sb = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($sa, $sb), $taA);
-        $sa = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($sa, $sb), $taB);
+        $sa = GmpMath::bitwiseXor(GmpMath::bitwiseXor($sa, $sb), $taB);
+        $sb = GmpMath::bitwiseXor(GmpMath::bitwiseXor($sa, $sb), $taA);
+        $sa = GmpMath::bitwiseXor(GmpMath::bitwiseXor($sa, $sb), $taB);
 
         $a = $isGMP ? $sa : (bool) gmp_strval($sa, 10);
         $b = $isGMP ? $sb : (bool) gmp_strval($sb, 10);
@@ -341,24 +361,23 @@ class Point
             return $this->curve->getInfinity();
         }
 
-        $math = $this->adapter;
         $modMath = $this->modAdapter;
 
         $a = $this->curve->getA();
-        $threeX2 = $math->mul(gmp_init(3, 10), $math->pow($this->x, 2));
+        $threeX2 = GmpMath::mul(gmp_init(3, 10), GmpMath::pow($this->x, 2));
 
         $tangent = $modMath->div(
-            $math->add($threeX2, $a),
-            $math->mul(gmp_init(2, 10), $this->y)
+            GmpMath::add($threeX2, $a),
+            GmpMath::mul(gmp_init(2, 10), $this->y)
         );
 
         $x3 = $modMath->sub(
-            $math->pow($tangent, 2),
-            $math->mul(gmp_init(2, 10), $this->x)
+            GmpMath::pow($tangent, 2),
+            GmpMath::mul(gmp_init(2, 10), $this->x)
         );
 
         $y3 = $modMath->sub(
-            $math->mul($tangent, $math->sub($this->x, $x3)),
+            GmpMath::mul($tangent, GmpMath::sub($this->x, $x3)),
             $this->y
         );
 

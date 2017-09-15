@@ -19,7 +19,7 @@ final class GmpMath
      *
      * @return int
      */
-    public function cmp(\GMP $first, \GMP $other): int
+    public static function cmp(\GMP $first, \GMP $other): int
     {
         return gmp_cmp($first, $other);
     }
@@ -30,7 +30,7 @@ final class GmpMath
      *
      * @return bool
      */
-    public function equals(\GMP $first, \GMP $other): bool
+    public static function equals(\GMP $first, \GMP $other): bool
     {
         return gmp_cmp($first, $other) === 0;
     }
@@ -41,7 +41,7 @@ final class GmpMath
      *
      * @return \GMP
      */
-    public function mod(\GMP $number, \GMP $modulus): \GMP
+    public static function mod(\GMP $number, \GMP $modulus): \GMP
     {
         return gmp_mod($number, $modulus);
     }
@@ -52,7 +52,7 @@ final class GmpMath
      *
      * @return \GMP
      */
-    public function add(\GMP $augend, \GMP $addend): \GMP
+    public static function add(\GMP $augend, \GMP $addend): \GMP
     {
         return gmp_add($augend, $addend);
     }
@@ -63,7 +63,7 @@ final class GmpMath
      *
      * @return \GMP
      */
-    public function sub(\GMP $minuend, \GMP $subtrahend): \GMP
+    public static function sub(\GMP $minuend, \GMP $subtrahend): \GMP
     {
         return gmp_sub($minuend, $subtrahend);
     }
@@ -74,20 +74,9 @@ final class GmpMath
      *
      * @return \GMP
      */
-    public function mul(\GMP $multiplier, \GMP $multiplicand): \GMP
+    public static function mul(\GMP $multiplier, \GMP $multiplicand): \GMP
     {
         return gmp_mul($multiplier, $multiplicand);
-    }
-
-    /**
-     * @param \GMP $dividend
-     * @param \GMP $divisor
-     *
-     * @return \GMP
-     */
-    public function div(\GMP $dividend, \GMP $divisor): \GMP
-    {
-        return gmp_div($dividend, $divisor);
     }
 
     /**
@@ -96,7 +85,7 @@ final class GmpMath
      *
      * @return \GMP
      */
-    public function pow(\GMP $base, $exponent): \GMP
+    public static function pow(\GMP $base, $exponent): \GMP
     {
         return gmp_pow($base, $exponent);
     }
@@ -107,21 +96,9 @@ final class GmpMath
      *
      * @return \GMP
      */
-    public function bitwiseAnd(\GMP $first, \GMP $other): \GMP
+    public static function bitwiseAnd(\GMP $first, \GMP $other): \GMP
     {
         return gmp_and($first, $other);
-    }
-
-    /**
-     * @param \GMP $number
-     * @param $positions
-     *
-     * @return \GMP
-     */
-    public function rightShift(\GMP $number, $positions): \GMP
-    {
-        // Shift 1 right = div / 2
-        return gmp_div($number, gmp_pow(gmp_init(2, 10), $positions));
     }
 
     /**
@@ -130,7 +107,7 @@ final class GmpMath
      *
      * @return \GMP
      */
-    public function bitwiseXor(\GMP $first, \GMP $other): \GMP
+    public static function bitwiseXor(\GMP $first, \GMP $other): \GMP
     {
         return gmp_xor($first, $other);
     }
@@ -140,7 +117,7 @@ final class GmpMath
      *
      * @return string
      */
-    public function toString(\GMP $value): string
+    public static function toString(\GMP $value): string
     {
         return gmp_strval($value);
     }
@@ -150,7 +127,7 @@ final class GmpMath
      *
      * @return string
      */
-    public function decHex($dec): string
+    public static function decHex($dec): string
     {
         $dec = gmp_init($dec, 10);
 
@@ -168,58 +145,14 @@ final class GmpMath
     }
 
     /**
-     * @param \GMP $base
-     * @param \GMP $exponent
-     * @param \GMP $modulus
-     *
-     * @return \GMP
-     */
-    public function powmod(\GMP $base, \GMP $exponent, \GMP $modulus): \GMP
-    {
-        if ($this->cmp($exponent, gmp_init(0, 10)) < 0) {
-            throw new \InvalidArgumentException('Negative exponents ('.$this->toString($exponent).') not allowed.');
-        }
-
-        return gmp_powm($base, $exponent, $modulus);
-    }
-
-    /**
      * @param \GMP $a
      * @param \GMP $m
      *
      * @return \GMP
      */
-    public function inverseMod(\GMP $a, \GMP $m): \GMP
+    public static function inverseMod(\GMP $a, \GMP $m): \GMP
     {
         return gmp_invert($a, $m);
-    }
-
-    /**
-     * @param \GMP $a
-     * @param \GMP $n
-     *
-     * @return int
-     */
-    public function jacobi(\GMP $a, \GMP $n): int
-    {
-        return gmp_jacobi($a, $n);
-    }
-
-    /**
-     * @param $s
-     *
-     * @return \GMP
-     */
-    public function stringToInt($s): \GMP
-    {
-        $result = gmp_init(0, 10);
-        $sLen = mb_strlen($s, '8bit');
-
-        for ($c = 0; $c < $sLen; ++$c) {
-            $result = gmp_add(gmp_mul(256, $result), gmp_init(ord($s[$c]), 10));
-        }
-
-        return $result;
     }
 
     /**
@@ -229,26 +162,8 @@ final class GmpMath
      *
      * @return string
      */
-    public function baseConvert($number, $from, $to): string
+    public static function baseConvert($number, $from, $to): string
     {
         return gmp_strval(gmp_init($number, $from), $to);
-    }
-
-    /**
-     * @return NumberTheory
-     */
-    public function getNumberTheory(): NumberTheory
-    {
-        return new NumberTheory();
-    }
-
-    /**
-     * @param \GMP $modulus
-     *
-     * @return ModularArithmetic
-     */
-    public function getModularArithmetic(\GMP $modulus): ModularArithmetic
-    {
-        return new ModularArithmetic($modulus);
     }
 }

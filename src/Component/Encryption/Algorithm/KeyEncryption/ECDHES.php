@@ -188,7 +188,7 @@ final class ECDHES implements KeyAgreementInterface
      *
      * @throws \InvalidArgumentException
      *
-     * @return \Jose\Component\Core\Util\Ecc\Primitives\GeneratorPoint
+     * @return \Jose\Component\Core\Util\Ecc\Primitives\PointGenerator
      */
     private function getGenerator(JWK $key)
     {
@@ -226,8 +226,7 @@ final class ECDHES implements KeyAgreementInterface
     private function convertDecToBin($value)
     {
         $value = gmp_strval($value, 10);
-        $adapter = new GmpMath();
 
-        return hex2bin($adapter->decHex($value));
+        return hex2bin(GmpMath::decHex($value));
     }
 }

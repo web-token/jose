@@ -21,17 +21,12 @@ use Jose\Component\Core\Util\Ecc\Math\ModularArithmetic;
  * - Does the curve contain a point?
  * - Comparison of two curves.
  */
-final class CurveFp
+final class Curve
 {
     /**
      * @var CurveParameters
      */
     private $parameters;
-
-    /**
-     * @var GmpMath
-     */
-    private $adapter;
 
     /**
      * @var ModularArithmetic
@@ -46,7 +41,6 @@ final class CurveFp
     public function __construct(CurveParameters $parameters)
     {
         $this->parameters = $parameters;
-        $this->adapter = new GmpMath();
         $this->modAdapter = new ModularArithmetic($this->parameters->getPrime());
     }
 
@@ -83,11 +77,11 @@ final class CurveFp
      * @param \GMP $y
      * @param \GMP $order
      *
-     * @return GeneratorPoint
+     * @return Point
      */
-    public function getGenerator(\GMP $x, \GMP $y, \GMP $order): GeneratorPoint
+    public function getGenerator(\GMP $x, \GMP $y, \GMP $order): Point
     {
-        return new GeneratorPoint($this, $x, $y, $order);
+        return new Point($this, $x, $y, $order);
     }
 
     /**
@@ -98,15 +92,13 @@ final class CurveFp
      */
     public function contains(\GMP $x, \GMP $y): bool
     {
-        $math = $this->adapter;
-
-        $eq_zero = $math->equals(
+        $eq_zero = GmpMath::equals(
             $this->modAdapter->sub(
-                $math->pow($y, 2),
-                $math->add(
-                    $math->add(
-                        $math->pow($x, 3),
-                        $math->mul($this->getA(), $x)
+                GmpMath::pow($y, 2),
+                GmpMath::add(
+                    GmpMath::add(
+                        GmpMath::pow($x, 3),
+                        GmpMath::mul($this->getA(), $x)
                     ),
                     $this->getB()
                 )
@@ -150,28 +142,34 @@ final class CurveFp
     }
 
     /**
-     * @param CurveFp $other
+     * @param Curve $other
      *
      * @return int
      */
-    public function cmp(CurveFp $other): int
+    public function cmp(Curve $other): int
     {
-        $math = $this->adapter;
-
-        $equal = $math->equals($this->getA(), $other->getA());
-        $equal &= $math->equals($this->getB(), $other->getB());
-        $equal &= $math->equals($this->getPrime(), $other->getPrime());
+        $equal = GmpMath::equals($this->getA(), $other->getA());
+        $equal &= GmpMath::equals($this->getB(), $other->getB());
+        $equal &= GmpMath::equals($this->getPrime(), $other->getPrime());
 
         return $equal ? 0 : 1;
     }
 
     /**
-     * @param CurveFp $other
+     * @param Curve $other
      *
      * @return bool
      */
-    public function equals(CurveFp $other): bool
+    public function equals(Curve $other): bool
     {
         return $this->cmp($other) === 0;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return 'curve(' . GmpMath::toString($this->getA()) . ', ' . GmpMath::toString($this->getB()) . ', ' . GmpMath::toString($this->getPrime()) . ')';
     }
 }

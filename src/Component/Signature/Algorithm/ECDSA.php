@@ -131,9 +131,8 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     private function convertDecToHex($value)
     {
         $value = gmp_strval($value, 10);
-        $adapter = new GmpMath();
 
-        return $adapter->decHex($value);
+        return GmpMath::decHex($value);
     }
 
     /**

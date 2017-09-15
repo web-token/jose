@@ -14,11 +14,6 @@ namespace Jose\Component\Core\Util\Ecc\Math;
 final class ModularArithmetic
 {
     /**
-     * @var GmpMath
-     */
-    private $adapter;
-
-    /**
      * @var \GMP
      */
     private $modulus;
@@ -28,7 +23,6 @@ final class ModularArithmetic
      */
     public function __construct(\GMP $modulus)
     {
-        $this->adapter = new GmpMath();
         $this->modulus = $modulus;
     }
 
@@ -40,7 +34,7 @@ final class ModularArithmetic
      */
     public function sub(\GMP $minuend, \GMP $subtrahend): \GMP
     {
-        return $this->adapter->mod($this->adapter->sub($minuend, $subtrahend), $this->modulus);
+        return GmpMath::mod(GmpMath::sub($minuend, $subtrahend), $this->modulus);
     }
 
     /**
@@ -51,7 +45,7 @@ final class ModularArithmetic
      */
     public function mul(\GMP $multiplier, \GMP $muliplicand): \GMP
     {
-        return $this->adapter->mod($this->adapter->mul($multiplier, $muliplicand), $this->modulus);
+        return GmpMath::mod(GmpMath::mul($multiplier, $muliplicand), $this->modulus);
     }
 
     /**
@@ -62,17 +56,6 @@ final class ModularArithmetic
      */
     public function div(\GMP $dividend, \GMP $divisor): \GMP
     {
-        return $this->mul($dividend, $this->adapter->inverseMod($divisor, $this->modulus));
-    }
-
-    /**
-     * @param \GMP $base
-     * @param \GMP $exponent
-     *
-     * @return \GMP
-     */
-    public function pow(\GMP $base, \GMP $exponent): \GMP
-    {
-        return $this->adapter->powmod($base, $exponent, $this->modulus);
+        return $this->mul($dividend, GmpMath::inverseMod($divisor, $this->modulus));
     }
 }

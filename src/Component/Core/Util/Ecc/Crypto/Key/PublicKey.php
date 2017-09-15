@@ -36,7 +36,7 @@ namespace Jose\Component\Core\Util\Ecc\Crypto\Key;
  */
 
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
-use Jose\Component\Core\Util\Ecc\Primitives\GeneratorPoint;
+use Jose\Component\Core\Util\Ecc\Primitives\PointGenerator;
 use Jose\Component\Core\Util\Ecc\Primitives\Point;
 
 /**
@@ -52,21 +52,18 @@ final class PublicKey
     /**
      * Initialize a new instance.
      *
-     * @param GeneratorPoint $generator
+     * @param \GMP           $n
      * @param Point          $point
      *
      * @throws \LogicException
      * @throws \RuntimeException
      */
-    public function __construct(GeneratorPoint $generator, Point $point)
+    public function __construct(\GMP $n, Point $point)
     {
         $this->point = $point;
-        $adapter = new GmpMath();
 
-        $n = $generator->getOrder();
-
-        if ($adapter->cmp($point->getX(), gmp_init(0, 10)) < 0 || $adapter->cmp($n, $point->getX()) <= 0
-            || $adapter->cmp($point->getY(), gmp_init(0, 10)) < 0 || $adapter->cmp($n, $point->getY()) <= 0
+        if (GmpMath::cmp($point->getX(), gmp_init(0, 10)) < 0 || GmpMath::cmp($n, $point->getX()) <= 0
+            || GmpMath::cmp($point->getY(), gmp_init(0, 10)) < 0 || GmpMath::cmp($n, $point->getY()) <= 0
         ) {
             throw new \RuntimeException('Generator point has x and y out of range.');
         }
