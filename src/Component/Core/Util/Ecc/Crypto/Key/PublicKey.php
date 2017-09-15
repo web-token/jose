@@ -35,8 +35,6 @@ namespace Jose\Component\Core\Util\Ecc\Crypto\Key;
  * ***********************************************************************
  */
 
-use Jose\Component\Core\Util\Ecc\Math\GmpMath;
-use Jose\Component\Core\Util\Ecc\Primitives\PointGenerator;
 use Jose\Component\Core\Util\Ecc\Primitives\Point;
 
 /**
@@ -50,34 +48,22 @@ final class PublicKey
     private $point;
 
     /**
-     * Initialize a new instance.
+     * PublicKey constructor.
      *
-     * @param Point          $point
-     *
-     * @throws \LogicException
-     * @throws \RuntimeException
+     * @param Point $point
      */
     private function __construct(Point $point)
     {
         $this->point = $point;
-
     }
 
     /**
-     * @param \GMP $n
      * @param Point $point
      * @return PublicKey
      */
-    public static function create(\GMP $n, Point $point): PublicKey
+    public static function create(Point $point): PublicKey
     {
-
-        if (GmpMath::cmp($point->getX(), gmp_init(0, 10)) < 0 || GmpMath::cmp($n, $point->getX()) <= 0
-            || GmpMath::cmp($point->getY(), gmp_init(0, 10)) < 0 || GmpMath::cmp($n, $point->getY()) <= 0
-        ) {
-            throw new \RuntimeException('Generator point has x and y out of range.');
-        }
-
-        return new PublicKey($point);
+        return new self($point);
     }
 
     /**

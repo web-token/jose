@@ -37,6 +37,7 @@ namespace Jose\Component\Core\Util\Ecc\Crypto\EcDH;
 
 use Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey;
 use Jose\Component\Core\Util\Ecc\Crypto\Key\PublicKey;
+use Jose\Component\Core\Util\Ecc\Primitives\Curve;
 
 /**
  * This class is the implementation of ECDH.
@@ -49,13 +50,14 @@ use Jose\Component\Core\Util\Ecc\Crypto\Key\PublicKey;
 final class EcDH
 {
     /**
-     * @param PublicKey $publicKey
+     * @param Curve      $curve
+     * @param PublicKey  $publicKey
      * @param PrivateKey $privateKey
      *
      * @return \GMP
      */
-    public static function computeSharedKey(PublicKey $publicKey, PrivateKey $privateKey): \GMP
+    public static function computeSharedKey(Curve $curve, PublicKey $publicKey, PrivateKey $privateKey): \GMP
     {
-        return $publicKey->getPoint()->mul($privateKey->getSecret())->getX();
+        return $curve->mul($publicKey->getPoint(), $privateKey->getSecret())->getX();
     }
 }

@@ -81,11 +81,11 @@ final class GmpMath
 
     /**
      * @param \GMP $base
-     * @param $exponent
+     * @param int  $exponent
      *
      * @return \GMP
      */
-    public static function pow(\GMP $base, $exponent): \GMP
+    public static function pow(\GMP $base, int $exponent): \GMP
     {
         return gmp_pow($base, $exponent);
     }
@@ -123,11 +123,11 @@ final class GmpMath
     }
 
     /**
-     * @param $dec
+     * @param string $dec
      *
      * @return string
      */
-    public static function decHex($dec): string
+    public static function decHex(string $dec): string
     {
         $dec = gmp_init($dec, 10);
 
@@ -156,13 +156,13 @@ final class GmpMath
     }
 
     /**
-     * @param $number
-     * @param $from
-     * @param $to
+     * @param string $number
+     * @param int    $from
+     * @param int    $to
      *
      * @return string
      */
-    public static function baseConvert($number, $from, $to): string
+    public static function baseConvert(string $number, int $from, int $to): string
     {
         return gmp_strval(gmp_init($number, $from), $to);
     }

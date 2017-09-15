@@ -11,10 +11,7 @@
 
 namespace Jose\Component\Core\Util\Ecc\Primitives;
 
-use Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey;
-use Jose\Component\Core\Util\Ecc\Crypto\Key\PublicKey;
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
-use Jose\Component\Core\Util\Ecc\Math\ModularArithmetic;
 
 /**
  * *********************************************************************
@@ -50,11 +47,6 @@ use Jose\Component\Core\Util\Ecc\Math\ModularArithmetic;
 final class Point
 {
     /**
-     * @var Curve
-     */
-    private $curve;
-
-    /**
      * @var \GMP
      */
     private $x;
@@ -77,7 +69,6 @@ final class Point
     /**
      * Initialize a new instance.
      *
-     * @param Curve $curve
      * @param \GMP    $x
      * @param \GMP    $y
      * @param \GMP    $order
@@ -86,24 +77,34 @@ final class Point
      * @throws \RuntimeException when either the curve does not contain the given coordinates or
      *                           when order is not null and P(x, y) * order is not equal to infinity
      */
-    public function __construct(Curve $curve, \GMP $x, \GMP $y, ?\GMP $order = null, bool $infinity = false)
+    private function __construct(\GMP $x, \GMP $y, \GMP $order, bool $infinity = false)
     {
-        /*if (!$infinity && !$curve->contains($x, $y)) {
-            throw new \RuntimeException('Curve '.$curve.' does not contain point ('.GmpMath::toString($x).', '.GmpMath::toString($y).')');
-        }*/
-
-        $this->curve = $curve;
         $this->x = $x;
         $this->y = $y;
         $this->order = null === $order ? gmp_init(0, 10) : $order;
         $this->infinity = $infinity;
+    }
 
-        if (!is_null($order)) {
-            $mul = $this->mul($order);
-            if (!$mul->isInfinity()) {
-                throw new \RuntimeException('SELF * ORDER MUST EQUAL INFINITY. ('.(string) $mul.' found instead)');
-            }
-        }
+    /**
+     * @param \GMP $x
+     * @param \GMP $y
+     * @param \GMP|null $order
+     *
+     * @return Point
+     */
+    public static function create(\GMP $x, \GMP $y, ?\GMP $order = null): Point
+    {
+        return new self($x, $y, null === $order ? gmp_init(0, 10) : $order);
+    }
+
+    /**
+     * @return Point
+     */
+    public static function infinity(): Point
+    {
+        $zero = gmp_init(0, 10);
+
+        return new self($zero, $zero, $zero, true);
     }
 
     /**
@@ -112,14 +113,6 @@ final class Point
     public function isInfinity(): bool
     {
         return $this->infinity;
-    }
-
-    /**
-     * @return Curve
-     */
-    public function getCurve(): Curve
-    {
-        return $this->curve;
     }
 
     /**
@@ -147,157 +140,16 @@ final class Point
     }
 
     /**
-     * @param Point $addend
-     *
-     * @return Point
-     */
-    public function add(Point $addend): Point
-    {
-        if (!$this->curve->equals($addend->getCurve())) {
-            throw new \RuntimeException('The Elliptic Curves do not match.');
-        }
-
-        if ($addend->isInfinity()) {
-            return clone $this;
-        }
-
-        if ($this->isInfinity()) {
-            return clone $addend;
-        }
-
-        if (GmpMath::equals($addend->getX(), $this->x)) {
-            if (GmpMath::equals($addend->getY(), $this->y)) {
-                return $this->getDouble();
-            } else {
-                return $this->curve->getInfinity();
-            }
-        }
-
-        $slope = ModularArithmetic::div(
-            GmpMath::sub($addend->getY(), $this->y),
-            GmpMath::sub($addend->getX(), $this->x),
-            $this->getCurve()->getPrime()
-        );
-
-        $xR = ModularArithmetic::sub(
-            GmpMath::sub(GmpMath::pow($slope, 2), $this->x),
-            $addend->getX(),
-            $this->getCurve()->getPrime()
-        );
-
-        $yR = ModularArithmetic::sub(
-            GmpMath::mul($slope, GmpMath::sub($this->x, $xR)),
-            $this->y,
-            $this->getCurve()->getPrime()
-        );
-
-        return $this->curve->getPoint($xR, $yR, $this->order);
-    }
-
-    /**
-     * @param Point $other
-     *
-     * @return int
-     */
-    public function cmp(Point $other): int
-    {
-        if ($other->isInfinity() && $this->isInfinity()) {
-            return 0;
-        }
-
-        if ($other->isInfinity() || $this->isInfinity()) {
-            return 1;
-        }
-
-        $equal = (GmpMath::equals($this->x, $other->getX()));
-        $equal &= (GmpMath::equals($this->y, $other->getY()));
-        $equal &= $this->isInfinity() == $other->isInfinity();
-        $equal &= $this->curve->equals($other->getCurve());
-
-        return $equal ? 0 : 1;
-    }
-
-    /**
-     * @param Point $other
-     *
-     * @return bool
-     */
-    public function equals(Point $other): bool
-    {
-        return $this->cmp($other) === 0;
-    }
-
-    /**
-     * @param \GMP $n
-     *
-     * @return Point
-     */
-    public function mul(\GMP $n): Point
-    {
-        if ($this->isInfinity()) {
-            return $this->curve->getInfinity();
-        }
-
-        /** @var \GMP $zero */
-        $zero = gmp_init(0, 10);
-        if (GmpMath::cmp($this->order, $zero) > 0) {
-            $n = GmpMath::mod($n, $this->order);
-        }
-
-        if (GmpMath::equals($n, $zero)) {
-            return $this->curve->getInfinity();
-        }
-
-        /** @var Point[] $r */
-        $r = [
-            $this->curve->getInfinity(),
-            clone $this,
-        ];
-
-        $k = $this->curve->getSize();
-        $n = str_pad(GmpMath::baseConvert(GmpMath::toString($n), 10, 2), $k, '0', STR_PAD_LEFT);
-
-        for ($i = 0; $i < $k; ++$i) {
-            $j = $n[$i];
-
-            $this->cswap($r[0], $r[1], $j ^ 1);
-
-            $r[0] = $r[0]->add($r[1]);
-            $r[1] = $r[1]->getDouble();
-
-            $this->cswap($r[0], $r[1], $j ^ 1);
-        }
-
-        $r[0]->validate();
-
-        return $r[0];
-    }
-
-    /**
-     * @param \GMP $x
-     * @param \GMP $y
-     * @param \GMP $order
-     *
-     * @return PublicKey
-     */
-    public function getPublicKeyFrom(\GMP $x, \GMP $y, ?\GMP $order = null): PublicKey
-    {
-        $pubPoint = $this->getCurve()->getPoint($x, $y, $order);
-
-        return PublicKey::create($this->getOrder(), $pubPoint);
-    }
-
-    /**
      * @param Point $a
      * @param Point $b
      * @param int   $cond
      */
-    private function cswap(Point $a, Point $b, int $cond)
+    public static function cswap(Point $a, Point $b, int $cond)
     {
-        $this->cswapValue($a->x, $b->x, $cond);
-        $this->cswapValue($a->y, $b->y, $cond);
-        $this->cswapValue($a->order, $b->order, $cond);
-        $this->cswapValue($a->infinity, $b->infinity, $cond);
+        self::cswapGMP($a->x, $b->x, $cond);
+        self::cswapGMP($a->y, $b->y, $cond);
+        self::cswapGMP($a->order, $b->order, $cond);
+        self::cswapBoolean($a->infinity, $b->infinity, $cond);
     }
 
     /**
@@ -305,71 +157,32 @@ final class Point
      * @param $b
      * @param $cond
      */
-    private function cswapValue(&$a, &$b, int $cond)
+    private static function cswapBoolean(bool &$a, bool &$b, int $cond)
     {
-        $isGMP = is_object($a) && $a instanceof \GMP;
+        $sa = gmp_init(intval($a), 10);
+        $sb = gmp_init(intval($b), 10);
 
-        /** @var \GMP $sa */
-        $sa = $isGMP ? $a : gmp_init(intval($a), 10);
+        self::cswapGMP($sa, $sb, $cond);
 
-        /** @var \GMP $sb */
-        $sb = $isGMP ? $b : gmp_init(intval($b), 10);
-        $size = max(mb_strlen(gmp_strval($sa, 2), '8bit'), mb_strlen(gmp_strval($sb, 2), '8bit'));
-
-        $mask = 1 - intval($cond);
-        $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
-
-        /** @var \GMP $mask */
-        $mask = gmp_init($mask, 2);
-
-        $taA = GmpMath::bitwiseAnd($sa, $mask);
-        $taB = GmpMath::bitwiseAnd($sb, $mask);
-
-        $sa = GmpMath::bitwiseXor(GmpMath::bitwiseXor($sa, $sb), $taB);
-        $sb = GmpMath::bitwiseXor(GmpMath::bitwiseXor($sa, $sb), $taA);
-        $sa = GmpMath::bitwiseXor(GmpMath::bitwiseXor($sa, $sb), $taB);
-
-        $a = $isGMP ? $sa : (bool) gmp_strval($sa, 10);
-        $b = $isGMP ? $sb : (bool) gmp_strval($sb, 10);
-    }
-
-    private function validate()
-    {
-        if (!$this->infinity && !$this->curve->contains($this->x, $this->y)) {
-            throw new \RuntimeException('Invalid point');
-        }
+        $a = (bool) gmp_strval($sa, 10);
+        $b = (bool) gmp_strval($sb, 10);
     }
 
     /**
-     * @return Point
+     * @param \GMP $sa
+     * @param \GMP $sb
+     * @param int $cond
      */
-    public function getDouble(): Point
+    private static function cswapGMP(\GMP &$sa, \GMP &$sb, int $cond)
     {
-        if ($this->isInfinity()) {
-            return $this->curve->getInfinity();
-        }
-
-        $a = $this->curve->getA();
-        $threeX2 = GmpMath::mul(gmp_init(3, 10), GmpMath::pow($this->x, 2));
-
-        $tangent = ModularArithmetic::div(
-            GmpMath::add($threeX2, $a),
-            GmpMath::mul(gmp_init(2, 10), $this->y),
-            $this->getCurve()->getPrime()
-        );
-
-        $x3 = ModularArithmetic::sub(
-            GmpMath::pow($tangent, 2),
-            GmpMath::mul(gmp_init(2, 10), $this->x),
-            $this->getCurve()->getPrime()
-        );
-
-        $y3 = ModularArithmetic::sub(
-            GmpMath::mul($tangent, GmpMath::sub($this->x, $x3)),
-            $this->y,
-            $this->getCurve()->getPrime()
-        );
-
-        return $this->curve->getPoint($x3, $y3, $this->order);
+        $size = max(mb_strlen(gmp_strval($sa, 2), '8bit'), mb_strlen(gmp_strval($sb, 2), '8bit'));
+        $mask = 1 - intval($cond);
+        $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
+        $mask = gmp_init($mask, 2);
+        $taA = GmpMath::bitwiseAnd($sa, $mask);
+        $taB = GmpMath::bitwiseAnd($sb, $mask);
+        $sa = GmpMath::bitwiseXor(GmpMath::bitwiseXor($sa, $sb), $taB);
+        $sb = GmpMath::bitwiseXor(GmpMath::bitwiseXor($sa, $sb), $taA);
+        $sa = GmpMath::bitwiseXor(GmpMath::bitwiseXor($sa, $sb), $taB);
     }
 }

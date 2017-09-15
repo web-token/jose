@@ -18,7 +18,7 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\Ecc\Crypto\Key\PrivateKey;
 use Jose\Component\Core\Util\Ecc\Curves\NistCurve;
 use Jose\Component\Core\Util\Ecc\Math\GmpMath;
-use Jose\Component\Core\Util\Ecc\Primitives\Point;
+use Jose\Component\Core\Util\Ecc\Primitives\Curve;
 use Jose\Component\Encryption\Util\ConcatKDF;
 use Jose\Component\Core\JWKFactory;
 use Jose\Component\Core\Util\Ecc\Crypto\EcDH\EcDH;
@@ -85,16 +85,16 @@ final class ECDHES implements KeyAgreementInterface
             case 'P-256':
             case 'P-384':
             case 'P-521':
-                $p = $this->getGenerator($private_key);
+                $curve = $this->getCurve($private_key);
 
                 $rec_x = $this->convertBase64ToGmp($public_key->get('x'));
                 $rec_y = $this->convertBase64ToGmp($public_key->get('y'));
                 $sen_d = $this->convertBase64ToGmp($private_key->get('d'));
 
                 $priv_key = PrivateKey::create($sen_d);
-                $pub_key = $p->getPublicKeyFrom($rec_x, $rec_y);
+                $pub_key = $curve->getPublicKeyFrom($rec_x, $rec_y);
 
-                return $this->convertDecToBin(EcDH::computeSharedKey($pub_key, $priv_key));
+                return $this->convertDecToBin(EcDH::computeSharedKey($curve, $pub_key, $priv_key));
             case 'X25519':
                 $sKey = Base64Url::decode($private_key->get('d'));
                 $recipientPublickey = Base64Url::decode($public_key->get('x'));
@@ -186,19 +186,19 @@ final class ECDHES implements KeyAgreementInterface
      *
      * @throws \InvalidArgumentException
      *
-     * @return Point
+     * @return Curve
      */
-    private function getGenerator(JWK $key): Point
+    private function getCurve(JWK $key): Curve
     {
         $crv = $key->get('crv');
 
         switch ($crv) {
             case 'P-256':
-                return NistCurve::generator256();
+                return NistCurve::curve256();
             case 'P-384':
-                return NistCurve::generator384();
+                return NistCurve::curve384();
             case 'P-521':
-                return NistCurve::generator521();
+                return NistCurve::curve521();
             default:
                 throw new \InvalidArgumentException(sprintf('The curve "%s" is not supported', $crv));
         }
@@ -209,7 +209,7 @@ final class ECDHES implements KeyAgreementInterface
      *
      * @return \GMP
      */
-    private function convertBase64ToGmp($value)
+    private function convertBase64ToGmp(string $value): \GMP
     {
         $value = unpack('H*', Base64Url::decode($value));
 
@@ -221,7 +221,7 @@ final class ECDHES implements KeyAgreementInterface
      *
      * @return string
      */
-    private function convertDecToBin($value)
+    private function convertDecToBin(\GMP $value): string
     {
         $value = gmp_strval($value, 10);
 
