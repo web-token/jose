@@ -107,7 +107,7 @@ final class Curve
     public function getPoint(\GMP $x, \GMP $y, ?\GMP $order = null): Point
     {
         if (!$this->contains($x, $y)) {
-            throw new \RuntimeException('Curve '.$this->__toString().' does not contain point ('.GmpMath::toString($x).', '.GmpMath::toString($y).')');
+            throw new \RuntimeException('Curve '.$this->__toString().' does not contain point ('.Math::toString($x).', '.Math::toString($y).')');
         }
         $point = Point::create($x, $y, $order);
         if (!is_null($order)) {
@@ -128,13 +128,12 @@ final class Curve
      */
     public function getPublicKeyFrom(\GMP $x, \GMP $y): PublicKey
     {
-        $point = $this->getPoint($x, $y);
-
-        if (GmpMath::cmp($point->getX(), gmp_init(0, 10)) < 0 || GmpMath::cmp($this->generator->getOrder(), $point->getX()) <= 0
-            || GmpMath::cmp($point->getY(), gmp_init(0, 10)) < 0 || GmpMath::cmp($this->generator->getOrder(), $point->getY()) <= 0
-        ) {
+        $zero = gmp_init(0, 10);
+        if (Math::cmp($x, $zero) < 0 || Math::cmp($this->generator->getOrder(), $x) <= 0 || Math::cmp($y, $zero) < 0 || Math::cmp($this->generator->getOrder(), $y) <= 0)
+        {
             throw new \RuntimeException('Generator point has x and y out of range.');
         }
+        $point = $this->getPoint($x, $y);
 
         return PublicKey::create($point);
     }
@@ -147,13 +146,13 @@ final class Curve
      */
     public function contains(\GMP $x, \GMP $y): bool
     {
-        $eq_zero = GmpMath::equals(
+        $eq_zero = Math::equals(
             ModularArithmetic::sub(
-                GmpMath::pow($y, 2),
-                GmpMath::add(
-                    GmpMath::add(
-                        GmpMath::pow($x, 3),
-                        GmpMath::mul($this->getA(), $x)
+                Math::pow($y, 2),
+                Math::add(
+                    Math::add(
+                        Math::pow($x, 3),
+                        Math::mul($this->getA(), $x)
                     ),
                     $this->getB()
                 ),
@@ -173,10 +172,6 @@ final class Curve
      */
     public function add(Point $one, Point $two): Point
     {
-        /*if (!$this->equals($two->getCurve())) {
-            throw new \RuntimeException('The Elliptic Curves do not match.');
-        }*/
-
         if ($two->isInfinity()) {
             return clone $one;
         }
@@ -185,8 +180,8 @@ final class Curve
             return clone $two;
         }
 
-        if (GmpMath::equals($two->getX(), $one->getX())) {
-            if (GmpMath::equals($two->getY(), $one->getY())) {
+        if (Math::equals($two->getX(), $one->getX())) {
+            if (Math::equals($two->getY(), $one->getY())) {
                 return $this->getDouble($one);
             } else {
                 return Point::infinity();
@@ -194,19 +189,19 @@ final class Curve
         }
 
         $slope = ModularArithmetic::div(
-            GmpMath::sub($two->getY(), $one->getY()),
-            GmpMath::sub($two->getX(), $one->getX()),
+            Math::sub($two->getY(), $one->getY()),
+            Math::sub($two->getX(), $one->getX()),
             $this->getPrime()
         );
 
         $xR = ModularArithmetic::sub(
-            GmpMath::sub(GmpMath::pow($slope, 2), $one->getX()),
+            Math::sub(Math::pow($slope, 2), $one->getX()),
             $two->getX(),
             $this->getPrime()
         );
 
         $yR = ModularArithmetic::sub(
-            GmpMath::mul($slope, GmpMath::sub($one->getX(), $xR)),
+            Math::mul($slope, Math::sub($one->getX(), $xR)),
             $one->getY(),
             $this->getPrime()
         );
@@ -228,11 +223,11 @@ final class Curve
 
         /** @var \GMP $zero */
         $zero = gmp_init(0, 10);
-        if (GmpMath::cmp($one->getOrder(), $zero) > 0) {
-            $n = GmpMath::mod($n, $one->getOrder());
+        if (Math::cmp($one->getOrder(), $zero) > 0) {
+            $n = Math::mod($n, $one->getOrder());
         }
 
-        if (GmpMath::equals($n, $zero)) {
+        if (Math::equals($n, $zero)) {
             return Point::infinity();
         }
 
@@ -243,16 +238,13 @@ final class Curve
         ];
 
         $k = $this->getSize();
-        $n = str_pad(GmpMath::baseConvert(GmpMath::toString($n), 10, 2), $k, '0', STR_PAD_LEFT);
+        $n = str_pad(Math::baseConvert(Math::toString($n), 10, 2), $k, '0', STR_PAD_LEFT);
 
         for ($i = 0; $i < $k; ++$i) {
             $j = $n[$i];
-
             Point::cswap($r[0], $r[1], $j ^ 1);
-
             $r[0] = $this->add($r[0], $r[1]);
             $r[1] = $this->getDouble($r[1]);
-
             Point::cswap($r[0], $r[1], $j ^ 1);
         }
 
@@ -268,9 +260,9 @@ final class Curve
      */
     public function cmp(Curve $other): int
     {
-        $equal = GmpMath::equals($this->getA(), $other->getA());
-        $equal &= GmpMath::equals($this->getB(), $other->getB());
-        $equal &= GmpMath::equals($this->getPrime(), $other->getPrime());
+        $equal = Math::equals($this->getA(), $other->getA());
+        $equal &= Math::equals($this->getB(), $other->getB());
+        $equal &= Math::equals($this->getPrime(), $other->getPrime());
 
         return $equal ? 0 : 1;
     }
@@ -290,7 +282,7 @@ final class Curve
      */
     public function __toString(): string
     {
-        return 'curve('.GmpMath::toString($this->getA()).', '.GmpMath::toString($this->getB()).', '.GmpMath::toString($this->getPrime()).')';
+        return 'curve('.Math::toString($this->getA()).', '.Math::toString($this->getB()).', '.Math::toString($this->getPrime()).')';
     }
 
     /**
@@ -315,22 +307,22 @@ final class Curve
         }
 
         $a = $this->getA();
-        $threeX2 = GmpMath::mul(gmp_init(3, 10), GmpMath::pow($point->getX(), 2));
+        $threeX2 = Math::mul(gmp_init(3, 10), Math::pow($point->getX(), 2));
 
         $tangent = ModularArithmetic::div(
-            GmpMath::add($threeX2, $a),
-            GmpMath::mul(gmp_init(2, 10), $point->getY()),
+            Math::add($threeX2, $a),
+            Math::mul(gmp_init(2, 10), $point->getY()),
             $this->getPrime()
         );
 
         $x3 = ModularArithmetic::sub(
-            GmpMath::pow($tangent, 2),
-            GmpMath::mul(gmp_init(2, 10), $point->getX()),
+            Math::pow($tangent, 2),
+            Math::mul(gmp_init(2, 10), $point->getX()),
             $this->getPrime()
         );
 
         $y3 = ModularArithmetic::sub(
-            GmpMath::mul($tangent, GmpMath::sub($point->getX(), $x3)),
+            Math::mul($tangent, Math::sub($point->getX(), $x3)),
             $point->getY(),
             $this->getPrime()
         );

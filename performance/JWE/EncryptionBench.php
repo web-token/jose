@@ -11,6 +11,7 @@
 
 namespace Jose\Performance\JWE;
 
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\Converter\StandardJsonConverter;
 use Jose\Component\Core\JWAManager;
 use Jose\Component\Core\JWK;
@@ -45,8 +46,14 @@ abstract class EncryptionBench
      */
     private $compressionMethodsManager;
 
+    /**
+     * @var JsonConverterInterface
+     */
+    private $jsonConverter;
+
     public function init()
     {
+        $this->jsonConverter = new StandardJsonConverter();
         $this->keyEncryptionAlgorithmsManager = JWAManager::create([
             new KeyEncryption\A128KW(),
             new KeyEncryption\A192KW(),
@@ -91,7 +98,7 @@ abstract class EncryptionBench
     public function benchEncryption($params)
     {
         $jweBuilder = new JWEBuilder(
-            new StandardJsonConverter(),
+            $this->jsonConverter,
             $this->getKeyEncryptionAlgorithmsManager(),
             $this->getContentEncryptionAlgorithmsManager(),
             $this->getCompressionMethodsManager()

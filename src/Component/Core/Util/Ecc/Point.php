@@ -177,10 +177,10 @@ final class Point
         $mask = 1 - intval($cond);
         $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
         $mask = gmp_init($mask, 2);
-        $taA = GmpMath::bitwiseAnd($sa, $mask);
-        $taB = GmpMath::bitwiseAnd($sb, $mask);
-        $sa = GmpMath::bitwiseXor(GmpMath::bitwiseXor($sa, $sb), $taB);
-        $sb = GmpMath::bitwiseXor(GmpMath::bitwiseXor($sa, $sb), $taA);
-        $sa = GmpMath::bitwiseXor(GmpMath::bitwiseXor($sa, $sb), $taB);
+        $taA = Math::bitwiseAnd($sa, $mask);
+        $taB = Math::bitwiseAnd($sb, $mask);
+        $sa = Math::bitwiseXor(Math::bitwiseXor($sa, $sb), $taB);
+        $sb = Math::bitwiseXor(Math::bitwiseXor($sa, $sb), $taA);
+        $sa = Math::bitwiseXor(Math::bitwiseXor($sa, $sb), $taB);
     }
 }

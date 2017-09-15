@@ -22,7 +22,7 @@ final class ModularArithmetic
      */
     public static function sub(\GMP $minuend, \GMP $subtrahend, \GMP $modulus): \GMP
     {
-        return GmpMath::mod(GmpMath::sub($minuend, $subtrahend), $modulus);
+        return Math::mod(Math::sub($minuend, $subtrahend), $modulus);
     }
 
     /**
@@ -34,7 +34,7 @@ final class ModularArithmetic
      */
     public static function mul(\GMP $multiplier, \GMP $muliplicand, \GMP $modulus): \GMP
     {
-        return GmpMath::mod(GmpMath::mul($multiplier, $muliplicand), $modulus);
+        return Math::mod(Math::mul($multiplier, $muliplicand), $modulus);
     }
 
     /**
@@ -46,6 +46,6 @@ final class ModularArithmetic
      */
     public static function div(\GMP $dividend, \GMP $divisor, \GMP $modulus): \GMP
     {
-        return self::mul($dividend, GmpMath::inverseMod($divisor, $modulus), $modulus);
+        return self::mul($dividend, Math::inverseMod($divisor, $modulus), $modulus);
     }
 }
