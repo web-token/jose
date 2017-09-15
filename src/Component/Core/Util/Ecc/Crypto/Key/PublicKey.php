@@ -59,6 +59,7 @@ final class PublicKey
 
     /**
      * @param Point $point
+     *
      * @return PublicKey
      */
     public static function create(Point $point): PublicKey

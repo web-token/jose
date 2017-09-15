@@ -69,10 +69,10 @@ final class Point
     /**
      * Initialize a new instance.
      *
-     * @param \GMP    $x
-     * @param \GMP    $y
-     * @param \GMP    $order
-     * @param bool    $infinity
+     * @param \GMP $x
+     * @param \GMP $y
+     * @param \GMP $order
+     * @param bool $infinity
      *
      * @throws \RuntimeException when either the curve does not contain the given coordinates or
      *                           when order is not null and P(x, y) * order is not equal to infinity
@@ -86,8 +86,8 @@ final class Point
     }
 
     /**
-     * @param \GMP $x
-     * @param \GMP $y
+     * @param \GMP      $x
+     * @param \GMP      $y
      * @param \GMP|null $order
      *
      * @return Point
@@ -171,7 +171,7 @@ final class Point
     /**
      * @param \GMP $sa
      * @param \GMP $sb
-     * @param int $cond
+     * @param int  $cond
      */
     private static function cswapGMP(\GMP &$sa, \GMP &$sb, int $cond)
     {
