@@ -33,8 +33,8 @@ final class JWELoader
     /**
      * JWELoader constructor.
      *
-     * @param AlgorithmManager               $keyEncryptionAlgorithmManager
-     * @param AlgorithmManager               $contentEncryptionAlgorithmManager
+     * @param AlgorithmManager         $keyEncryptionAlgorithmManager
+     * @param AlgorithmManager         $contentEncryptionAlgorithmManager
      * @param CompressionMethodManager $compressionMethodManager
      * @param HeaderCheckerManager     $headerCheckerManager
      */
