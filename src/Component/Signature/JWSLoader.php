@@ -35,7 +35,7 @@ final class JWSLoader
     /**
      * JWSLoader constructor.
      *
-     * @param AlgorithmManager           $signatureAlgorithmManager
+     * @param AlgorithmManager     $signatureAlgorithmManager
      * @param HeaderCheckerManager $headerCheckerManager
      */
     public function __construct(AlgorithmManager $signatureAlgorithmManager, HeaderCheckerManager $headerCheckerManager)

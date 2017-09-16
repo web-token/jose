@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Core;
 
 /**
- * Class AlgorithmManager
+ * Class AlgorithmManager.
  */
 final class AlgorithmManager
 {

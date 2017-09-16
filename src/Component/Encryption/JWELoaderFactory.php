@@ -37,7 +37,7 @@ final class JWELoaderFactory
     /**
      * JWELoaderFactory constructor.
      *
-     * @param AlgorithmManagerFactory               $algorithmManagerFactory
+     * @param AlgorithmManagerFactory         $algorithmManagerFactory
      * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
      * @param HeaderCheckerManagerFactory     $headerCheckerManagerFactory
      */

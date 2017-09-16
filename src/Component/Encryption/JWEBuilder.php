@@ -94,8 +94,8 @@ final class JWEBuilder
      * JWEBuilder constructor.
      *
      * @param JsonConverterInterface   $jsonConverter
-     * @param AlgorithmManager               $keyEncryptionAlgorithmManager
-     * @param AlgorithmManager               $contentEncryptionAlgorithmManager
+     * @param AlgorithmManager         $keyEncryptionAlgorithmManager
+     * @param AlgorithmManager         $contentEncryptionAlgorithmManager
      * @param CompressionMethodManager $compressionManager
      */
     public function __construct(JsonConverterInterface $jsonConverter, AlgorithmManager $keyEncryptionAlgorithmManager, AlgorithmManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionManager)

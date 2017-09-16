@@ -72,8 +72,8 @@ final class Decrypter
     /**
      * Decrypter constructor.
      *
-     * @param AlgorithmManager               $keyEncryptionAlgorithmManager
-     * @param AlgorithmManager               $contentEncryptionAlgorithmManager
+     * @param AlgorithmManager         $keyEncryptionAlgorithmManager
+     * @param AlgorithmManager         $contentEncryptionAlgorithmManager
      * @param CompressionMethodManager $compressionManager
      */
     public function __construct(AlgorithmManager $keyEncryptionAlgorithmManager, AlgorithmManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionManager)
@@ -192,7 +192,7 @@ final class Decrypter
     }
 
     /**
-     * @param AlgorithmInterface                        $key_encryption_algorithm
+     * @param AlgorithmInterface                  $key_encryption_algorithm
      * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
      * @param JWK                                 $key
      * @param Recipient                           $recipient

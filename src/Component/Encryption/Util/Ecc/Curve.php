@@ -129,8 +129,7 @@ final class Curve
     public function getPublicKeyFrom(\GMP $x, \GMP $y): PublicKey
     {
         $zero = gmp_init(0, 10);
-        if (Math::cmp($x, $zero) < 0 || Math::cmp($this->generator->getOrder(), $x) <= 0 || Math::cmp($y, $zero) < 0 || Math::cmp($this->generator->getOrder(), $y) <= 0)
-        {
+        if (Math::cmp($x, $zero) < 0 || Math::cmp($this->generator->getOrder(), $x) <= 0 || Math::cmp($y, $zero) < 0 || Math::cmp($this->generator->getOrder(), $y) <= 0) {
             throw new \RuntimeException('Generator point has x and y out of range.');
         }
         $point = $this->getPoint($x, $y);

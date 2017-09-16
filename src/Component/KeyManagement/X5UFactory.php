@@ -21,7 +21,7 @@ use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 
 /**
- * Class X5UFactory
+ * Class X5UFactory.
  */
 final class X5UFactory extends UrlKeySetFactory
 {

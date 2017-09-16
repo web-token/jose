@@ -31,7 +31,7 @@ final class JWSLoaderFactory
     /**
      * JWSLoaderFactory constructor.
      *
-     * @param AlgorithmManagerFactory           $algorithmManagerFactory
+     * @param AlgorithmManagerFactory     $algorithmManagerFactory
      * @param HeaderCheckerManagerFactory $headerCheckerManagerFactory
      */
     public function __construct(AlgorithmManagerFactory $algorithmManagerFactory, HeaderCheckerManagerFactory $headerCheckerManagerFactory)
