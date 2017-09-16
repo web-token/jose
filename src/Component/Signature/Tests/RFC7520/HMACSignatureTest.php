@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Tests\RFC7520;
 
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\JWSParser;
@@ -60,7 +60,7 @@ final class HMACSignatureTest extends AbstractSignatureTest
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
         ];
 
-        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new HS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder
@@ -121,7 +121,7 @@ final class HMACSignatureTest extends AbstractSignatureTest
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
         ];
 
-        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new HS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder
@@ -185,7 +185,7 @@ final class HMACSignatureTest extends AbstractSignatureTest
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
         ];
 
-        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new HS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder
@@ -240,7 +240,7 @@ final class HMACSignatureTest extends AbstractSignatureTest
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
         ];
 
-        $signatureAlgorithmManager = JWAManager::create([new HS256()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new HS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder

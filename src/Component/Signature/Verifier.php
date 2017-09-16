@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\Util\KeyChecker;
@@ -22,16 +22,16 @@ use Jose\Component\Core\Util\KeyChecker;
 final class Verifier
 {
     /**
-     * @var JWAManager
+     * @var AlgorithmManager
      */
     private $signatureAlgorithmManager;
 
     /**
      * Signer constructor.
      *
-     * @param JWAManager $signatureAlgorithmManager
+     * @param AlgorithmManager $signatureAlgorithmManager
      */
-    public function __construct(JWAManager $signatureAlgorithmManager)
+    public function __construct(AlgorithmManager $signatureAlgorithmManager)
     {
         $this->signatureAlgorithmManager = $signatureAlgorithmManager;
     }

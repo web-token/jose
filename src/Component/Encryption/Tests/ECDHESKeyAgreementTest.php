@@ -19,7 +19,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA192KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW;
-use Jose\Component\Core\JWKFactory;
+use Jose\Component\KeyManagement\JWKFactory;
 
 /**
  * final class ECDHESKeyAgreementTest.

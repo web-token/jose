@@ -13,7 +13,7 @@ namespace Jose\Performance\JWE;
 
 use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\Converter\StandardJsonConverter;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Encryption\Algorithm\KeyEncryption;
@@ -54,7 +54,7 @@ abstract class EncryptionBench
     public function init()
     {
         $this->jsonConverter = new StandardJsonConverter();
-        $this->keyEncryptionAlgorithmsManager = JWAManager::create([
+        $this->keyEncryptionAlgorithmsManager = AlgorithmManager::create([
             new KeyEncryption\A128KW(),
             new KeyEncryption\A192KW(),
             new KeyEncryption\A256KW(),
@@ -74,7 +74,7 @@ abstract class EncryptionBench
             new KeyEncryption\RSAOAEP256(),
         ]);
 
-        $this->contentEncryptionAlgorithmsManager = JWAManager::create([
+        $this->contentEncryptionAlgorithmsManager = AlgorithmManager::create([
             new ContentEncryption\A128CBCHS256(),
             new ContentEncryption\A192CBCHS384(),
             new ContentEncryption\A256CBCHS512(),
@@ -158,17 +158,17 @@ abstract class EncryptionBench
     abstract protected function getAAD(): ?string;
 
     /**
-     * @return JWAManager
+     * @return AlgorithmManager
      */
-    private function getKeyEncryptionAlgorithmsManager(): JWAManager
+    private function getKeyEncryptionAlgorithmsManager(): AlgorithmManager
     {
         return $this->keyEncryptionAlgorithmsManager;
     }
 
     /**
-     * @return JWAManager
+     * @return AlgorithmManager
      */
-    private function getContentEncryptionAlgorithmsManager(): JWAManager
+    private function getContentEncryptionAlgorithmsManager(): AlgorithmManager
     {
         return $this->contentEncryptionAlgorithmsManager;
     }

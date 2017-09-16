@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Tests;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\EdDSA;
 use Jose\Component\Signature\JWS;
@@ -65,7 +65,7 @@ final class EdDSASignatureTest extends AbstractSignatureTest
         $header = ['alg' => 'EdDSA'];
         $input = Base64Url::decode('RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc');
 
-        $signatureAlgorithmManager = JWAManager::create([new EdDSA()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new EdDSA()]);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['EdDSA']);
         $jws = $jwsBuilder
             ->withPayload($input)

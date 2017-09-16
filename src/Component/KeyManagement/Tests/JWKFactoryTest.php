@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\KeyManagement\Tests;
 
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKFactory;
+use Jose\Component\KeyManagement\JWKFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

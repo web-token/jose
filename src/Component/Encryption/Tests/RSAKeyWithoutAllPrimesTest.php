@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests;
 
 use Jose\Component\Core\Converter\StandardJsonConverter;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
@@ -26,7 +26,7 @@ use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Encryption\JWEParser;
-use Jose\Component\Core\JWKFactory;
+use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\Algorithm\PS256;
 use Jose\Component\Signature\Algorithm\PS384;
 use Jose\Component\Signature\Algorithm\PS512;
@@ -58,7 +58,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
 
         $claims = json_encode(['foo' => 'bar']);
 
-        $algorithmManager = JWAManager::create([$signature_algorithm]);
+        $algorithmManager = AlgorithmManager::create([$signature_algorithm]);
         $builder = new JWSBuilder(new StandardJsonConverter(), $algorithmManager);
         $jws = $builder
             ->withPayload($claims)
@@ -111,8 +111,8 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
 
         $claims = json_encode(['foo' => 'bar']);
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([$encryption_algorithm]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([$encryption_algorithm]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A256GCM()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create([$encryption_algorithm->name()], ['A256GCM'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
@@ -141,8 +141,8 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
 
         $claims = json_encode(['foo' => 'bar']);
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([$encryption_algorithm]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([$encryption_algorithm]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A256GCM()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create([$encryption_algorithm->name()], ['A256GCM'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);

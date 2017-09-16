@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
@@ -159,8 +159,8 @@ final class RSAKeyEncryptionTest extends AbstractEncryptionTest
      */
     public function testLoadJWK1()
     {
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSAOAEP()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A256GCM()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -182,8 +182,8 @@ final class RSAKeyEncryptionTest extends AbstractEncryptionTest
      */
     public function testLoadJWK2()
     {
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSA15()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -203,8 +203,8 @@ final class RSAKeyEncryptionTest extends AbstractEncryptionTest
      */
     public function testLoadJWK3()
     {
-        $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new A128KW()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 

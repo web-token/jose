@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Tests;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Signature\Algorithm\HS256;
@@ -140,7 +140,7 @@ final class SignerTest extends AbstractSignatureTest
 
     public function testCreateCompactJWSUsingFactory()
     {
-        $algorithmManager = JWAManager::create([new HS512(), new RS512()]);
+        $algorithmManager = AlgorithmManager::create([new HS512(), new RS512()]);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
 
         $jws = $jwsBuilder
@@ -194,7 +194,7 @@ final class SignerTest extends AbstractSignatureTest
 
     public function testCreateFlattenedJWSUsingFactory()
     {
-        $algorithmManager = JWAManager::create([new HS512(), new RS512()]);
+        $algorithmManager = AlgorithmManager::create([new HS512(), new RS512()]);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
@@ -274,7 +274,7 @@ final class SignerTest extends AbstractSignatureTest
 
     public function testSignAndLoad()
     {
-        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new HS512(), new RS512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
         $jws = $jwsBuilder
@@ -301,7 +301,7 @@ final class SignerTest extends AbstractSignatureTest
      */
     public function testSignAndLoadWithWrongKeys()
     {
-        $signatureAlgorithmManager = JWAManager::create([new RS512()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new RS512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS512']);
         $jws = $jwsBuilder
@@ -324,7 +324,7 @@ final class SignerTest extends AbstractSignatureTest
      */
     public function testSignAndLoadWithUnsupportedAlgorithm()
     {
-        $verifier = new Verifier(JWAManager::create([new HS512()]));
+        $verifier = new Verifier(AlgorithmManager::create([new HS512()]));
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS512']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
@@ -346,7 +346,7 @@ final class SignerTest extends AbstractSignatureTest
      */
     public function testSignAndLoadWithJWSWithoutSignatures()
     {
-        $signatureAlgorithmManager = JWAManager::create([new RS512()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new RS512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
         $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
         $jws = '{"payload":"SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4","signatures":[]}';
@@ -406,7 +406,7 @@ final class SignerTest extends AbstractSignatureTest
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $algorithmManager = JWAManager::create([new HS256()]);
+        $algorithmManager = AlgorithmManager::create([new HS256()]);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder
             ->withPayload($payload, true)
@@ -456,7 +456,7 @@ final class SignerTest extends AbstractSignatureTest
         $this->assertEquals($expected_result, $jws->toJSON());
 
         $loaded = JWSParser::parse($expected_result);
-        $algorithmManager = JWAManager::create([new HS256()]);
+        $algorithmManager = AlgorithmManager::create([new HS256()]);
         $verifier = new Verifier($algorithmManager);
         $verifier->verifyWithKey($loaded, $key, $payload, $index1);
 
@@ -598,7 +598,7 @@ final class SignerTest extends AbstractSignatureTest
             'signature' => 'A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY',
         ];
 
-        $algorithmManager = JWAManager::create([new HS256()]);
+        $algorithmManager = AlgorithmManager::create([new HS256()]);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jws = $jwsBuilder
             ->withPayload($payload)
@@ -657,7 +657,7 @@ final class SignerTest extends AbstractSignatureTest
      */
     public function testSignAndLoadWithoutAlgParameterInTheHeader()
     {
-        $signatureAlgorithmManager = JWAManager::create([new RS512()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new RS512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
         $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
         $jws = 'eyJraWQiOiJiaWxiby5iYWdnaW5zQGhvYmJpdG9uLmV4YW1wbGUifQ.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.MRjdkly7_-oTPTS3AXP41iQIGKa80A0ZmTuV5MEaHoxnW2e5CZ5NlKtainoFmKZopdHM1O2U4mwzJdQx996ivp83xuglII7PNDi84wnB-BDkoBwA78185hX-Es4JIwmDLJK3lfWRa-XtL0RnltuYv746iYTh_qHRD68BNt1uSNCrUCTJDt5aAE6x8wW1Kt9eRo4QPocSadnHXFxnt8Is9UzpERV0ePPQdLuW3IS_de3xyIrDaLGdjluPxUAhb6L2aXic1U12podGU0KLUQSE_oI-ZnmKJ3F4uOZDnd6QZWJushZ41Axf_fcIe8u9ipH84ogoree7vjbU5y18kDquDg';
@@ -673,7 +673,7 @@ final class SignerTest extends AbstractSignatureTest
 
     public function testSignAndLoadJWKSet()
     {
-        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new HS512(), new RS512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
         $jws = $jwsBuilder
@@ -699,7 +699,7 @@ final class SignerTest extends AbstractSignatureTest
      */
     public function testKeySetIsEmpty()
     {
-        $signatureAlgorithmManager = JWAManager::create([new HS512(), new RS512()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new HS512(), new RS512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
         $jws = $jwsBuilder

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWAInterface;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmInterface;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\Util\KeyChecker;
@@ -31,12 +31,12 @@ use Jose\Component\Encryption\Compression\CompressionMethodManager;
 final class Decrypter
 {
     /**
-     * @var JWAManager
+     * @var AlgorithmManager
      */
     private $keyEncryptionAlgorithmManager;
 
     /**
-     * @var JWAManager
+     * @var AlgorithmManager
      */
     private $contentEncryptionAlgorithmManager;
 
@@ -72,11 +72,11 @@ final class Decrypter
     /**
      * Decrypter constructor.
      *
-     * @param JWAManager               $keyEncryptionAlgorithmManager
-     * @param JWAManager               $contentEncryptionAlgorithmManager
+     * @param AlgorithmManager               $keyEncryptionAlgorithmManager
+     * @param AlgorithmManager               $contentEncryptionAlgorithmManager
      * @param CompressionMethodManager $compressionManager
      */
-    public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionManager)
+    public function __construct(AlgorithmManager $keyEncryptionAlgorithmManager, AlgorithmManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionManager)
     {
         $this->keyEncryptionAlgorithmManager = $keyEncryptionAlgorithmManager;
         $this->contentEncryptionAlgorithmManager = $contentEncryptionAlgorithmManager;
@@ -192,7 +192,7 @@ final class Decrypter
     }
 
     /**
-     * @param JWAInterface                        $key_encryption_algorithm
+     * @param AlgorithmInterface                        $key_encryption_algorithm
      * @param ContentEncryptionAlgorithmInterface $content_encryption_algorithm
      * @param JWK                                 $key
      * @param Recipient                           $recipient
@@ -200,7 +200,7 @@ final class Decrypter
      *
      * @return null|string
      */
-    private function decryptCEK(JWAInterface $key_encryption_algorithm, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, JWK $key, Recipient $recipient, array $complete_headers): ?string
+    private function decryptCEK(AlgorithmInterface $key_encryption_algorithm, ContentEncryptionAlgorithmInterface $content_encryption_algorithm, JWK $key, Recipient $recipient, array $complete_headers): ?string
     {
         if ($key_encryption_algorithm instanceof DirectEncryptionInterface) {
             return $key_encryption_algorithm->getCEK($key);

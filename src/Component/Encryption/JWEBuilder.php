@@ -15,7 +15,7 @@ namespace Jose\Component\Encryption;
 
 use Base64Url\Base64Url;
 use Jose\Component\Core\Converter\JsonConverterInterface;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\KeyChecker;
 use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
@@ -51,12 +51,12 @@ final class JWEBuilder
     private $recipients = [];
 
     /**
-     * @var JWAManager
+     * @var AlgorithmManager
      */
     private $keyEncryptionAlgorithmManager;
 
     /**
-     * @var JWAManager
+     * @var AlgorithmManager
      */
     private $contentEncryptionAlgorithmManager;
 
@@ -94,11 +94,11 @@ final class JWEBuilder
      * JWEBuilder constructor.
      *
      * @param JsonConverterInterface   $jsonConverter
-     * @param JWAManager               $keyEncryptionAlgorithmManager
-     * @param JWAManager               $contentEncryptionAlgorithmManager
+     * @param AlgorithmManager               $keyEncryptionAlgorithmManager
+     * @param AlgorithmManager               $contentEncryptionAlgorithmManager
      * @param CompressionMethodManager $compressionManager
      */
-    public function __construct(JsonConverterInterface $jsonConverter, JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionManager)
+    public function __construct(JsonConverterInterface $jsonConverter, AlgorithmManager $keyEncryptionAlgorithmManager, AlgorithmManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionManager)
     {
         $this->jsonConverter = $jsonConverter;
         $this->keyEncryptionAlgorithmManager = $keyEncryptionAlgorithmManager;

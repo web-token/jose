@@ -15,7 +15,7 @@ namespace Jose\Component\Signature;
 
 use Base64Url\Base64Url;
 use Jose\Component\Core\Converter\JsonConverterInterface;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\KeyChecker;
 
@@ -42,7 +42,7 @@ final class JWSBuilder
     private $signatures = [];
 
     /**
-     * @var JWAManager
+     * @var AlgorithmManager
      */
     private $signatureAlgorithmManager;
 
@@ -50,9 +50,9 @@ final class JWSBuilder
      * JWSBuilder constructor.
      *
      * @param JsonConverterInterface $jsonConverter
-     * @param JWAManager             $signatureAlgorithmManager
+     * @param AlgorithmManager             $signatureAlgorithmManager
      */
-    public function __construct(JsonConverterInterface $jsonConverter, JWAManager $signatureAlgorithmManager)
+    public function __construct(JsonConverterInterface $jsonConverter, AlgorithmManager $signatureAlgorithmManager)
     {
         $this->jsonConverter = $jsonConverter;
         $this->signatureAlgorithmManager = $signatureAlgorithmManager;

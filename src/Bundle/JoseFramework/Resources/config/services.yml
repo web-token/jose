@@ -4,8 +4,7 @@ services:
         autoconfigure: true
         public: true
 
-    Jose\Component\Core\JWAManagerFactory: ~
-    Jose\Component\Core\JWKFactory: ~
+    Jose\Component\Core\AlgorithmManagerFactory: ~
     Jose\Bundle\JoseFramework\Controller\JWKSetControllerFactory: ~
     Jose\Bundle\JoseFramework\Routing\JWKSetLoader:
         tags:

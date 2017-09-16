@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
@@ -68,8 +68,8 @@ final class RSA_OAEPAndA256GCMEncryptionTest extends AbstractEncryptionTest
         $expected_ciphertext = 'o4k2cnGN8rSSw3IDo1YuySkqeS_t2m1GXklSgqBdpACm6UJuJowOHC5ytjqYgRL-I-soPlwqMUf4UgRWWeaOGNw6vGW-xyM01lTYxrXfVzIIaRdhYtEMRBvBWbEwP7ua1DRfvaOjgZv6Ifa3brcAM64d8p5lhhNcizPersuhw5f-pGYzseva-TUaL8iWnctc-sSwy7SQmRkfhDjwbz0fz6kFovEgj64X1I5s7E6GLp5fnbYGLa1QUiML7Cc2GxgvI7zqWo0YIEc7aCflLG1-8BboVWFdZKLK9vNoycrYHumwzKluLWEbSVmaPpOslY2n525DxDfWaVFUfKQxMF56vn4B9QMpWAbnypNimbM8zVOw';
         $expected_tag = 'UCGiqJxhBI3IFVdPalHHvA';
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSAOAEP()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A256GCM()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -133,8 +133,8 @@ final class RSA_OAEPAndA256GCMEncryptionTest extends AbstractEncryptionTest
             'enc' => 'A256GCM',
         ];
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A256GCM()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSAOAEP()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A256GCM()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP'], ['A256GCM'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);

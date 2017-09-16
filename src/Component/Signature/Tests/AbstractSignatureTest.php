@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Tests;
 
 use Jose\Component\Core\Converter\StandardJsonConverter;
-use Jose\Component\Core\JWAManagerFactory;
+use Jose\Component\Core\AlgorithmManagerFactory;
 use Jose\Component\Signature\Algorithm;
 use Jose\Component\Signature\JWSBuilderFactory;
 use PHPUnit\Framework\TestCase;
@@ -22,17 +22,17 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractSignatureTest extends TestCase
 {
     /**
-     * @var JWAManagerFactory
+     * @var AlgorithmManagerFactory
      */
     private $algorithmManagerFactory;
 
     /**
-     * @return JWAManagerFactory
+     * @return AlgorithmManagerFactory
      */
-    protected function getAlgorithmManagerFactory(): JWAManagerFactory
+    protected function getAlgorithmManagerFactory(): AlgorithmManagerFactory
     {
         if (null === $this->algorithmManagerFactory) {
-            $this->algorithmManagerFactory = new JWAManagerFactory();
+            $this->algorithmManagerFactory = new AlgorithmManagerFactory();
             $this->algorithmManagerFactory
                 ->add('HS256', new Algorithm\HS256())
                 ->add('HS384', new Algorithm\HS384())

@@ -1,7 +1,7 @@
-PHP JOSE Library
-================
+PHP JOSE Framework
+==================
 
-If you really love that library, then you can help me out for a couple of :beers:!
+If you really love that framework, then you can help me out for a couple of :beers:!
 
 [![Beerpay](https://beerpay.io/Spomky-Labs/jose/badge.svg?style=beer-square)](https://beerpay.io/Spomky-Labs/jose)  [![Beerpay](https://beerpay.io/Spomky-Labs/jose/make-wish.svg?style=flat-square)](https://beerpay.io/Spomky-Labs/jose?focus=wish)
 
@@ -23,7 +23,7 @@ If you really love that library, then you can help me out for a couple of :beers
 [![Latest Unstable Version](https://poser.pugx.org/Spomky-Labs/JOSE/v/unstable.png)](https://packagist.org/packages/Spomky-Labs/JOSE)
 [![License](https://poser.pugx.org/Spomky-Labs/JOSE/license.png)](https://packagist.org/packages/Spomky-Labs/JOSE)
 
-This library provides an implementation of:
+This framework provides an implementation of:
 
 * JW**S** [JSON Web Signature (RFC 7515)](https://tools.ietf.org/html/rfc7515),
 * JW**T** [JSON Web Token (RFC 7519)](https://tools.ietf.org/html/rfc7519),
@@ -32,6 +32,9 @@ This library provides an implementation of:
 * JW**K** [JSON Web Key (RFC 7517)](http://tools.ietf.org/html/rfc7517).
 * JSON Web Key Thumbprint ([RFC 7638](https://tools.ietf.org/html/rfc7638)).
 * Unencoded Payload Option [RFC7797](https://tools.ietf.org/html/rfc7797).
+
+This framework is not just a library, it contains also Symfony bundles for an easy integration into your application.
+It also provides a standalone console command that will help you to manager your keys and key sets. 
 
 # Provided Features
 
@@ -80,35 +83,35 @@ JWKSet is fully supported.
 
 ## Supported Signature Algorithms
 
-| Signature Algorithm            | Supported | Comment                                                                     |
-| ------------------------------ |:---------:| --------------------------------------------------------------------------- |
-| `HS256`, `HS384` and `HS512`   | YES       |                                                                             |
-| `HS256`, `ES384` and `ES512`   | YES       |                                                                             |
-| `RS256`, `RS384` and `RS512`   | YES       |                                                                             |
-| `PS256`, `PS384` and `PS512`   | YES       |                                                                             |
-| `none`                         | YES       | **Please note that this is not a secured algorithm. USE IT WITH CAUTION!**  |
+| Signature Algorithm            | Supported | Comment                                                                                            |
+| ------------------------------ |:---------:| -------------------------------------------------------------------------------------------------- |
+| `HS256`, `HS384` and `HS512`   | YES       |                                                                                                    |
+| `HS256`, `ES384` and `ES512`   | YES       |                                                                                                    |
+| `RS256`, `RS384` and `RS512`   | YES       |                                                                                                    |
+| `PS256`, `PS384` and `PS512`   | YES       |                                                                                                    |
+| `none`                         | YES       | **Please note that this is not a secured algorithm. USE IT WITH CAUTION!**                         |
 | *`EdDSA` with `Ed25519` curve* | YES       | [For PHP 7.1, third party extension highly recommended](https://github.com/jedisct1/libsodium-php) |
-| *`EdDSA` with `Ed448` curve*   | **NO**    |                                                                             |
+| *`EdDSA` with `Ed448` curve*   | **NO**    |                                                                                                    |
 
 ## Supported Key Encryption Algorithms
 
-| Key Encryption Algorithm                                            | Supported | Comment                                                                                                           |
-| ------------------------------------------------------------------- |:---------:| ----------------------------------------------------------------------------------------------------------------- |
-| `dir`                                                               | YES       |                                                                                                                   |
-| `RSA1_5`, `RSA-OAEP` and `RSA-OAEP-256`                             | YES       |                                                                                                                   |
-| `ECDH-ES`, `ECDH-ES+A128KW`, `ECDH-ES+A192KW` and `ECDH-ES+A256KW`  | YES       |                                                                                                                   |
-| `A128KW`, `A128KW` and `A128KW`                                     | YES       |                                                                                                                   |
-| `PBES2-HS256+A128KW`, `PBES2-HS384+A192KW` and `PBES2-HS512+A256KW` | YES       |                                                                                                                   |
-| `A128GCMKW`, `A192GCMKW` and `A256GCMKW`                            | YES       |                                                                                                                   |
-| `EdDSA` with `X25519` curve                                         | YES       | [For PHP 7.1, third party extension highly recommended](https://github.com/jedisct1/libsodium-php)                |
-| `EdDSA` with `X448` curve                                           | **NO**    |                                                                                                                   |
+| Key Encryption Algorithm                                            | Supported | Comment                                                                                            |
+| ------------------------------------------------------------------- |:---------:| -------------------------------------------------------------------------------------------------- |
+| `dir`                                                               | YES       |                                                                                                    |
+| `RSA1_5`, `RSA-OAEP` and `RSA-OAEP-256`                             | YES       |                                                                                                    |
+| `ECDH-ES`, `ECDH-ES+A128KW`, `ECDH-ES+A192KW` and `ECDH-ES+A256KW`  | YES       |                                                                                                    |
+| `A128KW`, `A128KW` and `A128KW`                                     | YES       |                                                                                                    |
+| `PBES2-HS256+A128KW`, `PBES2-HS384+A192KW` and `PBES2-HS512+A256KW` | YES       |                                                                                                    |
+| `A128GCMKW`, `A192GCMKW` and `A256GCMKW`                            | YES       |                                                                                                    |
+| `EdDSA` with `X25519` curve                                         | YES       | [For PHP 7.1, third party extension highly recommended](https://github.com/jedisct1/libsodium-php) |
+| `EdDSA` with `X448` curve                                           | **NO**    |                                                                                                    |
 
 ## Supported Content Encryption Algorithms
 
-| Content Encryption Algorithm                         | Supported | Comment                                                                                                          |
-| ---------------------------------------------------- |:---------:| ---------------------------------------------------------------------------------------------------------------- |
-| `A128CBC-HS256`, `A192CBC-HS384` and `A256CBC-HS512` | YES       |                                                                                                                  |
-| `A128GCM`, `A192GCM` and `A256GCM`                   | YES       | For better performance, please use PHP 7.1+ or this [third party extension](https://github.com/bukka/php-crypto) |
+| Content Encryption Algorithm                         | Supported | Comment |
+| ---------------------------------------------------- |:---------:| ------- |
+| `A128CBC-HS256`, `A192CBC-HS384` and `A256CBC-HS512` | YES       |         |
+| `A128GCM`, `A192GCM` and `A256GCM`                   | YES       |         |
 
 # The Release Process
 
@@ -116,7 +119,7 @@ The release process [is described here](doc/Release.md).
 
 # Prerequisites
 
-This library needs at least:
+This framework needs at least:
 * ![PHP 7.1+](https://img.shields.io/badge/PHP-7.1%2B-ff69b4.svg),
 * OpenSSL extension.
 
@@ -140,7 +143,7 @@ Code coverage is analyzed by [Coveralls.io](https://coveralls.io/github/Spomky-L
 
 # Installation
 
-The preferred way to install this library is to rely on Composer:
+The preferred way to install this framework is to rely on Composer:
 
 ```sh
 composer require spomky-labs/jose
@@ -148,18 +151,20 @@ composer require spomky-labs/jose
 
 # How to use
 
-Have a look at [How to use](doc/Use.md) to know how to load your JWT and discover all possibilities provided by this library.
+* [The components](doc/components.md)
+* [The bundles](doc/bundles.md)
+* [The console commands](doc/console.md)
 
 # Performances
 
-Please read the [performance page](doc/Performance.md) to know how fast are the algorithms supported by this library.
+Please read the [performance page](doc/benchmark.md) to know how fast are the algorithms supported by this framework.
 
 # Contributing
 
-Requests for new features, bug fixed and all other ideas to make this library useful are welcome.
+Requests for new features, bug fixed and all other ideas to make this framework useful are welcome.
 If you feel comfortable writing code, you could try to fix [opened issues where help is wanted](https://github.com/Spomky-Labs/jose/labels/help+wanted) or [those that are easy to fix](https://github.com/Spomky-Labs/jose/labels/easy-pick).
 
-Do not forget to [follow these best practices](doc/Contributing.md).
+Do not forget to [follow these best practices](.github/CONTRIBUTING.md).
 
 # Licence
 

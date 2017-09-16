@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
@@ -67,8 +67,8 @@ final class RSA1_5AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTest
         $expected_ciphertext = '0fys_TY_na7f8dwSfXLiYdHaA2DxUjD67ieF7fcVbIR62JhJvGZ4_FNVSiGc_raa0HnLQ6s1P2sv3Xzl1p1l_o5wR_RsSzrS8Z-wnI3Jvo0mkpEEnlDmZvDu_k8OWzJv7eZVEqiWKdyVzFhPpiyQU28GLOpRc2VbVbK4dQKPdNTjPPEmRqcaGeTWZVyeSUvf5k59yJZxRuSvWFf6KrNtmRdZ8R4mDOjHSrM_s8uwIFcqt4r5GX8TKaI0zT5CbL5Qlw3sRc7u_hg0yKVOiRytEAEs3vZkcfLkP6nbXdC_PkMdNS-ohP78T2O6_7uInMGhFeX4ctHG7VelHGiT93JfWDEQi5_V9UN1rhXNrYu-0fVMkZAKX3VWi7lzA6BP430m';
         $expected_tag = 'kvKuFBXHe5mQr4lqgobAUg';
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSA15()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -131,8 +131,8 @@ final class RSA1_5AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTest
             'enc' => 'A128CBC-HS256',
         ];
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSA15()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA1_5'], ['A128CBC-HS256'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);

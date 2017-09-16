@@ -16,6 +16,9 @@ namespace Jose\Component\KeyManagement;
 use Http\Client\HttpClient;
 use Http\Message\RequestFactory;
 
+/**
+ * Class UrlKeySetFactory
+ */
 abstract class UrlKeySetFactory
 {
     /**
@@ -29,7 +32,7 @@ abstract class UrlKeySetFactory
     private $requestFactory;
 
     /**
-     * JKUManager constructor.
+     * UrlKeySetFactory constructor.
      *
      * @param HttpClient     $client
      * @param RequestFactory $requestFactory
@@ -44,7 +47,7 @@ abstract class UrlKeySetFactory
      * @param string $url
      * @param array  $headers
      *
-     * @throws \HttpRuntimeException
+     * @throws \RuntimeException
      *
      * @return string
      */
@@ -54,7 +57,7 @@ abstract class UrlKeySetFactory
         $response = $this->client->sendRequest($request);
 
         if (200 !== $response->getStatusCode()) {
-            throw new \HttpRuntimeException('Unable to get the key set.', $response->getStatusCode());
+            throw new \RuntimeException('Unable to get the key set.', $response->getStatusCode());
         }
 
         return $response->getBody()->getContents();

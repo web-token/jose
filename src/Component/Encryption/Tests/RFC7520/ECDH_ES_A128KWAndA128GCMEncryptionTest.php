@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW;
@@ -69,8 +69,8 @@ final class ECDH_ES_A128KWAndA128GCMEncryptionTest extends AbstractEncryptionTes
         $expected_ciphertext = 'tkZuOO9h95OgHJmkkrfLBisku8rGf6nzVxhRM3sVOhXgz5NJ76oID7lpnAi_cPWJRCjSpAaUZ5dOR3Spy7QuEkmKx8-3RCMhSYMzsXaEwDdXta9Mn5B7cCBoJKB0IgEnj_qfo1hIi-uEkUpOZ8aLTZGHfpl05jMwbKkTe2yK3mjF6SBAsgicQDVCkcY9BLluzx1RmC3ORXaM0JaHPB93YcdSDGgpgBWMVrNU1ErkjcMqMoT_wtCex3w03XdLkjXIuEr2hWgeP-nkUZTPU9EoGSPj6fAS-bSz87RCPrxZdj_iVyC6QWcqAu07WNhjzJEPc4jVntRJ6K53NgPQ5p99l3Z408OUqj4ioYezbS6vTPlQ';
         $expected_tag = 'WuGzxmcreYjpHGJoa17EBg';
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA128KW()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new ECDHESA128KW()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128GCM()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -138,8 +138,8 @@ final class ECDH_ES_A128KWAndA128GCMEncryptionTest extends AbstractEncryptionTes
             'enc' => 'A128GCM',
         ];
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new ECDHESA128KW()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new ECDHESA128KW()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128GCM()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['ECDH-ES+A128KW'], ['A128GCM'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);

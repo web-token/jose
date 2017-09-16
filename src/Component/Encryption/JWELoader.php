@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption;
 
 use Jose\Component\Checker\HeaderCheckerManager;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Encryption\Compression\CompressionMethodManager;
 
@@ -33,12 +33,12 @@ final class JWELoader
     /**
      * JWELoader constructor.
      *
-     * @param JWAManager               $keyEncryptionAlgorithmManager
-     * @param JWAManager               $contentEncryptionAlgorithmManager
+     * @param AlgorithmManager               $keyEncryptionAlgorithmManager
+     * @param AlgorithmManager               $contentEncryptionAlgorithmManager
      * @param CompressionMethodManager $compressionMethodManager
      * @param HeaderCheckerManager     $headerCheckerManager
      */
-    public function __construct(JWAManager $keyEncryptionAlgorithmManager, JWAManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionMethodManager, HeaderCheckerManager $headerCheckerManager)
+    public function __construct(AlgorithmManager $keyEncryptionAlgorithmManager, AlgorithmManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionMethodManager, HeaderCheckerManager $headerCheckerManager)
     {
         $this->decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionMethodManager);
         $this->headerCheckerManager = $headerCheckerManager;

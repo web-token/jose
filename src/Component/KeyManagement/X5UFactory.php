@@ -20,6 +20,9 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 
+/**
+ * Class X5UFactory
+ */
 final class X5UFactory extends UrlKeySetFactory
 {
     private $jsonConverter;
@@ -41,7 +44,7 @@ final class X5UFactory extends UrlKeySetFactory
      * @param string $url
      * @param array  $headers
      *
-     * @throws \HttpRuntimeException
+     * @throws \InvalidArgumentException
      *
      * @return JWKSet
      */

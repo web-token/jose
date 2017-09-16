@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Jose\Component\Core;
 
-final class JWAManagerFactory
+/**
+ * Class AlgorithmManagerFactory
+ */
+final class AlgorithmManagerFactory
 {
     /**
      * @var array
@@ -22,11 +25,11 @@ final class JWAManagerFactory
 
     /**
      * @param string       $alias
-     * @param JWAInterface $algorithm
+     * @param AlgorithmInterface $algorithm
      *
-     * @return JWAManagerFactory
+     * @return AlgorithmManagerFactory
      */
-    public function add(string $alias, JWAInterface $algorithm): JWAManagerFactory
+    public function add(string $alias, AlgorithmInterface $algorithm): AlgorithmManagerFactory
     {
         if (array_key_exists($alias, $this->algorithms)) {
             throw new \InvalidArgumentException(sprintf('The alias "%s" already exists.', $alias));
@@ -39,9 +42,9 @@ final class JWAManagerFactory
     /**
      * @param string[] $aliases
      *
-     * @return JWAManager
+     * @return AlgorithmManager
      */
-    public function create(array $aliases): JWAManager
+    public function create(array $aliases): AlgorithmManager
     {
         $algorithms = [];
         foreach ($aliases as $alias) {
@@ -52,7 +55,7 @@ final class JWAManagerFactory
             }
         }
 
-        return JWAManager::create($algorithms);
+        return AlgorithmManager::create($algorithms);
     }
 
     /**

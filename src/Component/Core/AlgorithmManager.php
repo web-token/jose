@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Jose\Component\Core;
 
 /**
- * Class JWAManager.
+ * Class AlgorithmManager
  */
-final class JWAManager
+final class AlgorithmManager
 {
     /**
      * @var array
@@ -26,7 +26,7 @@ final class JWAManager
     /**
      * JWAManager constructor.
      *
-     * @param JWAInterface[] $algorithms
+     * @param AlgorithmInterface[] $algorithms
      */
     private function __construct(array $algorithms)
     {
@@ -36,11 +36,11 @@ final class JWAManager
     }
 
     /**
-     * @param JWAInterface[] $algorithms
+     * @param AlgorithmInterface[] $algorithms
      *
-     * @return JWAManager
+     * @return AlgorithmManager
      */
-    public static function create(array $algorithms): JWAManager
+    public static function create(array $algorithms): AlgorithmManager
     {
         return new self($algorithms);
     }
@@ -66,9 +66,9 @@ final class JWAManager
     /**
      * @param string $algorithm The algorithm
      *
-     * @return JWAInterface Returns JWAInterface object if the algorithm is supported, else null
+     * @return AlgorithmInterface Returns JWAInterface object if the algorithm is supported, else null
      */
-    public function get(string $algorithm): JWAInterface
+    public function get(string $algorithm): AlgorithmInterface
     {
         if (!$this->has($algorithm)) {
             throw new \InvalidArgumentException(sprintf('The algorithm "%s" is not supported.', $algorithm));
@@ -78,11 +78,11 @@ final class JWAManager
     }
 
     /**
-     * @param JWAInterface $algorithm
+     * @param AlgorithmInterface $algorithm
      *
-     * @return JWAManager
+     * @return AlgorithmManager
      */
-    private function add(JWAInterface $algorithm): JWAManager
+    private function add(AlgorithmInterface $algorithm): AlgorithmManager
     {
         $name = $algorithm->name();
         if ($this->has($name)) {

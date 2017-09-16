@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature;
 
 use Jose\Component\Checker\HeaderCheckerManager;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWKSet;
 
 /**
@@ -35,10 +35,10 @@ final class JWSLoader
     /**
      * JWSLoader constructor.
      *
-     * @param JWAManager           $signatureAlgorithmManager
+     * @param AlgorithmManager           $signatureAlgorithmManager
      * @param HeaderCheckerManager $headerCheckerManager
      */
-    public function __construct(JWAManager $signatureAlgorithmManager, HeaderCheckerManager $headerCheckerManager)
+    public function __construct(AlgorithmManager $signatureAlgorithmManager, HeaderCheckerManager $headerCheckerManager)
     {
         $this->verifier = new Verifier($signatureAlgorithmManager);
         $this->headerCheckerManager = $headerCheckerManager;

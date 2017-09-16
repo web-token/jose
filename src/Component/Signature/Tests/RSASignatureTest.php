@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Tests;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
@@ -478,8 +478,8 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadJWEFromRFC7516()
     {
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSA15()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -501,8 +501,8 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadJWEJSONSerialization()
     {
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSA15(), new A128KW()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128CBCHS256()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSA15(), new A128KW()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -542,7 +542,7 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadJWSJSONSerializationWithDetachedPayload()
     {
-        $signatureAlgorithmManager = JWAManager::create([new ES256(), new RS256()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new ES256(), new RS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
 
         $result = JWSParser::parse('{"signatures":[{"protected":"eyJhbGciOiJSUzI1NiJ9","header":{"kid":"2010-12-29"},"signature":"cC4hiUPoj9Eetdgtv3hF80EGrhuB__dzERat0XF9g2VtQgr9PJbu3XOiZj5RZmh7AAuHIm4Bh-0Qc_lF5YKt_O8W2Fp5jujGbds9uJdbF9CUAr7t1dnZcAcQjbKBYNX4BAynRFdiuB--f_nZLgrnbyTyWzO75vRK5h6xBArLIARNPvkSjtQBMHlb1L07Qe7K0GarZRmB_eSN9383LcOLn6_dO--xi12jzDwusC-eOkHWEsqtFZESc6BfI7noOPqvhJ1phCnvWh6IeYI2w9QOYEUipUTI8np6LbgGY9Fs98rqVt5AXLIhWkWywlVmtVrBp0igcN_IoypGlUPQGe77Rw"},{"protected":"eyJhbGciOiJFUzI1NiJ9","header":{"kid":"e9bc097a-ce51-4036-9562-d2ade882db0d"},"signature":"DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q"}]}');
@@ -560,7 +560,7 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadJWSJSONSerializationWithDetachedPayloadAndPayloadInJWS()
     {
-        $signatureAlgorithmManager = JWAManager::create([new RS256()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new RS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
 
         $result = JWSParser::parse('{"payload":"eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ","signatures":[{"protected":"eyJhbGciOiJSUzI1NiJ9","header":{"kid":"2010-12-29"},"signature":"cC4hiUPoj9Eetdgtv3hF80EGrhuB__dzERat0XF9g2VtQgr9PJbu3XOiZj5RZmh7AAuHIm4Bh-0Qc_lF5YKt_O8W2Fp5jujGbds9uJdbF9CUAr7t1dnZcAcQjbKBYNX4BAynRFdiuB--f_nZLgrnbyTyWzO75vRK5h6xBArLIARNPvkSjtQBMHlb1L07Qe7K0GarZRmB_eSN9383LcOLn6_dO--xi12jzDwusC-eOkHWEsqtFZESc6BfI7noOPqvhJ1phCnvWh6IeYI2w9QOYEUipUTI8np6LbgGY9Fs98rqVt5AXLIhWkWywlVmtVrBp0igcN_IoypGlUPQGe77Rw"},{"protected":"eyJhbGciOiJFUzI1NiJ9","header":{"kid":"e9bc097a-ce51-4036-9562-d2ade882db0d"},"signature":"DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q"}]}');

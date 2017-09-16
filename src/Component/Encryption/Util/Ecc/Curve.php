@@ -9,7 +9,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Core\Util\Ecc;
+namespace Jose\Component\Encryption\Util\Ecc;
 
 /**
  * This class is a representation of an EC over a field modulo a prime number.

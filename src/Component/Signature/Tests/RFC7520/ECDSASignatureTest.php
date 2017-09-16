@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Tests\RFC7520;
 
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\ES512;
 use Jose\Component\Signature\JWSParser;
@@ -61,7 +61,7 @@ final class ECDSASignatureTest extends AbstractSignatureTest
             'kid' => 'bilbo.baggins@hobbiton.example',
         ];
 
-        $signatureAlgorithmManager = JWAManager::create([new ES512()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new ES512()]);
         $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['ES512']);
         $jws = $jwsBuilder

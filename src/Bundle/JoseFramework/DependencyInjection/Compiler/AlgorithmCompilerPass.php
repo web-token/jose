@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Bundle\JoseFramework\DependencyInjection\Compiler;
 
-use Jose\Component\Core\JWAManagerFactory;
+use Jose\Component\Core\AlgorithmManagerFactory;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -25,11 +25,11 @@ final class AlgorithmCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition(JWAManagerFactory::class)) {
+        if (!$container->hasDefinition(AlgorithmManagerFactory::class)) {
             return;
         }
 
-        $definition = $container->getDefinition(JWAManagerFactory::class);
+        $definition = $container->getDefinition(AlgorithmManagerFactory::class);
 
         $taggedAlgorithmServices = $container->findTaggedServiceIds('jose.algorithm');
         foreach ($taggedAlgorithmServices as $id => $tags) {

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Console\Command;
 
-use Jose\Component\Core\JWKFactory;
+use Jose\Component\KeyManagement\JWKFactory;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

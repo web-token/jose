@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
@@ -63,8 +63,8 @@ final class A128KWAndA128GCMEncryptionWithCompressionTest extends AbstractEncryp
         $expected_ciphertext = 'HbDtOsdai1oYziSx25KEeTxmwnh8L8jKMFNc1k3zmMI6VB8hry57tDZ61jXyezSPt0fdLVfe6Jf5y5-JaCap_JQBcb5opbmT60uWGml8blyiMQmOn9J--XhhlYg0m-BHaqfDO5iTOWxPxFMUedx7WCy8mxgDHj0aBMG6152PsM-w5E_o2B3jDbrYBKhpYA7qi3AyijnCJ7BP9rr3U8kxExCpG3mK420TjOw';
         $expected_tag = 'VILuUwuIxaLVmh5X-T7kmA';
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new A128KW()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128GCM()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -122,8 +122,8 @@ final class A128KWAndA128GCMEncryptionWithCompressionTest extends AbstractEncryp
             'zip' => 'DEF',
         ];
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new A128KW()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128GCM()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['A128KW'], ['A128GCM'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);

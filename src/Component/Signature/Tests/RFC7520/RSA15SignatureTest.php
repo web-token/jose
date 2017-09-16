@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Tests\RFC7520;
 
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\JWSParser;
@@ -59,7 +59,7 @@ final class RSA15SignatureTest extends AbstractSignatureTest
             'kid' => 'bilbo.baggins@hobbiton.example',
         ];
 
-        $signatureAlgorithmManager = JWAManager::create([new RS256()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new RS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256']);

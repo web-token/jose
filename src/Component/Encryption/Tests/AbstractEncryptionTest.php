@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests;
 
 use Jose\Component\Core\Converter\StandardJsonConverter;
-use Jose\Component\Core\JWAManagerFactory;
+use Jose\Component\Core\AlgorithmManagerFactory;
 use Jose\Component\Encryption\Algorithm\KeyEncryption;
 use Jose\Component\Encryption\Algorithm\ContentEncryption;
 use Jose\Component\Encryption\Compression;
@@ -25,17 +25,17 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractEncryptionTest extends TestCase
 {
     /**
-     * @var JWAManagerFactory
+     * @var AlgorithmManagerFactory
      */
     private $algorithmManagerFactory;
 
     /**
-     * @return JWAManagerFactory
+     * @return AlgorithmManagerFactory
      */
-    protected function getAlgorithmManagerFactory(): JWAManagerFactory
+    protected function getAlgorithmManagerFactory(): AlgorithmManagerFactory
     {
         if (null === $this->algorithmManagerFactory) {
-            $this->algorithmManagerFactory = new JWAManagerFactory();
+            $this->algorithmManagerFactory = new AlgorithmManagerFactory();
             $this->algorithmManagerFactory
                 ->add('A128GCM', new ContentEncryption\A128GCM())
                 ->add('A192GCM', new ContentEncryption\A192GCM())

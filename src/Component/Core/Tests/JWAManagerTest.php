@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Jose\Component\Core\Tests;
 
-use Jose\Component\Core\JWAInterface;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmInterface;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Signature\Algorithm\HS512;
 use Jose\Component\Signature\Algorithm\RS256;
 use PHPUnit\Framework\TestCase;
@@ -32,7 +32,7 @@ final class JWAManagerTest extends TestCase
      */
     public function testCreateManagerWithBadList()
     {
-        JWAManager::create(['foo']);
+        AlgorithmManager::create(['foo']);
     }
 
     /**
@@ -41,12 +41,12 @@ final class JWAManagerTest extends TestCase
      */
     public function testCreateManagerAndRetrieveAlgorithm()
     {
-        $manager = JWAManager::create([new HS512(), new RS256()]);
+        $manager = AlgorithmManager::create([new HS512(), new RS256()]);
 
         $this->assertEquals(['HS512', 'RS256'], $manager->list());
         $this->assertTrue($manager->has('HS512'));
         $this->assertFalse($manager->has('HS384'));
-        $this->assertInstanceOf(JWAInterface::class, $manager->get('HS512'));
+        $this->assertInstanceOf(AlgorithmInterface::class, $manager->get('HS512'));
         $manager->get('HS384');
     }
 }

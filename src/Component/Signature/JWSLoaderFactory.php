@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Jose\Component\Signature;
 
 use Jose\Component\Checker\HeaderCheckerManagerFactory;
-use Jose\Component\Core\JWAManagerFactory;
+use Jose\Component\Core\AlgorithmManagerFactory;
 
 final class JWSLoaderFactory
 {
     /**
-     * @var JWAManagerFactory
+     * @var AlgorithmManagerFactory
      */
     private $algorithmManagerFactory;
 
@@ -31,10 +31,10 @@ final class JWSLoaderFactory
     /**
      * JWSLoaderFactory constructor.
      *
-     * @param JWAManagerFactory           $algorithmManagerFactory
+     * @param AlgorithmManagerFactory           $algorithmManagerFactory
      * @param HeaderCheckerManagerFactory $headerCheckerManagerFactory
      */
-    public function __construct(JWAManagerFactory $algorithmManagerFactory, HeaderCheckerManagerFactory $headerCheckerManagerFactory)
+    public function __construct(AlgorithmManagerFactory $algorithmManagerFactory, HeaderCheckerManagerFactory $headerCheckerManagerFactory)
     {
         $this->algorithmManagerFactory = $algorithmManagerFactory;
         $this->headerCheckerManagerFactory = $headerCheckerManagerFactory;

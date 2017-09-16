@@ -14,7 +14,7 @@ namespace Jose\Performance\JWS;
 use Base64Url\Base64Url;
 use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\Converter\StandardJsonConverter;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm;
 use Jose\Component\Signature\JWSBuilder;
@@ -46,7 +46,7 @@ abstract class SignatureBench
     public function init()
     {
         $this->jsonConverter = new StandardJsonConverter();
-        $this->signatureAlgorithmsManager = JWAManager::create([
+        $this->signatureAlgorithmsManager = AlgorithmManager::create([
             new Algorithm\HS256(),
             new Algorithm\HS384(),
             new Algorithm\HS512(),
@@ -108,9 +108,9 @@ abstract class SignatureBench
     }
 
     /**
-     * @return JWAManager
+     * @return AlgorithmManager
      */
-    protected function getSignatureAlgorithmsManager(): JWAManager
+    protected function getSignatureAlgorithmsManager(): AlgorithmManager
     {
         return $this->signatureAlgorithmsManager;
     }

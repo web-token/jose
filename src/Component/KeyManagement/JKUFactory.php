@@ -18,12 +18,15 @@ use Http\Message\RequestFactory;
 use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWKSet;
 
+/**
+ * Class JKUFactory
+ */
 final class JKUFactory extends UrlKeySetFactory
 {
     private $jsonConverter;
 
     /**
-     * X5UFactory constructor.
+     * JKUFactory constructor.
      *
      * @param JsonConverterInterface $jsonConverter
      * @param HttpClient             $client
@@ -39,7 +42,7 @@ final class JKUFactory extends UrlKeySetFactory
      * @param string $url
      * @param array  $headers
      *
-     * @throws \HttpRuntimeException
+     * @throws \InvalidArgumentException
      *
      * @return JWKSet
      */

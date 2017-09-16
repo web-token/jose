@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Jose\Component\Core;
 
-interface JWAInterface
+/**
+ * Interface JWAInterface
+ */
+interface AlgorithmInterface
 {
     /**
      * @return string Returns the name of the algorithm

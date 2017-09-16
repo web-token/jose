@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Algorithm;
 
-use Jose\Component\Core\JWAInterface;
+use Jose\Component\Core\AlgorithmInterface;
 
-interface KeyEncryptionAlgorithmInterface extends JWAInterface
+interface KeyEncryptionAlgorithmInterface extends AlgorithmInterface
 {
     public const MODE_DIRECT = 'dir';
     public const MODE_ENCRYPT = 'enc';

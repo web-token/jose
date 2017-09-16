@@ -11,13 +11,18 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Core;
+namespace Jose\Component\KeyManagement;
 
 use Base64Url\Base64Url;
+use Jose\Component\Core\JWK;
+use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\Util\ECKey;
 use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
+/**
+ * Class JWKFactory
+ */
 final class JWKFactory
 {
     /**
@@ -290,16 +295,5 @@ final class JWKFactory
         $values = array_merge($values, $additional_values);
 
         return JWK::create($values);
-    }
-
-    /**
-     * @param JWKSet $jwk_set
-     * @param int    $key_index
-     *
-     * @return JWK
-     */
-    public static function createFromKeySet(JWKSet $jwk_set, int $key_index): JWK
-    {
-        return $jwk_set->get($key_index);
     }
 }

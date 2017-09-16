@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption;
 
 use Jose\Component\Checker\HeaderCheckerManagerFactory;
-use Jose\Component\Core\JWAManagerFactory;
+use Jose\Component\Core\AlgorithmManagerFactory;
 use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
 
 final class JWELoaderFactory
 {
     /**
-     * @var JWAManagerFactory
+     * @var AlgorithmManagerFactory
      */
     private $algorithmManagerFactory;
 
@@ -37,11 +37,11 @@ final class JWELoaderFactory
     /**
      * JWELoaderFactory constructor.
      *
-     * @param JWAManagerFactory               $algorithmManagerFactory
+     * @param AlgorithmManagerFactory               $algorithmManagerFactory
      * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
      * @param HeaderCheckerManagerFactory     $headerCheckerManagerFactory
      */
-    public function __construct(JWAManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory, HeaderCheckerManagerFactory $headerCheckerManagerFactory)
+    public function __construct(AlgorithmManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory, HeaderCheckerManagerFactory $headerCheckerManagerFactory)
     {
         $this->algorithmManagerFactory = $algorithmManagerFactory;
         $this->compressionMethodManagerFactory = $compressionMethodManagerFactory;

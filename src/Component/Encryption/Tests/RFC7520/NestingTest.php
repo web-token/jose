@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
@@ -64,7 +64,7 @@ final class NestingTest extends AbstractEncryptionTest
 
         $loaded_compact_json = JWSParser::parse($json_compact);
 
-        $signatureAlgorithmManager = JWAManager::create([new PS256()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new PS256()]);
         $verifier = new Verifier($signatureAlgorithmManager);
 
         $verifier->verifyWithKey($loaded_compact_json, $signature_key, null, $index);
@@ -107,8 +107,8 @@ final class NestingTest extends AbstractEncryptionTest
         $loaded_flattened_json = JWEParser::parse($json_flattened);
         $loaded_json = JWEParser::parse($json);
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new RSAOAEP()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSAOAEP()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128GCM()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 

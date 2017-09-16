@@ -31,8 +31,10 @@ final class UpdateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $updater = new Updater();
-        $updater->getStrategy()->setPharUrl('https://spomky-labs.github.io/jose/jose.phar');
-        $updater->getStrategy()->setVersionUrl('https://spomky-labs.github.io/jose/jose.phar.version');
+        $updater->setStrategy(Updater::STRATEGY_GITHUB);
+        $updater->getStrategy()->setPackageName('spomky-labs/jose');
+        $updater->getStrategy()->setPharName('jose');
+        $updater->getStrategy()->setCurrentLocalVersion('7.0.0');
 
         try {
             $result = $updater->update();

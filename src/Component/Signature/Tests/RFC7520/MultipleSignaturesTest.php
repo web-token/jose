@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Tests\RFC7520;
 
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\ES512;
 use Jose\Component\Signature\Algorithm\HS256;
@@ -69,7 +69,7 @@ final class MultipleSignaturesTest extends AbstractSignatureTest
             'k' => 'hJtXIZ2uSN5kbQfbtTNWbpdmhkV8FJG-Onbc6mxCcYg',
         ]);
 
-        $signatureAlgorithmManager = JWAManager::create([new RS256(), new ES512(), new HS256()]);
+        $signatureAlgorithmManager = AlgorithmManager::create([new RS256(), new ES512(), new HS256()]);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256', 'ES512', 'HS256']);
         $jwsBuilder = $jwsBuilder->withPayload($payload);
 

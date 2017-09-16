@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature;
 
-use Jose\Component\Core\JWAInterface;
+use Jose\Component\Core\AlgorithmInterface;
 use Jose\Component\Core\JWK;
 
 /**
  * This interface is used by algorithms that have capabilities to sign data and verify a signature.
  */
-interface SignatureAlgorithmInterface extends JWAInterface
+interface SignatureAlgorithmInterface extends AlgorithmInterface
 {
     /**
      * Sign the input.

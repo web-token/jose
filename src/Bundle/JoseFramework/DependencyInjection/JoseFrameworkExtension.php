@@ -20,6 +20,7 @@ use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWKSource;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWSBuilder;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\SourceInterface;
 use Jose\Bundle\Signature\DependencyInjection\Source\JWSLoader;
+use Jose\Component\KeyManagement\JWKFactory;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -76,6 +77,9 @@ final class JoseFrameworkExtension extends Extension implements PrependExtension
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
+        if (class_exists(JWKFactory::class)) {
+            $loader->load('jwk_factory.yml');
+        }
         if (true === $config['use_default_json_converter']) {
             $loader->load('json_converter.yml');
         }
@@ -112,8 +116,10 @@ final class JoseFrameworkExtension extends Extension implements PrependExtension
 
     private function addDefaultSources()
     {
-        $this->addSource(new JWKSource($this->bundlePath));
-        $this->addSource(new JWKSetSource($this->bundlePath));
+        if (class_exists(JWKFactory::class)) {
+            $this->addSource(new JWKSource($this->bundlePath));
+            $this->addSource(new JWKSetSource($this->bundlePath));
+        }
         if (class_exists(JWSBuilder::class)) {
             $this->addSource(new JWSBuilder());
         }

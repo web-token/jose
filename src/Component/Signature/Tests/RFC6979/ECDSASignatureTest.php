@@ -15,7 +15,7 @@ namespace Jose\Component\Signature\Tests\RFC6979;
 
 use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\JWKFactory;
+use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\Algorithm\ES256;
 use Jose\Component\Signature\Algorithm\ES384;
 use Jose\Component\Signature\Algorithm\ES512;

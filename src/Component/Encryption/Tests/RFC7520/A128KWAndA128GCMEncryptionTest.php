@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\JWAManager;
+use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
@@ -62,8 +62,8 @@ final class A128KWAndA128GCMEncryptionTest extends AbstractEncryptionTest
         $expected_ciphertext = 'AwliP-KmWgsZ37BvzCefNen6VTbRK3QMA4TkvRkH0tP1bTdhtFJgJxeVmJkLD61A1hnWGetdg11c9ADsnWgL56NyxwSYjU1ZEHcGkd3EkU0vjHi9gTlb90qSYFfeF0LwkcTtjbYKCsiNJQkcIp1yeM03OmuiYSoYJVSpf7ej6zaYcMv3WwdxDFl8REwOhNImk2Xld2JXq6BR53TSFkyT7PwVLuq-1GwtGHlQeg7gDT6xW0JqHDPn_H-puQsmthc9Zg0ojmJfqqFvETUxLAF-KjcBTS5dNy6egwkYtOt8EIHK-oEsKYtZRaa8Z7MOZ7UGxGIMvEmxrGCPeJa14slv2-gaqK0kEThkaSqdYw0FkQZF';
         $expected_tag = 'ER7MWJZ1FBI_NKvn7Zb1Lw';
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new A128KW()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128GCM()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
 
@@ -120,8 +120,8 @@ final class A128KWAndA128GCMEncryptionTest extends AbstractEncryptionTest
             'enc' => 'A128GCM',
         ];
 
-        $keyEncryptionAlgorithmManager = JWAManager::create([new A128KW()]);
-        $contentEncryptionAlgorithmManager = JWAManager::create([new A128GCM()]);
+        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new A128KW()]);
+        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128GCM()]);
         $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['A128KW'], ['A128GCM'], ['DEF']);
         $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);

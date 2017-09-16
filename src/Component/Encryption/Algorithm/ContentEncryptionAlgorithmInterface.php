@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Algorithm;
 
-use Jose\Component\Core\JWAInterface;
+use Jose\Component\Core\AlgorithmInterface;
 
-interface ContentEncryptionAlgorithmInterface extends JWAInterface
+interface ContentEncryptionAlgorithmInterface extends AlgorithmInterface
 {
     /**
      * Encrypt data.
