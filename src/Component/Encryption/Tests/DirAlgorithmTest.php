@@ -48,6 +48,6 @@ final class DirAlgorithmTest extends AbstractEncryptionTest
 
         $dir = new Dir();
 
-        $this->assertEquals('ABCD', $dir->getCEK($key));
+        self::assertEquals('ABCD', $dir->getCEK($key));
     }
 }

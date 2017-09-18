@@ -42,7 +42,7 @@ final class ECKeysTest extends TestCase
     {
         $pem = file_get_contents('file://'.__DIR__.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es256.from.APN.key');
         $details = KeyConverter::loadFromKey($pem);
-        $this->assertEquals($details, [
+        self::assertEquals($details, [
             'kty' => 'EC',
             'crv' => 'P-256',
             'd' => '13n3isfsEktzl-CtH5ECpRrKk-40prVuCbldkP77gak',
@@ -55,7 +55,7 @@ final class ECKeysTest extends TestCase
     {
         $pem = file_get_contents('file://'.__DIR__.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'public.es256.key');
         $details = KeyConverter::loadFromKey($pem);
-        $this->assertEquals($details, [
+        self::assertEquals($details, [
             'kty' => 'EC',
             'crv' => 'P-256',
             'x' => 'vuYsP-QnrqAbM7Iyhzjt08hFSuzapyojCB_gFsBt65U',
@@ -67,7 +67,7 @@ final class ECKeysTest extends TestCase
     {
         $private_pem = file_get_contents('file://'.__DIR__.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es256.key');
         $details = KeyConverter::loadFromKey($private_pem);
-        $this->assertEquals($details, [
+        self::assertEquals($details, [
             'kty' => 'EC',
             'crv' => 'P-256',
             'd' => 'q_VkzNnxTG39jHB0qkwA_SeVXud7yCHT7kb7kZv-0xQ',
@@ -80,7 +80,7 @@ final class ECKeysTest extends TestCase
     {
         $private_pem = file_get_contents('file://'.__DIR__.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es256.encrypted.key');
         $details = KeyConverter::loadFromKey($private_pem, 'test');
-        $this->assertEquals($details, [
+        self::assertEquals($details, [
             'kty' => 'EC',
             'crv' => 'P-256',
             'd' => 'q_VkzNnxTG39jHB0qkwA_SeVXud7yCHT7kb7kZv-0xQ',
@@ -102,7 +102,7 @@ final class ECKeysTest extends TestCase
     {
         $pem = file_get_contents('file://'.__DIR__.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'public.es384.key');
         $details = KeyConverter::loadFromKey($pem);
-        $this->assertEquals($details, [
+        self::assertEquals($details, [
             'kty' => 'EC',
             'crv' => 'P-384',
             'x' => '6f-XZsg2Tvn0EoEapQ-ylMYNtsm8CPf0cb8HI2EkfY9Bqpt3QMzwlM7mVsFRmaMZ',
@@ -114,7 +114,7 @@ final class ECKeysTest extends TestCase
     {
         $private_pem = file_get_contents('file://'.__DIR__.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es384.key');
         $details = KeyConverter::loadFromKey($private_pem);
-        $this->assertEquals($details, [
+        self::assertEquals($details, [
             'kty' => 'EC',
             'crv' => 'P-384',
             'd' => 'pcSSXrbeZEOaBIs7IwqcU9M_OOM81XhZuOHoGgmS_2PdECwcdQcXzv7W8-lYL0cr',
@@ -127,7 +127,7 @@ final class ECKeysTest extends TestCase
     {
         $private_pem = file_get_contents('file://'.__DIR__.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es384.encrypted.key');
         $details = KeyConverter::loadFromKey($private_pem, 'test');
-        $this->assertEquals($details, [
+        self::assertEquals($details, [
             'kty' => 'EC',
             'crv' => 'P-384',
             'd' => 'pcSSXrbeZEOaBIs7IwqcU9M_OOM81XhZuOHoGgmS_2PdECwcdQcXzv7W8-lYL0cr',
@@ -140,7 +140,7 @@ final class ECKeysTest extends TestCase
     {
         $pem = file_get_contents('file://'.__DIR__.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'public.es512.key');
         $details = KeyConverter::loadFromKey($pem);
-        $this->assertEquals($details, [
+        self::assertEquals($details, [
             'kty' => 'EC',
             'crv' => 'P-521',
             'x' => 'AVpvo7TGpQk5P7ZLo0qkBpaT-fFDv6HQrWElBKMxcrJd_mRNapweATsVv83YON4lTIIRXzgGkmWeqbDr6RQO-1cS',
@@ -152,7 +152,7 @@ final class ECKeysTest extends TestCase
     {
         $private_pem = file_get_contents('file://'.__DIR__.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es512.key');
         $details = KeyConverter::loadFromKey($private_pem);
-        $this->assertEquals($details, [
+        self::assertEquals($details, [
             'kty' => 'EC',
             'crv' => 'P-521',
             'd' => 'Fp6KFKRiHIdR_7PP2VKxz6OkS_phyoQqwzv2I89-8zP7QScrx5r8GFLcN5mCCNJt3rN3SIgI4XoIQbNePlAj6vE',
@@ -165,7 +165,7 @@ final class ECKeysTest extends TestCase
     {
         $private_pem = file_get_contents('file://'.__DIR__.DIRECTORY_SEPARATOR.'EC'.DIRECTORY_SEPARATOR.'private.es512.encrypted.key');
         $details = KeyConverter::loadFromKey($private_pem, 'test');
-        $this->assertEquals($details, [
+        self::assertEquals($details, [
             'kty' => 'EC',
             'crv' => 'P-521',
             'd' => 'Fp6KFKRiHIdR_7PP2VKxz6OkS_phyoQqwzv2I89-8zP7QScrx5r8GFLcN5mCCNJt3rN3SIgI4XoIQbNePlAj6vE',
@@ -189,7 +189,7 @@ final class ECKeysTest extends TestCase
 
         $public_ec_key = ECKey::toPublic($private_ec_key);
 
-        $this->assertEquals([
+        self::assertEquals([
             'kty' => 'EC',
             'kid' => 'Foo',
             'crv' => 'P-256',

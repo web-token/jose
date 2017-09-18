@@ -67,7 +67,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
             ->toCompactJSON(0);
 
         $loaded = JWSParser::parse($jws);
-        $this->assertInstanceOf(JWS::class, $loaded);
+        self::assertInstanceOf(JWS::class, $loaded);
 
         $verifier = new Verifier($algorithmManager);
         $verifier->verifyWithKey($loaded, $key);
@@ -125,7 +125,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
             ->toCompactJSON(0);
 
         $loaded = JWEParser::parse($jwt);
-        $this->assertInstanceOf(JWE::class, $loaded);
+        self::assertInstanceOf(JWE::class, $loaded);
 
         $decrypter->decryptUsingKey($loaded, $key);
     }
@@ -155,7 +155,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
             ->toCompactJSON(0);
 
         $loaded = JWEParser::parse($jwt);
-        $this->assertInstanceOf(JWE::class, $loaded);
+        self::assertInstanceOf(JWE::class, $loaded);
 
         $decrypter->decryptUsingKey($loaded, $key);
     }

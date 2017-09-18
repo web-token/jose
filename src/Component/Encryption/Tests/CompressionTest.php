@@ -34,9 +34,9 @@ final class CompressionTest extends AbstractEncryptionTest
             new ZLib(),
         ]);
 
-        $this->assertEquals(['DEF', 'GZ', 'ZLIB'], $manager->list());
+        self::assertEquals(['DEF', 'GZ', 'ZLIB'], $manager->list());
         $compression = $manager->get('DEF');
-        $this->assertInstanceOf(CompressionMethodInterface::class, $compression);
+        self::assertInstanceOf(CompressionMethodInterface::class, $compression);
     }
 
     /**
@@ -46,7 +46,7 @@ final class CompressionTest extends AbstractEncryptionTest
     public function testGetInvalidCompressionAlgorithm()
     {
         $manager = new CompressionMethodManager();
-        $this->assertFalse($manager->has('FOO'));
+        self::assertFalse($manager->has('FOO'));
         $manager->get('FOO');
     }
 
@@ -57,8 +57,8 @@ final class CompressionTest extends AbstractEncryptionTest
         $data = 'Live long and Prosper.';
         $compressed = $compression->compress($data);
         $uncompressed = $compression->uncompress($compressed);
-        $this->assertNotNull($compressed);
-        $this->assertSame($data, $uncompressed);
+        self::assertNotNull($compressed);
+        self::assertSame($data, $uncompressed);
     }
 
     public function testGZip()
@@ -68,8 +68,8 @@ final class CompressionTest extends AbstractEncryptionTest
         $data = 'Live long and Prosper.';
         $compressed = $compression->compress($data);
         $uncompressed = $compression->uncompress($compressed);
-        $this->assertNotNull($compressed);
-        $this->assertSame($data, $uncompressed);
+        self::assertNotNull($compressed);
+        self::assertSame($data, $uncompressed);
     }
 
     public function testZLib()
@@ -79,8 +79,8 @@ final class CompressionTest extends AbstractEncryptionTest
         $data = 'Live long and Prosper.';
         $compressed = $compression->compress($data);
         $uncompressed = $compression->uncompress($compressed);
-        $this->assertNotNull($compressed);
-        $this->assertSame($data, $uncompressed);
+        self::assertNotNull($compressed);
+        self::assertSame($data, $uncompressed);
     }
 
     /**

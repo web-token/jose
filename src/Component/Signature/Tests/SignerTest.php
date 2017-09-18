@@ -81,13 +81,13 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
             ->build();
 
-        $this->assertEquals(2, $jws->countSignatures());
+        self::assertEquals(2, $jws->countSignatures());
 
         $loaded = JWSParser::parse($jws->toJSON());
 
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
-        $this->assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
+        self::assertInstanceOf(JWS::class, $loaded);
+        self::assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
+        self::assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
     }
 
     public function testSignMultipleInstructionWithCompactRepresentation()
@@ -99,9 +99,9 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
             ->build();
 
-        $this->assertEquals(2, $jws->countSignatures());
-        $this->assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
-        $this->assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
+        self::assertEquals(2, $jws->countSignatures());
+        self::assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
+        self::assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
     }
 
     /**
@@ -116,9 +116,9 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
             ->build();
 
-        $this->assertEquals(2, $jws->countSignatures());
-        $this->assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
-        $this->assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
+        self::assertEquals(2, $jws->countSignatures());
+        self::assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
+        self::assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
     }
 
     /**
@@ -133,9 +133,9 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
             ->build();
 
-        $this->assertEquals(2, $jws->countSignatures());
-        $this->assertEquals('eyJhbGciOiJIUzUxMiJ9..TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
-        $this->assertEquals('eyJhbGciOiJSUzUxMiJ9..cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
+        self::assertEquals(2, $jws->countSignatures());
+        self::assertEquals('eyJhbGciOiJIUzUxMiJ9..TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
+        self::assertEquals('eyJhbGciOiJSUzUxMiJ9..cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
     }
 
     public function testCreateCompactJWSUsingFactory()
@@ -159,10 +159,10 @@ final class SignerTest extends AbstractSignatureTest
         $jws2 = $jws->toCompactJSON(0);
         $jws3 = $jws->toCompactJSON(1);
 
-        $this->assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws0);
-        $this->assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws1);
-        $this->assertEquals('eyJhbGciOiJIUzUxMiJ9..TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws2);
-        $this->assertEquals('eyJhbGciOiJSUzUxMiJ9..cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws3);
+        self::assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws0);
+        self::assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws1);
+        self::assertEquals('eyJhbGciOiJIUzUxMiJ9..TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws2);
+        self::assertEquals('eyJhbGciOiJSUzUxMiJ9..cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws3);
 
         $verifier = new Verifier($algorithmManager);
         $loaded_0 = JWSParser::parse($jws0);
@@ -187,9 +187,9 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
             ->build();
 
-        $this->assertEquals(2, $jws->countSignatures());
-        $this->assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJIUzUxMiJ9","signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws->toFlattenedJSON(0));
-        $this->assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJSUzUxMiJ9","signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws->toFlattenedJSON(1));
+        self::assertEquals(2, $jws->countSignatures());
+        self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJIUzUxMiJ9","signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws->toFlattenedJSON(0));
+        self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJSUzUxMiJ9","signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws->toFlattenedJSON(1));
     }
 
     public function testCreateFlattenedJWSUsingFactory()
@@ -212,10 +212,10 @@ final class SignerTest extends AbstractSignatureTest
         $jws2 = $jws->toFlattenedJSON(0);
         $jws3 = $jws->toFlattenedJSON(1);
 
-        $this->assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJIUzUxMiJ9","header":{"foo":"bar"},"signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws0);
-        $this->assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJSUzUxMiJ9","header":{"plic":"ploc"},"signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws1);
-        $this->assertEquals('{"protected":"eyJhbGciOiJIUzUxMiJ9","header":{"foo":"bar"},"signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws2);
-        $this->assertEquals('{"protected":"eyJhbGciOiJSUzUxMiJ9","header":{"plic":"ploc"},"signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws3);
+        self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJIUzUxMiJ9","header":{"foo":"bar"},"signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws0);
+        self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJSUzUxMiJ9","header":{"plic":"ploc"},"signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws1);
+        self::assertEquals('{"protected":"eyJhbGciOiJIUzUxMiJ9","header":{"foo":"bar"},"signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws2);
+        self::assertEquals('{"protected":"eyJhbGciOiJSUzUxMiJ9","header":{"plic":"ploc"},"signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws3);
 
         $verifier = new Verifier($algorithmManager);
         $loaded_0 = JWSParser::parse($jws0);
@@ -267,9 +267,9 @@ final class SignerTest extends AbstractSignatureTest
 
         $loaded = JWSParser::parse($jws->toFlattenedJSON(0));
 
-        $this->assertEquals(1, $loaded->countSignatures());
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
+        self::assertEquals(1, $loaded->countSignatures());
+        self::assertInstanceOf(JWS::class, $loaded);
+        self::assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
     }
 
     public function testSignAndLoad()
@@ -285,14 +285,14 @@ final class SignerTest extends AbstractSignatureTest
 
         $loaded = JWSParser::parse($jws->toJSON());
 
-        $this->assertEquals(2, $loaded->countSignatures());
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals('Live long and Prosper.', $loaded->getPayload());
+        self::assertEquals(2, $loaded->countSignatures());
+        self::assertInstanceOf(JWS::class, $loaded);
+        self::assertEquals('Live long and Prosper.', $loaded->getPayload());
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
         $verifier->verifyWithKeySet($loaded, $this->getPublicKeySet());
 
-        $this->assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
-        $this->assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
+        self::assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
+        self::assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
     }
 
     /**
@@ -311,9 +311,9 @@ final class SignerTest extends AbstractSignatureTest
 
         $loaded = JWSParser::parse($jws->toJSON());
 
-        $this->assertEquals(1, $loaded->countSignatures());
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals('Live long and Prosper.', $loaded->getPayload());
+        self::assertEquals(1, $loaded->countSignatures());
+        self::assertInstanceOf(JWS::class, $loaded);
+        self::assertEquals('Live long and Prosper.', $loaded->getPayload());
 
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
     }
@@ -333,9 +333,9 @@ final class SignerTest extends AbstractSignatureTest
 
         $loaded = JWSParser::parse($jws->toJSON());
 
-        $this->assertEquals(1, $loaded->countSignatures());
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals('Live long and Prosper.', $loaded->getPayload());
+        self::assertEquals(1, $loaded->countSignatures());
+        self::assertInstanceOf(JWS::class, $loaded);
+        self::assertEquals('Live long and Prosper.', $loaded->getPayload());
 
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
     }
@@ -353,9 +353,9 @@ final class SignerTest extends AbstractSignatureTest
 
         $loaded = JWSParser::parse($jws);
 
-        $this->assertEquals(0, $loaded->countSignatures());
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals($payload, $loaded->getPayload());
+        self::assertEquals(0, $loaded->countSignatures());
+        self::assertInstanceOf(JWS::class, $loaded);
+        self::assertEquals($payload, $loaded->getPayload());
 
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
     }
@@ -413,15 +413,15 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($key, $protectedHeader)
             ->build()
             ->toCompactJSON(0);
-        $this->assertEquals('eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY', $jws);
+        self::assertEquals('eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY', $jws);
 
         $loaded = JWSParser::parse($jws);
         $verifier = new Verifier($algorithmManager);
         $verifier->verifyWithKey($loaded, $key, $payload, $index);
 
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals(0, $index);
-        $this->assertEquals($protectedHeader, $loaded->getSignature(0)->getProtectedHeaders());
+        self::assertInstanceOf(JWS::class, $loaded);
+        self::assertEquals(0, $index);
+        self::assertEquals($protectedHeader, $loaded->getSignature(0)->getProtectedHeaders());
     }
 
     /**
@@ -453,15 +453,15 @@ final class SignerTest extends AbstractSignatureTest
 
         $expected_result = '{"signatures":[{"signature":"A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY","protected":"eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19"},{"signature":"5mvfOroL-g7HyqJoozehmsaqmvTYGEq5jTI1gVvoEoQ","protected":"eyJhbGciOiJIUzI1NiJ9"}]}';
 
-        $this->assertEquals($expected_result, $jws->toJSON());
+        self::assertEquals($expected_result, $jws->toJSON());
 
         $loaded = JWSParser::parse($expected_result);
         $algorithmManager = AlgorithmManager::create([new HS256()]);
         $verifier = new Verifier($algorithmManager);
         $verifier->verifyWithKey($loaded, $key, $payload, $index1);
 
-        $this->assertEquals(0, $index1);
-        $this->assertEquals($protectedHeader1, $loaded->getSignature(0)->getProtectedHeaders());
+        self::assertEquals(0, $index1);
+        self::assertEquals($protectedHeader1, $loaded->getSignature(0)->getProtectedHeaders());
     }
 
     /**
@@ -606,16 +606,16 @@ final class SignerTest extends AbstractSignatureTest
             ->build()
             ->toFlattenedJSON(0);
 
-        $this->assertEquals($expected_result, json_decode($jws, true));
+        self::assertEquals($expected_result, json_decode($jws, true));
 
         $loaded = JWSParser::parse($jws);
         $verifier = new Verifier($algorithmManager);
         $verifier->verifyWithKey($loaded, $key, null, $index);
 
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals($payload, $loaded->getPayload());
-        $this->assertEquals(0, $index);
-        $this->assertEquals($protectedHeader, $loaded->getSignature(0)->getProtectedHeaders());
+        self::assertInstanceOf(JWS::class, $loaded);
+        self::assertEquals($payload, $loaded->getPayload());
+        self::assertEquals(0, $index);
+        self::assertEquals($protectedHeader, $loaded->getSignature(0)->getProtectedHeaders());
     }
 
     /**
@@ -648,7 +648,7 @@ final class SignerTest extends AbstractSignatureTest
             ->build()
             ->toFlattenedJSON(0);
 
-        $this->assertEquals($expected_result, json_decode($jws, true));
+        self::assertEquals($expected_result, json_decode($jws, true));
     }
 
     /**
@@ -664,9 +664,9 @@ final class SignerTest extends AbstractSignatureTest
 
         $loaded = JWSParser::parse($jws);
 
-        $this->assertEquals(1, $loaded->countSignatures());
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals($payload, $loaded->getPayload());
+        self::assertEquals(1, $loaded->countSignatures());
+        self::assertInstanceOf(JWS::class, $loaded);
+        self::assertEquals($payload, $loaded->getPayload());
 
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
     }
@@ -683,14 +683,14 @@ final class SignerTest extends AbstractSignatureTest
             ->build();
 
         $loaded = JWSParser::parse($jws->toJSON());
-        $this->assertEquals(2, $loaded->countSignatures());
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals($this->getKeyset(), JWKSet::createFromKeyData(json_decode($loaded->getPayload(), true)));
+        self::assertEquals(2, $loaded->countSignatures());
+        self::assertInstanceOf(JWS::class, $loaded);
+        self::assertEquals($this->getKeyset(), JWKSet::createFromKeyData(json_decode($loaded->getPayload(), true)));
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
         $verifier->verifyWithKeySet($loaded, $this->getPublicKeySet());
 
-        $this->assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
-        $this->assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
+        self::assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
+        self::assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
     }
 
     /**
@@ -709,9 +709,9 @@ final class SignerTest extends AbstractSignatureTest
             ->build();
 
         $loaded = JWSParser::parse($jws->toJSON());
-        $this->assertEquals(2, $loaded->countSignatures());
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals($this->getKeyset(), JWKSet::createFromKeyData(json_decode($loaded->getPayload(), true)));
+        self::assertEquals(2, $loaded->countSignatures());
+        self::assertInstanceOf(JWS::class, $loaded);
+        self::assertEquals($this->getKeyset(), JWKSet::createFromKeyData(json_decode($loaded->getPayload(), true)));
         $verifier->verifyWithKeySet($loaded, JWKSet::createFromKeys([]));
         $verifier->verifyWithKey($loaded, JWK::create(['kty' => 'EC']));
     }

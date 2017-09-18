@@ -62,8 +62,8 @@ final class ForeignJWTTest extends AbstractSignatureTest
             ],
         ];
 
-        $this->assertInstanceOf(JWS::class, $jwt);
-        $this->assertEquals($expected_index, $index);
-        $this->assertEquals($expected_headers, $jwt->getSignature(0)->getProtectedHeaders());
+        self::assertInstanceOf(JWS::class, $jwt);
+        self::assertEquals($expected_index, $index);
+        self::assertEquals($expected_headers, $jwt->getSignature(0)->getProtectedHeaders());
     }
 }

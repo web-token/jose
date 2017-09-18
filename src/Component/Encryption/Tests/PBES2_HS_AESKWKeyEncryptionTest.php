@@ -50,7 +50,7 @@ final class PBES2_HS_AESKWKeyEncryptionTest extends AbstractEncryptionTest
 
         $wrapped_cek = Base64Url::decode('TrqXOwuNUfDV9VPTNbyGvEJ9JMjefAVn-TR1uIxR9p6hsRQh9Tk7BA');
 
-        $this->assertEquals($expected_cek, $pbes2->unwrapKey($key, $wrapped_cek, $header));
+        self::assertEquals($expected_cek, $pbes2->unwrapKey($key, $wrapped_cek, $header));
     }
 
     public function testPBES2HS256A128KW_Bis()
@@ -69,9 +69,9 @@ final class PBES2_HS_AESKWKeyEncryptionTest extends AbstractEncryptionTest
 
         $pbes2 = new PBES2HS256A128KW();
         $encrypted_cek = $pbes2->wrapKey($key, $cek, $header, $header);
-        $this->assertTrue(isset($header['p2s']));
-        $this->assertEquals(4096, $header['p2c']);
-        $this->assertEquals($cek, $pbes2->unwrapKey($key, $encrypted_cek, $header));
+        self::assertTrue(isset($header['p2s']));
+        self::assertEquals(4096, $header['p2c']);
+        self::assertEquals($cek, $pbes2->unwrapKey($key, $encrypted_cek, $header));
     }
 
     public function testPBES2HS384A192KW()
@@ -90,9 +90,9 @@ final class PBES2_HS_AESKWKeyEncryptionTest extends AbstractEncryptionTest
 
         $pbes2 = new PBES2HS384A192KW();
         $encrypted_cek = $pbes2->wrapKey($key, $cek, $header, $header);
-        $this->assertTrue(isset($header['p2s']));
-        $this->assertEquals(4096, $header['p2c']);
-        $this->assertEquals($cek, $pbes2->unwrapKey($key, $encrypted_cek, $header));
+        self::assertTrue(isset($header['p2s']));
+        self::assertEquals(4096, $header['p2c']);
+        self::assertEquals($cek, $pbes2->unwrapKey($key, $encrypted_cek, $header));
     }
 
     public function testPBES2HS512A256KW()
@@ -111,9 +111,9 @@ final class PBES2_HS_AESKWKeyEncryptionTest extends AbstractEncryptionTest
 
         $pbes2 = new PBES2HS512A256KW();
         $encrypted_cek = $pbes2->wrapKey($key, $cek, $header, $header);
-        $this->assertTrue(isset($header['p2s']));
-        $this->assertEquals(4096, $header['p2c']);
-        $this->assertEquals($cek, $pbes2->unwrapKey($key, $encrypted_cek, $header));
+        self::assertTrue(isset($header['p2s']));
+        self::assertEquals(4096, $header['p2c']);
+        self::assertEquals($cek, $pbes2->unwrapKey($key, $encrypted_cek, $header));
     }
 
     /**

@@ -198,7 +198,7 @@ final class JWSCheckTest extends TestCase
 
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
-        $this->assertEquals(json_encode($payload), $jws->getPayload());
+        self::assertEquals(json_encode($payload), $jws->getPayload());
     }
 
     public function testJWSSuccessfullyCheckedWithUnsupportedClaims()
@@ -210,7 +210,7 @@ final class JWSCheckTest extends TestCase
 
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
-        $this->assertEquals(json_encode($payload), $jws->getPayload());
+        self::assertEquals(json_encode($payload), $jws->getPayload());
     }
 
     /**

@@ -58,8 +58,8 @@ final class ECDHESWithX25519EncryptionTest extends AbstractEncryptionTest
 
         $jwe = JWEParser::parse($jwt);
         $jwe = $decrypter->decryptUsingKey($jwe, $receiverKey, $index);
-        $this->assertEquals(0, $index);
-        $this->assertTrue($jwe->hasSharedProtectedHeader('epk'));
-        $this->assertEquals($input, $jwe->getPayload());
+        self::assertEquals(0, $index);
+        self::assertTrue($jwe->hasSharedProtectedHeader('epk'));
+        self::assertEquals($input, $jwe->getPayload());
     }
 }

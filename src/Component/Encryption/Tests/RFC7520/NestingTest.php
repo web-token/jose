@@ -69,9 +69,9 @@ final class NestingTest extends AbstractEncryptionTest
 
         $verifier->verifyWithKey($loaded_compact_json, $signature_key, null, $index);
 
-        $this->assertEquals(0, $index);
-        $this->assertEquals($signature_header, $loaded_compact_json->getSignature($index)->getProtectedHeaders());
-        $this->assertEquals($payload, json_decode($loaded_compact_json->getPayload(), true));
+        self::assertEquals(0, $index);
+        self::assertEquals($signature_header, $loaded_compact_json->getSignature($index)->getProtectedHeaders());
+        self::assertEquals($payload, json_decode($loaded_compact_json->getPayload(), true));
     }
 
     public function testDecryption()
@@ -116,16 +116,16 @@ final class NestingTest extends AbstractEncryptionTest
         $loaded_flattened_json = $decrypter->decryptUsingKey($loaded_flattened_json, $encryption_key, $index);
         $loaded_json = $decrypter->decryptUsingKey($loaded_json, $encryption_key, $index);
 
-        $this->assertEquals(0, $index);
-        $this->assertEquals($encryption_header, $loaded_compact_json->getSharedProtectedHeaders());
-        $this->assertEquals($payload, $loaded_compact_json->getPayload());
+        self::assertEquals(0, $index);
+        self::assertEquals($encryption_header, $loaded_compact_json->getSharedProtectedHeaders());
+        self::assertEquals($payload, $loaded_compact_json->getPayload());
 
-        $this->assertEquals(0, $index);
-        $this->assertEquals($encryption_header, $loaded_flattened_json->getSharedProtectedHeaders());
-        $this->assertEquals($payload, $loaded_flattened_json->getPayload());
+        self::assertEquals(0, $index);
+        self::assertEquals($encryption_header, $loaded_flattened_json->getSharedProtectedHeaders());
+        self::assertEquals($payload, $loaded_flattened_json->getPayload());
 
-        $this->assertEquals(0, $index);
-        $this->assertEquals($encryption_header, $loaded_json->getSharedProtectedHeaders());
-        $this->assertEquals($payload, $loaded_json->getPayload());
+        self::assertEquals(0, $index);
+        self::assertEquals($encryption_header, $loaded_json->getSharedProtectedHeaders());
+        self::assertEquals($payload, $loaded_json->getPayload());
     }
 }

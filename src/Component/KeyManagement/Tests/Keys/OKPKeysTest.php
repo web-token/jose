@@ -42,12 +42,12 @@ final class OKPKeysTest extends TestCase
             ]
         );
 
-        $this->assertEquals('OKP', $jwk->get('kty'));
-        $this->assertTrue($jwk->has('x'));
-        $this->assertTrue($jwk->has('d'));
-        $this->assertEquals('KEY', $jwk->get('kid'));
-        $this->assertEquals('ECDH-ES', $jwk->get('alg'));
-        $this->assertEquals('enc', $jwk->get('use'));
+        self::assertEquals('OKP', $jwk->get('kty'));
+        self::assertTrue($jwk->has('x'));
+        self::assertTrue($jwk->has('d'));
+        self::assertEquals('KEY', $jwk->get('kid'));
+        self::assertEquals('ECDH-ES', $jwk->get('alg'));
+        self::assertEquals('enc', $jwk->get('use'));
     }
 
     public function testCreateOKPKeyWithCurveEd25519()
@@ -61,11 +61,11 @@ final class OKPKeysTest extends TestCase
             ]
         );
 
-        $this->assertEquals('OKP', $jwk->get('kty'));
-        $this->assertTrue($jwk->has('x'));
-        $this->assertTrue($jwk->has('d'));
-        $this->assertEquals('KEY', $jwk->get('kid'));
-        $this->assertEquals('EdDSA', $jwk->get('alg'));
-        $this->assertEquals('sig', $jwk->get('use'));
+        self::assertEquals('OKP', $jwk->get('kty'));
+        self::assertTrue($jwk->has('x'));
+        self::assertTrue($jwk->has('d'));
+        self::assertEquals('KEY', $jwk->get('kid'));
+        self::assertEquals('EdDSA', $jwk->get('alg'));
+        self::assertEquals('sig', $jwk->get('use'));
     }
 }

@@ -53,7 +53,7 @@ final class CertificateTest extends TestCase
     {
         $result = KeyConverter::loadKeyFromCertificateFile($file);
 
-        $this->assertEquals($expected_values, $result);
+        self::assertEquals($expected_values, $result);
     }
 
     public function dataLoadCertificate()
@@ -253,7 +253,7 @@ final class CertificateTest extends TestCase
 
         $certificate = JWKFactory::createFromX5C($key->get('x5c'), ['use' => 'sig', 'kid' => '1b94c']);
 
-        $this->assertEquals([
+        self::assertEquals([
                 'kty' => 'RSA',
                 'use' => 'sig',
                 'kid' => '1b94c',

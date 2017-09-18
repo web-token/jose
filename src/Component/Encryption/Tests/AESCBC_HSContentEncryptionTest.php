@@ -43,9 +43,9 @@ final class AESCBC_HSContentEncryptionTest extends AbstractEncryptionTest
 
         $cyphertext = $algorithm->encryptContent($plaintext, $K, $iv, null, $header, $T);
 
-        $this->assertEquals($expected_cyphertext, $cyphertext);
-        $this->assertEquals($plaintext, $algorithm->decryptContent($cyphertext, $K, $iv, null, $header, $T));
-        $this->assertEquals($expected_T, $T);
+        self::assertEquals($expected_cyphertext, $cyphertext);
+        self::assertEquals($plaintext, $algorithm->decryptContent($cyphertext, $K, $iv, null, $header, $T));
+        self::assertEquals($expected_T, $T);
     }
 
     /**
@@ -97,15 +97,15 @@ final class AESCBC_HSContentEncryptionTest extends AbstractEncryptionTest
 
         $cyphertext = $algorithm->encryptContent($plaintext, $K, $iv, $aad, $header, $T);
 
-        $this->assertEquals($expected_cyphertext, $cyphertext);
+        self::assertEquals($expected_cyphertext, $cyphertext);
 
         //We invoke protected methods to test vectors directly. This is due to the encryption signature: this test case uses a string as AAD, but the algorithm uses the protected header.
         $calc_method = self::getMethod(A128CBCHS256::class, 'calculateAuthenticationTag');
         $check_method = self::getMethod(A128CBCHS256::class, 'isTagValid');
 
         $T = $calc_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad]);
-        $this->assertEquals($expected_T, $T);
-        $this->assertTrue($check_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad, $T]));
+        self::assertEquals($expected_T, $T);
+        self::assertTrue($check_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad, $T]));
     }
 
     /**
@@ -125,15 +125,15 @@ final class AESCBC_HSContentEncryptionTest extends AbstractEncryptionTest
 
         $cyphertext = $algorithm->encryptContent($plaintext, $K, $iv, $aad, $header, $T);
 
-        $this->assertEquals($expected_cyphertext, $cyphertext);
+        self::assertEquals($expected_cyphertext, $cyphertext);
 
         //We invoke protected methods to test vectors directly. This is due to the encryption signature: this test case uses a string as AAD, but the algorithm uses the protected header.
         $calc_method = self::getMethod(A128CBCHS256::class, 'calculateAuthenticationTag');
         $check_method = self::getMethod(A128CBCHS256::class, 'isTagValid');
 
         $T = $calc_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad]);
-        $this->assertEquals($expected_T, $T);
-        $this->assertTrue($check_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad, $T]));
+        self::assertEquals($expected_T, $T);
+        self::assertTrue($check_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad, $T]));
     }
 
     /**
@@ -153,15 +153,15 @@ final class AESCBC_HSContentEncryptionTest extends AbstractEncryptionTest
 
         $cyphertext = $algorithm->encryptContent($plaintext, $K, $iv, $aad, $header, $T);
 
-        $this->assertEquals($expected_cyphertext, $cyphertext);
+        self::assertEquals($expected_cyphertext, $cyphertext);
 
         //We invoke protected methods to test vectors directly. This is due to the encryption signature: this test case uses a string as AAD, but the algorithm uses the protected header.
         $calc_method = self::getMethod(A128CBCHS256::class, 'calculateAuthenticationTag');
         $check_method = self::getMethod(A128CBCHS256::class, 'isTagValid');
 
         $T = $calc_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad]);
-        $this->assertEquals($expected_T, $T);
-        $this->assertTrue($check_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad, $T]));
+        self::assertEquals($expected_T, $T);
+        self::assertTrue($check_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad, $T]));
     }
 
     /**

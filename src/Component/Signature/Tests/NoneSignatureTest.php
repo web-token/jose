@@ -37,8 +37,8 @@ final class NoneSignatureTest extends AbstractSignatureTest
 
         $signature = $none->sign($key, $data);
 
-        $this->assertEquals($signature, '');
-        $this->assertTrue($none->verify($key, $data, $signature));
+        self::assertEquals($signature, '');
+        self::assertTrue($none->verify($key, $data, $signature));
     }
 
     /**
@@ -69,18 +69,18 @@ final class NoneSignatureTest extends AbstractSignatureTest
             ->addSignature($jwk, ['alg' => 'none'])
             ->build();
 
-        $this->assertEquals(1, $jws->countSignatures());
+        self::assertEquals(1, $jws->countSignatures());
 
         $compact = $jws->toCompactJSON(0);
-        $this->assertTrue(is_string($compact));
+        self::assertTrue(is_string($compact));
 
         $result = JWSParser::parse($compact);
 
-        $this->assertInstanceOf(JWS::class, $result);
+        self::assertInstanceOf(JWS::class, $result);
 
-        $this->assertEquals('Live long and Prosper.', $result->getPayload());
-        $this->assertEquals(1, $result->countSignatures());
-        $this->assertTrue($result->getSignature(0)->hasProtectedHeader('alg'));
-        $this->assertEquals('none', $result->getSignature(0)->getProtectedHeader('alg'));
+        self::assertEquals('Live long and Prosper.', $result->getPayload());
+        self::assertEquals(1, $result->countSignatures());
+        self::assertTrue($result->getSignature(0)->hasProtectedHeader('alg'));
+        self::assertEquals('none', $result->getSignature(0)->getProtectedHeader('alg'));
     }
 }

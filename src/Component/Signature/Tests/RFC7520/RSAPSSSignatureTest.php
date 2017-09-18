@@ -86,14 +86,14 @@ final class RSAPSSSignatureTest extends AbstractSignatureTest
 
         $loaded_compact_json = JWSParser::parse($expected_compact_json);
         $verifier->verifyWithKey($loaded_compact_json, $privateKey, null, $loaded_compact_json_index);
-        $this->assertEquals(0, $loaded_compact_json_index);
+        self::assertEquals(0, $loaded_compact_json_index);
 
         $loaded_flattened_json = JWSParser::parse($expected_flattened_json);
         $verifier->verifyWithKey($loaded_flattened_json, $privateKey, null, $loaded_flattened_json_index);
-        $this->assertEquals(0, $loaded_flattened_json_index);
+        self::assertEquals(0, $loaded_flattened_json_index);
 
         $loaded_json = JWSParser::parse($expected_json);
         $verifier->verifyWithKey($loaded_json, $privateKey, null, $loaded_json_index);
-        $this->assertEquals(0, $loaded_json_index);
+        self::assertEquals(0, $loaded_json_index);
     }
 }

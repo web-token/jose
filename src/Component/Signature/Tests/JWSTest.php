@@ -38,12 +38,12 @@ final class JWSTest extends AbstractSignatureTest
         $jws = JWS::create(json_encode($claims))
             ->addSignature('', Base64Url::encode(json_encode($headers)));
 
-        $this->assertEquals(json_encode($claims), $jws->getPayload());
-        $this->assertEquals(1, $jws->countSignatures());
-        $this->assertTrue($jws->getSignature(0)->hasProtectedHeader('alg'));
-        $this->assertEquals($headers, $jws->getSignature(0)->getProtectedHeaders());
-        $this->assertEquals('none', $jws->getSignature(0)->getProtectedHeader('alg'));
-        $this->assertEquals([], $jws->getSignature(0)->getHeaders());
+        self::assertEquals(json_encode($claims), $jws->getPayload());
+        self::assertEquals(1, $jws->countSignatures());
+        self::assertTrue($jws->getSignature(0)->hasProtectedHeader('alg'));
+        self::assertEquals($headers, $jws->getSignature(0)->getProtectedHeaders());
+        self::assertEquals('none', $jws->getSignature(0)->getProtectedHeader('alg'));
+        self::assertEquals([], $jws->getSignature(0)->getHeaders());
     }
 
     /**

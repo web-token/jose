@@ -43,15 +43,15 @@ final class JWEFlattenedTest extends AbstractEncryptionTest
 
         $loaded = JWEParser::parse('{"protected":"eyJlbmMiOiJBMTI4Q0JDLUhTMjU2In0","unprotected":{"jku":"https://server.example.com/keys.jwks"},"header":{"alg":"A128KW","kid":"7"},"encrypted_key":"6KB707dM9YTIgHtLvtgWQ8mKwboJW3of9locizkDTHzBC2IlrT1oOQ","iv":"AxY8DCtDaGlsbGljb3RoZQ","ciphertext":"KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY","tag":"Mz-VPPyU4RlcuYv1IwIvzw"}');
 
-        $this->assertInstanceOf(JWE::class, $loaded);
-        $this->assertEquals('A128KW', $loaded->getRecipient(0)->getHeader('alg'));
-        $this->assertEquals('A128CBC-HS256', $loaded->getSharedProtectedHeader('enc'));
-        $this->assertNull($loaded->getPayload());
+        self::assertInstanceOf(JWE::class, $loaded);
+        self::assertEquals('A128KW', $loaded->getRecipient(0)->getHeader('alg'));
+        self::assertEquals('A128CBC-HS256', $loaded->getSharedProtectedHeader('enc'));
+        self::assertNull($loaded->getPayload());
 
         $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getSymmetricKeySet(), $index);
 
-        $this->assertEquals(0, $index);
-        $this->assertEquals('Live long and prosper.', $loaded->getPayload());
+        self::assertEquals(0, $index);
+        self::assertEquals('Live long and prosper.', $loaded->getPayload());
     }
 
     /**

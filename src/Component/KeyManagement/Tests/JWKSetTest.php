@@ -31,7 +31,7 @@ final class JWKSetTest extends TestCase
         $jwkset = $this->getPublicKeySet();
 
         $jwk = $jwkset->selectKey('enc');
-        $this->assertInstanceOf(JWK::class, $jwk);
+        self::assertInstanceOf(JWK::class, $jwk);
     }
 
     public function testKeySelectionWithAlgorithm()
@@ -39,8 +39,8 @@ final class JWKSetTest extends TestCase
         $jwkset = $this->getPublicKeySet();
 
         $jwk = $jwkset->selectKey('sig', 'RS256');
-        $this->assertInstanceOf(JWK::class, $jwk);
-        $this->assertEquals([
+        self::assertInstanceOf(JWK::class, $jwk);
+        self::assertEquals([
                 'kid' => '71ee230371d19630bc17fb90ccf20ae632ad8cf8',
                 'kty' => 'RSA',
                 'alg' => 'RS256',
@@ -57,8 +57,8 @@ final class JWKSetTest extends TestCase
         $jwkset = $this->getPublicKeySet();
 
         $jwk = $jwkset->selectKey('sig', 'RS256', ['kid' => '02491f945c951adf156f370788e8ccdabf8877a8']);
-        $this->assertInstanceOf(JWK::class, $jwk);
-        $this->assertEquals([
+        self::assertInstanceOf(JWK::class, $jwk);
+        self::assertEquals([
                 'kid' => '02491f945c951adf156f370788e8ccdabf8877a8',
                 'kty' => 'RSA',
                 'alg' => 'RS256',
@@ -75,8 +75,8 @@ final class JWKSetTest extends TestCase
         $jwkset = $this->getPublicKeySet();
 
         $jwk = $jwkset->selectKey('sig', null, ['kid' => '02491f945c951adf156f370788e8ccdabf8877a8']);
-        $this->assertInstanceOf(JWK::class, $jwk);
-        $this->assertEquals([
+        self::assertInstanceOf(JWK::class, $jwk);
+        self::assertEquals([
                 'kid' => '02491f945c951adf156f370788e8ccdabf8877a8',
                 'kty' => 'RSA',
                 'alg' => 'RS256',
@@ -93,7 +93,7 @@ final class JWKSetTest extends TestCase
         $jwkset = $this->getPublicKeySet();
 
         $jwk = $jwkset->selectKey('enc', null, ['kid' => '02491f945c951adf156f370788e8ccdabf8877a8']);
-        $this->assertNull($jwk);
+        self::assertNull($jwk);
     }
 
     public function testCreateKeySetFromValues()
@@ -107,10 +107,10 @@ final class JWKSetTest extends TestCase
             'e' => 'AQAB',
         ]]];
         $jwkset = JWKFactory::createFromValues($values);
-        $this->assertInstanceOf(JWKSet::class, $jwkset);
-        $this->assertEquals(1, count($jwkset));
-        $this->assertTrue($jwkset->has('71ee230371d19630bc17fb90ccf20ae632ad8cf8'));
-        $this->assertFalse($jwkset->has(0));
+        self::assertInstanceOf(JWKSet::class, $jwkset);
+        self::assertEquals(1, count($jwkset));
+        self::assertTrue($jwkset->has('71ee230371d19630bc17fb90ccf20ae632ad8cf8'));
+        self::assertFalse($jwkset->has(0));
     }
 
     /**

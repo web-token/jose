@@ -38,8 +38,8 @@ final class AESGCMContentEncryptionTest extends AbstractEncryptionTest
 
         $cyphertext = $algorithm->encryptContent($plaintext, $cek, $iv, null, $header, $tag);
 
-        $this->assertNotNull($tag);
-        $this->assertEquals($plaintext, $algorithm->decryptContent($cyphertext, $cek, $iv, null, $header, $tag));
+        self::assertNotNull($tag);
+        self::assertEquals($plaintext, $algorithm->decryptContent($cyphertext, $cek, $iv, null, $header, $tag));
     }
 
     public function testA192GCMEncryptAndDecrypt()
@@ -55,8 +55,8 @@ final class AESGCMContentEncryptionTest extends AbstractEncryptionTest
 
         $cyphertext = $algorithm->encryptContent($plaintext, $cek, $iv, null, $header, $tag);
 
-        $this->assertNotNull($tag);
-        $this->assertEquals($plaintext, $algorithm->decryptContent($cyphertext, $cek, $iv, null, $header, $tag));
+        self::assertNotNull($tag);
+        self::assertEquals($plaintext, $algorithm->decryptContent($cyphertext, $cek, $iv, null, $header, $tag));
     }
 
     public function testA256GCMEncryptAndDecrypt()
@@ -72,8 +72,8 @@ final class AESGCMContentEncryptionTest extends AbstractEncryptionTest
 
         $cyphertext = $algorithm->encryptContent($plaintext, $cek, $iv, null, $header, $tag);
 
-        $this->assertNotNull($tag);
-        $this->assertEquals($plaintext, $algorithm->decryptContent($cyphertext, $cek, $iv, null, $header, $tag));
+        self::assertNotNull($tag);
+        self::assertEquals($plaintext, $algorithm->decryptContent($cyphertext, $cek, $iv, null, $header, $tag));
     }
 
     /**
@@ -90,8 +90,8 @@ final class AESGCMContentEncryptionTest extends AbstractEncryptionTest
         $cyphertext = $this->convertArrayToBinString([229, 236, 166, 241, 53, 191, 115, 196, 174, 43, 73, 109, 39, 122, 233, 96, 140, 206, 120, 52, 51, 237, 48, 11, 190, 219, 186, 80, 111, 104, 50, 142, 47, 167, 59, 61, 181, 127, 196, 21, 40, 82, 242, 32, 123, 143, 168, 226, 73, 216, 176, 144, 138, 247, 106, 60, 16, 205, 160, 109, 64, 63, 192]);
         $expected_plaintext = 'The true sign of intelligence is not knowledge but imagination.';
 
-        $this->assertEquals('eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ', $header);
-        $this->assertEquals($expected_plaintext, $algorithm->decryptContent($cyphertext, $cek, $iv, null, $header, $tag));
+        self::assertEquals('eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ', $header);
+        self::assertEquals($expected_plaintext, $algorithm->decryptContent($cyphertext, $cek, $iv, null, $header, $tag));
     }
 
     /**

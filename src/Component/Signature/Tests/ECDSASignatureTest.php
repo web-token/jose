@@ -60,8 +60,8 @@ final class ECDSASignatureTest extends AbstractSignatureTest
 
         $sign = $ecdsa->sign($key, $data);
 
-        $this->assertTrue($ecdsa->verify($key, $data, $sign));
-        $this->assertTrue($ecdsa->verify($key, $data, Base64Url::decode($signature)));
+        self::assertTrue($ecdsa->verify($key, $data, $sign));
+        self::assertTrue($ecdsa->verify($key, $data, Base64Url::decode($signature)));
     }
 
     public function testES256SignVerify()
@@ -79,7 +79,7 @@ final class ECDSASignatureTest extends AbstractSignatureTest
         $data = 'eyJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ';
         $signature = $ecdsa->sign($key, $data);
 
-        $this->assertTrue($ecdsa->verify($key, $data, $signature));
+        self::assertTrue($ecdsa->verify($key, $data, $signature));
     }
 
     /**
@@ -110,7 +110,7 @@ final class ECDSASignatureTest extends AbstractSignatureTest
         $data = 'Live long and Prosper.';
         $signature = $ecdsa->sign($private_key, $data);
 
-        $this->assertTrue($ecdsa->verify($public_key, $data, $signature));
+        self::assertTrue($ecdsa->verify($public_key, $data, $signature));
     }
 
     public function testES384SignAndVerify()
@@ -122,7 +122,7 @@ final class ECDSASignatureTest extends AbstractSignatureTest
         $data = 'Live long and Prosper.';
         $signature = $ecdsa->sign($private_key, $data);
 
-        $this->assertTrue($ecdsa->verify($public_key, $data, $signature));
+        self::assertTrue($ecdsa->verify($public_key, $data, $signature));
     }
 
     public function testES512SignAndVerify()
@@ -134,7 +134,7 @@ final class ECDSASignatureTest extends AbstractSignatureTest
         $data = 'Live long and Prosper.';
         $signature = $ecdsa->sign($private_key, $data);
 
-        $this->assertTrue($ecdsa->verify($public_key, $data, $signature));
+        self::assertTrue($ecdsa->verify($public_key, $data, $signature));
     }
 
     public function testHS512Verify()
@@ -153,8 +153,8 @@ final class ECDSASignatureTest extends AbstractSignatureTest
 
         $sign = $ecdsa->sign($key, $data);
 
-        $this->assertTrue($ecdsa->verify($key, $data, $sign));
-        $this->assertTrue($ecdsa->verify($key, $data, Base64Url::decode($signature)));
+        self::assertTrue($ecdsa->verify($key, $data, $sign));
+        self::assertTrue($ecdsa->verify($key, $data, Base64Url::decode($signature)));
     }
 
     public function testHS512SignVerify()
@@ -172,7 +172,7 @@ final class ECDSASignatureTest extends AbstractSignatureTest
         $data = 'eyJhbGciOiJFUzUxMiJ9.UGF5bG9hZA';
         $signature = $ecdsa->sign($key, $data);
 
-        $this->assertTrue($ecdsa->verify($key, $data, $signature));
+        self::assertTrue($ecdsa->verify($key, $data, $signature));
     }
 
     public function testBadSignature()
@@ -189,6 +189,6 @@ final class ECDSASignatureTest extends AbstractSignatureTest
         $data = 'eyJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ';
         $signature = 'DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3';
 
-        $this->assertFalse($ecdsa->verify($key, $data, Base64Url::decode($signature)));
+        self::assertFalse($ecdsa->verify($key, $data, Base64Url::decode($signature)));
     }
 }

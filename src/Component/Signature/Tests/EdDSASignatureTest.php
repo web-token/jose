@@ -47,7 +47,7 @@ final class EdDSASignatureTest extends AbstractSignatureTest
 
         $result = $eddsa->verify($key, $input, $signature);
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     /**
@@ -73,13 +73,13 @@ final class EdDSASignatureTest extends AbstractSignatureTest
             ->build()
             ->toCompactJSON(0);
 
-        $this->assertEquals('eyJhbGciOiJFZERTQSJ9.RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc.hgyY0il_MGCjP0JzlnLWG1PPOt7-09PGcvMg3AIbQR6dWbhijcNR4ki4iylGjg5BhVsPt9g7sVvpAr_MuM0KAg', $jws);
+        self::assertEquals('eyJhbGciOiJFZERTQSJ9.RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc.hgyY0il_MGCjP0JzlnLWG1PPOt7-09PGcvMg3AIbQR6dWbhijcNR4ki4iylGjg5BhVsPt9g7sVvpAr_MuM0KAg', $jws);
 
         $loaded = JWSParser::parse($jws);
         $verifier = new Verifier($signatureAlgorithmManager);
 
-        $this->assertInstanceOf(JWS::class, $loaded);
-        $this->assertEquals(1, $loaded->countSignatures());
+        self::assertInstanceOf(JWS::class, $loaded);
+        self::assertEquals(1, $loaded->countSignatures());
         $verifier->verifyWithKey($loaded, $key);
     }
 }

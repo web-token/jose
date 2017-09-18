@@ -43,10 +43,10 @@ final class JWAManagerTest extends TestCase
     {
         $manager = AlgorithmManager::create([new HS512(), new RS256()]);
 
-        $this->assertEquals(['HS512', 'RS256'], $manager->list());
-        $this->assertTrue($manager->has('HS512'));
-        $this->assertFalse($manager->has('HS384'));
-        $this->assertInstanceOf(AlgorithmInterface::class, $manager->get('HS512'));
+        self::assertEquals(['HS512', 'RS256'], $manager->list());
+        self::assertTrue($manager->has('HS512'));
+        self::assertFalse($manager->has('HS384'));
+        self::assertInstanceOf(AlgorithmInterface::class, $manager->get('HS512'));
         $manager->get('HS384');
     }
 }

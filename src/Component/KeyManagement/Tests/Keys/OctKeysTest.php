@@ -35,7 +35,7 @@ final class OctKeysTest extends TestCase
     {
         $jwk = JWKFactory::createOctKey(64);
 
-        $this->assertEquals('oct', $jwk->get('kty'));
-        $this->assertTrue($jwk->has('k'));
+        self::assertEquals('oct', $jwk->get('kty'));
+        self::assertTrue($jwk->has('k'));
     }
 }

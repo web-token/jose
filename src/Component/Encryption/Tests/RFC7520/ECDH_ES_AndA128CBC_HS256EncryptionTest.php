@@ -76,21 +76,21 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTes
 
         $loaded_json = JWEParser::parse($expected_json);
 
-        $this->assertEquals($expected_ciphertext, Base64Url::encode($loaded_compact_json->getCiphertext()));
-        $this->assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());
-        $this->assertEquals($expected_iv, Base64Url::encode($loaded_compact_json->getIV()));
-        $this->assertEquals($expected_tag, Base64Url::encode($loaded_compact_json->getTag()));
+        self::assertEquals($expected_ciphertext, Base64Url::encode($loaded_compact_json->getCiphertext()));
+        self::assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());
+        self::assertEquals($expected_iv, Base64Url::encode($loaded_compact_json->getIV()));
+        self::assertEquals($expected_tag, Base64Url::encode($loaded_compact_json->getTag()));
 
-        $this->assertEquals($expected_ciphertext, Base64Url::encode($loaded_json->getCiphertext()));
-        $this->assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());
-        $this->assertEquals($expected_iv, Base64Url::encode($loaded_json->getIV()));
-        $this->assertEquals($expected_tag, Base64Url::encode($loaded_json->getTag()));
+        self::assertEquals($expected_ciphertext, Base64Url::encode($loaded_json->getCiphertext()));
+        self::assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());
+        self::assertEquals($expected_iv, Base64Url::encode($loaded_json->getIV()));
+        self::assertEquals($expected_tag, Base64Url::encode($loaded_json->getTag()));
 
         $loaded_compact_json = $decrypter->decryptUsingKey($loaded_compact_json, $private_key);
-        $this->assertEquals($expected_payload, $loaded_compact_json->getPayload());
+        self::assertEquals($expected_payload, $loaded_compact_json->getPayload());
 
         $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
-        $this->assertEquals($expected_payload, $loaded_json->getPayload());
+        self::assertEquals($expected_payload, $loaded_json->getPayload());
     }
 
     /**
@@ -140,8 +140,8 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTes
         $loaded_json = JWEParser::parse($jwe->toJSON());
         $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
 
-        $this->assertTrue(array_key_exists('epk', $loaded_json->getSharedProtectedHeaders()));
+        self::assertTrue(array_key_exists('epk', $loaded_json->getSharedProtectedHeaders()));
 
-        $this->assertEquals($expected_payload, $loaded_json->getPayload());
+        self::assertEquals($expected_payload, $loaded_json->getPayload());
     }
 }

@@ -50,7 +50,7 @@ final class ECDSASignatureTest extends AbstractSignatureTest
     {
         $is_valid = $algorithm->verify($key, $message, $signature);
 
-        $this->assertTrue($is_valid);
+        self::assertTrue($is_valid);
     }
 
     /**
