@@ -11,10 +11,7 @@ If you really love that framework, then you can help me out for a couple of :bee
 [![Coverage Status](https://coveralls.io/repos/github/Spomky-Labs/jose/badge.svg?branch=master)](https://coveralls.io/github/Spomky-Labs/jose?branch=master)
 
 [![Build Status](https://travis-ci.org/Spomky-Labs/jose.svg?branch=master)](https://travis-ci.org/Spomky-Labs/jose)
-[![HHVM Status](http://hhvm.h4cc.de/badge/Spomky-Labs/jose.svg?style=flat)](http://hhvm.h4cc.de/package/Spomky-Labs/jose)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/Spomky-Labs/jose/badge.svg)](https://travis-ci.org/Spomky-Labs/jose)
-
-[![Dependency Status](https://www.versioneye.com/user/projects/57ac28c489a9740034ca18c6/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57ac28c489a9740034ca18c6)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/9123fbfc-7ae1-4d63-9fda-170b8ad794ee/big.png)](https://insight.sensiolabs.com/projects/9123fbfc-7ae1-4d63-9fda-170b8ad794ee)
 
@@ -122,12 +119,11 @@ The release process [is described here](doc/Release.md).
 This framework needs at least:
 * ![PHP 7.1+](https://img.shields.io/badge/PHP-7.1%2B-ff69b4.svg),
 * OpenSSL extension.
+* GMP extension.
+* MBString extension.
 
 Please consider the following optional requirements:
-* [For PHP 7.1 only, third party extension highly recommended](https://github.com/jedisct1/libsodium-php)
-
-Please read performance test results below concerning the ECC based algorithms.
-As the time needed to perform operation is long compared to the other algorithms, we do not recommend their use.
+* If you intent to use `EdDSA` or `ECDH-ES` algorithm with `Ed25519`/`X25519` curves on PHP 7.1, please install this [third party extension](https://github.com/jedisct1/libsodium-php)
 
 # Continuous Integration
 
@@ -159,12 +155,16 @@ composer require spomky-labs/jose
 
 Please read the [performance page](doc/benchmark.md) to know how fast are the algorithms supported by this framework.
 
+**The use of the Algorithm `ECDH-ES` with curves `P-256`, `P-384` or `P-521` is not recommended**.
+
 # Contributing
 
 Requests for new features, bug fixed and all other ideas to make this framework useful are welcome.
 If you feel comfortable writing code, you could try to fix [opened issues where help is wanted](https://github.com/Spomky-Labs/jose/labels/help+wanted) or [those that are easy to fix](https://github.com/Spomky-Labs/jose/labels/easy-pick).
 
 Do not forget to [follow these best practices](.github/CONTRIBUTING.md).
+
+**If you think you have found a security issue, DO NOT open an issue**. You should submit your issue here. 
 
 # Licence
 
