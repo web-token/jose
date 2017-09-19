@@ -91,43 +91,43 @@ abstract class AbstractEncryptionTest extends TestCase
     /**
      * @var JWEBuilderFactory
      */
-    private $jwsBuilderFactory;
+    private $jweBuilderFactory;
 
     /**
      * @return JWEBuilderFactory
      */
     protected function getJWEBuilderFactory(): JWEBuilderFactory
     {
-        if (null === $this->jwsBuilderFactory) {
-            $this->jwsBuilderFactory = new JWEBuilderFactory(
+        if (null === $this->jweBuilderFactory) {
+            $this->jweBuilderFactory = new JWEBuilderFactory(
                 new StandardJsonConverter(),
                 $this->getAlgorithmManagerFactory(),
                 $this->getCompressionMethodManagerFactory()
             );
         }
 
-        return $this->jwsBuilderFactory;
+        return $this->jweBuilderFactory;
     }
 
     /**
      * @var JWELoaderFactory
      */
-    private $jwsLoaderFactory;
+    private $jweLoaderFactory;
 
     /**
      * @return JWELoaderFactory
      */
     protected function getJWELoaderFactory(): JWELoaderFactory
     {
-        if (null === $this->jwsLoaderFactory) {
-            $this->jwsLoaderFactory = new JWELoaderFactory(
+        if (null === $this->jweLoaderFactory) {
+            $this->jweLoaderFactory = new JWELoaderFactory(
                 $this->getAlgorithmManagerFactory(),
                 $this->getCompressionMethodManagerFactory(),
                 $this->getHeaderCheckerManagerFactory()
             );
         }
 
-        return $this->jwsLoaderFactory;
+        return $this->jweLoaderFactory;
     }
 
     /**

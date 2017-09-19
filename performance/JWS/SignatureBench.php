@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -12,15 +14,18 @@
 namespace Jose\Performance\JWS;
 
 use Base64Url\Base64Url;
+use Jose\Component\Checker\ExpirationTimeChecker;
+use Jose\Component\Checker\HeaderCheckerManager;
+use Jose\Component\Checker\IssuedAtChecker;
+use Jose\Component\Checker\NotBeforeChecker;
 use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\Converter\StandardJsonConverter;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm;
 use Jose\Component\Signature\JWSBuilder;
-use Jose\Component\Signature\JWSParser;
+use Jose\Component\Signature\JWSLoader;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
-use Jose\Component\Signature\Verifier;
 
 /**
  * @BeforeMethods({"init"})
@@ -37,6 +42,11 @@ abstract class SignatureBench
      * @param JWAManager
      */
     private $signatureAlgorithmsManager;
+
+    /**
+     * @var HeaderCheckerManager
+     */
+    private $headerCherckerManager;
 
     /**
      * @var JsonConverterInterface
@@ -62,6 +72,11 @@ abstract class SignatureBench
             new Algorithm\None(),
             new Algorithm\EdDSA(),
         ]);
+        $this->headerCherckerManager = HeaderCheckerManager::create([
+            new ExpirationTimeChecker(),
+            new IssuedAtChecker(),
+            new NotBeforeChecker(),
+        ]);
     }
 
     /**
@@ -86,9 +101,9 @@ abstract class SignatureBench
      */
     public function benchVerification($params)
     {
-        $jws = JWSParser::parse($params['input']);
-        $verifier = new Verifier($this->signatureAlgorithmsManager);
-        $verifier->verifyWithKey($jws, $this->getPublicKey(), null, $index);
+        $jwsLoader = new JWSLoader($this->signatureAlgorithmsManager, $this->headerCherckerManager);
+        $jws = $jwsLoader->load($params['input']);
+        $jwsLoader->verifyWithKey($jws, $this->getPublicKey());
     }
 
     public function benchSignOnly()

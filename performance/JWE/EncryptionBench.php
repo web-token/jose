@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -11,6 +13,10 @@
 
 namespace Jose\Performance\JWE;
 
+use Jose\Component\Checker\ExpirationTimeChecker;
+use Jose\Component\Checker\HeaderCheckerManager;
+use Jose\Component\Checker\IssuedAtChecker;
+use Jose\Component\Checker\NotBeforeChecker;
 use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\Converter\StandardJsonConverter;
 use Jose\Component\Core\AlgorithmManager;
@@ -20,9 +26,8 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption;
 use Jose\Component\Encryption\Algorithm\ContentEncryption;
 use Jose\Component\Encryption\Compression;
 use Jose\Component\Encryption\Compression\CompressionMethodManager;
-use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWEBuilder;
-use Jose\Component\Encryption\JWEParser;
+use Jose\Component\Encryption\JWELoader;
 
 /**
  * @BeforeMethods({"init"})
@@ -51,6 +56,11 @@ abstract class EncryptionBench
      */
     private $jsonConverter;
 
+    /**
+     * @var HeaderCheckerManager
+     */
+    private $headerCherckerManager;
+
     public function init()
     {
         $this->jsonConverter = new StandardJsonConverter();
@@ -73,7 +83,6 @@ abstract class EncryptionBench
             new KeyEncryption\RSAOAEP(),
             new KeyEncryption\RSAOAEP256(),
         ]);
-
         $this->contentEncryptionAlgorithmsManager = AlgorithmManager::create([
             new ContentEncryption\A128CBCHS256(),
             new ContentEncryption\A192CBCHS384(),
@@ -82,11 +91,15 @@ abstract class EncryptionBench
             new ContentEncryption\A192GCM(),
             new ContentEncryption\A256GCM(),
         ]);
-
         $this->compressionMethodsManager = CompressionMethodManager::create([
             new Compression\Deflate(),
             new Compression\GZip(),
             new Compression\ZLib(),
+        ]);
+        $this->headerCherckerManager = HeaderCheckerManager::create([
+            new ExpirationTimeChecker(),
+            new IssuedAtChecker(),
+            new NotBeforeChecker(),
         ]);
     }
 
@@ -120,14 +133,15 @@ abstract class EncryptionBench
      */
     public function benchDecryption(array $params)
     {
-        $jwe = JWEParser::parse($params['input']);
-        $decrypter = new Decrypter(
+        $jweLoader = new JWELoader(
             $this->getKeyEncryptionAlgorithmsManager(),
             $this->getContentEncryptionAlgorithmsManager(),
-            $this->getCompressionMethodsManager()
-            );
+            $this->getCompressionMethodsManager(),
+            $this->headerCherckerManager
+        );
+        $jwe = $jweLoader->load($params['input']);
         $keyset = JWKSet::createFromKeyData($params['recipient_keys']);
-        $decrypter->decryptUsingKeySet($jwe, $keyset);
+        $jweLoader->decryptUsingKeySet($jwe, $keyset);
     }
 
     /**
