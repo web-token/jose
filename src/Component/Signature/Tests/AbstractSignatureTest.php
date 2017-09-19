@@ -13,10 +13,13 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Tests;
 
+use Jose\Component\Checker\HeaderCheckerManagerFactory;
+use Jose\Component\Checker\UnencodedPayloadChecker;
 use Jose\Component\Core\Converter\StandardJsonConverter;
 use Jose\Component\Core\AlgorithmManagerFactory;
 use Jose\Component\Signature\Algorithm;
 use Jose\Component\Signature\JWSBuilderFactory;
+use Jose\Component\Signature\JWSLoaderFactory;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractSignatureTest extends TestCase
@@ -71,5 +74,45 @@ abstract class AbstractSignatureTest extends TestCase
         }
 
         return $this->jwsBuilderFactory;
+    }
+
+    /**
+     * @var JWSLoaderFactory
+     */
+    private $jwsLoaderFactory;
+
+    /**
+     * @return JWSLoaderFactory
+     */
+    protected function getJWSLoaderFactory(): JWSLoaderFactory
+    {
+        if (null === $this->jwsLoaderFactory) {
+            $this->jwsLoaderFactory = new JWSLoaderFactory(
+                $this->getAlgorithmManagerFactory(),
+                $this->getHeaderCheckerManagerFactory()
+            );
+        }
+
+        return $this->jwsLoaderFactory;
+    }
+
+    /**
+     * @var HeaderCheckerManagerFactory
+     */
+    private $headerCheckerManagerFactory;
+
+    /**
+     * @return HeaderCheckerManagerFactory
+     */
+    protected function getHeaderCheckerManagerFactory(): HeaderCheckerManagerFactory
+    {
+        if (null === $this->headerCheckerManagerFactory) {
+            $this->headerCheckerManagerFactory = new HeaderCheckerManagerFactory();
+            $this->headerCheckerManagerFactory
+                ->add('b64', new UnencodedPayloadChecker())
+            ;
+        }
+
+        return $this->headerCheckerManagerFactory;
     }
 }

@@ -14,14 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
-use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHES;
-use Jose\Component\Encryption\Compression\CompressionMethodManager;
-use Jose\Component\Encryption\Compression\Deflate;
-use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\JWEParser;
 use Jose\Component\Encryption\Tests\AbstractEncryptionTest;
 
 /**
@@ -67,14 +60,11 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTes
         $expected_ciphertext = 'BoDlwPnTypYq-ivjmQvAYJLb5Q6l-F3LIgQomlz87yW4OPKbWE1zSTEFjDfhU9IPIOSA9Bml4m7iDFwA-1ZXvHteLDtw4R1XRGMEsDIqAYtskTTmzmzNa-_q4F_evAPUmwlO-ZG45Mnq4uhM1fm_D9rBtWolqZSF3xGNNkpOMQKF1Cl8i8wjzRli7-IXgyirlKQsbhhqRzkv8IcY6aHl24j03C-AR2le1r7URUhArM79BY8soZU0lzwI-sD5PZ3l4NDCCei9XkoIAfsXJWmySPoeRb2Ni5UZL4mYpvKDiwmyzGd65KqVw7MsFfI_K767G9C9Azp73gKZD0DyUn1mn0WW5LmyX_yJ-3AROq8p1WZBfG-ZyJ6195_JGG2m9Csg';
         $expected_tag = 'WCCkNa-x4BeB9hIDIfFuhg';
 
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new ECDHES()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES'], ['A128CBC-HS256'], ['DEF'], []);
 
-        $loaded_compact_json = JWEParser::parse($expected_compact_json);
+        $loaded_compact_json = $jweLoader->load($expected_compact_json);
 
-        $loaded_json = JWEParser::parse($expected_json);
+        $loaded_json = $jweLoader->load($expected_json);
 
         self::assertEquals($expected_ciphertext, Base64Url::encode($loaded_compact_json->getCiphertext()));
         self::assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());
@@ -86,10 +76,10 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTes
         self::assertEquals($expected_iv, Base64Url::encode($loaded_json->getIV()));
         self::assertEquals($expected_tag, Base64Url::encode($loaded_json->getTag()));
 
-        $loaded_compact_json = $decrypter->decryptUsingKey($loaded_compact_json, $private_key);
+        $loaded_compact_json = $jweLoader->decryptUsingKey($loaded_compact_json, $private_key);
         self::assertEquals($expected_payload, $loaded_compact_json->getPayload());
 
-        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
+        $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
         self::assertEquals($expected_payload, $loaded_json->getPayload());
     }
 
@@ -125,11 +115,8 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTes
             'enc' => 'A128CBC-HS256',
         ];
 
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new ECDHES()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['ECDH-ES'], ['A128CBC-HS256'], ['DEF']);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES'], ['A128CBC-HS256'], ['DEF'], []);
 
         $jwe = $jweBuilder
             ->withPayload($expected_payload)
@@ -137,8 +124,8 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTes
             ->addRecipient($public_key)
             ->build();
 
-        $loaded_json = JWEParser::parse($jwe->toJSON());
-        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
+        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
 
         self::assertTrue(array_key_exists('epk', $loaded_json->getSharedProtectedHeaders()));
 

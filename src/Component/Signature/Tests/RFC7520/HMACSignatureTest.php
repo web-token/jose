@@ -13,12 +13,8 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Tests\RFC7520;
 
-use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\Algorithm\HS256;
-use Jose\Component\Signature\JWSParser;
 use Jose\Component\Signature\Tests\AbstractSignatureTest;
-use Jose\Component\Signature\Verifier;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-4.4
@@ -60,9 +56,8 @@ final class HMACSignatureTest extends AbstractSignatureTest
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
         ];
 
-        $signatureAlgorithmManager = AlgorithmManager::create([new HS256()]);
-        $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], []);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($key, $headers)
@@ -82,14 +77,14 @@ final class HMACSignatureTest extends AbstractSignatureTest
         self::assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
         self::assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
-        $loaded_compact_json = JWSParser::parse($expected_compact_json);
-        $verifier->verifyWithKey($loaded_compact_json, $key);
+        $loaded_compact_json = $jwsLoader->load($expected_compact_json);
+        $jwsLoader->verifyWithKey($loaded_compact_json, $key);
 
-        $loaded_flattened_json = JWSParser::parse($expected_flattened_json);
-        $verifier->verifyWithKey($loaded_flattened_json, $key);
+        $loaded_flattened_json = $jwsLoader->load($expected_flattened_json);
+        $jwsLoader->verifyWithKey($loaded_flattened_json, $key);
 
-        $loaded_json = JWSParser::parse($expected_json);
-        $verifier->verifyWithKey($loaded_json, $key);
+        $loaded_json = $jwsLoader->load($expected_json);
+        $jwsLoader->verifyWithKey($loaded_json, $key);
     }
 
     /**
@@ -121,9 +116,8 @@ final class HMACSignatureTest extends AbstractSignatureTest
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
         ];
 
-        $signatureAlgorithmManager = AlgorithmManager::create([new HS256()]);
-        $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], []);
         $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $headers)
@@ -144,14 +138,14 @@ final class HMACSignatureTest extends AbstractSignatureTest
 
         self::assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
-        $loaded_compact_json = JWSParser::parse($expected_compact_json);
-        $verifier->verifyWithKey($loaded_compact_json, $key, $payload);
+        $loaded_compact_json = $jwsLoader->load($expected_compact_json);
+        $jwsLoader->verifyWithKey($loaded_compact_json, $key, $payload);
 
-        $loaded_flattened_json = JWSParser::parse($expected_flattened_json);
-        $verifier->verifyWithKey($loaded_flattened_json, $key, $payload);
+        $loaded_flattened_json = $jwsLoader->load($expected_flattened_json);
+        $jwsLoader->verifyWithKey($loaded_flattened_json, $key, $payload);
 
-        $loaded_json = JWSParser::parse($expected_json);
-        $verifier->verifyWithKey($loaded_json, $key, $payload);
+        $loaded_json = $jwsLoader->load($expected_json);
+        $jwsLoader->verifyWithKey($loaded_json, $key, $payload);
     }
 
     /**
@@ -185,9 +179,8 @@ final class HMACSignatureTest extends AbstractSignatureTest
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
         ];
 
-        $signatureAlgorithmManager = AlgorithmManager::create([new HS256()]);
-        $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], []);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($key, $protected_headers, $unprotected_headers)
@@ -204,11 +197,11 @@ final class HMACSignatureTest extends AbstractSignatureTest
         self::assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
         self::assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
-        $loaded_flattened_json = JWSParser::parse($expected_flattened_json);
-        $verifier->verifyWithKey($loaded_flattened_json, $key);
+        $loaded_flattened_json = $jwsLoader->load($expected_flattened_json);
+        $jwsLoader->verifyWithKey($loaded_flattened_json, $key);
 
-        $loaded_json = JWSParser::parse($expected_json);
-        $verifier->verifyWithKey($loaded_json, $key);
+        $loaded_json = $jwsLoader->load($expected_json);
+        $jwsLoader->verifyWithKey($loaded_json, $key);
     }
 
     /**
@@ -240,9 +233,8 @@ final class HMACSignatureTest extends AbstractSignatureTest
             'kid' => '018c0ae5-4d9b-471b-bfd6-eef314bc7037',
         ];
 
-        $signatureAlgorithmManager = AlgorithmManager::create([new HS256()]);
-        $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], []);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($key, [], $unprotected_headers)
@@ -259,10 +251,10 @@ final class HMACSignatureTest extends AbstractSignatureTest
         self::assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
         self::assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
-        $loaded_flattened_json = JWSParser::parse($expected_flattened_json);
-        $verifier->verifyWithKey($loaded_flattened_json, $key);
+        $loaded_flattened_json = $jwsLoader->load($expected_flattened_json);
+        $jwsLoader->verifyWithKey($loaded_flattened_json, $key);
 
-        $loaded_json = JWSParser::parse($expected_json);
-        $verifier->verifyWithKey($loaded_json, $key);
+        $loaded_json = $jwsLoader->load($expected_json);
+        $jwsLoader->verifyWithKey($loaded_json, $key);
     }
 }

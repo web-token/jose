@@ -14,20 +14,12 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM;
-use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256;
-use Jose\Component\Encryption\Compression\CompressionMethodManager;
-use Jose\Component\Encryption\Compression\Deflate;
-use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWE;
-use Jose\Component\Encryption\JWEParser;
 
 /**
  * final class RSAKeyEncryptionTest.
@@ -159,19 +151,16 @@ final class RSAKeyEncryptionTest extends AbstractEncryptionTest
      */
     public function testLoadJWK1()
     {
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSAOAEP()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A256GCM()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP'], ['A256GCM'], ['DEF'], []);
 
-        $loaded = JWEParser::parse('eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.OKOawDo13gRp2ojaHV7LFpZcgV7T6DVZKTyKOMTYUmKoTCVJRgckCL9kiMT03JGeipsEdY3mx_etLbbWSrFr05kLzcSr4qKAq7YN7e9jwQRb23nfa6c9d-StnImGyFDbSv04uVuxIp5Zms1gNxKKK2Da14B8S4rzVRltdYwam_lDp5XnZAYpQdb76FdIKLaVmqgfwX7XWRxv2322i-vDxRfqNzo_tETKzpVLzfiwQyeyPGLBIO56YJ7eObdv0je81860ppamavo35UgoRdbYaBcoh9QcfylQr66oc6vFWXRcZ_ZT2LawVCWTIy3brGPi6UklfCpIMfIjf7iGdXKHzg.48V1_ALb6US04U3b.5eym8TW_c8SuK0ltJ3rpYIzOeDQz7TALvtu6UG9oMo4vpzs9tX_EFShS8iB7j6jiSdiwkIr3ajwQzaBtQD_A.XFBoMYUZodetZdvTiFvSkQ');
+        $loaded = $jweLoader->load('eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.OKOawDo13gRp2ojaHV7LFpZcgV7T6DVZKTyKOMTYUmKoTCVJRgckCL9kiMT03JGeipsEdY3mx_etLbbWSrFr05kLzcSr4qKAq7YN7e9jwQRb23nfa6c9d-StnImGyFDbSv04uVuxIp5Zms1gNxKKK2Da14B8S4rzVRltdYwam_lDp5XnZAYpQdb76FdIKLaVmqgfwX7XWRxv2322i-vDxRfqNzo_tETKzpVLzfiwQyeyPGLBIO56YJ7eObdv0je81860ppamavo35UgoRdbYaBcoh9QcfylQr66oc6vFWXRcZ_ZT2LawVCWTIy3brGPi6UklfCpIMfIjf7iGdXKHzg.48V1_ALb6US04U3b.5eym8TW_c8SuK0ltJ3rpYIzOeDQz7TALvtu6UG9oMo4vpzs9tX_EFShS8iB7j6jiSdiwkIr3ajwQzaBtQD_A.XFBoMYUZodetZdvTiFvSkQ');
 
         self::assertInstanceOf(JWE::class, $loaded);
         self::assertEquals('RSA-OAEP', $loaded->getSharedProtectedHeader('alg'));
         self::assertEquals('A256GCM', $loaded->getSharedProtectedHeader('enc'));
         self::assertNull($loaded->getPayload());
 
-        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $jweLoader->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         self::assertEquals(0, $index);
         self::assertEquals('The true sign of intelligence is not knowledge but imagination.', $loaded->getPayload());
@@ -182,17 +171,14 @@ final class RSAKeyEncryptionTest extends AbstractEncryptionTest
      */
     public function testLoadJWK2()
     {
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSA15()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['RSA1_5'], ['A128CBC-HS256'], ['DEF'], []);
 
-        $loaded = JWEParser::parse('eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.UGhIOguC7IuEvf_NPVaXsGMoLOmwvc1GyqlIKOK1nN94nHPoltGRhWhw7Zx0-kFm1NJn8LE9XShH59_i8J0PH5ZZyNfGy2xGdULU7sHNF6Gp2vPLgNZ__deLKxGHZ7PcHALUzoOegEI-8E66jX2E4zyJKx-YxzZIItRzC5hlRirb6Y5Cl_p-ko3YvkkysZIFNPccxRU7qve1WYPxqbb2Yw8kZqa2rMWI5ng8OtvzlV7elprCbuPhcCdZ6XDP0_F8rkXds2vE4X-ncOIM8hAYHHi29NX0mcKiRaD0-D-ljQTP-cFPgwCp6X-nZZd9OHBv-B3oWh2TbqmScqXMR4gp_A.AxY8DCtDaGlsbGljb3RoZQ.KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY.9hH0vgRfYgPnAHOd8stkvw');
+        $loaded = $jweLoader->load('eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.UGhIOguC7IuEvf_NPVaXsGMoLOmwvc1GyqlIKOK1nN94nHPoltGRhWhw7Zx0-kFm1NJn8LE9XShH59_i8J0PH5ZZyNfGy2xGdULU7sHNF6Gp2vPLgNZ__deLKxGHZ7PcHALUzoOegEI-8E66jX2E4zyJKx-YxzZIItRzC5hlRirb6Y5Cl_p-ko3YvkkysZIFNPccxRU7qve1WYPxqbb2Yw8kZqa2rMWI5ng8OtvzlV7elprCbuPhcCdZ6XDP0_F8rkXds2vE4X-ncOIM8hAYHHi29NX0mcKiRaD0-D-ljQTP-cFPgwCp6X-nZZd9OHBv-B3oWh2TbqmScqXMR4gp_A.AxY8DCtDaGlsbGljb3RoZQ.KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY.9hH0vgRfYgPnAHOd8stkvw');
 
         self::assertInstanceOf(JWE::class, $loaded);
         self::assertNull($loaded->getPayload());
 
-        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
+        $loaded = $jweLoader->decryptUsingKeySet($loaded, $this->getPrivateKeySet(), $index);
 
         self::assertEquals(0, $index);
         self::assertEquals('Live long and prosper.', $loaded->getPayload());
@@ -203,19 +189,16 @@ final class RSAKeyEncryptionTest extends AbstractEncryptionTest
      */
     public function testLoadJWK3()
     {
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new A128KW()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['A128KW'], ['A128CBC-HS256'], ['DEF'], []);
 
-        $loaded = JWEParser::parse('eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.6KB707dM9YTIgHtLvtgWQ8mKwboJW3of9locizkDTHzBC2IlrT1oOQ.AxY8DCtDaGlsbGljb3RoZQ.KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY.U0m_YmjN04DJvceFICbCVQ');
+        $loaded = $jweLoader->load('eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.6KB707dM9YTIgHtLvtgWQ8mKwboJW3of9locizkDTHzBC2IlrT1oOQ.AxY8DCtDaGlsbGljb3RoZQ.KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY.U0m_YmjN04DJvceFICbCVQ');
 
         self::assertInstanceOf(JWE::class, $loaded);
         self::assertEquals('A128KW', $loaded->getSharedProtectedHeader('alg'));
         self::assertEquals('A128CBC-HS256', $loaded->getSharedProtectedHeader('enc'));
         self::assertNull($loaded->getPayload());
 
-        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getSymmetricKeySet(), $index);
+        $loaded = $jweLoader->decryptUsingKeySet($loaded, $this->getSymmetricKeySet(), $index);
 
         self::assertEquals(0, $index);
         self::assertEquals('Live long and prosper.', $loaded->getPayload());

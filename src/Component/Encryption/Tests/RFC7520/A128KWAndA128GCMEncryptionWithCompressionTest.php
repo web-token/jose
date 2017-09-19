@@ -14,14 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
-use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
-use Jose\Component\Encryption\Compression\CompressionMethodManager;
-use Jose\Component\Encryption\Compression\Deflate;
-use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\JWEParser;
 use Jose\Component\Encryption\Tests\AbstractEncryptionTest;
 
 /**
@@ -63,19 +56,16 @@ final class A128KWAndA128GCMEncryptionWithCompressionTest extends AbstractEncryp
         $expected_ciphertext = 'HbDtOsdai1oYziSx25KEeTxmwnh8L8jKMFNc1k3zmMI6VB8hry57tDZ61jXyezSPt0fdLVfe6Jf5y5-JaCap_JQBcb5opbmT60uWGml8blyiMQmOn9J--XhhlYg0m-BHaqfDO5iTOWxPxFMUedx7WCy8mxgDHj0aBMG6152PsM-w5E_o2B3jDbrYBKhpYA7qi3AyijnCJ7BP9rr3U8kxExCpG3mK420TjOw';
         $expected_tag = 'VILuUwuIxaLVmh5X-T7kmA';
 
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new A128KW()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128GCM()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['A128KW'], ['A128GCM'], ['DEF'], []);
 
-        $loaded_compact_json = JWEParser::parse($expected_compact_json);
-        $loaded_compact_json = $decrypter->decryptUsingKey($loaded_compact_json, $private_key);
+        $loaded_compact_json = $jweLoader->load($expected_compact_json);
+        $loaded_compact_json = $jweLoader->decryptUsingKey($loaded_compact_json, $private_key);
 
-        $loaded_flattened_json = JWEParser::parse($expected_flattened_json);
-        $loaded_flattened_json = $decrypter->decryptUsingKey($loaded_flattened_json, $private_key);
+        $loaded_flattened_json = $jweLoader->load($expected_flattened_json);
+        $loaded_flattened_json = $jweLoader->decryptUsingKey($loaded_flattened_json, $private_key);
 
-        $loaded_json = JWEParser::parse($expected_json);
-        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
+        $loaded_json = $jweLoader->load($expected_json);
+        $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
 
         self::assertEquals($expected_ciphertext, Base64Url::encode($loaded_compact_json->getCiphertext()));
         self::assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());
@@ -122,11 +112,8 @@ final class A128KWAndA128GCMEncryptionWithCompressionTest extends AbstractEncryp
             'zip' => 'DEF',
         ];
 
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new A128KW()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128GCM()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['A128KW'], ['A128GCM'], ['DEF']);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['A128KW'], ['A128GCM'], ['DEF'], []);
 
         $jwe = $jweBuilder
             ->withPayload($expected_payload)
@@ -134,14 +121,14 @@ final class A128KWAndA128GCMEncryptionWithCompressionTest extends AbstractEncryp
             ->addRecipient($private_key)
             ->build();
 
-        $loaded_compact_json = JWEParser::parse($jwe->toCompactJSON(0));
-        $loaded_compact_json = $decrypter->decryptUsingKey($loaded_compact_json, $private_key);
+        $loaded_compact_json = $jweLoader->load($jwe->toCompactJSON(0));
+        $loaded_compact_json = $jweLoader->decryptUsingKey($loaded_compact_json, $private_key);
 
-        $loaded_flattened_json = JWEParser::parse($jwe->toFlattenedJSON(0));
-        $loaded_flattened_json = $decrypter->decryptUsingKey($loaded_flattened_json, $private_key);
+        $loaded_flattened_json = $jweLoader->load($jwe->toFlattenedJSON(0));
+        $loaded_flattened_json = $jweLoader->decryptUsingKey($loaded_flattened_json, $private_key);
 
-        $loaded_json = JWEParser::parse($jwe->toJSON());
-        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
+        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
 
         self::assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());
 

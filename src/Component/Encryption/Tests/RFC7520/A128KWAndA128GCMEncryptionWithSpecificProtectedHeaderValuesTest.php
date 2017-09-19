@@ -14,14 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
-use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
-use Jose\Component\Encryption\Compression\CompressionMethodManager;
-use Jose\Component\Encryption\Compression\Deflate;
-use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\JWEParser;
 use Jose\Component\Encryption\Tests\AbstractEncryptionTest;
 
 /**
@@ -63,16 +56,13 @@ final class A128KWAndA128GCMEncryptionWithSpecificProtectedHeaderValuesTest exte
         $expected_ciphertext = 'lIbCyRmRJxnB2yLQOTqjCDKV3H30ossOw3uD9DPsqLL2DM3swKkjOwQyZtWsFLYMj5YeLht_StAn21tHmQJuuNt64T8D4t6C7kC9OCCJ1IHAolUv4MyOt80MoPb8fZYbNKqplzYJgIL58g8N2v46OgyG637d6uuKPwhAnTGm_zWhqc_srOvgiLkzyFXPq1hBAURbc3-8BqeRb48iR1-_5g5UjWVD3lgiLCN_P7AW8mIiFvUNXBPJK3nOWL4teUPS8yHLbWeL83olU4UAgL48x-8dDkH23JykibVSQju-f7e-1xreHWXzWLHs1NqBbre0dEwK3HX_xM0LjUz77Krppgegoutpf5qaKg3l-_xMINmf';
         $expected_tag = 'fNYLqpUe84KD45lvDiaBAQ';
 
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new A128KW()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128GCM()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['A128KW'], ['A128GCM'], ['DEF'], []);
 
-        $loaded_flattened_json = JWEParser::parse($expected_flattened_json);
-        $loaded_flattened_json = $decrypter->decryptUsingKey($loaded_flattened_json, $private_key);
+        $loaded_flattened_json = $jweLoader->load($expected_flattened_json);
+        $loaded_flattened_json = $jweLoader->decryptUsingKey($loaded_flattened_json, $private_key);
 
-        $loaded_json = JWEParser::parse($expected_json);
-        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
+        $loaded_json = $jweLoader->load($expected_json);
+        $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
 
         self::assertEquals($expected_ciphertext, Base64Url::encode($loaded_flattened_json->getCiphertext()));
         self::assertEquals($protected_headers, $loaded_flattened_json->getSharedProtectedHeaders());
@@ -116,11 +106,8 @@ final class A128KWAndA128GCMEncryptionWithSpecificProtectedHeaderValuesTest exte
             'kid' => '81b20965-8332-43d9-a468-82160ad91ac8',
         ];
 
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new A128KW()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128GCM()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['A128KW'], ['A128GCM'], ['DEF']);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['A128KW'], ['A128GCM'], ['DEF'], []);
 
         $jwe = $jweBuilder
             ->withPayload($expected_payload)
@@ -129,11 +116,11 @@ final class A128KWAndA128GCMEncryptionWithSpecificProtectedHeaderValuesTest exte
             ->addRecipient($private_key)
             ->build();
 
-        $loaded_flattened_json = JWEParser::parse($jwe->toFlattenedJSON(0));
-        $loaded_flattened_json = $decrypter->decryptUsingKey($loaded_flattened_json, $private_key);
+        $loaded_flattened_json = $jweLoader->load($jwe->toFlattenedJSON(0));
+        $loaded_flattened_json = $jweLoader->decryptUsingKey($loaded_flattened_json, $private_key);
 
-        $loaded_json = JWEParser::parse($jwe->toJSON());
-        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
+        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
 
         self::assertEquals($protected_headers, $loaded_flattened_json->getSharedProtectedHeaders());
         self::assertEquals($headers, $loaded_flattened_json->getSharedHeaders());

@@ -13,12 +13,8 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Tests\RFC7520;
 
-use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\Algorithm\RS256;
-use Jose\Component\Signature\JWSParser;
 use Jose\Component\Signature\Tests\AbstractSignatureTest;
-use Jose\Component\Signature\Verifier;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-4.1
@@ -59,10 +55,8 @@ final class RSA15SignatureTest extends AbstractSignatureTest
             'kid' => 'bilbo.baggins@hobbiton.example',
         ];
 
-        $signatureAlgorithmManager = AlgorithmManager::create([new RS256()]);
-        $verifier = new Verifier($signatureAlgorithmManager);
-
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256']);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256'], []);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($privateKey, $headers)
@@ -82,13 +76,13 @@ final class RSA15SignatureTest extends AbstractSignatureTest
         self::assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
         self::assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
-        $loaded_compact_json = JWSParser::parse($expected_compact_json);
-        $verifier->verifyWithKey($loaded_compact_json, $privateKey);
+        $loaded_compact_json = $jwsLoader->load($expected_compact_json);
+        $jwsLoader->verifyWithKey($loaded_compact_json, $privateKey);
 
-        $loaded_flattened_json = JWSParser::parse($expected_flattened_json);
-        $verifier->verifyWithKey($loaded_flattened_json, $privateKey);
+        $loaded_flattened_json = $jwsLoader->load($expected_flattened_json);
+        $jwsLoader->verifyWithKey($loaded_flattened_json, $privateKey);
 
-        $loaded_json = JWSParser::parse($expected_json);
-        $verifier->verifyWithKey($loaded_json, $privateKey);
+        $loaded_json = $jwsLoader->load($expected_json);
+        $jwsLoader->verifyWithKey($loaded_json, $privateKey);
     }
 }

@@ -14,16 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
-use Jose\Component\Encryption\Algorithm\KeyEncryption\A256GCMKW;
-use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW;
-use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA15;
-use Jose\Component\Encryption\Compression\CompressionMethodManager;
-use Jose\Component\Encryption\Compression\Deflate;
-use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\JWEParser;
 use Jose\Component\Encryption\Tests\AbstractEncryptionTest;
 
 /**
@@ -111,19 +102,16 @@ final class MultipleRecipientEncryptionTest extends AbstractEncryptionTest
         $expected_ciphertext = 'ajm2Q-OpPXCr7-MHXicknb1lsxLdXxK_yLds0KuhJzfWK04SjdxQeSw2L9mu3a_k1C55kCQ_3xlkcVKC5yr__Is48VOoK0k63_QRM9tBURMFqLByJ8vOYQX0oJW4VUHJLmGhF-tVQWB7Kz8mr8zeE7txF0MSaP6ga7-siYxStR7_G07Thd1jh-zGT0wxM5g-VRORtq0K6AXpLlwEqRp7pkt2zRM0ZAXqSpe1O6FJ7FHLDyEFnD-zDIZukLpCbzhzMDLLw2-8I14FQrgi-iEuzHgIJFIJn2wh9Tj0cg_kOZy9BqMRZbmYXMY9YQjorZ_P_JYG3ARAIF3OjDNqpdYe-K_5Q5crGJSDNyij_ygEiItR5jssQVH2ofDQdLChtazE';
         $expected_tag = 'BESYyFN7T09KY7i8zKs5_g';
 
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSA15(), new ECDHESA256KW(), new A256GCMKW()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['RSA1_5', 'ECDH-ES+A256KW', 'A256GCMKW'], ['A128CBC-HS256'], ['DEF'], []);
 
-        $loaded_json = JWEParser::parse($expected_json);
-        $decrypter->decryptUsingKey($loaded_json, $recipient_1_private_key);
+        $loaded_json = $jweLoader->load($expected_json);
+        $jweLoader->decryptUsingKey($loaded_json, $recipient_1_private_key);
 
-        $loaded_json = JWEParser::parse($expected_json);
-        $decrypter->decryptUsingKey($loaded_json, $recipient_2_private_key);
+        $loaded_json = $jweLoader->load($expected_json);
+        $jweLoader->decryptUsingKey($loaded_json, $recipient_2_private_key);
 
-        $loaded_json = JWEParser::parse($expected_json);
-        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $recipient_3_private_key);
+        $loaded_json = $jweLoader->load($expected_json);
+        $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $recipient_3_private_key);
 
         self::assertEquals($expected_ciphertext, Base64Url::encode($loaded_json->getCiphertext()));
         self::assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());
@@ -211,11 +199,8 @@ final class MultipleRecipientEncryptionTest extends AbstractEncryptionTest
             'kid' => '18ec08e1-bfa9-4d95-b205-2b4dd1d4321d',
         ];
 
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new RSA15(), new ECDHESA256KW(), new A256GCMKW()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA1_5', 'ECDH-ES+A256KW', 'A256GCMKW'], ['A128CBC-HS256'], ['DEF']);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['RSA1_5', 'ECDH-ES+A256KW', 'A256GCMKW'], ['A128CBC-HS256'], ['DEF'], []);
 
         $jwe = $jweBuilder
             ->withPayload($expected_payload)
@@ -226,14 +211,14 @@ final class MultipleRecipientEncryptionTest extends AbstractEncryptionTest
             ->addRecipient($recipient_3_private_key, $recipient_3_headers)
             ->build();
 
-        $loaded_json = JWEParser::parse($jwe->toJSON());
-        $decrypter->decryptUsingKey($loaded_json, $recipient_1_private_key);
+        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $jweLoader->decryptUsingKey($loaded_json, $recipient_1_private_key);
 
-        $loaded_json = JWEParser::parse($jwe->toJSON());
-        $decrypter->decryptUsingKey($loaded_json, $recipient_2_private_key);
+        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $jweLoader->decryptUsingKey($loaded_json, $recipient_2_private_key);
 
-        $loaded_json = JWEParser::parse($jwe->toJSON());
-        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $recipient_3_private_key);
+        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $recipient_3_private_key);
 
         self::assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());
         self::assertEquals($recipient_1_headers, $loaded_json->getRecipient(0)->getHeaders());

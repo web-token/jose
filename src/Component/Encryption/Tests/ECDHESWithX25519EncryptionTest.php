@@ -13,13 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Tests;
 
-use Jose\Component\Core\AlgorithmManager;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
-use Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA128KW;
-use Jose\Component\Encryption\Compression\CompressionMethodManager;
-use Jose\Component\Encryption\Compression\Deflate;
-use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\JWEParser;
 use Jose\Component\KeyManagement\JWKFactory;
 
 /**
@@ -43,11 +36,8 @@ final class ECDHESWithX25519EncryptionTest extends AbstractEncryptionTest
             'enc' => 'A128GCM',
         ];
 
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new ECDHESA128KW()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128GCM()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['ECDH-ES+A128KW'], ['A128GCM'], ['DEF']);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES+A128KW'], ['A128GCM'], ['DEF'], []);
 
         $jwt = $jweBuilder
             ->withPayload($input)
@@ -56,8 +46,8 @@ final class ECDHESWithX25519EncryptionTest extends AbstractEncryptionTest
             ->build()
             ->toCompactJSON(0);
 
-        $jwe = JWEParser::parse($jwt);
-        $jwe = $decrypter->decryptUsingKey($jwe, $receiverKey, $index);
+        $jwe = $jweLoader->load($jwt);
+        $jwe = $jweLoader->decryptUsingKey($jwe, $receiverKey, $index);
         self::assertEquals(0, $index);
         self::assertTrue($jwe->hasSharedProtectedHeader('epk'));
         self::assertEquals($input, $jwe->getPayload());

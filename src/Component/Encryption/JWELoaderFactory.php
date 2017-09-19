@@ -17,6 +17,9 @@ use Jose\Component\Checker\HeaderCheckerManagerFactory;
 use Jose\Component\Core\AlgorithmManagerFactory;
 use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
 
+/**
+ * Class JWELoaderFactory
+ */
 final class JWELoaderFactory
 {
     /**

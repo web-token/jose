@@ -14,14 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests\RFC7520;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
-use Jose\Component\Encryption\Algorithm\KeyEncryption\PBES2HS512A256KW;
-use Jose\Component\Encryption\Compression\CompressionMethodManager;
-use Jose\Component\Encryption\Compression\Deflate;
-use Jose\Component\Encryption\Decrypter;
-use Jose\Component\Encryption\JWEParser;
 use Jose\Component\Encryption\Tests\AbstractEncryptionTest;
 
 /**
@@ -81,19 +74,16 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends AbstractEnc
         $expected_ciphertext = '23i-Tb1AV4n0WKVSSgcQrdg6GRqsUKxjruHXYsTHAJLZ2nsnGIX86vMXqIi6IRsfywCRFzLxEcZBRnTvG3nhzPk0GDD7FMyXhUHpDjEYCNA_XOmzg8yZR9oyjo6lTF6si4q9FZ2EhzgFQCLO_6h5EVg3vR75_hkBsnuoqoM3dwejXBtIodN84PeqMb6asmas_dpSsz7H10fC5ni9xIz424givB1YLldF6exVmL93R3fOoOJbmk2GBQZL_SEGllv2cQsBgeprARsaQ7Bq99tT80coH8ItBjgV08AtzXFFsx9qKvC982KLKdPQMTlVJKkqtV4Ru5LEVpBZXBnZrtViSOgyg6AiuwaS-rCrcD_ePOGSuxvgtrokAKYPqmXUeRdjFJwafkYEkiuDCV9vWGAi1DH2xTafhJwcmywIyzi4BqRpmdn_N-zl5tuJYyuvKhjKv6ihbsV_k1hJGPGAxJ6wUpmwC4PTQ2izEm0TuSE8oMKdTw8V3kobXZ77ulMwDs4p';
         $expected_tag = '0HlwodAhOCILG5SQ2LQ9dg';
 
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new PBES2HS512A256KW()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['PBES2-HS512+A256KW'], ['A128CBC-HS256'], ['DEF'], []);
 
-        $loaded_compact_json = JWEParser::parse($expected_compact_json);
-        $loaded_compact_json = $decrypter->decryptUsingKey($loaded_compact_json, $private_key);
+        $loaded_compact_json = $jweLoader->load($expected_compact_json);
+        $loaded_compact_json = $jweLoader->decryptUsingKey($loaded_compact_json, $private_key);
 
-        $loaded_flattened_json = JWEParser::parse($expected_flattened_json);
-        $loaded_flattened_json = $decrypter->decryptUsingKey($loaded_flattened_json, $private_key);
+        $loaded_flattened_json = $jweLoader->load($expected_flattened_json);
+        $loaded_flattened_json = $jweLoader->decryptUsingKey($loaded_flattened_json, $private_key);
 
-        $loaded_json = JWEParser::parse($expected_json);
-        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
+        $loaded_json = $jweLoader->load($expected_json);
+        $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
 
         self::assertEquals($expected_ciphertext, Base64Url::encode($loaded_compact_json->getCiphertext()));
         self::assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());
@@ -157,11 +147,8 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends AbstractEnc
             'enc' => 'A128CBC-HS256',
         ];
 
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new PBES2HS512A256KW()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
         $jweBuilder = $this->getJWEBuilderFactory()->create(['PBES2-HS512+A256KW'], ['A128CBC-HS256'], ['DEF']);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['PBES2-HS512+A256KW'], ['A128CBC-HS256'], ['DEF'], []);
 
         $jwe = $jweBuilder
             ->withPayload($expected_payload)
@@ -169,11 +156,11 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends AbstractEnc
             ->addRecipient($private_key)
             ->build();
 
-        $loaded_flattened_json = JWEParser::parse($jwe->toFlattenedJSON(0));
-        $loaded_flattened_json = $decrypter->decryptUsingKey($loaded_flattened_json, $private_key);
+        $loaded_flattened_json = $jweLoader->load($jwe->toFlattenedJSON(0));
+        $loaded_flattened_json = $jweLoader->decryptUsingKey($loaded_flattened_json, $private_key);
 
-        $loaded_json = JWEParser::parse($jwe->toJSON());
-        $loaded_json = $decrypter->decryptUsingKey($loaded_json, $private_key);
+        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
 
         self::assertTrue(array_key_exists('p2s', $loaded_flattened_json->getSharedProtectedHeaders()));
         self::assertTrue(array_key_exists('p2c', $loaded_flattened_json->getSharedProtectedHeaders()));

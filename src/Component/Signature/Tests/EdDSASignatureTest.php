@@ -14,12 +14,9 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Tests;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm\EdDSA;
 use Jose\Component\Signature\JWS;
-use Jose\Component\Signature\JWSParser;
-use Jose\Component\Signature\Verifier;
 
 /**
  * final class EdDSASignatureTest.
@@ -65,8 +62,8 @@ final class EdDSASignatureTest extends AbstractSignatureTest
         $header = ['alg' => 'EdDSA'];
         $input = Base64Url::decode('RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc');
 
-        $signatureAlgorithmManager = AlgorithmManager::create([new EdDSA()]);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['EdDSA']);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['EdDSA'], []);
         $jws = $jwsBuilder
             ->withPayload($input)
             ->addSignature($key, $header)
@@ -75,11 +72,10 @@ final class EdDSASignatureTest extends AbstractSignatureTest
 
         self::assertEquals('eyJhbGciOiJFZERTQSJ9.RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc.hgyY0il_MGCjP0JzlnLWG1PPOt7-09PGcvMg3AIbQR6dWbhijcNR4ki4iylGjg5BhVsPt9g7sVvpAr_MuM0KAg', $jws);
 
-        $loaded = JWSParser::parse($jws);
-        $verifier = new Verifier($signatureAlgorithmManager);
+        $loaded = $jwsLoader->load($jws);
 
         self::assertInstanceOf(JWS::class, $loaded);
         self::assertEquals(1, $loaded->countSignatures());
-        $verifier->verifyWithKey($loaded, $key);
+        $jwsLoader->verifyWithKey($loaded, $key);
     }
 }

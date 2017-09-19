@@ -14,15 +14,8 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Tests;
 
 use Base64Url\Base64Url;
-use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWKSet;
-use Jose\Component\Encryption\Algorithm\ContentEncryption\A128CBCHS256;
-use Jose\Component\Encryption\Algorithm\KeyEncryption\A128KW;
-use Jose\Component\Encryption\Compression\CompressionMethodManager;
-use Jose\Component\Encryption\Compression\Deflate;
-use Jose\Component\Encryption\Decrypter;
 use Jose\Component\Encryption\JWE;
-use Jose\Component\Encryption\JWEParser;
 
 /**
  * final class FlattenedTest.
@@ -36,19 +29,16 @@ final class JWEFlattenedTest extends AbstractEncryptionTest
      */
     public function testLoadFlattenedJWE()
     {
-        $keyEncryptionAlgorithmManager = AlgorithmManager::create([new A128KW()]);
-        $contentEncryptionAlgorithmManager = AlgorithmManager::create([new A128CBCHS256()]);
-        $compressionManager = CompressionMethodManager::create([new Deflate()]);
-        $decrypter = new Decrypter($keyEncryptionAlgorithmManager, $contentEncryptionAlgorithmManager, $compressionManager);
+        $jweLoader = $this->getJWELoaderFactory()->create(['A128KW'], ['A128CBC-HS256'], ['DEF'], []);
 
-        $loaded = JWEParser::parse('{"protected":"eyJlbmMiOiJBMTI4Q0JDLUhTMjU2In0","unprotected":{"jku":"https://server.example.com/keys.jwks"},"header":{"alg":"A128KW","kid":"7"},"encrypted_key":"6KB707dM9YTIgHtLvtgWQ8mKwboJW3of9locizkDTHzBC2IlrT1oOQ","iv":"AxY8DCtDaGlsbGljb3RoZQ","ciphertext":"KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY","tag":"Mz-VPPyU4RlcuYv1IwIvzw"}');
+        $loaded = $jweLoader->load('{"protected":"eyJlbmMiOiJBMTI4Q0JDLUhTMjU2In0","unprotected":{"jku":"https://server.example.com/keys.jwks"},"header":{"alg":"A128KW","kid":"7"},"encrypted_key":"6KB707dM9YTIgHtLvtgWQ8mKwboJW3of9locizkDTHzBC2IlrT1oOQ","iv":"AxY8DCtDaGlsbGljb3RoZQ","ciphertext":"KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY","tag":"Mz-VPPyU4RlcuYv1IwIvzw"}');
 
         self::assertInstanceOf(JWE::class, $loaded);
         self::assertEquals('A128KW', $loaded->getRecipient(0)->getHeader('alg'));
         self::assertEquals('A128CBC-HS256', $loaded->getSharedProtectedHeader('enc'));
         self::assertNull($loaded->getPayload());
 
-        $loaded = $decrypter->decryptUsingKeySet($loaded, $this->getSymmetricKeySet(), $index);
+        $loaded = $jweLoader->decryptUsingKeySet($loaded, $this->getSymmetricKeySet(), $index);
 
         self::assertEquals(0, $index);
         self::assertEquals('Live long and prosper.', $loaded->getPayload());

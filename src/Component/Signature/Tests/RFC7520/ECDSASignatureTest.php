@@ -13,12 +13,8 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Tests\RFC7520;
 
-use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\Algorithm\ES512;
-use Jose\Component\Signature\JWSParser;
 use Jose\Component\Signature\Tests\AbstractSignatureTest;
-use Jose\Component\Signature\Verifier;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-4.3
@@ -61,15 +57,14 @@ final class ECDSASignatureTest extends AbstractSignatureTest
             'kid' => 'bilbo.baggins@hobbiton.example',
         ];
 
-        $signatureAlgorithmManager = AlgorithmManager::create([new ES512()]);
-        $verifier = new Verifier($signatureAlgorithmManager);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['ES512']);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['ES512'], []);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($private_key, $headers)
             ->build();
 
-        $verifier->verifyWithKey($jws, $private_key);
+        $jwsLoader->verifyWithKey($jws, $private_key);
 
         /*
          * Header
@@ -79,16 +74,16 @@ final class ECDSASignatureTest extends AbstractSignatureTest
         $expected_flattened_json = '{"payload":"SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4","protected":"eyJhbGciOiJFUzUxMiIsImtpZCI6ImJpbGJvLmJhZ2dpbnNAaG9iYml0b24uZXhhbXBsZSJ9","signature":"AE_R_YZCChjn4791jSQCrdPZCNYqHXCTZH0-JZGYNlaAjP2kqaluUIIUnC9qvbu9Plon7KRTzoNEuT4Va2cmL1eJAQy3mtPBu_u_sDDyYjnAMDxXPn7XrT0lw-kvAD890jl8e2puQens_IEKBpHABlsbEPX6sFY8OcGDqoRuBomu9xQ2"}';
         $expected_json = '{"payload":"SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4","signatures":[{"protected":"eyJhbGciOiJFUzUxMiIsImtpZCI6ImJpbGJvLmJhZ2dpbnNAaG9iYml0b24uZXhhbXBsZSJ9","signature":"AE_R_YZCChjn4791jSQCrdPZCNYqHXCTZH0-JZGYNlaAjP2kqaluUIIUnC9qvbu9Plon7KRTzoNEuT4Va2cmL1eJAQy3mtPBu_u_sDDyYjnAMDxXPn7XrT0lw-kvAD890jl8e2puQens_IEKBpHABlsbEPX6sFY8OcGDqoRuBomu9xQ2"}]}';
 
-        $loaded_compact_json = JWSParser::parse($expected_compact_json);
-        $verifier->verifyWithKey($loaded_compact_json, $private_key, null, $loaded_compact_json_index);
+        $loaded_compact_json = $jwsLoader->load($expected_compact_json);
+        $loaded_compact_json_index = $jwsLoader->verifyWithKey($loaded_compact_json, $private_key);
         self::assertEquals(0, $loaded_compact_json_index);
 
-        $loaded_flattened_json = JWSParser::parse($expected_flattened_json);
-        $verifier->verifyWithKey($loaded_flattened_json, $private_key, null, $loaded_flattened_json_index);
+        $loaded_flattened_json = $jwsLoader->load($expected_flattened_json);
+        $loaded_flattened_json_index = $jwsLoader->verifyWithKey($loaded_flattened_json, $private_key);
         self::assertEquals(0, $loaded_flattened_json_index);
 
-        $loaded_json = JWSParser::parse($expected_json);
-        $verifier->verifyWithKey($loaded_json, $private_key, null, $loaded_json_index);
+        $loaded_json = $jwsLoader->load($expected_json);
+        $loaded_json_index = $jwsLoader->verifyWithKey($loaded_json, $private_key);
         self::assertEquals(0, $loaded_json_index);
     }
 }

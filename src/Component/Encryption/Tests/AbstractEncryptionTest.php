@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption\Tests;
 
+use Jose\Component\Checker\HeaderCheckerManagerFactory;
 use Jose\Component\Core\Converter\StandardJsonConverter;
 use Jose\Component\Core\AlgorithmManagerFactory;
 use Jose\Component\Encryption\Algorithm\KeyEncryption;
@@ -20,6 +21,7 @@ use Jose\Component\Encryption\Algorithm\ContentEncryption;
 use Jose\Component\Encryption\Compression;
 use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
 use Jose\Component\Encryption\JWEBuilderFactory;
+use Jose\Component\Encryption\JWELoaderFactory;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractEncryptionTest extends TestCase
@@ -105,5 +107,43 @@ abstract class AbstractEncryptionTest extends TestCase
         }
 
         return $this->jwsBuilderFactory;
+    }
+
+    /**
+     * @var JWELoaderFactory
+     */
+    private $jwsLoaderFactory;
+
+    /**
+     * @return JWELoaderFactory
+     */
+    protected function getJWELoaderFactory(): JWELoaderFactory
+    {
+        if (null === $this->jwsLoaderFactory) {
+            $this->jwsLoaderFactory = new JWELoaderFactory(
+                $this->getAlgorithmManagerFactory(),
+                $this->getCompressionMethodManagerFactory(),
+                $this->getHeaderCheckerManagerFactory()
+            );
+        }
+
+        return $this->jwsLoaderFactory;
+    }
+
+    /**
+     * @var HeaderCheckerManagerFactory
+     */
+    private $headerCheckerManagerFactory;
+
+    /**
+     * @return HeaderCheckerManagerFactory
+     */
+    protected function getHeaderCheckerManagerFactory(): HeaderCheckerManagerFactory
+    {
+        if (null === $this->headerCheckerManagerFactory) {
+            $this->headerCheckerManagerFactory = new HeaderCheckerManagerFactory();
+        }
+
+        return $this->headerCheckerManagerFactory;
     }
 }
