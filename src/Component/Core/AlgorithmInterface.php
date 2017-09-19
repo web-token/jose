@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Core;
 
 /**
- * Interface JWAInterface
+ * Interface JWAInterface.
  */
 interface AlgorithmInterface
 {

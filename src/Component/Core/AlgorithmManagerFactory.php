@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Core;
 
 /**
- * Class AlgorithmManagerFactory
+ * Class AlgorithmManagerFactory.
  */
 final class AlgorithmManagerFactory
 {
@@ -24,7 +24,7 @@ final class AlgorithmManagerFactory
     private $algorithms = [];
 
     /**
-     * @param string       $alias
+     * @param string             $alias
      * @param AlgorithmInterface $algorithm
      *
      * @return AlgorithmManagerFactory

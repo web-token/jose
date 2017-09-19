@@ -18,7 +18,7 @@ use Jose\Component\Core\AlgorithmManagerFactory;
 use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
 
 /**
- * Class JWELoaderFactory
+ * Class JWELoaderFactory.
  */
 final class JWELoaderFactory
 {
@@ -40,7 +40,7 @@ final class JWELoaderFactory
     /**
      * JWELoaderFactory constructor.
      *
-     * @param AlgorithmManagerFactory               $algorithmManagerFactory
+     * @param AlgorithmManagerFactory         $algorithmManagerFactory
      * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
      * @param HeaderCheckerManagerFactory     $headerCheckerManagerFactory
      */

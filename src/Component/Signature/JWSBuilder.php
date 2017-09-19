@@ -50,7 +50,7 @@ final class JWSBuilder
      * JWSBuilder constructor.
      *
      * @param JsonConverterInterface $jsonConverter
-     * @param AlgorithmManager             $signatureAlgorithmManager
+     * @param AlgorithmManager       $signatureAlgorithmManager
      */
     public function __construct(JsonConverterInterface $jsonConverter, AlgorithmManager $signatureAlgorithmManager)
     {

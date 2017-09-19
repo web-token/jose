@@ -26,7 +26,6 @@ use Jose\Component\Signature\JWS;
  */
 final class RSASignatureTest extends AbstractSignatureTest
 {
-
     public function testCompleteRS256Sign()
     {
         $key = JWK::create([

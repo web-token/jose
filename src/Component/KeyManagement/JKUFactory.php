@@ -19,7 +19,7 @@ use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWKSet;
 
 /**
- * Class JKUFactory
+ * Class JKUFactory.
  */
 final class JKUFactory extends UrlKeySetFactory
 {
