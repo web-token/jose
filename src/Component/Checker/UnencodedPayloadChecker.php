@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Checker;
 
 /**
- * Class UnencodedPayloadChecker
+ * Class UnencodedPayloadChecker.
  */
 final class UnencodedPayloadChecker implements HeaderCheckerInterface
 {

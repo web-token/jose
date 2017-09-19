@@ -38,7 +38,7 @@ final class JWEBuilderFactory
      * JWEBuilderFactory constructor.
      *
      * @param JsonConverterInterface          $jsonEncoder
-     * @param AlgorithmManagerFactory               $algorithmManagerFactory
+     * @param AlgorithmManagerFactory         $algorithmManagerFactory
      * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
      */
     public function __construct(JsonConverterInterface $jsonEncoder, AlgorithmManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory)

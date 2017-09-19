@@ -21,7 +21,7 @@ use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 
 /**
- * Class JWKFactory
+ * Class JWKFactory.
  */
 final class JWKFactory
 {

@@ -488,7 +488,6 @@ final class EncrypterTest extends AbstractEncryptionTest
 
         $loaded = $jweLoader->load($jwe);
 
-
         self::assertInstanceOf(JWE::class, $loaded);
         self::assertEquals('ECDH-ES+A256KW', $loaded->getSharedProtectedHeader('alg'));
         self::assertEquals('A256GCM', $loaded->getSharedProtectedHeader('enc'));

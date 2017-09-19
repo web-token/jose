@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Checker;
 
 /**
- * Class AlgorithmChecker
+ * Class AlgorithmChecker.
  */
 final class AlgorithmChecker implements HeaderCheckerInterface
 {
