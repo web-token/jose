@@ -29,6 +29,9 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 
+/**
+ * Class JWELoader.
+ */
 final class JWELoader
 {
     /**
@@ -112,7 +115,10 @@ final class JWELoader
     {
         $jwkset = JWKSet::createFromKeys([$jwk]);
 
-        return $this->decryptUsingKeySet($jwe, $jwkset, $recipientIndex);
+        $jwe = $this->decryptUsingKeySet($jwe, $jwkset, $recipientIndex);
+        $this->headerCheckerManager->check($jwe, $recipientIndex);
+
+        return $jwe;
     }
 
     /**

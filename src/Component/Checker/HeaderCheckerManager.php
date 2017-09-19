@@ -143,7 +143,6 @@ final class HeaderCheckerManager
     {
         $checkedHeaders = [];
         foreach ($this->checkers as $header => $checker) {
-            //@todo Add the isRequired() check.
             if ($checker->protectedHeaderOnly()) {
                 if (array_key_exists($header, $protected)) {
                     $checker->checkHeader($protected[$header]);
