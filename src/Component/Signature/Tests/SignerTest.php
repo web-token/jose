@@ -473,7 +473,6 @@ final class SignerTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], []);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($key, $protectedHeader1)

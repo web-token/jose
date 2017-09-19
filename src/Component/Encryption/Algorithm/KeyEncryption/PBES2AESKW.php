@@ -60,7 +60,7 @@ abstract class PBES2AESKW implements KeyWrappingInterface
 
         $derived_key = hash_pbkdf2($hash_algorithm, $password, $complete_headers['alg']."\x00".$salt, $this->nb_count, $key_size, true);
 
-        return $wrapper->wrap($derived_key, $cek);
+        return $wrapper::wrap($derived_key, $cek);
     }
 
     /**
@@ -80,7 +80,7 @@ abstract class PBES2AESKW implements KeyWrappingInterface
 
         $derived_key = hash_pbkdf2($hash_algorithm, $password, $salt, $count, $key_size, true);
 
-        return $wrapper->unwrap($derived_key, $encrypted_cek);
+        return $wrapper::unwrap($derived_key, $encrypted_cek);
     }
 
     /**

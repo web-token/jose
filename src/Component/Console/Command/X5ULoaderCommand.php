@@ -19,6 +19,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class X5ULoaderCommand
+ */
 final class X5ULoaderCommand extends AbstractObjectOutputCommand
 {
     /**

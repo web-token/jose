@@ -29,7 +29,7 @@ abstract class AESKW implements KeyWrappingInterface
         $this->checkKey($key);
         $wrapper = $this->getWrapper();
 
-        return $wrapper->wrap(Base64Url::decode($key->get('k')), $cek);
+        return $wrapper::wrap(Base64Url::decode($key->get('k')), $cek);
     }
 
     /**
@@ -40,7 +40,7 @@ abstract class AESKW implements KeyWrappingInterface
         $this->checkKey($key);
         $wrapper = $this->getWrapper();
 
-        return $wrapper->unwrap(Base64Url::decode($key->get('k')), $encrypted_cek);
+        return $wrapper::unwrap(Base64Url::decode($key->get('k')), $encrypted_cek);
     }
 
     /**

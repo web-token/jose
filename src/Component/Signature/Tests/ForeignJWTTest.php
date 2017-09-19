@@ -46,16 +46,6 @@ final class ForeignJWTTest extends AbstractSignatureTest
             'alg' => 'RS256',
             'typ' => 'JWT',
         ];
-        $expected_claims = [
-            'aud' => 'f5222279-d544-4c3d-ac7c-fc54715d0c26',
-            'exp' => 1469649209,
-            'jti' => '6af11497-7d6b-4497-8425-74ba13a5831c',
-            'redir' => 'https://localhost:4444/oauth2/auth?client_id=f5222279-d544-4c3d-ac7c-fc54715d0c26&response_type=code&scope=core+foo&state=abcdefgh&redirect_uri=http://localhost/cb',
-            'scp' => [
-                'core',
-                'foo',
-            ],
-        ];
 
         self::assertInstanceOf(JWS::class, $jwt);
         self::assertEquals($expected_index, $index);

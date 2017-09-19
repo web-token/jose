@@ -70,9 +70,12 @@ final class CertificateTest extends TestCase
     }
 
     /**
+     * @param string $file
+     * @param array  $expected_values
+     *
      * @dataProvider dataLoadCertificate
      */
-    public function testLoadCertificate($file, array $expected_values)
+    public function testLoadCertificate(string $file, array $expected_values)
     {
         $result = KeyConverter::loadKeyFromCertificateFile($file);
 

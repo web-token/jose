@@ -30,7 +30,7 @@ abstract class ECDHESAESKW implements KeyAgreementWrappingInterface
         $agreement_key = $ecdh_es->getAgreementKey($this->getKeyLength(), $this->name(), $receiver_key->toPublic(), $complete_header, $additional_header_values);
         $wrapper = $this->getWrapper();
 
-        return $wrapper->wrap($agreement_key, $cek);
+        return $wrapper::wrap($agreement_key, $cek);
     }
 
     /**
@@ -43,7 +43,7 @@ abstract class ECDHESAESKW implements KeyAgreementWrappingInterface
         $agreement_key = $ecdh_es->getAgreementKey($this->getKeyLength(), $this->name(), $receiver_key, $complete_header);
         $wrapper = $this->getWrapper();
 
-        return $wrapper->unwrap($agreement_key, $encrypted_cek);
+        return $wrapper::unwrap($agreement_key, $encrypted_cek);
     }
 
     /**

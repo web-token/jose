@@ -64,7 +64,6 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testDuplicatedHeader()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], []);
 
         $jweBuilder
             ->withPayload('FOO')
@@ -189,7 +188,6 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testCompressionAlgorithmNotSupported()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], []);
 
         $jweBuilder
             ->withPayload(json_encode($this->getKeyToEncrypt()))
@@ -211,7 +209,6 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testForeignKeyManagementModeForbidden()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['dir', 'ECDH-ES+A256KW'], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['dir', 'ECDH-ES+A256KW'], ['A256CBC-HS512'], ['DEF'], []);
 
         $jweBuilder
             ->withPayload('Live long and Prosper.')
@@ -230,7 +227,6 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testOperationNotAllowedForTheKey()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], []);
 
         $jweBuilder
             ->withPayload('Live long and Prosper.')
@@ -250,7 +246,6 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testAlgorithmNotAllowedForTheKey()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], []);
 
         $jweBuilder
             ->withPayload('Live long and Prosper.')
@@ -301,7 +296,6 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testAlgParameterIsMissing()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create([], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create([], ['A256CBC-HS512'], ['DEF'], []);
 
         $jweBuilder
             ->withPayload(json_encode($this->getKeyToEncrypt()))
@@ -321,7 +315,6 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testEncParameterIsMissing()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], [], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], [], ['DEF'], []);
 
         $jweBuilder
             ->withPayload(json_encode($this->getKeyToEncrypt()))
@@ -341,7 +334,6 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testNotAKeyEncryptionAlgorithm()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['A256CBC-HS512'], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['A256CBC-HS512'], ['A256CBC-HS512'], ['DEF'], []);
 
         $jweBuilder
             ->withPayload(json_encode($this->getKeyToEncrypt()))
@@ -362,7 +354,6 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testNotAContentEncryptionAlgorithm()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['RSA-OAEP-256'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['RSA-OAEP-256'], ['DEF'], []);
 
         $jweBuilder
             ->withPayload(json_encode($this->getKeyToEncrypt()))

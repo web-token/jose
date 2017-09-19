@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * The MIT License (MIT)
  *
@@ -11,6 +13,9 @@
 
 namespace Jose\Component\Encryption\Util\Ecc;
 
+/**
+ * Class ModularArithmetic.
+ */
 final class ModularArithmetic
 {
     /**

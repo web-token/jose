@@ -48,11 +48,11 @@ final class PemConverterCommand extends AbstractObjectOutputCommand
         $key = JWK::create($json);
         switch ($key->get('kty')) {
             case 'RSA':
-                $pem = RSAKey::createFromJWK($key)->toPem();
+                $pem = RSAKey::createFromJWK($key)->toPEM();
 
                 break;
             case 'EC':
-                $pem = ECKey::createFromJWK($key)->toPem();
+                $pem = ECKey::createFromJWK($key)->toPEM();
 
                 break;
             default:

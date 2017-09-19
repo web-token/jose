@@ -22,6 +22,9 @@ use FG\ASN1\Universal\OctetString;
 use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
 
+/**
+ * Class RSAKey.
+ */
 final class RSAKey
 {
     /**
