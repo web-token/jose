@@ -5,9 +5,9 @@
   "time_unit": "microseconds",
   "retry_threshold": 10,
   "reports": {
-    "all": {
+    "with-params": {
       "extends": "aggregate",
-      "cols": ["benchmark", "groups", "subject", "mean", "best", "worst", "params"]
+      "cols": ["benchmark", "groups", "subject", "mean", "params"]
     },
     "simple": {
       "extends": "aggregate",
