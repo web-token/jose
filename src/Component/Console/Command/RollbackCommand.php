@@ -18,6 +18,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Humbug\SelfUpdate\Updater;
 
+/**
+ * Class RollbackCommand.
+ */
 final class RollbackCommand extends Command
 {
     protected function configure()

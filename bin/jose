@@ -60,6 +60,8 @@ $application->add(new Command\JKULoaderCommand(new JKUFactory($jsonConverter, $h
 
 $application->add(new Command\PemConverterCommand($jsonConverter));
 
+$application->add(new Command\GetThumbprintCommand($jsonConverter));
+
 $application->add(new Command\UpdateCommand());
 $application->add(new Command\RollbackCommand());
 

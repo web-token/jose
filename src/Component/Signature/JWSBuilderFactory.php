@@ -16,6 +16,9 @@ namespace Jose\Component\Signature;
 use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\AlgorithmManagerFactory;
 
+/**
+ * Class JWSBuilderFactory.
+ */
 final class JWSBuilderFactory
 {
     /**

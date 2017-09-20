@@ -23,6 +23,9 @@ use FG\ASN1\Universal\Sequence;
 use FG\ASN1\ASNObject;
 use Jose\Component\Core\JWK;
 
+/**
+ * Class ECKey.
+ */
 final class ECKey
 {
     /**

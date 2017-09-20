@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker;
 
+/**
+ * Class AudienceChecker.
+ */
 final class AudienceChecker implements ClaimCheckerInterface, HeaderCheckerInterface
 {
     private const CLAIM_NAME = 'aud';

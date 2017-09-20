@@ -15,6 +15,9 @@ namespace Jose\Component\Checker;
 
 use Jose\Component\Core\Converter\JsonConverterInterface;
 
+/**
+ * Class ClaimCheckerManagerFactory.
+ */
 final class ClaimCheckerManagerFactory
 {
     /**

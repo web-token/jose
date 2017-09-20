@@ -17,6 +17,9 @@ use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\AlgorithmManagerFactory;
 use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
 
+/**
+ * Class JWEBuilderFactory.
+ */
 final class JWEBuilderFactory
 {
     /**

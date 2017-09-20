@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Jose\Component\Checker;
 
+/**
+ * Class IssuedAtChecker.
+ */
 final class IssuedAtChecker implements ClaimCheckerInterface, HeaderCheckerInterface
 {
     private const CLAIM_NAME = 'iat';

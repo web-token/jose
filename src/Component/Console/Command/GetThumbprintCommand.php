@@ -14,15 +14,15 @@ declare(strict_types=1);
 namespace Jose\Component\Console\Command;
 
 use Jose\Component\Core\JWK;
-use Jose\Component\KeyManagement\KeyConverter\RSAKey;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class OptimizeRsaKeyCommand.
+ * Class GetThumbprintCommand.
  */
-final class OptimizeRsaKeyCommand extends AbstractObjectOutputCommand
+final class GetThumbprintCommand extends AbstractObjectOutputCommand
 {
     /**
      * {@inheritdoc}
@@ -31,9 +31,10 @@ final class OptimizeRsaKeyCommand extends AbstractObjectOutputCommand
     {
         parent::configure();
         $this
-            ->setName('key:optimize')
-            ->setDescription('Optimize a RSA key by calculating additional primes (CRT).')
-            ->addArgument('jwk', InputArgument::REQUIRED, 'The RSA key.');
+            ->setName('key:thumbprint')
+            ->setDescription('Get the thumbprint of a JWK key.')
+            ->addArgument('jwk', InputArgument::REQUIRED, 'The JWK key.')
+            ->addOption('hash', null, InputOption::VALUE_OPTIONAL, 'The hashing algorithm.', 'sha256');
     }
 
     /**
@@ -42,12 +43,12 @@ final class OptimizeRsaKeyCommand extends AbstractObjectOutputCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $jwk = $input->getArgument('jwk');
+        $hash = $input->getOption('hash');
         $json = $this->jsonConverter->decode($jwk);
         if (!is_array($json)) {
             throw new \InvalidArgumentException('Invalid input.');
         }
-        $key = RSAKey::createFromJWK(JWK::create($json));
-        $key->optimize();
-        $this->prepareJsonOutput($input, $output, $key->toJwk());
+        $key = JWK::create($json);
+        $this->prepareOutput($input, $output, $key->thumbprint($hash));
     }
 }

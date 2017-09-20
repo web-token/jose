@@ -102,7 +102,6 @@ final class JWSBuilder
      */
     public function addSignature(JWK $signatureKey, array $protectedHeaders, array $headers = []): JWSBuilder
     {
-
         $this->checkB64AndCriticalHeader($protectedHeaders);
         $isPayloadEncoded = $this->checkIfPayloadIsEncoded($protectedHeaders);
         if (null === $this->isPayloadEncoded) {
@@ -212,11 +211,12 @@ final class JWSBuilder
     }
 
     /**
-     * @param array ...$headers
+     * @param array $header1
+     * @param array $header2
      */
-    private function checkDuplicatedHeaderParameters(...$headers)
+    private function checkDuplicatedHeaderParameters(array $header1, array $header2)
     {
-        $inter = call_user_func_array('array_intersect_key', $headers);
+        $inter = array_intersect_key($header1, $header2);
         if (!empty($inter)) {
             throw new \InvalidArgumentException(sprintf('The header contains duplicated entries: %s.', implode(', ', array_keys($inter))));
         }

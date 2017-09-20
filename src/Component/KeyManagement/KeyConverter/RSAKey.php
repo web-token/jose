@@ -17,6 +17,9 @@ use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\BigInteger;
 
+/**
+ * Class RSAKey.
+ */
 final class RSAKey
 {
     /**

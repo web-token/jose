@@ -16,6 +16,9 @@ namespace Jose\Component\Signature;
 use Jose\Component\Checker\HeaderCheckerManagerFactory;
 use Jose\Component\Core\AlgorithmManagerFactory;
 
+/**
+ * Class JWSLoaderFactory.
+ */
 final class JWSLoaderFactory
 {
     /**

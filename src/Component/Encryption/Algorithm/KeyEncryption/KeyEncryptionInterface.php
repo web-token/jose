@@ -16,6 +16,9 @@ namespace Jose\Component\Encryption\Algorithm\KeyEncryption;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 
+/**
+ * Interface KeyEncryptionInterface.
+ */
 interface KeyEncryptionInterface extends KeyEncryptionAlgorithmInterface
 {
     /**

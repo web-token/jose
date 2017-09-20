@@ -17,6 +17,9 @@ use Jose\Component\Core\Util\BigInteger;
 use Jose\Component\Core\Util\Hash;
 use Jose\Component\Core\Util\RSAKey;
 
+/**
+ * Class RSA.
+ */
 final class RSA
 {
     /**

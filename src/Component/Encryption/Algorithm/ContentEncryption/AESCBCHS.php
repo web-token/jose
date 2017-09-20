@@ -15,6 +15,9 @@ namespace Jose\Component\Encryption\Algorithm\ContentEncryption;
 
 use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
 
+/**
+ * Class AESCBCHS.
+ */
 abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
 {
     /**

@@ -18,6 +18,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Humbug\SelfUpdate\Updater;
 
+/**
+ * Class UpdateCommand.
+ */
 final class UpdateCommand extends Command
 {
     protected function configure()

@@ -15,6 +15,9 @@ namespace Jose\Component\Encryption\Algorithm;
 
 use Jose\Component\Core\AlgorithmInterface;
 
+/**
+ * Interface KeyEncryptionAlgorithmInterface.
+ */
 interface KeyEncryptionAlgorithmInterface extends AlgorithmInterface
 {
     public const MODE_DIRECT = 'dir';

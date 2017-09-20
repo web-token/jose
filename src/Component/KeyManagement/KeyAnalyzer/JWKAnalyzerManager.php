@@ -15,6 +15,9 @@ namespace Jose\Component\KeyManagement\KeyAnalyzer;
 
 use Jose\Component\Core\JWK;
 
+/**
+ * Class JWKAnalyzerManager.
+ */
 final class JWKAnalyzerManager
 {
     /**

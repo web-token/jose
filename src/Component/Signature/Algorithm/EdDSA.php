@@ -18,7 +18,7 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
- * Class Ed25519.
+ * Class EdDSA.
  */
 final class EdDSA implements SignatureAlgorithmInterface
 {

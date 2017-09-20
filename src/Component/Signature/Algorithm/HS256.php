@@ -14,10 +14,6 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Algorithm;
 
 /**
- * This class handles signatures using HMAC.
- * It supports HS256;.
- */
-/**
  * Class HS256.
  */
 final class HS256 extends HMAC

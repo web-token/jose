@@ -17,6 +17,9 @@ use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use ZxcvbnPhp\Zxcvbn;
 
+/**
+ * Class OctAnalyzer.
+ */
 final class OctAnalyzer implements JWKAnalyzerInterface
 {
     /**

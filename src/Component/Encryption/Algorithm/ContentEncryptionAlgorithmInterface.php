@@ -15,6 +15,9 @@ namespace Jose\Component\Encryption\Algorithm;
 
 use Jose\Component\Core\AlgorithmInterface;
 
+/**
+ * Interface ContentEncryptionAlgorithmInterface.
+ */
 interface ContentEncryptionAlgorithmInterface extends AlgorithmInterface
 {
     /**

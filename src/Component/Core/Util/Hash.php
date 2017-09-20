@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Jose\Component\Core\Util;
 
+/**
+ * Class Hash.
+ */
 final class Hash
 {
     /**

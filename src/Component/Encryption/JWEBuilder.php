@@ -28,6 +28,9 @@ use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Component\Encryption\Compression\CompressionMethodInterface;
 use Jose\Component\Encryption\Compression\CompressionMethodManager;
 
+/**
+ * Class JWEBuilder.
+ */
 final class JWEBuilder
 {
     /**

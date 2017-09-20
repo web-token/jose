@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Algorithm;
 
+/**
+ * Class ES256.
+ */
 final class ES256 extends ECDSA
 {
     /**
