@@ -71,3 +71,7 @@ services:
     Jose\Component\Console\Command\PemConverterCommand:
         tags:
             - {name: 'console.command'}
+
+    Jose\Component\Console\Command\GetThumbprintCommand:
+        tags:
+            - {name: 'console.command'}

@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+declare(strict_types=1);
+
 require __DIR__.'/../vendor/autoload.php';
 
 use Jose\Component\Console\Command;
@@ -14,6 +16,9 @@ use Http\Adapter\Guzzle6\Client;
 use GuzzleHttp\Psr7\Request;
 use Http\Message\RequestFactory as Psr7RequestFactory;
 
+/**
+ * Class RequestFactory.
+ */
 final class RequestFactory implements Psr7RequestFactory
 {
     /**

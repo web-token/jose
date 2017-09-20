@@ -29,7 +29,14 @@ final class JKULoaderCommand extends AbstractObjectOutputCommand
      */
     private $jkuFactory;
 
-    public function __construct(JKUFactory $jkuFactory, JsonConverterInterface $jsonConverter, $name = null)
+    /**
+     * JKULoaderCommand constructor.
+     *
+     * @param JKUFactory $jkuFactory
+     * @param JsonConverterInterface $jsonConverter
+     * @param null|string $name
+     */
+    public function __construct(JKUFactory $jkuFactory, JsonConverterInterface $jsonConverter, ?string $name = null)
     {
         $this->jkuFactory = $jkuFactory;
         parent::__construct($jsonConverter, $name);

@@ -32,11 +32,11 @@ final class X5ULoaderCommand extends AbstractObjectOutputCommand
     /**
      * X5ULoaderCommand constructor.
      *
-     * @param X5UFactory             $x5uFactory
+     * @param X5UFactory $x5uFactory
      * @param JsonConverterInterface $jsonConverter
-     * @param null                   $name
+     * @param null|string $name
      */
-    public function __construct(X5UFactory $x5uFactory, JsonConverterInterface $jsonConverter, $name = null)
+    public function __construct(X5UFactory $x5uFactory, JsonConverterInterface $jsonConverter, ?string $name = null)
     {
         $this->x5uFactory = $x5uFactory;
         parent::__construct($jsonConverter, $name);
