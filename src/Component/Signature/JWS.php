@@ -48,7 +48,7 @@ final class JWS implements JWTInterface
      * @param string|null $encodedPayload
      * @param bool        $isPayloadDetached
      */
-    private function __construct(?string $payload = null, ?string $encodedPayload = null, bool $isPayloadDetached = false)
+    private function __construct(?string $payload, ?string $encodedPayload = null, bool $isPayloadDetached = false)
     {
         $this->payload = $payload;
         $this->encodedPayload = $encodedPayload;
@@ -57,13 +57,14 @@ final class JWS implements JWTInterface
 
     /**
      * @param string|null $payload
+     * @param string|null $encodedPayload
      * @param bool        $isPayloadDetached
      *
      * @return JWS
      */
-    public static function create(?string $payload = null, bool $isPayloadDetached = false): JWS
+    public static function create(?string $payload, ?string $encodedPayload = null, bool $isPayloadDetached = false): JWS
     {
-        return new self($payload, null, $isPayloadDetached);
+        return new self($payload, $encodedPayload, $isPayloadDetached);
     }
 
     /**
@@ -75,19 +76,6 @@ final class JWS implements JWTInterface
     }
 
     /**
-     * @param string $payload
-     *
-     * @return JWS
-     */
-    public function withPayload(string $payload): JWS
-    {
-        $jwt = clone $this;
-        $jwt->payload = $payload;
-
-        return $jwt;
-    }
-
-    /**
      * @return bool
      */
     public function isPayloadDetached(): bool
@@ -96,54 +84,15 @@ final class JWS implements JWTInterface
     }
 
     /**
-     * @return JWS
-     */
-    public function withDetachedPayload(): JWS
-    {
-        $jwt = clone $this;
-        $jwt->isPayloadDetached = true;
-
-        return $jwt;
-    }
-
-    /**
-     * @return JWS
-     */
-    public function withAttachedPayload(): JWS
-    {
-        $jwt = clone $this;
-        $jwt->isPayloadDetached = false;
-
-        return $jwt;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withEncodedPayload(string $encoded_payload): JWS
-    {
-        $jwt = clone $this;
-        $jwt->encodedPayload = $encoded_payload;
-
-        return $jwt;
-    }
-
-    /**
-     * @param Signature $signature
-     *
      * @return string|null
      */
-    public function getEncodedPayload(Signature $signature): ?string
+    public function getEncodedPayload(): ?string
     {
         if (true === $this->isPayloadDetached()) {
             return null;
         }
-        if (null !== $this->encodedPayload) {
-            return $this->encodedPayload;
-        }
-        $payload = $this->getPayload();
 
-        return $this->isPayloadEncoded($signature) ? Base64Url::encode($payload) : $payload;
+        return $this->encodedPayload;
     }
 
     /**
@@ -172,15 +121,16 @@ final class JWS implements JWTInterface
 
     /**
      * @param string      $signature
-     * @param string|null $encoded_protected_headers
+     * @param array       $protectedHeaders
+     * @param string|null $encodedProtectedHeaders
      * @param array       $headers
      *
      * @return JWS
      */
-    public function addSignature(string $signature, ?string $encoded_protected_headers, array $headers = []): JWS
+    public function addSignature(string $signature, array $protectedHeaders, ?string $encodedProtectedHeaders, array $headers = []): JWS
     {
         $jws = clone $this;
-        $jws->signatures[] = Signature::create($signature, $encoded_protected_headers, $headers);
+        $jws->signatures[] = Signature::create($signature, $protectedHeaders, $encodedProtectedHeaders, $headers);
 
         return $jws;
     }
@@ -207,14 +157,14 @@ final class JWS implements JWTInterface
         if (!empty($signature->getHeaders())) {
             throw new \LogicException('The signature contains unprotected headers and cannot be converted into compact JSON.');
         }
-        if (!$this->isPayloadEncoded($signature) && !empty($this->getEncodedPayload($signature))) {
+        if (!$this->isPayloadEncoded($signature) && !empty($this->getEncodedPayload())) {
             throw new \LogicException('Unable to convert the JWS with non-encoded payload.');
         }
 
         return sprintf(
             '%s.%s.%s',
             $signature->getEncodedProtectedHeaders(),
-            $this->getEncodedPayload($signature),
+            $this->getEncodedPayload(),
             Base64Url::encode($signature->getSignature())
         );
     }
@@ -230,7 +180,7 @@ final class JWS implements JWTInterface
 
         $data = [];
         $values = [
-            'payload' => $this->getEncodedPayload($signature),
+            'payload' => $this->getEncodedPayload(),
             'protected' => $signature->getEncodedProtectedHeaders(),
             'header' => $signature->getHeaders(),
         ];
@@ -258,7 +208,7 @@ final class JWS implements JWTInterface
         $this->checkPayloadEncoding();
 
         if (false === $this->isPayloadDetached()) {
-            $data['payload'] = $this->getEncodedPayload($this->getSignature(0));
+            $data['payload'] = $this->getEncodedPayload();
         }
 
         $data['signatures'] = [];
@@ -299,7 +249,7 @@ final class JWS implements JWTInterface
             }
             if (false === $this->isPayloadDetached()) {
                 if ($is_encoded !== $this->isPayloadEncoded($signature)) {
-                    throw new \LogicException('Foreign payload encoding detected. The JWS cannot be converted.');
+                    throw new \LogicException('Foreign payload encoding detected.');
                 }
             }
         }

@@ -35,8 +35,8 @@ final class JWSTest extends AbstractSignatureTest
             'sub' => 'My friend',
         ];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($claims))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($claims), json_encode($claims))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
 
         self::assertEquals(json_encode($claims), $jws->getPayload());
         self::assertEquals(1, $jws->countSignatures());
@@ -60,7 +60,7 @@ final class JWSTest extends AbstractSignatureTest
             'aud' => 'You',
             'sub' => 'My friend',
         ];
-        JWS::create(json_encode($claims))->toCompactJSON(0);
+        JWS::create(json_encode($claims), json_encode($claims))->toCompactJSON(0);
     }
 
     /**
@@ -77,7 +77,7 @@ final class JWSTest extends AbstractSignatureTest
             'aud' => 'You',
             'sub' => 'My friend',
         ];
-        JWS::create(json_encode($claims))->toFlattenedJSON(0);
+        JWS::create(json_encode($claims), json_encode($claims))->toFlattenedJSON(0);
     }
 
     /**
@@ -94,7 +94,7 @@ final class JWSTest extends AbstractSignatureTest
             'aud' => 'You',
             'sub' => 'My friend',
         ];
-        JWS::create(json_encode($claims))->toJSON();
+        JWS::create(json_encode($claims), json_encode($claims))->toJSON();
     }
 
     /**
@@ -112,8 +112,8 @@ final class JWSTest extends AbstractSignatureTest
             'sub' => 'My friend',
         ];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($claims))
-            ->addSignature('', Base64Url::encode(json_encode($headers)), ['foo' => 'bar']);
+        $jws = JWS::create(json_encode($claims), json_encode($claims))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)), ['foo' => 'bar']);
 
         $jws->toCompactJSON(0);
     }
@@ -133,8 +133,8 @@ final class JWSTest extends AbstractSignatureTest
             'sub' => 'My friend',
         ];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($claims))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($claims), json_encode($claims))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
         $jws->getSignature(0)->getHeader('foo');
     }
 
@@ -153,8 +153,8 @@ final class JWSTest extends AbstractSignatureTest
             'sub' => 'My friend',
         ];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($claims))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($claims), json_encode($claims))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
         $jws->getSignature(0)->getProtectedHeader('foo');
     }
 }

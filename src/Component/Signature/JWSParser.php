@@ -31,18 +31,45 @@ final class JWSParser
     public static function parse(string $input): JWS
     {
         $json = JWSConverter::convert($input);
+        $isPayloadEncoded = null;
 
-        $jws = JWS::create();
-
+        if (array_key_exists('payload', $json)) {
+            $rawPayload = $json['payload'];
+        } else {
+            $rawPayload = null;
+        }
+        $signatures = [];
         foreach ($json['signatures'] as $signature) {
-            $bin_signature = Base64Url::decode($signature['signature']);
-            $protected_headers = self::getProtectedHeaders($signature);
-            $headers = self::getHeaders($signature);
-
-            $jws = $jws->addSignature($bin_signature, $protected_headers, $headers);
+            $encodedProtectedHeaders = self::getProtectedHeaders($signature);
+            $protectedHeaders = null !== $encodedProtectedHeaders ? json_decode(Base64Url::decode($encodedProtectedHeaders), true) : [];
+            $signatures[] = [
+                'signature' => Base64Url::decode($signature['signature']),
+                'protected' => $protectedHeaders,
+                'encoded_protected' => $encodedProtectedHeaders,
+                'header' => self::getHeaders($signature),
+            ];
+            if (null === $isPayloadEncoded) {
+                $isPayloadEncoded = self::isPayloadEncoded($protectedHeaders);
+            }
+            if (self::isPayloadEncoded($protectedHeaders) !== $isPayloadEncoded) {
+                throw new \InvalidArgumentException('Foreign payload encoding detected.');
+            }
         }
 
-        self::populatePayload($jws, $json);
+        if (null === $rawPayload) {
+            $payload = null;
+        } else {
+            $payload = false === $isPayloadEncoded ? $rawPayload : Base64Url::decode($rawPayload);
+        }
+        $jws = JWS::create($payload, $rawPayload);
+        foreach ($signatures as $signature) {
+            $jws = $jws->addSignature(
+                $signature['signature'],
+                $signature['protected'],
+                $signature['encoded_protected'],
+                $signature['header']
+            );
+        }
 
         return $jws;
     }
@@ -76,40 +103,12 @@ final class JWSParser
     }
 
     /**
-     * @param JWS   $jws
-     * @param array $data
-     */
-    private static function populatePayload(JWS &$jws, array $data)
-    {
-        if (array_key_exists('payload', $data)) {
-            $isPayloadEncoded = null;
-            foreach ($jws->getSignatures() as $signature) {
-                if (null === $isPayloadEncoded) {
-                    $isPayloadEncoded = self::isPayloadEncoded($signature);
-                }
-                if (self::isPayloadEncoded($signature) !== $isPayloadEncoded) {
-                    throw new \InvalidArgumentException('Foreign payload encoding detected. The JWS cannot be loaded.');
-                }
-            }
-            $payload = $data['payload'];
-            $jws = $jws->withAttachedPayload();
-            $jws = $jws->withEncodedPayload($payload);
-            if (false !== $isPayloadEncoded) {
-                $payload = Base64Url::decode($payload);
-            }
-            $jws = $jws->withPayload($payload);
-        } else {
-            $jws = $jws->withDetachedPayload();
-        }
-    }
-
-    /**
-     * @param Signature $signature
+     * @param array $protectedHeaders
      *
      * @return bool
      */
-    private static function isPayloadEncoded(Signature $signature): bool
+    private static function isPayloadEncoded(array $protectedHeaders): bool
     {
-        return !$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
+        return !array_key_exists('b64', $protectedHeaders) || true === $protectedHeaders['b64'];
     }
 }

@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature;
 
-use Base64Url\Base64Url;
-
+/**
+ * Class Signature.
+ */
 final class Signature
 {
     /**
@@ -28,6 +29,24 @@ final class Signature
     private $protectedHeaders = [];
 
     /**
+     * Signature constructor.
+     *
+     * @param string      $signature
+     * @param array       $protectedHeaders
+     * @param null|string $encodedProtectedHeaders
+     * @param array       $headers
+     */
+    private function __construct(string $signature, array $protectedHeaders, ?string $encodedProtectedHeaders, array $headers)
+    {
+        if (null !== $encodedProtectedHeaders) {
+            $this->protectedHeaders = $protectedHeaders;
+        }
+        $this->encodedProtectedHeaders = $encodedProtectedHeaders;
+        $this->signature = $signature;
+        $this->headers = $headers;
+    }
+
+    /**
      * @var array
      */
     private $headers = [];
@@ -38,36 +57,16 @@ final class Signature
     private $signature;
 
     /**
-     * Signature constructor.
-     *
      * @param string      $signature
-     * @param null|string $encodedProtectedHeaders
-     * @param array       $headers
-     */
-    private function __construct(string $signature, ?string $encodedProtectedHeaders, array $headers)
-    {
-        if (null !== $encodedProtectedHeaders) {
-            $protected_headers = json_decode(Base64Url::decode($encodedProtectedHeaders), true);
-            if (!is_array($protected_headers)) {
-                throw new \InvalidArgumentException('Unable to decode the protected headers.');
-            }
-            $this->protectedHeaders = $protected_headers;
-        }
-        $this->encodedProtectedHeaders = $encodedProtectedHeaders;
-        $this->signature = $signature;
-        $this->headers = $headers;
-    }
-
-    /**
-     * @param string      $signature
+     * @param array       $protectedHeaders
      * @param string|null $encodedProtectedHeaders
      * @param array       $headers
      *
      * @return Signature
      */
-    public static function create(string $signature, ?string $encodedProtectedHeaders, array $headers = []): Signature
+    public static function create(string $signature, array $protectedHeaders, ?string $encodedProtectedHeaders, array $headers = []): Signature
     {
-        return new self($signature, $encodedProtectedHeaders, $headers);
+        return new self($signature, $protectedHeaders, $encodedProtectedHeaders, $headers);
     }
 
     /**

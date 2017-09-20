@@ -176,7 +176,7 @@ final class Point
     private static function cswapGMP(\GMP &$sa, \GMP &$sb, int $cond)
     {
         $size = max(mb_strlen(gmp_strval($sa, 2), '8bit'), mb_strlen(gmp_strval($sb, 2), '8bit'));
-        $mask = 1 - intval($cond);
+        $mask = strval(1 - intval($cond));
         $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
         $mask = gmp_init($mask, 2);
         $taA = Math::bitwiseAnd($sa, $mask);

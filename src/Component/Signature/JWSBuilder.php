@@ -19,6 +19,9 @@ use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\KeyChecker;
 
+/**
+ * Class JWSBuilder.
+ */
 final class JWSBuilder
 {
     /**
@@ -45,6 +48,11 @@ final class JWSBuilder
      * @var AlgorithmManager
      */
     private $signatureAlgorithmManager;
+
+    /**
+     * @var null|bool
+     */
+    private $isPayloadEncoded = null;
 
     /**
      * JWSBuilder constructor.
@@ -94,6 +102,14 @@ final class JWSBuilder
      */
     public function addSignature(JWK $signatureKey, array $protectedHeaders, array $headers = []): JWSBuilder
     {
+
+        $this->checkB64AndCriticalHeader($protectedHeaders);
+        $isPayloadEncoded = $this->checkIfPayloadIsEncoded($protectedHeaders);
+        if (null === $this->isPayloadEncoded) {
+            $this->isPayloadEncoded = $isPayloadEncoded;
+        } elseif ($this->isPayloadEncoded !== $isPayloadEncoded) {
+            throw new \InvalidArgumentException('Foreign payload encoding detected.');
+        }
         $this->checkDuplicatedHeaderParameters($protectedHeaders, $headers);
         KeyChecker::checkKeyUsage($signatureKey, 'signature');
         $signatureAlgorithm = $this->findSignatureAlgorithm($signatureKey, $protectedHeaders, $headers);
@@ -120,7 +136,9 @@ final class JWSBuilder
         if (0 === count($this->signatures)) {
             throw new \RuntimeException('At least one signature must be set.');
         }
-        $jws = JWS::create($this->payload, $this->isPayloadDetached);
+
+        $encodedPayload = false === $this->isPayloadEncoded ? $this->payload : Base64Url::encode($this->payload);
+        $jws = JWS::create($this->payload, $encodedPayload, $this->isPayloadDetached);
         foreach ($this->signatures as $signature) {
             /** @var SignatureAlgorithmInterface $signatureAlgorithm */
             $signatureAlgorithm = $signature['signature_algorithm'];
@@ -131,31 +149,22 @@ final class JWSBuilder
             /** @var array $headers */
             $headers = $signature['headers'];
             $encodedProtectedHeaders = empty($protectedHeaders) ? null : Base64Url::encode($this->jsonConverter->encode($protectedHeaders));
-            $input = $this->getInputToSign($protectedHeaders, $encodedProtectedHeaders);
-
+            $input = sprintf('%s.%s', $encodedProtectedHeaders, $encodedPayload);
             $s = $signatureAlgorithm->sign($signatureKey, $input);
-            $jws = $jws->addSignature($s, $encodedProtectedHeaders, $headers);
+            $jws = $jws->addSignature($s, $protectedHeaders, $encodedProtectedHeaders, $headers);
         }
 
         return $jws;
     }
 
     /**
-     * @param array  $protectedHeaders
-     * @param string $encodedProtectedHeaders
+     * @param array $protectedHeaders
      *
-     * @return string
+     * @return bool
      */
-    private function getInputToSign(array $protectedHeaders, ?string $encodedProtectedHeaders): string
+    private function checkIfPayloadIsEncoded(array $protectedHeaders): bool
     {
-        $this->checkB64AndCriticalHeader($protectedHeaders);
-        if (!array_key_exists('b64', $protectedHeaders) || (array_key_exists('b64', $protectedHeaders) && true === $protectedHeaders['b64'])) {
-            $encodedPayload = Base64Url::encode($this->payload);
-
-            return sprintf('%s.%s', $encodedProtectedHeaders, $encodedPayload);
-        }
-
-        return sprintf('%s.%s', $encodedProtectedHeaders, $this->payload);
+        return !array_key_exists('b64', $protectedHeaders) || true === $protectedHeaders['b64'];
     }
 
     /**

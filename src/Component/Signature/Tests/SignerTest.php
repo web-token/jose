@@ -422,7 +422,9 @@ final class SignerTest extends AbstractSignatureTest
             'crit' => ['b64'],
         ];
         $protectedHeader2 = [
-            'alg' => 'HS256',
+            'alg' => 'HS512',
+            'b64' => false,
+            'crit' => ['b64'],
         ];
 
         $key = JWK::create([
@@ -430,15 +432,15 @@ final class SignerTest extends AbstractSignatureTest
             'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
         ]);
 
-        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], ['b64']);
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256', 'HS512']);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256', 'HS512'], ['b64']);
         $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader1)
             ->addSignature($key, $protectedHeader2)
             ->build();
 
-        $expected_result = '{"signatures":[{"signature":"A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY","protected":"eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19"},{"signature":"5mvfOroL-g7HyqJoozehmsaqmvTYGEq5jTI1gVvoEoQ","protected":"eyJhbGciOiJIUzI1NiJ9"}]}';
+        $expected_result = '{"signatures":[{"signature":"A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY","protected":"eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19"},{"signature":"Mp-m-Vyst0zYCNkpg2RiIN8W9GO4nLU3FKsFtHzEcP4tgR4QcMys1_2m9HrDwszi0Cp2gv_Lioe6UPCcTNn6tQ","protected":"eyJhbGciOiJIUzUxMiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19"}]}';
 
         self::assertEquals($expected_result, $jws->toJSON());
 
@@ -453,7 +455,7 @@ final class SignerTest extends AbstractSignatureTest
      * The library is able to support multiple payload encoding and conversion in JSON is not available if payload is not detached.
      *
      * @expectedException \LogicException
-     * @expectedExceptionMessage  Foreign payload encoding detected. The JWS cannot be converted.
+     * @expectedExceptionMessage  Foreign payload encoding detected.
      */
     public function testCompactJSONWithUnencodedPayloadAndMultipleSignatures()
     {

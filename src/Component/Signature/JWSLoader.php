@@ -140,8 +140,8 @@ final class JWSLoader
     {
         $encodedProtectedHeaders = $signature->getEncodedProtectedHeaders();
         if (!$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64')) {
-            if (null !== $jws->getEncodedPayload($signature)) {
-                return sprintf('%s.%s', $encodedProtectedHeaders, $jws->getEncodedPayload($signature));
+            if (null !== $jws->getEncodedPayload()) {
+                return sprintf('%s.%s', $encodedProtectedHeaders, $jws->getEncodedPayload());
             }
 
             $payload = empty($jws->getPayload()) ? $detachedPayload : $jws->getPayload();

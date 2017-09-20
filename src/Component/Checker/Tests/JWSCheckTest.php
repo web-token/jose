@@ -44,9 +44,10 @@ final class JWSCheckTest extends TestCase
         $payload = ['exp' => time() + 1000];
         $protected = ['alg' => 'none'];
         $unprotected = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($payload))
+        $jws = JWS::create(json_encode($payload), json_encode($payload))
             ->addSignature(
                 '',
+                $protected,
                 Base64Url::encode(json_encode($protected)),
                 $unprotected
             );
@@ -63,8 +64,8 @@ final class JWSCheckTest extends TestCase
     {
         $payload = ['exp' => time() - 1];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($payload))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($payload), json_encode($payload))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
 
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
@@ -78,8 +79,8 @@ final class JWSCheckTest extends TestCase
     {
         $payload = ['iat' => time() + 100];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($payload))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($payload), json_encode($payload))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
     }
@@ -92,8 +93,8 @@ final class JWSCheckTest extends TestCase
     {
         $payload = ['nbf' => time() + 100];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($payload))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($payload), json_encode($payload))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
 
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
@@ -107,8 +108,8 @@ final class JWSCheckTest extends TestCase
     {
         $payload = ['aud' => 'Other Service'];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($payload))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($payload), json_encode($payload))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
 
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
@@ -122,8 +123,8 @@ final class JWSCheckTest extends TestCase
     {
         $payload = ['aud' => ['Other Service']];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($payload))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($payload), json_encode($payload))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
 
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
@@ -137,8 +138,8 @@ final class JWSCheckTest extends TestCase
     {
         $payload = [];
         $headers = ['alg' => 'none', 'crit' => ['iss']];
-        $jws = JWS::create(json_encode($payload))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($payload), json_encode($payload))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
 
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
@@ -152,8 +153,8 @@ final class JWSCheckTest extends TestCase
     {
         $payload = ['iss' => 'foo'];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($payload))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($payload), json_encode($payload))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
 
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
@@ -167,8 +168,8 @@ final class JWSCheckTest extends TestCase
     {
         $payload = ['sub' => 'foo'];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($payload))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($payload), json_encode($payload))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
 
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
@@ -182,8 +183,8 @@ final class JWSCheckTest extends TestCase
     {
         $payload = ['jti' => 'bad jti'];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($payload))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($payload), json_encode($payload))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
 
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
@@ -193,8 +194,8 @@ final class JWSCheckTest extends TestCase
     {
         $payload = ['jti' => 'JTI1', 'exp' => time() + 3600, 'iat' => time() - 100, 'nbf' => time() - 100, 'iss' => 'ISS1', 'sub' => 'SUB1', 'aud' => ['My Service']];
         $headers = ['alg' => 'none', 'jti' => 'JTI1', 'exp' => time() + 3600, 'crit' => ['exp', 'jti']];
-        $jws = JWS::create(json_encode($payload))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($payload), json_encode($payload))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
 
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
@@ -205,8 +206,8 @@ final class JWSCheckTest extends TestCase
     {
         $payload = ['foo' => 'bar'];
         $headers = ['alg' => 'none'];
-        $jws = JWS::create(json_encode($payload))
-            ->addSignature('', Base64Url::encode(json_encode($headers)));
+        $jws = JWS::create(json_encode($payload), json_encode($payload))
+            ->addSignature('', $headers, Base64Url::encode(json_encode($headers)));
 
         $this->getClaimCheckerManager()->check($jws);
         $this->getHeaderCheckerManager()->check($jws, 0);
