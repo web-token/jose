@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Performance\JWS;
 
-use Base64Url\Base64Url;
 use Jose\Component\Checker\ExpirationTimeChecker;
 use Jose\Component\Checker\HeaderCheckerManager;
 use Jose\Component\Checker\IssuedAtChecker;
@@ -104,22 +103,6 @@ abstract class SignatureBench
         $jwsLoader = new JWSLoader($this->signatureAlgorithmsManager, $this->headerCherckerManager);
         $jws = $jwsLoader->load($params['input']);
         $jwsLoader->verifyWithKey($jws, $this->getPublicKey());
-    }
-
-    public function benchSignOnly()
-    {
-        $this->getAlgorithm()->sign($this->getPrivateKey(), $this->getInput());
-    }
-
-    /**
-     * @param array $params
-     *
-     * @ParamProviders({"dataVerify"})
-     */
-    public function benchVerifyOnly($params)
-    {
-        $signature = '' === $params['signature'] ? $params['signature'] : Base64Url::decode($params['signature']);
-        $this->getAlgorithm()->verify($this->getPublicKey(), $this->getInput(), $signature);
     }
 
     /**
