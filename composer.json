@@ -30,7 +30,7 @@
         "ext-gmp": "*",
         "ext-mbstring": "*",
         "lib-openssl": "*",
-        "fgrosse/phpasn1": "dev-rename-object-class as 2.0.0",
+        "fgrosse/phpasn1": "^2.0",
         "paragonie/sodium_compat": "^1.1",
         "php-http/httplug": "^1.1",
         "php-http/message-factory": "^1.0",
