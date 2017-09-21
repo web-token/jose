@@ -40,7 +40,8 @@
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "symfony/framework-bundle": "^3.3",
-        "symfony/http-kernel": "^3.3"
+        "symfony/http-kernel": "^3.3",
+        "symfony/var-dumper": "^3.3"
     },
     "require-dev": {
         "ext-curl": "*",
@@ -55,8 +56,7 @@
         "phpbench/phpbench": "^0.13.0",
         "phpunit/phpunit": "^6.0",
         "satooshi/php-coveralls": "^1.0",
-        "symfony/finder": "^3.3",
-        "symfony/var-dumper": "^3.3"
+        "symfony/finder": "^3.3"
     },
    "suggest":{
         "bjeavons/zxcvbn-php": "Adds key quality check for oct keys."
