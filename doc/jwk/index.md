@@ -211,9 +211,12 @@ $jwkset = JWKSet::createFromKeys([
 ```
 
 The JWKSet object provided by the framework is immutable. This means that any modification of a key set will create a new key set.
+When you add a new key or remove an existing one, the method will return you a new object.
 
 ```php
 <?php
 
 $new_jwkset = $jwkset->with($jwk4);
 ```
+
+The JWKSet in the variable `$jwkset` is unchanged. The one in the variable `$new_jwkset` contains the new key.
