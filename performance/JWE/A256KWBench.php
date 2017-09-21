@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * The MIT License (MIT)
  *
@@ -14,7 +12,8 @@ declare(strict_types=1);
 namespace Jose\Performance\JWE;
 
 /**
- * @Groups({"JWE", "A256KW"})
+ * @Revs(4096)
+ * @Groups({"JWE", "KW", "A256KW"})
  */
 final class A256KWBench extends EncryptionBench
 {
@@ -25,34 +24,34 @@ final class A256KWBench extends EncryptionBench
     {
         return [
             [
-                    'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A128CBC-HS256'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
+                'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A128CBC-HS256'],
+                'shared_headers' => [],
+                'recipient_headers' => [],
             ],
             [
-                    'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A192CBC-HS384'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
+                'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A192CBC-HS384'],
+                'shared_headers' => [],
+                'recipient_headers' => [],
             ],
             [
-                    'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A256CBC-HS512'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
+                'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A256CBC-HS512'],
+                'shared_headers' => [],
+                'recipient_headers' => [],
             ],
             [
-                    'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A128GCM'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
+                'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A128GCM'],
+                'shared_headers' => [],
+                'recipient_headers' => [],
             ],
             [
-                    'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A192GCM'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
+                'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A192GCM'],
+                'shared_headers' => [],
+                'recipient_headers' => [],
             ],
             [
-                    'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A256GCM'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
+                'shared_protected_headers' => ['alg' => 'A256KW', 'enc' => 'A256GCM'],
+                'shared_headers' => [],
+                'recipient_headers' => [],
             ],
         ];
     }

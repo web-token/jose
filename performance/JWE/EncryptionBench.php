@@ -106,9 +106,10 @@ abstract class EncryptionBench
     /**
      * @param array $params
      *
+     * @Subject()
      * @ParamProviders({"dataPayloads", "dataHeadersAndAlgorithms", "dataRecipientPublicKeys"})
      */
-    public function benchEncryption($params)
+    public function encryption(array $params)
     {
         $jweBuilder = new JWEBuilder(
             $this->jsonConverter,
@@ -129,9 +130,10 @@ abstract class EncryptionBench
     /**
      * @param array $params
      *
+     * @Subject()
      * @ParamProviders({"dataInputs", "dataPrivateKeys"})
      */
-    public function benchDecryption(array $params)
+    public function decryption(array $params)
     {
         $jweLoader = new JWELoader(
             $this->getKeyEncryptionAlgorithmsManager(),

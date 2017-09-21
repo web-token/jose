@@ -13,9 +13,9 @@ namespace Jose\Performance\JWE;
 
 /**
  * @Revs(4096)
- * @Groups({"JWE", "GCMKW", "A256GCMKW"})
+ * @Groups({"JWE", "GCMKW", "A192GCMKW"})
  */
-final class A256GCMKWBench extends EncryptionBench
+final class A192GCMKWBench extends EncryptionBench
 {
     /**
      * @return array
@@ -24,32 +24,32 @@ final class A256GCMKWBench extends EncryptionBench
     {
         return [
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A128CBC-HS256'],
+                'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A128CBC-HS256'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A192CBC-HS384'],
+                'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A192CBC-HS384'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A256CBC-HS512'],
+                'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A256CBC-HS512'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A128GCM'],
+                'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A128GCM'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A192GCM'],
+                'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A192GCM'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A256GCM'],
+                'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A256GCM'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
@@ -70,7 +70,7 @@ final class A256GCMKWBench extends EncryptionBench
     public function dataInputs(): array
     {
         return [
-            ['input' => '{"ciphertext":"mdruX2DotBCFo0eYa0Hb1yOCdv2Dpg6tWBgTWUZ6Y9dLvZ2N-rJRjqgbyV3otZ_fpCurFdY5cX4Nk2G6A4tSw9Ixp5aQDaZgXasR_EhQjjiPSDjcSbQmpz0w8qGYmPX6OhH2G0iKtp2aFjgHK4tHvTl4abu72mqmJgoOTzYCiyin0BujbTB33v1TsM-0uPWdY9LziVkf4z2DV81ehj9iHbj7_cq9ABk","iv":"aeHHwTKalLxq-s_2","tag":"9lF1kYUWyvkXFT-r9hwsoA","aad":"QSxCLEMsRA","protected":"eyJpdiI6IjdHVEJDcXBjQktORnktN20iLCJ0YWciOiJGV29vY1dESDhSb1NfZVVQREQ1UVlBIiwiYWxnIjoiQTI1NkdDTUtXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"3nTasDHjqnzYhjJRwcxpCfs_lnrrT2YUzI8EdnbVI4I"}'],
+            ['input' => '{"ciphertext":"8-zEiA24sXMcmZl33nvu7sdP5gIupkNAcWkg2qE5bfRdReOiocGlYOr0GPj9SjJDEJUCdbMbsn3qx6cFkZaPmV_G5w7dNfX8ALhLVhSkbypW2C2TGGxaEEAnGJgjwBhi-wDd-k1bAU0htRszUi_RsY3sfb5ssDJZQkyslxtubVSTqWkpH0tuotxQxac2mDHrWAp0VYnpGSJSKPy3q3UGlxY812zaEOc","iv":"dCoOw5_olUz_kCjN","tag":"TGiZO1fqeb0pfdTlc5VYJQ","aad":"QSxCLEMsRA","protected":"eyJpdiI6IkNST0xGWS1CbVVUSmoxQlIiLCJ0YWciOiJVVTFtdExPcldCeFRaYW5OM2FKZWpBIiwiYWxnIjoiQTE5MkdDTUtXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"Z8_qLErKWsleFJuq1jBXWcJovvHUdhvJfZa9ecDbLJw"}'],
         ];
     }
 
@@ -83,7 +83,7 @@ final class A256GCMKWBench extends EncryptionBench
             [
                 'recipient_keys' => ['keys' => [[
                     'kty' => 'oct',
-                    'k' => 'OgUyABAPIkI-zFg3doqsv_GH-4GTGOu3HGnuG9wdxCo',
+                    'k' => 'KuFiR-n2ngkDNZfBXWS6cCGXrYonVUiH',
                 ]]],
             ],
         ];
@@ -98,7 +98,7 @@ final class A256GCMKWBench extends EncryptionBench
             [
                 'recipient_key' => [
                     'kty' => 'oct',
-                    'k' => 'OgUyABAPIkI-zFg3doqsv_GH-4GTGOu3HGnuG9wdxCo',
+                    'k' => 'KuFiR-n2ngkDNZfBXWS6cCGXrYonVUiH',
                 ],
             ],
         ];

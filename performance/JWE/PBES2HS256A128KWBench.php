@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace Jose\Performance\JWE;
 
 /**
- * @Groups({"JWE", "PBES2HS256A128KW"})
+ * @Revs(1024)
+ * @Groups({"JWE", "PBES2", "PBES2HS256A128KW"})
  */
 final class PBES2HS256A128KWBench extends EncryptionBench
 {

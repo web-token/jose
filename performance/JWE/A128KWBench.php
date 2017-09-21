@@ -13,9 +13,9 @@ namespace Jose\Performance\JWE;
 
 /**
  * @Revs(4096)
- * @Groups({"JWE", "GCMKW", "A256GCMKW"})
+ * @Groups({"JWE", "KW", "A128KW"})
  */
-final class A256GCMKWBench extends EncryptionBench
+final class A128KWBench extends EncryptionBench
 {
     /**
      * @return array
@@ -24,32 +24,32 @@ final class A256GCMKWBench extends EncryptionBench
     {
         return [
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A128CBC-HS256'],
+                'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A128CBC-HS256'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A192CBC-HS384'],
+                'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A192CBC-HS384'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A256CBC-HS512'],
+                'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A256CBC-HS512'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A128GCM'],
+                'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A128GCM'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A192GCM'],
+                'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A192GCM'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A256GCM'],
+                'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A256GCM'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
@@ -70,7 +70,7 @@ final class A256GCMKWBench extends EncryptionBench
     public function dataInputs(): array
     {
         return [
-            ['input' => '{"ciphertext":"mdruX2DotBCFo0eYa0Hb1yOCdv2Dpg6tWBgTWUZ6Y9dLvZ2N-rJRjqgbyV3otZ_fpCurFdY5cX4Nk2G6A4tSw9Ixp5aQDaZgXasR_EhQjjiPSDjcSbQmpz0w8qGYmPX6OhH2G0iKtp2aFjgHK4tHvTl4abu72mqmJgoOTzYCiyin0BujbTB33v1TsM-0uPWdY9LziVkf4z2DV81ehj9iHbj7_cq9ABk","iv":"aeHHwTKalLxq-s_2","tag":"9lF1kYUWyvkXFT-r9hwsoA","aad":"QSxCLEMsRA","protected":"eyJpdiI6IjdHVEJDcXBjQktORnktN20iLCJ0YWciOiJGV29vY1dESDhSb1NfZVVQREQ1UVlBIiwiYWxnIjoiQTI1NkdDTUtXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"3nTasDHjqnzYhjJRwcxpCfs_lnrrT2YUzI8EdnbVI4I"}'],
+            ['input' => '{"ciphertext":"CGRKzNX-H6vQCdP3T_1ftzz6hFMMBWKSysDWPVmTG9TCviDXZh0u8k9WX42PiX-BrdRxxjIw9JMKgq3pxw8kQu4KyHeta4iio8OHr1Qjy24LPGRg9_Dv4Yt2i_ytHV_QbUX1Dg_YPMcca9G4BJA56927fvtGXA0ke0pjmPYceWSdZGxKO4MLLGJCHmi5xceIxhCy7QZnEfQOEv5bR2v_G0UDAi_eQM8","iv":"_PsWB_V0xIxq8ulL","tag":"RkfU2WT1DKGXFLgGZeCTnA","aad":"QSxCLEMsRA","protected":"eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMjU2R0NNIn0","encrypted_key":"BX5Kx_b0rd5qUH0UqJe3h8Tu6bAPHLg-ZMFi7qHnEO7t46orRoW-xQ"}'],
         ];
     }
 
@@ -83,7 +83,7 @@ final class A256GCMKWBench extends EncryptionBench
             [
                 'recipient_keys' => ['keys' => [[
                     'kty' => 'oct',
-                    'k' => 'OgUyABAPIkI-zFg3doqsv_GH-4GTGOu3HGnuG9wdxCo',
+                    'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
                 ]]],
             ],
         ];
@@ -98,7 +98,7 @@ final class A256GCMKWBench extends EncryptionBench
             [
                 'recipient_key' => [
                     'kty' => 'oct',
-                    'k' => 'OgUyABAPIkI-zFg3doqsv_GH-4GTGOu3HGnuG9wdxCo',
+                    'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
                 ],
             ],
         ];

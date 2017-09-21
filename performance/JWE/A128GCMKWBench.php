@@ -13,9 +13,9 @@ namespace Jose\Performance\JWE;
 
 /**
  * @Revs(4096)
- * @Groups({"JWE", "GCMKW", "A256GCMKW"})
+ * @Groups({"JWE", "GCMKW", "A128GCMKW"})
  */
-final class A256GCMKWBench extends EncryptionBench
+final class A128GCMKWBench extends EncryptionBench
 {
     /**
      * @return array
@@ -24,32 +24,32 @@ final class A256GCMKWBench extends EncryptionBench
     {
         return [
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A128CBC-HS256'],
+                'shared_protected_headers' => ['alg' => 'A128GCMKW', 'enc' => 'A128CBC-HS256'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A192CBC-HS384'],
+                'shared_protected_headers' => ['alg' => 'A128GCMKW', 'enc' => 'A192CBC-HS384'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A256CBC-HS512'],
+                'shared_protected_headers' => ['alg' => 'A128GCMKW', 'enc' => 'A256CBC-HS512'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A128GCM'],
+                'shared_protected_headers' => ['alg' => 'A128GCMKW', 'enc' => 'A128GCM'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A192GCM'],
+                'shared_protected_headers' => ['alg' => 'A128GCMKW', 'enc' => 'A192GCM'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
             [
-                'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A256GCM'],
+                'shared_protected_headers' => ['alg' => 'A128GCMKW', 'enc' => 'A256GCM'],
                 'shared_headers' => [],
                 'recipient_headers' => [],
             ],
@@ -70,7 +70,7 @@ final class A256GCMKWBench extends EncryptionBench
     public function dataInputs(): array
     {
         return [
-            ['input' => '{"ciphertext":"mdruX2DotBCFo0eYa0Hb1yOCdv2Dpg6tWBgTWUZ6Y9dLvZ2N-rJRjqgbyV3otZ_fpCurFdY5cX4Nk2G6A4tSw9Ixp5aQDaZgXasR_EhQjjiPSDjcSbQmpz0w8qGYmPX6OhH2G0iKtp2aFjgHK4tHvTl4abu72mqmJgoOTzYCiyin0BujbTB33v1TsM-0uPWdY9LziVkf4z2DV81ehj9iHbj7_cq9ABk","iv":"aeHHwTKalLxq-s_2","tag":"9lF1kYUWyvkXFT-r9hwsoA","aad":"QSxCLEMsRA","protected":"eyJpdiI6IjdHVEJDcXBjQktORnktN20iLCJ0YWciOiJGV29vY1dESDhSb1NfZVVQREQ1UVlBIiwiYWxnIjoiQTI1NkdDTUtXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"3nTasDHjqnzYhjJRwcxpCfs_lnrrT2YUzI8EdnbVI4I"}'],
+            ['input' => '{"ciphertext":"crbOdBQqlc8WJZ9ZTb42xYoy2i5_KBoSOeJSg_6aeG0V1gxfVqe_AIkS9Nv8Vmil785R909ntom9Fo1GPZnt9mv-UfBeON7V1shRYjtOog6KouOvnA0YROvNr32AhE_tVrxzFyFVLRwJE0kfXvG29GhwTxhz2ugCqNZdIPJL5awM5BXosxlSiZRsHRMYSsULvfOTPqb2JkWbT1Z7bgCmm885-U01uaA","iv":"RUYx0bI8ywiHbgOI","tag":"rRPgmpp8UvOOhT_SVOGaIg","aad":"QSxCLEMsRA","protected":"eyJpdiI6Ikd4V1R2ZG96Zk1KZUcxQmMiLCJ0YWciOiJXYlM1Nk93NnUwUl9oZDZJQzZaZU9RIiwiYWxnIjoiQTEyOEdDTUtXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"r3zhEPolUXhQ0kHvg-wyxOYDDilfL4WJWAlfxlwIIm4"}'],
         ];
     }
 
@@ -83,7 +83,7 @@ final class A256GCMKWBench extends EncryptionBench
             [
                 'recipient_keys' => ['keys' => [[
                     'kty' => 'oct',
-                    'k' => 'OgUyABAPIkI-zFg3doqsv_GH-4GTGOu3HGnuG9wdxCo',
+                    'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
                 ]]],
             ],
         ];
@@ -98,7 +98,7 @@ final class A256GCMKWBench extends EncryptionBench
             [
                 'recipient_key' => [
                     'kty' => 'oct',
-                    'k' => 'OgUyABAPIkI-zFg3doqsv_GH-4GTGOu3HGnuG9wdxCo',
+                    'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
                 ],
             ],
         ];

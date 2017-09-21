@@ -26,9 +26,34 @@ final class RSAOAEPBench extends EncryptionBench
     {
         return [
             [
-                    'shared_protected_headers' => ['alg' => 'RSA-OAEP'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
+                'shared_protected_headers' => ['alg' => 'RSA-OAEP', 'enc' => 'A128CBC-HS256'],
+                'shared_headers' => [],
+                'recipient_headers' => [],
+            ],
+            [
+                'shared_protected_headers' => ['alg' => 'RSA-OAEP', 'enc' => 'A192CBC-HS384'],
+                'shared_headers' => [],
+                'recipient_headers' => [],
+            ],
+            [
+                'shared_protected_headers' => ['alg' => 'RSA-OAEP', 'enc' => 'A256CBC-HS512'],
+                'shared_headers' => [],
+                'recipient_headers' => [],
+            ],
+            [
+                'shared_protected_headers' => ['alg' => 'RSA-OAEP', 'enc' => 'A128GCM'],
+                'shared_headers' => [],
+                'recipient_headers' => [],
+            ],
+            [
+                'shared_protected_headers' => ['alg' => 'RSA-OAEP', 'enc' => 'A192GCM'],
+                'shared_headers' => [],
+                'recipient_headers' => [],
+            ],
+            [
+                'shared_protected_headers' => ['alg' => 'RSA-OAEP', 'enc' => 'A256GCM'],
+                'shared_headers' => [],
+                'recipient_headers' => [],
             ],
         ];
     }
