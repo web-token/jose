@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace Jose\Performance\JWE;
 
 /**
- * @Groups({"JWE", "RSA-OAEP-256"})
+ * @Revs(1024)
+ * @Groups({"JWE", "RSAEnc", "RSA-OAEP-256"})
  */
 final class RSAOAEP256Bench extends EncryptionBench
 {
@@ -25,32 +26,7 @@ final class RSAOAEP256Bench extends EncryptionBench
     {
         return [
             [
-                    'shared_protected_headers' => ['alg' => 'RSA-OAEP-256', 'enc' => 'A128CBC-HS256'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
-            ],
-            [
-                    'shared_protected_headers' => ['alg' => 'RSA-OAEP-256', 'enc' => 'A192CBC-HS384'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
-            ],
-            [
-                    'shared_protected_headers' => ['alg' => 'RSA-OAEP-256', 'enc' => 'A256CBC-HS512'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
-            ],
-            [
-                    'shared_protected_headers' => ['alg' => 'RSA-OAEP-256', 'enc' => 'A128GCM'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
-            ],
-            [
-                    'shared_protected_headers' => ['alg' => 'RSA-OAEP-256', 'enc' => 'A192GCM'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
-            ],
-            [
-                    'shared_protected_headers' => ['alg' => 'RSA-OAEP-256', 'enc' => 'A256GCM'],
+                    'shared_protected_headers' => ['alg' => 'RSA-OAEP-256'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
             ],

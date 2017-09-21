@@ -7,11 +7,15 @@
   "reports": {
     "with-params": {
       "extends": "aggregate",
-      "cols": ["benchmark", "groups", "subject", "mean", "params"]
+      "cols": ["subject", "groups", "mean", "params"]
+    },
+    "full": {
+      "extends": "aggregate",
+      "cols": ["subject", "groups", "revs", "best", "mean", "mode", "worst", "params"]
     },
     "simple": {
       "extends": "aggregate",
-      "cols": ["benchmark", "groups", "subject", "mean"]
+      "cols": ["subject", "groups", "mean"]
     }
   },
   "outputs": {

@@ -11,12 +11,15 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\JWE;
+namespace Jose\Performance\JWE\GCMKW;
+
+use Jose\Performance\JWE\EncryptionBench;
 
 /**
- * @Groups({"JWE", "A128KW"})
+ * @Revs(4096)
+ * @Groups({"JWE", "GCMKW", "A256GCMKW", "A128CBCHS256", "A192CBCHS384", "A256CBCHS512"})
  */
-final class A128KWBench extends EncryptionBench
+final class A256GCMKWAndAESCBCBench extends EncryptionBench
 {
     /**
      * @return array
@@ -25,32 +28,17 @@ final class A128KWBench extends EncryptionBench
     {
         return [
             [
-                    'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A128CBC-HS256'],
+                    'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A128CBC-HS256'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
             ],
             [
-                    'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A192CBC-HS384'],
+                    'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A192CBC-HS384'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
             ],
             [
-                    'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A256CBC-HS512'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
-            ],
-            [
-                    'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A128GCM'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
-            ],
-            [
-                    'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A192GCM'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
-            ],
-            [
-                    'shared_protected_headers' => ['alg' => 'A128KW', 'enc' => 'A256GCM'],
+                    'shared_protected_headers' => ['alg' => 'A256GCMKW', 'enc' => 'A256CBC-HS512'],
                     'shared_headers' => [],
                     'recipient_headers' => [],
             ],
@@ -71,7 +59,7 @@ final class A128KWBench extends EncryptionBench
     public function dataInputs(): array
     {
         return [
-            ['input' => '{"ciphertext":"CGRKzNX-H6vQCdP3T_1ftzz6hFMMBWKSysDWPVmTG9TCviDXZh0u8k9WX42PiX-BrdRxxjIw9JMKgq3pxw8kQu4KyHeta4iio8OHr1Qjy24LPGRg9_Dv4Yt2i_ytHV_QbUX1Dg_YPMcca9G4BJA56927fvtGXA0ke0pjmPYceWSdZGxKO4MLLGJCHmi5xceIxhCy7QZnEfQOEv5bR2v_G0UDAi_eQM8","iv":"_PsWB_V0xIxq8ulL","tag":"RkfU2WT1DKGXFLgGZeCTnA","aad":"QSxCLEMsRA","protected":"eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMjU2R0NNIn0","encrypted_key":"BX5Kx_b0rd5qUH0UqJe3h8Tu6bAPHLg-ZMFi7qHnEO7t46orRoW-xQ"}'],
+            ['input' => '{"ciphertext":"K0S43PsiO4oPGguOY3hkEjWV5VMVf_b5uwrIZMV6FfWEpjE549tkRg95teAXCiik5vEp18S1TiBCnzwFt-xt3HpeZrZ6h-3skB8vPe912vY8P18ZMKYL-vKjl74gTN5N3Bw4Mh5BYIFSWOFb1RqQu5Ssc7psTEWHvmBJkyapoS5B2HA0ATD2bvJJ3O1Z0OiD658zb2DC8gIf6fXrY-JfHB7rGgZ2Y6A6m7QrDr48i4Q","iv":"FFx1sqqwbkMtqVP19z2vew","tag":"cwIDKbnXh9CAwYN9Vvnpdw","aad":"QSxCLEMsRA","protected":"eyJpdiI6IjY4dkdib2tBbVhoeFRKT0EiLCJ0YWciOiJ1QjJSYi1vWGZHSDZvNzhCbDhRdmVBIiwiYWxnIjoiQTEyOEdDTUtXIiwiZW5jIjoiQTEyOENCQy1IUzI1NiJ9","encrypted_key":"i0tLidRGQqTsqMd591N0mh8AyjBc9eMp4AjIpqxbHwQ"}'],
         ];
     }
 

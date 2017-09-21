@@ -11,12 +11,15 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Performance\JWE;
+namespace Jose\Performance\JWE\GCMKW;
+
+use Jose\Performance\JWE\EncryptionBench;
 
 /**
- * @Groups({"JWE", "A192GCMKW"})
+ * @Revs(4096)
+ * @Groups({"JWE", "GCMKW", "A192GCMKW", "A128GCM", "A192GCM", "A256GCM"})
  */
-final class A192GCMKWBench extends EncryptionBench
+final class A192GCMKWAndAESGCMBench extends EncryptionBench
 {
     /**
      * @return array
@@ -24,21 +27,6 @@ final class A192GCMKWBench extends EncryptionBench
     public function dataHeadersAndAlgorithms(): array
     {
         return [
-            [
-                    'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A128CBC-HS256'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
-            ],
-            [
-                    'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A192CBC-HS384'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
-            ],
-            [
-                    'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A256CBC-HS512'],
-                    'shared_headers' => [],
-                    'recipient_headers' => [],
-            ],
             [
                     'shared_protected_headers' => ['alg' => 'A192GCMKW', 'enc' => 'A128GCM'],
                     'shared_headers' => [],
@@ -71,7 +59,7 @@ final class A192GCMKWBench extends EncryptionBench
     public function dataInputs(): array
     {
         return [
-            ['input' => '{"ciphertext":"8-zEiA24sXMcmZl33nvu7sdP5gIupkNAcWkg2qE5bfRdReOiocGlYOr0GPj9SjJDEJUCdbMbsn3qx6cFkZaPmV_G5w7dNfX8ALhLVhSkbypW2C2TGGxaEEAnGJgjwBhi-wDd-k1bAU0htRszUi_RsY3sfb5ssDJZQkyslxtubVSTqWkpH0tuotxQxac2mDHrWAp0VYnpGSJSKPy3q3UGlxY812zaEOc","iv":"dCoOw5_olUz_kCjN","tag":"TGiZO1fqeb0pfdTlc5VYJQ","aad":"QSxCLEMsRA","protected":"eyJpdiI6IkNST0xGWS1CbVVUSmoxQlIiLCJ0YWciOiJVVTFtdExPcldCeFRaYW5OM2FKZWpBIiwiYWxnIjoiQTE5MkdDTUtXIiwiZW5jIjoiQTI1NkdDTSJ9","encrypted_key":"Z8_qLErKWsleFJuq1jBXWcJovvHUdhvJfZa9ecDbLJw"}'],
+            ['input' => '{"ciphertext":"HkjX1OX7IhbkYVatuK71Uay5_Mk-NM7i1qj2dAX7ARdznuFtJtxsFU0GZ4Yfm4zHJQRNjbPQyoVqXmJAXaqIa6-sdKokLIyX6vOTM7KOj64A_BxH2nYV5H_0LKONd8tAhwGuMWXAccOM-tFOQd5TY2_THfGCCgM-iEM9hi3GJGxi5GeSNvzmLAU_f4WZ-sm_YJMj_RGC-Y3rE0r7zO4ssqN8kAdQhLk","iv":"ohd0x3pkbNq-Obrg","tag":"WAbMQa28YXhZFrHWzpIHag","aad":"QSxCLEMsRA","protected":"eyJpdiI6IlVmdUVHWDZkeTdiRjdqY28iLCJ0YWciOiJQZ3hlbXpab01hQUwzUzZlMnlTWW9RIiwiYWxnIjoiQTEyOEdDTUtXIiwiZW5jIjoiQTEyOEdDTSJ9","encrypted_key":"JazoFotGXi3JUoiD5PKAFA"}'],
         ];
     }
 
@@ -84,7 +72,7 @@ final class A192GCMKWBench extends EncryptionBench
             [
                 'recipient_keys' => ['keys' => [[
                     'kty' => 'oct',
-                    'k' => 'KuFiR-n2ngkDNZfBXWS6cCGXrYonVUiH',
+                    'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
                 ]]],
             ],
         ];
@@ -99,7 +87,7 @@ final class A192GCMKWBench extends EncryptionBench
             [
                 'recipient_key' => [
                     'kty' => 'oct',
-                    'k' => 'KuFiR-n2ngkDNZfBXWS6cCGXrYonVUiH',
+                    'k' => 'GZy6sIZ6wl9NJOKB-jnmVQ',
                 ],
             ],
         ];
