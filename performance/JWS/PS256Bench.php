@@ -17,7 +17,8 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
- * @Groups({"JWS", "RSA", "PS256"})
+ * @Revs(4096)
+ * @Groups({"JWS", "RSASign", "PS256"})
  */
 final class PS256Bench extends SignatureBench
 {

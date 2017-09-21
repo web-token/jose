@@ -81,9 +81,10 @@ abstract class SignatureBench
     /**
      * @param array $params
      *
+     * @Subject()
      * @ParamProviders({"dataSignature"})
      */
-    public function benchSignature($params)
+    public function sign($params)
     {
         $jwsBuilder = new JWSBuilder($this->jsonConverter, $this->signatureAlgorithmsManager);
         $jwsBuilder
@@ -96,9 +97,10 @@ abstract class SignatureBench
     /**
      * @param array $params
      *
+     * @Subject()
      * @ParamProviders({"dataVerification"})
      */
-    public function benchVerification($params)
+    public function verify($params)
     {
         $jwsLoader = new JWSLoader($this->signatureAlgorithmsManager, $this->headerCherckerManager);
         $jws = $jwsLoader->load($params['input']);

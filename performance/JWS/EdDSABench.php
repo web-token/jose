@@ -17,6 +17,7 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
+ * @Revs(4096)
  * @Groups({"JWS", "EdDSA", "Ed25519"})
  */
 final class EdDSABench extends SignatureBench

@@ -17,6 +17,7 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
+ * @Revs(4096)
  * @Groups({"JWS", "hmac", "HS384"})
  */
 final class HS384Bench extends SignatureBench
