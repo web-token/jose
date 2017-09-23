@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature;
 
-use Base64Url\Base64Url;
 use Jose\Component\Core\JWTInterface;
 
 /**
@@ -144,114 +143,5 @@ final class JWS implements JWTInterface
     public function countSignatures(): int
     {
         return count($this->signatures);
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return string
-     */
-    public function toCompactJSON(int $id): string
-    {
-        $signature = $this->getSignature($id);
-        if (!empty($signature->getHeaders())) {
-            throw new \LogicException('The signature contains unprotected headers and cannot be converted into compact JSON.');
-        }
-        if (!$this->isPayloadEncoded($signature) && !empty($this->getEncodedPayload())) {
-            throw new \LogicException('Unable to convert the JWS with non-encoded payload.');
-        }
-
-        return sprintf(
-            '%s.%s.%s',
-            $signature->getEncodedProtectedHeaders(),
-            $this->getEncodedPayload(),
-            Base64Url::encode($signature->getSignature())
-        );
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return string
-     */
-    public function toFlattenedJSON(int $id): string
-    {
-        $signature = $this->getSignature($id);
-
-        $data = [];
-        $values = [
-            'payload' => $this->getEncodedPayload(),
-            'protected' => $signature->getEncodedProtectedHeaders(),
-            'header' => $signature->getHeaders(),
-        ];
-
-        foreach ($values as $key => $value) {
-            if (!empty($value)) {
-                $data[$key] = $value;
-            }
-        }
-        $data['signature'] = Base64Url::encode($signature->getSignature());
-
-        return json_encode($data);
-    }
-
-    /**
-     * @return string
-     */
-    public function toJSON(): string
-    {
-        if (0 === $this->countSignatures()) {
-            throw new \LogicException('No signature.');
-        }
-
-        $data = [];
-        $this->checkPayloadEncoding();
-
-        if (false === $this->isPayloadDetached()) {
-            $data['payload'] = $this->getEncodedPayload();
-        }
-
-        $data['signatures'] = [];
-        foreach ($this->getSignatures() as $signature) {
-            $tmp = ['signature' => Base64Url::encode($signature->getSignature())];
-            $values = [
-                'protected' => $signature->getEncodedProtectedHeaders(),
-                'header' => $signature->getHeaders(),
-            ];
-
-            foreach ($values as $key => $value) {
-                if (!empty($value)) {
-                    $tmp[$key] = $value;
-                }
-            }
-            $data['signatures'][] = $tmp;
-        }
-
-        return json_encode($data);
-    }
-
-    /**
-     * @param Signature $signature
-     *
-     * @return bool
-     */
-    private function isPayloadEncoded(Signature $signature): bool
-    {
-        return !$signature->hasProtectedHeader('b64') || true === $signature->getProtectedHeader('b64');
-    }
-
-    private function checkPayloadEncoding()
-    {
-        $is_encoded = null;
-        foreach ($this->getSignatures() as $signature) {
-            if (null === $is_encoded) {
-                $is_encoded = $this->isPayloadEncoded($signature);
-            }
-            if (false === $this->isPayloadDetached()) {
-                if ($is_encoded !== $this->isPayloadEncoded($signature)) {
-                    throw new \LogicException('Foreign payload encoding detected.');
-                }
-            }
-        }
     }
 }

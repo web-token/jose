@@ -74,7 +74,7 @@ final class SignerTest extends AbstractSignatureTest
 
         self::assertEquals(2, $jws->countSignatures());
 
-        $loaded = $jwsLoader->load($jws->toJSON());
+        $loaded = $jwsLoader->load($this->getJWSSerializerManager()->serialize('jws_json_general', $jws, 0));
 
         self::assertInstanceOf(JWS::class, $loaded);
         self::assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
@@ -91,8 +91,8 @@ final class SignerTest extends AbstractSignatureTest
             ->build();
 
         self::assertEquals(2, $jws->countSignatures());
-        self::assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
-        self::assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
+        self::assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0));
+        self::assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 1));
     }
 
     /**
@@ -108,8 +108,8 @@ final class SignerTest extends AbstractSignatureTest
             ->build();
 
         self::assertEquals(2, $jws->countSignatures());
-        self::assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
-        self::assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
+        self::assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0));
+        self::assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 1));
     }
 
     /**
@@ -125,8 +125,8 @@ final class SignerTest extends AbstractSignatureTest
             ->build();
 
         self::assertEquals(2, $jws->countSignatures());
-        self::assertEquals('eyJhbGciOiJIUzUxMiJ9..TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
-        self::assertEquals('eyJhbGciOiJSUzUxMiJ9..cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
+        self::assertEquals('eyJhbGciOiJIUzUxMiJ9..TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0));
+        self::assertEquals('eyJhbGciOiJSUzUxMiJ9..cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 1));
     }
 
     public function testCreateCompactJWSUsingFactory()
@@ -139,16 +139,16 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey1(), ['alg' => 'HS512'])
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
             ->build();
-        $jws0 = $jws->toCompactJSON(0);
-        $jws1 = $jws->toCompactJSON(1);
+        $jws0 = $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0);
+        $jws1 = $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 1);
 
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.', true)
             ->addSignature($this->getKey1(), ['alg' => 'HS512'])
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
             ->build();
-        $jws2 = $jws->toCompactJSON(0);
-        $jws3 = $jws->toCompactJSON(1);
+        $jws2 = $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0);
+        $jws3 = $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 1);
 
         self::assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws0);
         self::assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws1);
@@ -178,8 +178,8 @@ final class SignerTest extends AbstractSignatureTest
             ->build();
 
         self::assertEquals(2, $jws->countSignatures());
-        self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJIUzUxMiJ9","signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws->toFlattenedJSON(0));
-        self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJSUzUxMiJ9","signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws->toFlattenedJSON(1));
+        self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJIUzUxMiJ9","signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $this->getJWSSerializerManager()->serialize('jws_json_flattened', $jws, 0));
+        self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJSUzUxMiJ9","signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $this->getJWSSerializerManager()->serialize('jws_json_flattened', $jws, 1));
     }
 
     public function testCreateFlattenedJWSUsingFactory()
@@ -191,16 +191,16 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
             ->addSignature($this->getKey2(), ['alg' => 'RS512'], ['plic' => 'ploc'])
             ->build();
-        $jws0 = $jws->toFlattenedJSON(0);
-        $jws1 = $jws->toFlattenedJSON(1);
+        $jws0 = $this->getJWSSerializerManager()->serialize('jws_json_flattened', $jws, 0);
+        $jws1 = $this->getJWSSerializerManager()->serialize('jws_json_flattened', $jws, 1);
 
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.', true)
             ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
             ->addSignature($this->getKey2(), ['alg' => 'RS512'], ['plic' => 'ploc'])
             ->build();
-        $jws2 = $jws->toFlattenedJSON(0);
-        $jws3 = $jws->toFlattenedJSON(1);
+        $jws2 = $this->getJWSSerializerManager()->serialize('jws_json_flattened', $jws, 0);
+        $jws3 = $this->getJWSSerializerManager()->serialize('jws_json_flattened', $jws, 1);
 
         self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJIUzUxMiJ9","header":{"foo":"bar"},"signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws0);
         self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJSUzUxMiJ9","header":{"plic":"ploc"},"signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws1);
@@ -255,7 +255,7 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
             ->build();
 
-        $loaded = $jwsLoader->load($jws->toFlattenedJSON(0));
+        $loaded = $jwsLoader->load($this->getJWSSerializerManager()->serialize('jws_json_flattened', $jws, 0));
 
         self::assertEquals(1, $loaded->countSignatures());
         self::assertInstanceOf(JWS::class, $loaded);
@@ -272,7 +272,7 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
             ->build();
 
-        $loaded = $jwsLoader->load($jws->toJSON());
+        $loaded = $jwsLoader->load($this->getJWSSerializerManager()->serialize('jws_json_general', $jws, 0));
 
         self::assertEquals(2, $loaded->countSignatures());
         self::assertInstanceOf(JWS::class, $loaded);
@@ -297,7 +297,7 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
             ->build();
 
-        $loaded = $jwsLoader->load($jws->toJSON());
+        $loaded = $jwsLoader->load($this->getJWSSerializerManager()->serialize('jws_json_general', $jws, 0));
 
         self::assertEquals(1, $loaded->countSignatures());
         self::assertInstanceOf(JWS::class, $loaded);
@@ -319,7 +319,7 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
             ->build();
 
-        $loaded = $jwsLoader->load($jws->toJSON());
+        $loaded = $jwsLoader->load($this->getJWSSerializerManager()->serialize('jws_json_general', $jws, 0));
 
         self::assertEquals(1, $loaded->countSignatures());
         self::assertInstanceOf(JWS::class, $loaded);
@@ -372,7 +372,7 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($key, $protectedHeader)
             ->build();
 
-        $jws->toCompactJSON(0);
+        $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0);
     }
 
     /**
@@ -398,8 +398,8 @@ final class SignerTest extends AbstractSignatureTest
         $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader)
-            ->build()
-            ->toCompactJSON(0);
+            ->build();
+        $jws = $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0);
         self::assertEquals('eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY', $jws);
 
         $loaded = $jwsLoader->load($jws);
@@ -442,7 +442,7 @@ final class SignerTest extends AbstractSignatureTest
 
         $expected_result = '{"signatures":[{"signature":"A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY","protected":"eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19"},{"signature":"Mp-m-Vyst0zYCNkpg2RiIN8W9GO4nLU3FKsFtHzEcP4tgR4QcMys1_2m9HrDwszi0Cp2gv_Lioe6UPCcTNn6tQ","protected":"eyJhbGciOiJIUzUxMiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19"}]}';
 
-        self::assertEquals($expected_result, $jws->toJSON());
+        self::assertEquals($expected_result, $this->getJWSSerializerManager()->serialize('jws_json_general', $jws, 0));
 
         $loaded = $jwsLoader->load($expected_result);
         $index1 = $jwsLoader->verifyWithKey($loaded, $key, $payload);
@@ -481,7 +481,7 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($key, $protectedHeader2)
             ->build();
 
-        $jws->toJSON();
+        $this->getJWSSerializerManager()->serialize('jws_json_general', $jws, 0);
     }
 
     /**
@@ -502,11 +502,11 @@ final class SignerTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
-        $jwsBuilder
+        $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader)
-            ->build()
-            ->toCompactJSON(0);
+            ->build();
+        $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0);
     }
 
     /**
@@ -528,11 +528,11 @@ final class SignerTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
-        $jwsBuilder
+        $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader)
-            ->build()
-            ->toCompactJSON(0);
+            ->build();
+        $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0);
     }
 
     /**
@@ -554,11 +554,11 @@ final class SignerTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
-        $jwsBuilder
+        $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader)
-            ->build()
-            ->toCompactJSON(0);
+            ->build();
+        $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0);
     }
 
     /**
@@ -590,8 +590,8 @@ final class SignerTest extends AbstractSignatureTest
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($key, $protectedHeader)
-            ->build()
-            ->toFlattenedJSON(0);
+            ->build();
+        $jws = $this->getJWSSerializerManager()->serialize('jws_json_flattened', $jws, 0);
 
         self::assertEquals($expected_result, json_decode($jws, true));
 
@@ -631,8 +631,8 @@ final class SignerTest extends AbstractSignatureTest
         $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader)
-            ->build()
-            ->toFlattenedJSON(0);
+            ->build();
+        $jws = $this->getJWSSerializerManager()->serialize('jws_json_flattened', $jws, 0);
 
         self::assertEquals($expected_result, json_decode($jws, true));
     }
@@ -666,7 +666,7 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
             ->build();
 
-        $loaded = $jwsLoader->load($jws->toJSON());
+        $loaded = $jwsLoader->load($this->getJWSSerializerManager()->serialize('jws_json_general', $jws, 0));
         self::assertEquals(2, $loaded->countSignatures());
         self::assertInstanceOf(JWS::class, $loaded);
         self::assertEquals($this->getKeyset(), JWKSet::createFromKeyData(json_decode($loaded->getPayload(), true)));
@@ -691,7 +691,7 @@ final class SignerTest extends AbstractSignatureTest
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
             ->build();
 
-        $loaded = $jwsLoader->load($jws->toJSON());
+        $loaded = $jwsLoader->load($this->getJWSSerializerManager()->serialize('jws_json_general', $jws, 0));
         self::assertEquals(2, $loaded->countSignatures());
         self::assertInstanceOf(JWS::class, $loaded);
         self::assertEquals($this->getKeyset(), JWKSet::createFromKeyData(json_decode($loaded->getPayload(), true)));

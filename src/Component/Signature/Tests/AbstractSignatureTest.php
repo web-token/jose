@@ -20,8 +20,15 @@ use Jose\Component\Core\AlgorithmManagerFactory;
 use Jose\Component\Signature\Algorithm;
 use Jose\Component\Signature\JWSBuilderFactory;
 use Jose\Component\Signature\JWSLoaderFactory;
+use Jose\Component\Signature\Serializer\CompactSerializer;
+use Jose\Component\Signature\Serializer\JSONFlattenedSerializer;
+use Jose\Component\Signature\Serializer\JSONGeneralSerializer;
+use Jose\Component\Signature\Serializer\JWSSerializerManager;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class AbstractSignatureTest.
+ */
 abstract class AbstractSignatureTest extends TestCase
 {
     /**
@@ -89,7 +96,8 @@ abstract class AbstractSignatureTest extends TestCase
         if (null === $this->jwsLoaderFactory) {
             $this->jwsLoaderFactory = new JWSLoaderFactory(
                 $this->getAlgorithmManagerFactory(),
-                $this->getHeaderCheckerManagerFactory()
+                $this->getHeaderCheckerManagerFactory(),
+                $this->getJWSSerializerManager()
             );
         }
 
@@ -114,5 +122,26 @@ abstract class AbstractSignatureTest extends TestCase
         }
 
         return $this->headerCheckerManagerFactory;
+    }
+
+    /**
+     * @var null|JWSSerializerManager
+     */
+    private $jwsSerializerManager = null;
+
+    /**
+     * @return JWSSerializerManager
+     */
+    protected function getJWSSerializerManager(): JWSSerializerManager
+    {
+        if (null === $this->jwsSerializerManager) {
+            $this->jwsSerializerManager = JWSSerializerManager::create([
+                new CompactSerializer(),
+                new JSONFlattenedSerializer(),
+                new JSONGeneralSerializer(),
+            ]);
+        }
+
+        return $this->jwsSerializerManager;
     }
 }

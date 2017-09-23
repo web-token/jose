@@ -67,8 +67,9 @@ final class EdDSASignatureTest extends AbstractSignatureTest
         $jws = $jwsBuilder
             ->withPayload($input)
             ->addSignature($key, $header)
-            ->build()
-            ->toCompactJSON(0);
+            ->build();
+
+        $jws = $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0);
 
         self::assertEquals('eyJhbGciOiJFZERTQSJ9.RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc.hgyY0il_MGCjP0JzlnLWG1PPOt7-09PGcvMg3AIbQR6dWbhijcNR4ki4iylGjg5BhVsPt9g7sVvpAr_MuM0KAg', $jws);
 

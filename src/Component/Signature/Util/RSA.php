@@ -243,9 +243,6 @@ final class RSA
      */
     public static function signWithPSS(RSAKey $key, string $message, string $hash): string
     {
-        if (!in_array($hash, ['sha256', 'sha384', 'sha512'])) {
-            throw new \InvalidArgumentException();
-        }
         $em = self::encodeEMSAPSS($message, 8 * $key->getModulusLength() - 1, Hash::$hash());
         $message = BigInteger::createFromBinaryString($em);
         $signature = self::exponentiate($key, $message);
@@ -264,9 +261,6 @@ final class RSA
      */
     public static function signWithPKCS15(RSAKey $key, string $message, string $hash): string
     {
-        if (!in_array($hash, ['sha256', 'sha384', 'sha512'])) {
-            throw new \InvalidArgumentException();
-        }
         $em = self::encodeEMSA15($message, $key->getModulusLength(), Hash::$hash());
         $message = BigInteger::createFromBinaryString($em);
         $signature = self::exponentiate($key, $message);
@@ -307,9 +301,6 @@ final class RSA
      */
     public static function verifyWithPSS(RSAKey $key, string $message, string $signature, string $hash): bool
     {
-        if (!in_array($hash, ['sha256', 'sha384', 'sha512'])) {
-            throw new \InvalidArgumentException();
-        }
         if (mb_strlen($signature, '8bit') !== $key->getModulusLength()) {
             throw new \InvalidArgumentException();
         }
@@ -333,9 +324,6 @@ final class RSA
      */
     public static function verifyWithPKCS15(RSAKey $key, string $message, string $signature, string $hash): bool
     {
-        if (!in_array($hash, ['sha256', 'sha384', 'sha512'])) {
-            throw new \InvalidArgumentException();
-        }
         if (mb_strlen($signature, '8bit') !== $key->getModulusLength()) {
             throw new \InvalidArgumentException();
         }

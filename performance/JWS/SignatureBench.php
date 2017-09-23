@@ -24,6 +24,10 @@ use Jose\Component\Core\JWK;
 use Jose\Component\Signature\Algorithm;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\Serializer\CompactSerializer;
+use Jose\Component\Signature\Serializer\JSONFlattenedSerializer;
+use Jose\Component\Signature\Serializer\JSONGeneralSerializer;
+use Jose\Component\Signature\Serializer\JWSSerializerManager;
 use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
@@ -52,6 +56,11 @@ abstract class SignatureBench
      */
     private $jsonConverter;
 
+    /**
+     * @var JWSSerializerManager
+     */
+    private $serializerManager;
+
     public function init()
     {
         $this->jsonConverter = new StandardJsonConverter();
@@ -76,6 +85,11 @@ abstract class SignatureBench
             new IssuedAtChecker(),
             new NotBeforeChecker(),
         ]);
+        $this->serializerManager = JWSSerializerManager::create([
+            new CompactSerializer(),
+            new JSONFlattenedSerializer(),
+            new JSONGeneralSerializer(),
+        ]);
     }
 
     /**
@@ -90,8 +104,7 @@ abstract class SignatureBench
         $jwsBuilder
             ->withPayload($this->payload)
             ->addSignature($this->getPrivateKey(), ['alg' => $params['algorithm']])
-            ->build()
-            ->toCompactJSON(0);
+            ->build();
     }
 
     /**
@@ -102,7 +115,7 @@ abstract class SignatureBench
      */
     public function verify($params)
     {
-        $jwsLoader = new JWSLoader($this->signatureAlgorithmsManager, $this->headerCherckerManager);
+        $jwsLoader = new JWSLoader($this->signatureAlgorithmsManager, $this->headerCherckerManager, $this->serializerManager);
         $jws = $jwsLoader->load($params['input']);
         $jwsLoader->verifyWithKey($jws, $this->getPublicKey());
     }

@@ -21,12 +21,22 @@ final class Signature
     /**
      * @var null|string
      */
-    private $encodedProtectedHeaders = null;
+    private $encodedProtectedHeaders;
 
     /**
      * @var array
      */
-    private $protectedHeaders = [];
+    private $protectedHeaders;
+
+    /**
+     * @var array
+     */
+    private $headers;
+
+    /**
+     * @var string
+     */
+    private $signature;
 
     /**
      * Signature constructor.
@@ -38,23 +48,11 @@ final class Signature
      */
     private function __construct(string $signature, array $protectedHeaders, ?string $encodedProtectedHeaders, array $headers)
     {
-        if (null !== $encodedProtectedHeaders) {
-            $this->protectedHeaders = $protectedHeaders;
-        }
+        $this->protectedHeaders = null === $encodedProtectedHeaders ? [] : $protectedHeaders;
         $this->encodedProtectedHeaders = $encodedProtectedHeaders;
         $this->signature = $signature;
         $this->headers = $headers;
     }
-
-    /**
-     * @var array
-     */
-    private $headers = [];
-
-    /**
-     * @var string
-     */
-    private $signature;
 
     /**
      * @param string      $signature

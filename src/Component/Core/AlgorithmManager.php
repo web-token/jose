@@ -24,7 +24,7 @@ final class AlgorithmManager
     private $algorithms = [];
 
     /**
-     * JWAManager constructor.
+     * AlgorithmManager constructor.
      *
      * @param AlgorithmInterface[] $algorithms
      */

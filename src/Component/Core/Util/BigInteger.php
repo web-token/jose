@@ -50,7 +50,7 @@ final class BigInteger
      */
     public static function createFromBinaryString(string $value): BigInteger
     {
-        $value = '0x'.bin2hex($value);
+        $value = '0x'.unpack('H*', $value)[1];
         $value = gmp_init($value, 16);
 
         return new self($value);

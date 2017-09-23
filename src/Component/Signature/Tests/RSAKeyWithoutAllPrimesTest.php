@@ -41,8 +41,8 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractSignatureTest
         $jws = $jwsBuilder
             ->withPayload($claims)
             ->addSignature($key, ['alg' => $signature_algorithm])
-            ->build()
-            ->toCompactJSON(0);
+            ->build();
+        $jws = $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0);
 
         $loaded = $jwsLoader->load($jws);
         self::assertInstanceOf(JWS::class, $loaded);

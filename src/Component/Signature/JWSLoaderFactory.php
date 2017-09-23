@@ -15,6 +15,7 @@ namespace Jose\Component\Signature;
 
 use Jose\Component\Checker\HeaderCheckerManagerFactory;
 use Jose\Component\Core\AlgorithmManagerFactory;
+use Jose\Component\Signature\Serializer\JWSSerializerManager;
 
 /**
  * Class JWSLoaderFactory.
@@ -32,15 +33,21 @@ final class JWSLoaderFactory
     private $headerCheckerManagerFactory;
 
     /**
+     * @var JWSSerializerManager
+     */
+    private $serializerManager;
+
+    /**
      * JWSLoaderFactory constructor.
      *
      * @param AlgorithmManagerFactory     $algorithmManagerFactory
      * @param HeaderCheckerManagerFactory $headerCheckerManagerFactory
      */
-    public function __construct(AlgorithmManagerFactory $algorithmManagerFactory, HeaderCheckerManagerFactory $headerCheckerManagerFactory)
+    public function __construct(AlgorithmManagerFactory $algorithmManagerFactory, HeaderCheckerManagerFactory $headerCheckerManagerFactory, JWSSerializerManager $serializerManager)
     {
         $this->algorithmManagerFactory = $algorithmManagerFactory;
         $this->headerCheckerManagerFactory = $headerCheckerManagerFactory;
+        $this->serializerManager = $serializerManager;
     }
 
     /**
@@ -54,6 +61,6 @@ final class JWSLoaderFactory
         $algorithmManager = $this->algorithmManagerFactory->create($algorithms);
         $headerCheckerManager = $this->headerCheckerManagerFactory->create($headerCheckers);
 
-        return new JWSLoader($algorithmManager, $headerCheckerManager);
+        return new JWSLoader($algorithmManager, $headerCheckerManager, $this->serializerManager);
     }
 }

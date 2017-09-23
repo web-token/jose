@@ -19,6 +19,7 @@ use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\Util\KeyChecker;
+use Jose\Component\Signature\Serializer\JWSSerializerManager;
 
 /**
  * Class able to load JWS and verify signatures and headers.
@@ -36,15 +37,21 @@ final class JWSLoader
     private $headerCheckerManager;
 
     /**
+     * @var JWSSerializerManager
+     */
+    private $serializerManager;
+
+    /**
      * JWSLoader constructor.
      *
      * @param AlgorithmManager     $signatureAlgorithmManager
      * @param HeaderCheckerManager $headerCheckerManager
      */
-    public function __construct(AlgorithmManager $signatureAlgorithmManager, HeaderCheckerManager $headerCheckerManager)
+    public function __construct(AlgorithmManager $signatureAlgorithmManager, HeaderCheckerManager $headerCheckerManager, JWSSerializerManager $serializerManager)
     {
         $this->signatureAlgorithmManager = $signatureAlgorithmManager;
         $this->headerCheckerManager = $headerCheckerManager;
+        $this->serializerManager = $serializerManager;
     }
 
     /**
@@ -54,7 +61,7 @@ final class JWSLoader
      */
     public function load(string $input): JWS
     {
-        return JWSParser::parse($input);
+        return $this->serializerManager->unserialize($input);
     }
 
     /**
