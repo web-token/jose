@@ -17,6 +17,7 @@ use Base64Url\Base64Url;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Signature\JWS;
+use Jose\Component\Signature\Serializer\CompactSerializer;
 
 /**
  * @group Signer
@@ -353,7 +354,7 @@ final class SignerTest extends AbstractSignatureTest
      * @expectedException \LogicException
      * @expectedExceptionMessage Unable to convert the JWS with non-encoded payload.
      */
-    public function testCompactJSONWithUnencodedPayload()
+    public function testCompactJSONWithUnencodedPayloadFailsBecauseOfForbiddenCharacters()
     {
         $protectedHeader = [
             'alg' => 'HS256',
@@ -373,6 +374,39 @@ final class SignerTest extends AbstractSignatureTest
             ->build();
 
         $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0);
+    }
+
+    /**
+     * @see https://tools.ietf.org/html/rfc7797#section-4
+     * @see https://tools.ietf.org/html/rfc7797#section-4.2
+     */
+    public function testCompactJSONWithUnencodedPayloadSucceeded()
+    {
+        $protectedHeader = [
+            'alg' => 'HS256',
+            'b64' => false,
+            'crit' => ['b64'],
+        ];
+
+        $key = JWK::create([
+            'kty' => 'oct',
+            'k' => 'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow',
+        ]);
+
+        $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
+        $jws = $jwsBuilder
+            ->withPayload('Live long and Prosper~')
+            ->addSignature($key, $protectedHeader)
+            ->build();
+
+        $compact = $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0);
+        self::assertEquals('eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19.Live long and Prosper~.nUNenbjNAEH2nNIXyQYmutiHRPnT17HcaMr5Lsho4BE', $compact);
+
+        $loaded = $this->getJWSSerializerManager()->unserialize($compact, $serializer);
+        self::assertEquals(CompactSerializer::NAME, $serializer);
+        self::assertEquals('Live long and Prosper~', $loaded->getPayload());
+        self::assertEquals('Live long and Prosper~', $loaded->getEncodedPayload());
+        self::assertEquals($protectedHeader, $loaded->getSignature(0)->getProtectedHeaders());
     }
 
     /**
