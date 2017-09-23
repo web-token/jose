@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Signature\Serializer;
 
-use Base64Url\Base64Url;
-use Jose\Component\Signature\JWS;
-
 /**
  * Class AbstractSerializer.
  */
