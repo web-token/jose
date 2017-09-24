@@ -15,6 +15,9 @@ namespace Jose\Test\TestBundle\Converter;
 
 use Jose\Component\Core\Converter\JsonConverterInterface;
 
+/**
+ * Class CustomJsonConverter.
+ */
 final class CustomJsonConverter implements JsonConverterInterface
 {
     /**

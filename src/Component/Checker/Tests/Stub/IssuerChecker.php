@@ -16,6 +16,9 @@ namespace Jose\Component\Checker\Tests\Stub;
 use Jose\Component\Checker\ClaimCheckerInterface;
 use Jose\Component\Checker\HeaderCheckerInterface;
 
+/**
+ * Class IssuerChecker.
+ */
 final class IssuerChecker implements ClaimCheckerInterface, HeaderCheckerInterface
 {
     private const CLAIM_NAME = 'iss';

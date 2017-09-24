@@ -11,17 +11,18 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Console\Command;
+namespace Jose\Component\Console;
 
+use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\JWKFactory;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class EcKeyGeneratorCommand.
+ * Class EcKeysetGeneratorCommand.
  */
-final class EcKeyGeneratorCommand extends AbstractGeneratorCommand
+final class EcKeysetGeneratorCommand extends AbstractGeneratorCommand
 {
     /**
      * {@inheritdoc}
@@ -30,9 +31,10 @@ final class EcKeyGeneratorCommand extends AbstractGeneratorCommand
     {
         parent::configure();
         $this
-            ->setName('key:generate:ec')
-            ->setDescription('Generate an EC key (JWK format)')
-            ->addArgument('curve', InputArgument::REQUIRED, 'Curve of the key.');
+            ->setName('keyset:generate:ec')
+            ->setDescription('Generate an EC key set (JWKSet format)')
+            ->addArgument('quantity', InputArgument::REQUIRED, 'Quantity of keys in the key set.')
+            ->addArgument('curve', InputArgument::REQUIRED, 'Curve of the keys.');
     }
 
     /**
@@ -40,10 +42,14 @@ final class EcKeyGeneratorCommand extends AbstractGeneratorCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $quantity = (int) $input->getArgument('quantity');
         $curve = $input->getArgument('curve');
         $args = $this->getOptions($input);
 
-        $jwk = JWKFactory::createECKey($curve, $args);
-        $this->prepareJsonOutput($input, $output, $jwk);
+        $keyset = JWKSet::createFromKeys([]);
+        for ($i = 0; $i < $quantity; ++$i) {
+            $keyset = $keyset->with(JWKFactory::createECKey($curve, $args));
+        }
+        $this->prepareJsonOutput($input, $output, $keyset);
     }
 }

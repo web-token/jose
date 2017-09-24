@@ -18,6 +18,9 @@ use Jose\Bundle\Checker\DependencyInjection\Compiler\HeaderCheckerCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Class CheckerBundle.
+ */
 final class CheckerBundle extends Bundle
 {
     /**

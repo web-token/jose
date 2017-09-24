@@ -11,7 +11,7 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Console\Command;
+namespace Jose\Component\Console;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,34 +19,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Humbug\SelfUpdate\Updater;
 
 /**
- * Class UpdateCommand.
+ * Class RollbackCommand.
  */
-final class UpdateCommand extends Command
+final class RollbackCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('selfupdate')
-            ->setDescription('Update the application if needed.')
+            ->setName('rollback')
+            ->setDescription('Rollback current version.')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $updater = new Updater();
-        $updater->setStrategy(Updater::STRATEGY_GITHUB);
-        $updater->getStrategy()->setPackageName('spomky-labs/jose');
-        $updater->getStrategy()->setPharName('jose');
-        $updater->getStrategy()->setCurrentLocalVersion('7.0.0');
 
         try {
-            $result = $updater->update();
-            if ($result) {
-                $new = $updater->getNewVersion();
-                $old = $updater->getOldVersion();
-                $output->write(sprintf('Updated from SHA-1 %s to SHA-1 %s', $old, $new));
+            if (!$updater->rollback()) {
+                $output->write('Failure!');
             } else {
-                $output->write('No update needed!');
+                $output->write('Success!');
             }
         } catch (\Exception $e) {
             $output->write('Well, something happened! Either an oopsie or something involving hackers.');

@@ -16,6 +16,9 @@ namespace Jose\Bundle\JoseFramework\DependencyInjection\Source\JWKSetSource;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * Interface JWKSetSourceInterface.
+ */
 interface JWKSetSourceInterface
 {
     /**

@@ -17,6 +17,9 @@ use Jose\Bundle\JoseFramework\DependencyInjection\Source\SourceInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+/**
+ * Class Configuration.
+ */
 final class Configuration implements ConfigurationInterface
 {
     /**

@@ -18,6 +18,9 @@ use Jose\Bundle\JoseFramework\DependencyInjection\JoseFrameworkExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Class JoseFrameworkBundle.
+ */
 final class JoseFrameworkBundle extends Bundle
 {
     /**

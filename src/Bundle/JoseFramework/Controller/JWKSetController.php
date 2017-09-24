@@ -15,6 +15,9 @@ namespace Jose\Bundle\JoseFramework\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class JWKSetController.
+ */
 final class JWKSetController
 {
     /**

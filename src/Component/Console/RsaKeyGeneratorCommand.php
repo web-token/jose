@@ -11,18 +11,17 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Console\Command;
+namespace Jose\Component\Console;
 
 use Jose\Component\KeyManagement\JWKFactory;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class KeyFileLoaderCommand.
+ * Class RsaKeyGeneratorCommand.
  */
-final class KeyFileLoaderCommand extends AbstractGeneratorCommand
+final class RsaKeyGeneratorCommand extends AbstractGeneratorCommand
 {
     /**
      * {@inheritdoc}
@@ -31,10 +30,9 @@ final class KeyFileLoaderCommand extends AbstractGeneratorCommand
     {
         parent::configure();
         $this
-            ->setName('key:load:key')
-            ->setDescription('Loads a key from a key file (JWK format)')
-            ->addArgument('file', InputArgument::REQUIRED, 'Filename of the key.')
-            ->addOption('secret', 's', InputOption::VALUE_OPTIONAL, 'Secret if the key is encrypted.', null);
+            ->setName('key:generate:rsa')
+            ->setDescription('Generate a RSA key (JWK format)')
+            ->addArgument('size', InputArgument::REQUIRED, 'Key size.');
     }
 
     /**
@@ -42,11 +40,10 @@ final class KeyFileLoaderCommand extends AbstractGeneratorCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $filename = $input->getArgument('file');
-        $password = $input->getOption('secret');
+        $size = (int) $input->getArgument('size');
         $args = $this->getOptions($input);
 
-        $jwk = JWKFactory::createFromKeyFile($filename, $password, $args);
+        $jwk = JWKFactory::createRSAKey($size, $args);
         $this->prepareJsonOutput($input, $output, $jwk);
     }
 }

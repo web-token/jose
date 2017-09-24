@@ -17,6 +17,9 @@ use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
+/**
+ * Class AbstractSource.
+ */
 abstract class AbstractSource
 {
     /**
@@ -27,6 +30,12 @@ abstract class AbstractSource
      */
     abstract protected function createDefinition(ContainerBuilder $container, array $config): Definition;
 
+    /**
+     * @param ContainerBuilder $container
+     * @param string $type
+     * @param string $name
+     * @param array $config
+     */
     public function create(ContainerBuilder $container, string $type, string $name, array $config)
     {
         $service_id = sprintf('jose.%s.%s', $type, $name);

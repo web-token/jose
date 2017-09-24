@@ -11,7 +11,7 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Console\Command;
+namespace Jose\Component\Console;
 
 use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\JWK;

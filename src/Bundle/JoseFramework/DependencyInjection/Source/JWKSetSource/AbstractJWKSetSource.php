@@ -22,6 +22,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * Class AbstractJWKSetSource.
+ */
 abstract class AbstractJWKSetSource extends AbstractSource implements JWKSetSourceInterface
 {
     /**

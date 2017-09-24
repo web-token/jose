@@ -17,6 +17,9 @@ use Jose\Bundle\Console\DependencyInjection\Compiler\KeyAnalyzerCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Class ConsoleBundle.
+ */
 final class ConsoleBundle extends Bundle
 {
     /**

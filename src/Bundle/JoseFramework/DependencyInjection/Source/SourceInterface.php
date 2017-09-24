@@ -16,6 +16,9 @@ namespace Jose\Bundle\JoseFramework\DependencyInjection\Source;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * Interface SourceInterface.
+ */
 interface SourceInterface
 {
     /**

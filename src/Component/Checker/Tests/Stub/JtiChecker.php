@@ -16,6 +16,9 @@ namespace Jose\Component\Checker\Tests\Stub;
 use Jose\Component\Checker\ClaimCheckerInterface;
 use Jose\Component\Checker\HeaderCheckerInterface;
 
+/**
+ * Class JtiChecker.
+ */
 final class JtiChecker implements ClaimCheckerInterface, HeaderCheckerInterface
 {
     private const CLAIM_NAME = 'jti';

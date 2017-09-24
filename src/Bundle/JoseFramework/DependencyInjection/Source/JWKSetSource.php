@@ -19,6 +19,9 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
+/**
+ * Class JWKSetSource.
+ */
 final class JWKSetSource implements SourceInterface
 {
     /**

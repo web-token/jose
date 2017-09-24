@@ -16,6 +16,9 @@ namespace Jose\Test\TestBundle\Service;
 use GuzzleHttp\Psr7\Request;
 use Http\Message\RequestFactory as Psr7RequestFactory;
 
+/**
+ * Class RequestFactory.
+ */
 final class RequestFactory implements Psr7RequestFactory
 {
     /**

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Console\Command;
+namespace Jose\Component\Console;
 
 use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\JWKFactory;
@@ -20,9 +20,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class OctKeysetGeneratorCommand.
+ * Class RsaKeysetGeneratorCommand.
  */
-final class OctKeysetGeneratorCommand extends AbstractGeneratorCommand
+final class RsaKeysetGeneratorCommand extends AbstractGeneratorCommand
 {
     /**
      * {@inheritdoc}
@@ -31,10 +31,10 @@ final class OctKeysetGeneratorCommand extends AbstractGeneratorCommand
     {
         parent::configure();
         $this
-            ->setName('keyset:generate:oct')
-            ->setDescription('Generate a key set with octet keys (JWK format)')
-            ->addArgument('quantity', InputArgument::REQUIRED, 'Quantity of keys in the key set.')
-            ->addArgument('size', InputArgument::REQUIRED, 'Key size.');
+            ->setName('keyset:generate:rsa')
+            ->setDescription('Generate a key set with RSA keys (JWK format)')
+            ->addArgument('size', InputArgument::REQUIRED, 'Quantity of keys in the key set.')
+            ->addArgument('curve', InputArgument::REQUIRED, 'Key size.');
     }
 
     /**
@@ -48,7 +48,7 @@ final class OctKeysetGeneratorCommand extends AbstractGeneratorCommand
 
         $keyset = JWKSet::createFromKeys([]);
         for ($i = 0; $i < $quantity; ++$i) {
-            $keyset = $keyset->with(JWKFactory::createOctKey($size, $args));
+            $keyset = $keyset->with(JWKFactory::createRSAKey($size, $args));
         }
         $this->prepareJsonOutput($input, $output, $keyset);
     }

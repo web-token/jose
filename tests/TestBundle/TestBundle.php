@@ -15,6 +15,9 @@ namespace Jose\Test\TestBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Class TestBundle.
+ */
 final class TestBundle extends Bundle
 {
 }
