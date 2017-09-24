@@ -69,7 +69,7 @@ final class NoneSignatureTest extends AbstractSignatureTest
             ->build();
 
         self::assertEquals(1, $jws->countSignatures());
-;
+
         $compact = $this->getJWSSerializerManager()->serialize('jws_compact', $jws, 0);
         self::assertTrue(is_string($compact));
 

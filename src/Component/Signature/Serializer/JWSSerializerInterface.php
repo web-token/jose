@@ -21,7 +21,7 @@ use Jose\Component\Signature\JWS;
 interface JWSSerializerInterface
 {
     /**
-     * The name of the serialization
+     * The name of the serialization.
      *
      * @return string
      */
