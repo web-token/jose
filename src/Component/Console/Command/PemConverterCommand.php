@@ -55,7 +55,7 @@ final class PemConverterCommand extends AbstractObjectOutputCommand
 
                 break;
             case 'EC':
-                $pem = ECKey::createFromJWK($key)->toPEM();
+                $pem = ECKey::convertToPEM($key);
 
                 break;
             default:

@@ -64,7 +64,7 @@ final class MultipleSignaturesTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256', 'ES512', 'HS256']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256', 'ES512', 'HS256'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256', 'ES512', 'HS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($ecdsa_private_key, [], ['alg' => 'ES512', 'kid' => 'bilbo.baggins@hobbiton.example']) //@see https://tools.ietf.org/html/rfc7520#section-4.8.2

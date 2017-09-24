@@ -20,10 +20,7 @@ use Jose\Component\Core\AlgorithmManagerFactory;
 use Jose\Component\Signature\Algorithm;
 use Jose\Component\Signature\JWSBuilderFactory;
 use Jose\Component\Signature\JWSLoaderFactory;
-use Jose\Component\Signature\Serializer\CompactSerializer;
-use Jose\Component\Signature\Serializer\JSONFlattenedSerializer;
-use Jose\Component\Signature\Serializer\JSONGeneralSerializer;
-use Jose\Component\Signature\Serializer\JWSSerializerManager;
+use Jose\Component\Signature\Serializer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -97,7 +94,7 @@ abstract class AbstractSignatureTest extends TestCase
             $this->jwsLoaderFactory = new JWSLoaderFactory(
                 $this->getAlgorithmManagerFactory(),
                 $this->getHeaderCheckerManagerFactory(),
-                $this->getJWSSerializerManager()
+                $this->getJWSSerializerManagerFactory()
             );
         }
 
@@ -125,20 +122,40 @@ abstract class AbstractSignatureTest extends TestCase
     }
 
     /**
-     * @var null|JWSSerializerManager
+     * @var null|Serializer\JWSSerializerManagerFactory
+     */
+    private $jwsSerializerManagerFactory = null;
+
+    /**
+     * @return Serializer\JWSSerializerManagerFactory
+     */
+    protected function getJWSSerializerManagerFactory(): Serializer\JWSSerializerManagerFactory
+    {
+        if (null === $this->jwsSerializerManagerFactory) {
+            $this->jwsSerializerManagerFactory = new Serializer\JWSSerializerManagerFactory();
+            $this->jwsSerializerManagerFactory->add(new Serializer\CompactSerializer());
+            $this->jwsSerializerManagerFactory->add(new Serializer\JSONFlattenedSerializer());
+            $this->jwsSerializerManagerFactory->add(new Serializer\JSONGeneralSerializer());
+        }
+
+        return $this->jwsSerializerManagerFactory;
+    }
+
+    /**
+     * @var null|Serializer\JWSSerializerManager
      */
     private $jwsSerializerManager = null;
 
     /**
-     * @return JWSSerializerManager
+     * @return Serializer\JWSSerializerManager
      */
-    protected function getJWSSerializerManager(): JWSSerializerManager
+    protected function getJWSSerializerManager(): Serializer\JWSSerializerManager
     {
         if (null === $this->jwsSerializerManager) {
-            $this->jwsSerializerManager = JWSSerializerManager::create([
-                new CompactSerializer(),
-                new JSONFlattenedSerializer(),
-                new JSONGeneralSerializer(),
+            $this->jwsSerializerManager = Serializer\JWSSerializerManager::create([
+                new Serializer\CompactSerializer(),
+                new Serializer\JSONFlattenedSerializer(),
+                new Serializer\JSONGeneralSerializer(),
             ]);
         }
 

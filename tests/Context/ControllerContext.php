@@ -17,6 +17,9 @@ use Assert\Assertion;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 
+/**
+ * Class ControllerContext.
+ */
 final class ControllerContext extends MinkContext
 {
     use KernelDictionary;

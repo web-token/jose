@@ -37,7 +37,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractSignatureTest
         $claims = ['foo' => 'bar'];
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create([$signature_algorithm]);
-        $jwsLoader = $this->getJWSLoaderFactory()->create([$signature_algorithm], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create([$signature_algorithm], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload($claims)
             ->addSignature($key, ['alg' => $signature_algorithm])

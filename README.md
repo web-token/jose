@@ -153,7 +153,9 @@ composer require spomky-labs/jose
 
 # Performances
 
-Please read the [performance page](doc/benchmark.md) to know how fast are the algorithms supported by this framework.
+Please read the [performance page](doc/benchmarks/index.md) to know how to test the algorithms of the framework.
+
+You can also see the [last benchmarks](doc/benchmarks/results.md) made in our development environment.
 
 **The use of the Algorithm `ECDH-ES` with curves `P-256`, `P-384` or `P-521` is not recommended**.
 

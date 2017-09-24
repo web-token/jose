@@ -18,6 +18,9 @@ use Behat\Symfony2Extension\Context\KernelDictionary;
 use Jose\Component\Encryption\Compression\CompressionMethodManager;
 use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
 
+/**
+ * Class CompressionContext.
+ */
 final class CompressionContext implements Context
 {
     use KernelDictionary;

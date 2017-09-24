@@ -41,7 +41,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature(
@@ -81,7 +81,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.', true)
             ->addSignature(
@@ -121,7 +121,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS384']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS384'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS384'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature(
@@ -161,7 +161,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS512']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS512'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature(
@@ -203,7 +203,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['PS256']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['PS256'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['PS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature(
@@ -242,7 +242,7 @@ final class RSASignatureTest extends AbstractSignatureTest
                 'qi' => 'BocuCOEOq-oyLDALwzMXU8gOf3IL1Q1_BWwsdoANoh6i179psxgE4JXToWcpXZQQqub8ngwE6uR9fpd3m6N_PL4T55vbDDyjPKmrL2ttC2gOtx9KrpPh-Z7LQRo4BE48nHJJrystKHfFlaH2G7JxHNgMBYVADyttN09qEoav8Os',
         ]);
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['PS384']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['PS384'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['PS384'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature(
@@ -281,7 +281,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['PS512']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['PS512'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['PS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature(
@@ -310,7 +310,7 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadJWSJSONSerialization()
     {
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256', 'ES256'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256', 'ES256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $result = $jwsLoader->load('{"payload":"eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ","signatures":[{"protected":"eyJhbGciOiJSUzI1NiJ9","header":{"kid":"2010-12-29"},"signature":"cC4hiUPoj9Eetdgtv3hF80EGrhuB__dzERat0XF9g2VtQgr9PJbu3XOiZj5RZmh7AAuHIm4Bh-0Qc_lF5YKt_O8W2Fp5jujGbds9uJdbF9CUAr7t1dnZcAcQjbKBYNX4BAynRFdiuB--f_nZLgrnbyTyWzO75vRK5h6xBArLIARNPvkSjtQBMHlb1L07Qe7K0GarZRmB_eSN9383LcOLn6_dO--xi12jzDwusC-eOkHWEsqtFZESc6BfI7noOPqvhJ1phCnvWh6IeYI2w9QOYEUipUTI8np6LbgGY9Fs98rqVt5AXLIhWkWywlVmtVrBp0igcN_IoypGlUPQGe77Rw"},{"protected":"eyJhbGciOiJFUzI1NiJ9","header":{"kid":"e9bc097a-ce51-4036-9562-d2ade882db0d"},"signature":"DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q"}]}');
 
         self::assertInstanceOf(JWS::class, $result);
@@ -326,7 +326,7 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadJWSJSONSerializationWithDetachedPayload()
     {
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256', 'ES256'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256', 'ES256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $result = $jwsLoader->load('{"signatures":[{"protected":"eyJhbGciOiJSUzI1NiJ9","header":{"kid":"2010-12-29"},"signature":"cC4hiUPoj9Eetdgtv3hF80EGrhuB__dzERat0XF9g2VtQgr9PJbu3XOiZj5RZmh7AAuHIm4Bh-0Qc_lF5YKt_O8W2Fp5jujGbds9uJdbF9CUAr7t1dnZcAcQjbKBYNX4BAynRFdiuB--f_nZLgrnbyTyWzO75vRK5h6xBArLIARNPvkSjtQBMHlb1L07Qe7K0GarZRmB_eSN9383LcOLn6_dO--xi12jzDwusC-eOkHWEsqtFZESc6BfI7noOPqvhJ1phCnvWh6IeYI2w9QOYEUipUTI8np6LbgGY9Fs98rqVt5AXLIhWkWywlVmtVrBp0igcN_IoypGlUPQGe77Rw"},{"protected":"eyJhbGciOiJFUzI1NiJ9","header":{"kid":"e9bc097a-ce51-4036-9562-d2ade882db0d"},"signature":"DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q"}]}');
 
         self::assertInstanceOf(JWS::class, $result);
@@ -342,7 +342,7 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadJWSJSONSerializationWithDetachedPayloadAndPayloadInJWS()
     {
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
 
         $result = $jwsLoader->load('{"payload":"eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ","signatures":[{"protected":"eyJhbGciOiJSUzI1NiJ9","header":{"kid":"2010-12-29"},"signature":"cC4hiUPoj9Eetdgtv3hF80EGrhuB__dzERat0XF9g2VtQgr9PJbu3XOiZj5RZmh7AAuHIm4Bh-0Qc_lF5YKt_O8W2Fp5jujGbds9uJdbF9CUAr7t1dnZcAcQjbKBYNX4BAynRFdiuB--f_nZLgrnbyTyWzO75vRK5h6xBArLIARNPvkSjtQBMHlb1L07Qe7K0GarZRmB_eSN9383LcOLn6_dO--xi12jzDwusC-eOkHWEsqtFZESc6BfI7noOPqvhJ1phCnvWh6IeYI2w9QOYEUipUTI8np6LbgGY9Fs98rqVt5AXLIhWkWywlVmtVrBp0igcN_IoypGlUPQGe77Rw"},{"protected":"eyJhbGciOiJFUzI1NiJ9","header":{"kid":"e9bc097a-ce51-4036-9562-d2ade882db0d"},"signature":"DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q"}]}');
 
@@ -359,7 +359,7 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadInvalidInput()
     {
-        $jwsLoader = $this->getJWSLoaderFactory()->create([], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create([], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jwsLoader->load('DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q');
     }
 
@@ -369,7 +369,7 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadInvalidInput2()
     {
-        $jwsLoader = $this->getJWSLoaderFactory()->create([], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create([], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jwsLoader->load('DtEhU3ljb.Eg8L.38VWAf.UAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q');
     }
 
@@ -378,7 +378,7 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadIETFExample1()
     {
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $result = $jwsLoader->load('eyJ0eXAiOiJKV1QiLA0KICJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk');
 
         self::assertInstanceOf(JWS::class, $result);
@@ -392,7 +392,7 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadIETFExample2()
     {
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $result = $jwsLoader->load('eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.cC4hiUPoj9Eetdgtv3hF80EGrhuB__dzERat0XF9g2VtQgr9PJbu3XOiZj5RZmh7AAuHIm4Bh-0Qc_lF5YKt_O8W2Fp5jujGbds9uJdbF9CUAr7t1dnZcAcQjbKBYNX4BAynRFdiuB--f_nZLgrnbyTyWzO75vRK5h6xBArLIARNPvkSjtQBMHlb1L07Qe7K0GarZRmB_eSN9383LcOLn6_dO--xi12jzDwusC-eOkHWEsqtFZESc6BfI7noOPqvhJ1phCnvWh6IeYI2w9QOYEUipUTI8np6LbgGY9Fs98rqVt5AXLIhWkWywlVmtVrBp0igcN_IoypGlUPQGe77Rw');
 
         self::assertInstanceOf(JWS::class, $result);
@@ -406,7 +406,7 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadIETFExample3()
     {
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['ES256'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['ES256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $result = $jwsLoader->load('eyJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q');
 
         self::assertInstanceOf(JWS::class, $result);
@@ -420,7 +420,7 @@ final class RSASignatureTest extends AbstractSignatureTest
      */
     public function testLoadIETFExample4()
     {
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['ES512'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['ES512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $result = $jwsLoader->load('eyJhbGciOiJFUzUxMiJ9.UGF5bG9hZA.AdwMgeerwtHoh-l192l60hp9wAHZFVJbLfD_UxMi70cwnZOYaRI1bKPWROc-mZZqwqT2SI-KGDKB34XO0aw_7XdtAG8GaSwFKdCAPZgoXD2YBJZCPEX3xKpRwcdOO8KpEHwJjyqOgzDO7iKvU8vcnwNrmxYbSW9ERBXukOXolLzeO_Jn');
 
         self::assertInstanceOf(JWS::class, $result);

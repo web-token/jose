@@ -66,7 +66,7 @@ final class SignerTest extends AbstractSignatureTest
     public function testSignAndLoadCompact()
     {
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512', 'RS512'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512', 'RS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload(json_encode($this->getKey3()))
             ->addSignature($this->getKey1(), ['alg' => 'HS512'])
@@ -133,7 +133,7 @@ final class SignerTest extends AbstractSignatureTest
     public function testCreateCompactJWSUsingFactory()
     {
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512', 'RS512'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512', 'RS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
 
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
@@ -186,7 +186,7 @@ final class SignerTest extends AbstractSignatureTest
     public function testCreateFlattenedJWSUsingFactory()
     {
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512', 'RS512'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512', 'RS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
@@ -250,7 +250,7 @@ final class SignerTest extends AbstractSignatureTest
     public function testSignAndLoadFlattened()
     {
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload(json_encode(['baz', 'ban']))
             ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
@@ -266,7 +266,7 @@ final class SignerTest extends AbstractSignatureTest
     public function testSignAndLoad()
     {
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512', 'RS512'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512', 'RS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
@@ -292,7 +292,7 @@ final class SignerTest extends AbstractSignatureTest
     public function testSignAndLoadWithWrongKeys()
     {
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS512']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS512'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
@@ -314,7 +314,7 @@ final class SignerTest extends AbstractSignatureTest
     public function testSignAndLoadWithUnsupportedAlgorithm()
     {
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS512']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS512'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['RS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload('Live long and Prosper.')
             ->addSignature($this->getKey2(), ['alg' => 'RS512'])
@@ -338,7 +338,7 @@ final class SignerTest extends AbstractSignatureTest
         $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
         $jws = '{"payload":"SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4","signatures":[]}';
 
-        $jwsLoader = $this->getJWSLoaderFactory()->create([], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create([], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $loaded = $jwsLoader->load($jws);
 
         self::assertEquals(0, $loaded->countSignatures());
@@ -428,7 +428,7 @@ final class SignerTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], ['b64']);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], ['b64'], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader)
@@ -467,7 +467,7 @@ final class SignerTest extends AbstractSignatureTest
         ]);
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256', 'HS512']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256', 'HS512'], ['b64']);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256', 'HS512'], ['b64'], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload($payload, true)
             ->addSignature($key, $protectedHeader1)
@@ -620,7 +620,7 @@ final class SignerTest extends AbstractSignatureTest
         ];
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], ['b64']);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], ['b64'], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($key, $protectedHeader)
@@ -680,7 +680,7 @@ final class SignerTest extends AbstractSignatureTest
         $payload = "It\xe2\x80\x99s a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there\xe2\x80\x99s no knowing where you might be swept off to.";
         $jws = 'eyJraWQiOiJiaWxiby5iYWdnaW5zQGhvYmJpdG9uLmV4YW1wbGUifQ.SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4.MRjdkly7_-oTPTS3AXP41iQIGKa80A0ZmTuV5MEaHoxnW2e5CZ5NlKtainoFmKZopdHM1O2U4mwzJdQx996ivp83xuglII7PNDi84wnB-BDkoBwA78185hX-Es4JIwmDLJK3lfWRa-XtL0RnltuYv746iYTh_qHRD68BNt1uSNCrUCTJDt5aAE6x8wW1Kt9eRo4QPocSadnHXFxnt8Is9UzpERV0ePPQdLuW3IS_de3xyIrDaLGdjluPxUAhb6L2aXic1U12podGU0KLUQSE_oI-ZnmKJ3F4uOZDnd6QZWJushZ41Axf_fcIe8u9ipH84ogoree7vjbU5y18kDquDg';
 
-        $jwsLoader = $this->getJWSLoaderFactory()->create([], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create([], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $loaded = $jwsLoader->load($jws);
 
         self::assertEquals(1, $loaded->countSignatures());
@@ -693,7 +693,7 @@ final class SignerTest extends AbstractSignatureTest
     public function testSignAndLoadJWKSet()
     {
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512', 'RS512'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512', 'RS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload(json_encode($this->getKeyset()))
             ->addSignature($this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar'])
@@ -718,7 +718,7 @@ final class SignerTest extends AbstractSignatureTest
     public function testKeySetIsEmpty()
     {
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS512', 'RS512']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512', 'RS512'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['HS512', 'RS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload(json_encode($this->getKeyset()))
             ->addSignature($this->getKey1(), ['alg' => 'HS512', ['foo' => 'bar']])

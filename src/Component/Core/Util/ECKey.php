@@ -14,12 +14,6 @@ declare(strict_types=1);
 namespace Jose\Component\Core\Util;
 
 use Base64Url\Base64Url;
-use FG\ASN1\ExplicitlyTaggedObject;
-use FG\ASN1\Universal\BitString;
-use FG\ASN1\Universal\Integer;
-use FG\ASN1\Universal\ObjectIdentifier;
-use FG\ASN1\Universal\OctetString;
-use FG\ASN1\Universal\Sequence;
 use Jose\Component\Core\JWK;
 
 /**
@@ -28,159 +22,204 @@ use Jose\Component\Core\JWK;
 final class ECKey
 {
     /**
-     * @var null|Sequence
-     */
-    private $sequence = null;
-
-    /**
-     * @var bool
-     */
-    private $private = false;
-
-    /**
-     * @var array
-     */
-    private $values = [];
-
-    /**
-     * ECKey constructor.
+     * @param JWK $jwk
      *
-     * @param JWK $data
+     * @return string
      */
-    private function __construct(JWK $data)
+    public static function convertToPEM(JWK $jwk): string
     {
-        $this->loadJWK($data->all());
-        $this->private = array_key_exists('d', $this->values);
+        if ($jwk->has('d')) {
+            return self::convertPrivateKeyToPEM($jwk);
+        } else {
+            return self::convertPublicKeyToPEM($jwk);
+        }
+    }
+    /**
+     * @param JWK $jwk
+     *
+     * @return string
+     */
+    public static function convertPublicKeyToPEM(JWK $jwk): string
+    {
+        switch ($jwk->get('crv')) {
+            case 'P-256':
+                $der = self::p256PublicKey();
+                break;
+            case 'P-384':
+                $der = self::p384PublicKey();
+                break;
+            case 'P-521':
+                $der = self::p521PublicKey();
+                break;
+            default:
+                throw new \InvalidArgumentException('Unsupported curve.');
+        }
+        $der .= self::getKey($jwk);
+        $pem  = '-----BEGIN PUBLIC KEY-----'.PHP_EOL;
+        $pem .= chunk_split(base64_encode($der), 64, PHP_EOL);
+        $pem .= '-----END PUBLIC KEY-----'.PHP_EOL;
+
+        return $pem;
     }
 
     /**
      * @param JWK $jwk
      *
-     * @return ECKey
+     * @return string
      */
-    public static function createFromJWK(JWK $jwk): ECKey
+    public static function convertPrivateKeyToPEM(JWK $jwk): string
     {
-        return new self($jwk);
-    }
-
-    /**
-     * @return array
-     */
-    private function getSupportedCurves(): array
-    {
-        return [
-            'P-256' => '1.2.840.10045.3.1.7',
-            'P-384' => '1.3.132.0.34',
-            'P-521' => '1.3.132.0.35',
-        ];
-    }
-
-    /**
-     * @param ECKey $private
-     *
-     * @return ECKey
-     */
-    public static function toPublic(ECKey $private): ECKey
-    {
-        $data = $private->toArray();
-        if (array_key_exists('d', $data)) {
-            unset($data['d']);
+        switch ($jwk->get('crv')) {
+            case 'P-256':
+                $der = self::p256PrivateKey($jwk);
+                break;
+            case 'P-384':
+                $der = self::p384PrivateKey($jwk);
+                break;
+            case 'P-521':
+                $der = self::p521PrivateKey($jwk);
+                break;
+            default:
+                throw new \InvalidArgumentException('Unsupported curve.');
         }
+        $der .= self::getKey($jwk);
+        $pem  = '-----BEGIN EC PRIVATE KEY-----'.PHP_EOL;
+        $pem .= chunk_split(base64_encode($der), 64, PHP_EOL);
+        $pem .= '-----END EC PRIVATE KEY-----'.PHP_EOL;
 
-        return new self(JWK::create($data));
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->values;
-    }
-
-    /**
-     * @param array $jwk
-     */
-    private function loadJWK(array $jwk)
-    {
-        $keys = [
-            'kty' => 'The key parameter "kty" is missing.',
-            'crv' => 'Curve parameter is missing',
-            'x' => 'Point parameters are missing.',
-            'y' => 'Point parameters are missing.',
-        ];
-        foreach ($keys as $k => $v) {
-            if (!array_key_exists($k, $jwk)) {
-                throw new \InvalidArgumentException($v);
-            }
-        }
-
-        if ('EC' !== $jwk['kty']) {
-            throw new \InvalidArgumentException('JWK is not an Elliptic Curve key.');
-        }
-        $this->values = $jwk;
-    }
-
-    private function initPublicKey()
-    {
-        $oid_sequence = new Sequence();
-        $oid_sequence->addChild(new ObjectIdentifier('1.2.840.10045.2.1'));
-        $oid_sequence->addChild(new ObjectIdentifier($this->getOID($this->values['crv'])));
-        $this->sequence->addChild($oid_sequence);
-
-        $bits = '04';
-        $bits .= bin2hex(Base64Url::decode($this->values['x']));
-        $bits .= bin2hex(Base64Url::decode($this->values['y']));
-        $this->sequence->addChild(new BitString($bits));
-    }
-
-    private function initPrivateKey()
-    {
-        $this->sequence->addChild(new Integer(1));
-        $this->sequence->addChild(new OctetString(bin2hex(Base64Url::decode($this->values['d']))));
-
-        $oid = new ObjectIdentifier($this->getOID($this->values['crv']));
-        $this->sequence->addChild(new ExplicitlyTaggedObject(0, $oid));
-
-        $bits = '04';
-        $bits .= bin2hex(Base64Url::decode($this->values['x']));
-        $bits .= bin2hex(Base64Url::decode($this->values['y']));
-        $bit = new BitString($bits);
-        $this->sequence->addChild(new ExplicitlyTaggedObject(1, $bit));
+        return $pem;
     }
 
     /**
      * @return string
      */
-    public function toPEM(): string
+    private static function p256PublicKey(): string
     {
-        if (null === $this->sequence) {
-            $this->sequence = new Sequence();
-            if (array_key_exists('d', $this->values)) {
-                $this->initPrivateKey();
-            } else {
-                $this->initPublicKey();
-            }
-        }
-        $result = '-----BEGIN '.($this->private ? 'EC PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
-        $result .= chunk_split(base64_encode($this->sequence->getBinary()), 64, PHP_EOL);
-        $result .= '-----END '.($this->private ? 'EC PRIVATE' : 'PUBLIC').' KEY-----'.PHP_EOL;
-
-        return $result;
+        return pack('H*',
+            '3059' // SEQUENCE, length 89
+                .'3013' // SEQUENCE, length 19
+                    .'0607' // OID, length 7
+                        .'2a8648ce3d0201' // 1.2.840.10045.2.1 = EC Public Key
+                    .'0608' // OID, length 8
+                        .'2a8648ce3d030107' // 1.2.840.10045.3.1.7 = P-256 Curve
+                .'0342' // BIT STRING, length 66
+                    .'00' // prepend with NUL - pubkey will follow
+        );
     }
 
     /**
-     * @param $curve
+     * @return string
+     */
+    private static function p384PublicKey(): string
+    {
+        return pack('H*',
+            '3076' // SEQUENCE, length 118
+                .'3010' // SEQUENCE, length 16
+                    .'0607' // OID, length 7
+                        .'2a8648ce3d0201' // 1.2.840.10045.2.1 = EC Public Key
+                    .'0605' // OID, length 5
+                        .'2b81040022' // 1.3.132.0.34 = P-384 Curve
+                .'0362' // BIT STRING, length 98
+                    .'00' // prepend with NUL - pubkey will follow
+        );
+    }
+
+    /**
+     * @return string
+     */
+    private static function p521PublicKey(): string
+    {
+        return pack('H*',
+            '30819b' // SEQUENCE, length 154
+                .'3010' // SEQUENCE, length 16
+                    .'0607' // OID, length 7
+                        .'2a8648ce3d0201' // 1.2.840.10045.2.1 = EC Public Key
+                    .'0605' // OID, length 5
+                        .'2b81040023' // 1.3.132.0.35 = P-521 Curve
+                .'038186' // BIT STRING, length 134
+                    .'00' // prepend with NUL - pubkey will follow
+        );
+    }
+
+    /**
+     * @param JWK $jwk
      *
      * @return string
      */
-    private function getOID(string $curve): string
+    private static function p256PrivateKey(JWK $jwk): string
     {
-        $curves = $this->getSupportedCurves();
-        if (!array_key_exists($curve, $curves)) {
-            throw new \InvalidArgumentException('Unsupported curve.');
-        }
+        $d = unpack('H*', Base64Url::decode($jwk->get('d')))[1];
+        $dl = mb_strlen($d, '8bit') / 2;
+        return pack('H*',
+            '30'.dechex(87+$dl) // SEQUENCE, length 87+length($d)
+                .'020101' // INTEGER, 1
+                .'04'.dechex($dl)   // OCTET STRING, length($d)
+                    .$d
+                .'a00a' // TAGGED OBJECT #0, length 10
+                    .'0608' // OID, length 8
+                        .'2a8648ce3d030107' // 1.3.132.0.34 = P-384 Curve
+                .'a144' //  TAGGED OBJECT #1, length 68
+                    .'0342' // BIT STRING, length 66
+                    .'00' // prepend with NUL - pubkey will follow
+        );
+    }
 
-        return $curves[$curve];
+    /**
+     * @param JWK $jwk
+     *
+     * @return string
+     */
+    private static function p384PrivateKey(JWK $jwk): string
+    {
+        $d = unpack('H*', Base64Url::decode($jwk->get('d')))[1];
+        $dl = mb_strlen($d, '8bit') / 2;
+        return pack('H*',
+            '3081'.dechex(116+$dl) // SEQUENCE, length 116 + length($d)
+                .'020101' // INTEGER, 1
+                .'04'.dechex($dl)   // OCTET STRING, length($d)
+                    .$d
+                .'a007' // TAGGED OBJECT #0, length 7
+                    .'0605' // OID, length 5
+                        .'2b81040022' // 1.3.132.0.34 = P-384 Curve
+                .'a164' //  TAGGED OBJECT #1, length 100
+                    .'0362' // BIT STRING, length 98
+                    .'00' // prepend with NUL - pubkey will follow
+        );
+    }
+
+    /**
+     * @param JWK $jwk
+     *
+     * @return string
+     */
+    private static function p521PrivateKey(JWK $jwk): string
+    {
+        $d = unpack('H*', Base64Url::decode($jwk->get('d')))[1];
+        $dl = mb_strlen($d, '8bit') / 2;
+        return pack('H*',
+            '3081'.dechex(154+$dl) // SEQUENCE, length 154+length(d)
+                .'020101' // INTEGER, 1
+                .'04'.dechex($dl)   // OCTET STRING, length(d)
+                    .$d
+                .'a007' // TAGGED OBJECT #0, length 7
+                    .'0605' // OID, length 5
+                        .'2b81040023' // 1.3.132.0.35 = P-521 Curve
+                .'a18189' //  TAGGED OBJECT #1, length 137
+                    .'038186' // BIT STRING, length 134
+                    .'00' // prepend with NUL - pubkey will follow
+        );
+    }
+
+    /**
+     * @param JWK $jwk
+     *
+     * @return string
+     */
+    private static function getKey(JWK $jwk): string
+    {
+        return
+            pack('H*', '04')
+            .Base64Url::decode($jwk->get('x'))
+            .Base64Url::decode($jwk->get('y'));
     }
 }

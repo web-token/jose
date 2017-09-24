@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Jose\Test\Unit\Keys;
 
 use Jose\Component\Core\JWK;
-use Jose\Component\Core\Util\ECKey;
 use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
 use PHPUnit\Framework\TestCase;
 
@@ -176,7 +175,7 @@ final class ECKeysTest extends TestCase
 
     public function testConvertPrivateKeyToPublic()
     {
-        $private_ec_key = ECKey::createFromJWK(JWK::create([
+        $jwk = JWK::create([
             'kty' => 'EC',
             'kid' => 'Foo',
             'crv' => 'P-256',
@@ -185,9 +184,7 @@ final class ECKeysTest extends TestCase
             'x' => 'vuYsP-QnrqAbM7Iyhzjt08hFSuzapyojCB_gFsBt65U',
             'y' => 'oq-E2K-X0kPeqGuKnhlXkxc5fnxomRSC6KLby7Ij8AE',
             'foo' => 'bar',
-        ]));
-
-        $public_ec_key = ECKey::toPublic($private_ec_key);
+        ]);
 
         self::assertEquals([
             'kty' => 'EC',
@@ -197,6 +194,6 @@ final class ECKeysTest extends TestCase
             'x' => 'vuYsP-QnrqAbM7Iyhzjt08hFSuzapyojCB_gFsBt65U',
             'y' => 'oq-E2K-X0kPeqGuKnhlXkxc5fnxomRSC6KLby7Ij8AE',
             'foo' => 'bar',
-        ], $public_ec_key->toArray());
+        ], $jwk->toPublic()->all());
     }
 }

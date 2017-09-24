@@ -19,6 +19,9 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Behat\Behat\Context\Context;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 
+/**
+ * Class CommandContext.
+ */
 final class CommandContext implements Context
 {
     use KernelDictionary;
@@ -178,9 +181,6 @@ final class CommandContext implements Context
     {
         $output = $this->getCommandOutput();
         if ($result->getRaw() !== $output) {
-            dump($output);
-            dump($this->command_exception->getMessage());
-
             throw new \InvalidArgumentException(sprintf('The output of the command is not the same as expected. I got "%".', $output));
         }
     }

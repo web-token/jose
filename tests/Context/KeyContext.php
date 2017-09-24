@@ -19,6 +19,9 @@ use Jose\Component\KeyManagement\X5UFactory;
 use Behat\Behat\Context\Context;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 
+/**
+ * Class KeyContext.
+ */
 final class KeyContext implements Context
 {
     use KernelDictionary;

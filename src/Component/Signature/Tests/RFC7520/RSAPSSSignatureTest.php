@@ -62,7 +62,7 @@ final class RSAPSSSignatureTest extends AbstractSignatureTest
         ];
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['PS384']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['PS384'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['PS384'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
             ->withPayload($payload)
             ->addSignature($privateKey, $headers)

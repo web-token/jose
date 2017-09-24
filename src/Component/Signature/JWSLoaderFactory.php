@@ -15,7 +15,7 @@ namespace Jose\Component\Signature;
 
 use Jose\Component\Checker\HeaderCheckerManagerFactory;
 use Jose\Component\Core\AlgorithmManagerFactory;
-use Jose\Component\Signature\Serializer\JWSSerializerManager;
+use Jose\Component\Signature\Serializer\JWSSerializerManagerFactory;
 
 /**
  * Class JWSLoaderFactory.
@@ -33,34 +33,37 @@ final class JWSLoaderFactory
     private $headerCheckerManagerFactory;
 
     /**
-     * @var JWSSerializerManager
+     * @var JWSSerializerManagerFactory
      */
-    private $serializerManager;
+    private $serializerManagerFactory;
 
     /**
      * JWSLoaderFactory constructor.
      *
      * @param AlgorithmManagerFactory     $algorithmManagerFactory
      * @param HeaderCheckerManagerFactory $headerCheckerManagerFactory
+     * @param JWSSerializerManagerFactory $serializerManagerFactory
      */
-    public function __construct(AlgorithmManagerFactory $algorithmManagerFactory, HeaderCheckerManagerFactory $headerCheckerManagerFactory, JWSSerializerManager $serializerManager)
+    public function __construct(AlgorithmManagerFactory $algorithmManagerFactory, HeaderCheckerManagerFactory $headerCheckerManagerFactory, JWSSerializerManagerFactory $serializerManagerFactory)
     {
         $this->algorithmManagerFactory = $algorithmManagerFactory;
         $this->headerCheckerManagerFactory = $headerCheckerManagerFactory;
-        $this->serializerManager = $serializerManager;
+        $this->serializerManagerFactory = $serializerManagerFactory;
     }
 
     /**
      * @param string[] $algorithms
      * @param string[] $headerCheckers
+     * @param string[] $serializers
      *
      * @return JWSLoader
      */
-    public function create(array $algorithms, array $headerCheckers): JWSLoader
+    public function create(array $algorithms, array $headerCheckers, array $serializers): JWSLoader
     {
         $algorithmManager = $this->algorithmManagerFactory->create($algorithms);
         $headerCheckerManager = $this->headerCheckerManagerFactory->create($headerCheckers);
+        $serializerManager = $this->serializerManagerFactory->create($serializers);
 
-        return new JWSLoader($algorithmManager, $headerCheckerManager, $this->serializerManager);
+        return new JWSLoader($algorithmManager, $headerCheckerManager, $serializerManager);
     }
 }

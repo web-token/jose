@@ -63,7 +63,7 @@ final class EdDSASignatureTest extends AbstractSignatureTest
         $input = Base64Url::decode('RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc');
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['EdDSA']);
-        $jwsLoader = $this->getJWSLoaderFactory()->create(['EdDSA'], []);
+        $jwsLoader = $this->getJWSLoaderFactory()->create(['EdDSA'], [], ['jws_compact']);
         $jws = $jwsBuilder
             ->withPayload($input)
             ->addSignature($key, $header)

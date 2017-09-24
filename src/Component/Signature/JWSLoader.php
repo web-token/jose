@@ -46,6 +46,7 @@ final class JWSLoader
      *
      * @param AlgorithmManager     $signatureAlgorithmManager
      * @param HeaderCheckerManager $headerCheckerManager
+     * @param JWSSerializerManager $serializerManager
      */
     public function __construct(AlgorithmManager $signatureAlgorithmManager, HeaderCheckerManager $headerCheckerManager, JWSSerializerManager $serializerManager)
     {
