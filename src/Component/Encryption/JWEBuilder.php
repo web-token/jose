@@ -110,6 +110,25 @@ final class JWEBuilder
     }
 
     /**
+     * Reset the current data.
+     *
+     * @return JWEBuilder
+     */
+    public function create(): JWEBuilder
+    {
+        $this->payload = null;
+        $this->aad = null;
+        $this->recipients = [];
+        $this->sharedProtectedHeaders = [];
+        $this->sharedHeaders = [];
+        $this->compressionMethod = null;
+        $this->contentEncryptionAlgorithm = null;
+        $this->keyManagementMode = null;
+
+        return $this;
+    }
+
+    /**
      * @return string[]
      */
     public function getSupportedKeyEncryptionAlgorithms(): array

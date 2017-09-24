@@ -59,7 +59,7 @@ final class HMACSignatureTest extends AbstractSignatureTest
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
-            ->withPayload($payload)
+            ->create()->withPayload($payload)
             ->addSignature($key, $headers)
             ->build();
 
@@ -119,7 +119,7 @@ final class HMACSignatureTest extends AbstractSignatureTest
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
-            ->withPayload($payload, true)
+            ->create()->withPayload($payload, true)
             ->addSignature($key, $headers)
             ->build();
 
@@ -182,7 +182,7 @@ final class HMACSignatureTest extends AbstractSignatureTest
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
-            ->withPayload($payload)
+            ->create()->withPayload($payload)
             ->addSignature($key, $protected_headers, $unprotected_headers)
             ->build();
 
@@ -236,7 +236,7 @@ final class HMACSignatureTest extends AbstractSignatureTest
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['HS256']);
         $jwsLoader = $this->getJWSLoaderFactory()->create(['HS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
-            ->withPayload($payload)
+            ->create()->withPayload($payload)
             ->addSignature($key, [], $unprotected_headers)
             ->build();
 

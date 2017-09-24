@@ -203,7 +203,7 @@ final class MultipleRecipientEncryptionTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create(['RSA1_5', 'ECDH-ES+A256KW', 'A256GCMKW'], ['A128CBC-HS256'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload($expected_payload)
+            ->create()->withPayload($expected_payload)
             ->withSharedProtectedHeaders($protected_headers)
             ->withSharedHeaders($headers)
             ->addRecipient($recipient_1_private_key, $recipient_1_headers)

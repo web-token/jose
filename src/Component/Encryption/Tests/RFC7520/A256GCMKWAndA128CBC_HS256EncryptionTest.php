@@ -121,7 +121,7 @@ final class A256GCMKWAndA128CBC_HS256EncryptionTest extends AbstractEncryptionTe
         $jweLoader = $this->getJWELoaderFactory()->create(['A256GCMKW'], ['A128CBC-HS256'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload($expected_payload)
+            ->create()->withPayload($expected_payload)
             ->withSharedProtectedHeaders($protected_headers)
             ->addRecipient($private_key)
             ->build();

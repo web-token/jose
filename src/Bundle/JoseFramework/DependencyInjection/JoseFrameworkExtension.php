@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Jose\Bundle\JoseFramework\DependencyInjection;
 
+use Jose\Bundle\Checker\DependencyInjection\Source\ClaimChecker;
 use Jose\Bundle\Encryption\DependencyInjection\Source\JWEBuilder;
 use Jose\Bundle\Encryption\DependencyInjection\Source\JWELoader;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWKSetSource;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWKSource;
-use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWSBuilder;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\SourceInterface;
+use Jose\Bundle\Signature\DependencyInjection\Source\JWSBuilder;
 use Jose\Bundle\Signature\DependencyInjection\Source\JWSLoader;
 use Jose\Component\KeyManagement\JWKFactory;
 use Symfony\Component\Config\Definition\Processor;
@@ -28,6 +29,9 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
+/**
+ * Class JoseFrameworkExtension.
+ */
 final class JoseFrameworkExtension extends Extension implements PrependExtensionInterface
 {
     /**
@@ -119,6 +123,9 @@ final class JoseFrameworkExtension extends Extension implements PrependExtension
         if (class_exists(JWKFactory::class)) {
             $this->addSource(new JWKSource($this->bundlePath));
             $this->addSource(new JWKSetSource($this->bundlePath));
+        }
+        if (class_exists(ClaimChecker::class)) {
+            $this->addSource(new ClaimChecker());
         }
         if (class_exists(JWSBuilder::class)) {
             $this->addSource(new JWSBuilder());

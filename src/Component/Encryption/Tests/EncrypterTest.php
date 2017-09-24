@@ -32,7 +32,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload('FOO')
+            ->create()->withPayload('FOO')
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
@@ -66,7 +66,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
 
         $jweBuilder
-            ->withPayload('FOO')
+            ->create()->withPayload('FOO')
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
@@ -84,7 +84,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload('FOO')
+            ->create()->withPayload('FOO')
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
@@ -114,7 +114,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload('FOO')
+            ->create()->withPayload('FOO')
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
@@ -156,7 +156,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload(json_encode($this->getKeyToEncrypt()))
+            ->create()->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
@@ -190,7 +190,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
 
         $jwe = $jweBuilder
-            ->withPayload(json_encode($this->getKeyToEncrypt()))
+            ->create()->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
@@ -211,7 +211,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweBuilder = $this->getJWEBuilderFactory()->create(['dir', 'ECDH-ES+A256KW'], ['A256CBC-HS512'], ['DEF']);
 
         $jweBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
             ])
@@ -229,7 +229,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
 
         $jweBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
@@ -248,7 +248,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
 
         $jweBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
                 'alg' => 'RSA-OAEP-256',
@@ -264,7 +264,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A128CBC-HS256'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload(json_encode($this->getKeySetToEncrypt()))
+            ->create()->withPayload(json_encode($this->getKeySetToEncrypt()))
             ->withSharedProtectedHeaders([
                 'kid' => '123456789',
                 'enc' => 'A128CBC-HS256',
@@ -298,7 +298,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweBuilder = $this->getJWEBuilderFactory()->create([], ['A256CBC-HS512'], ['DEF']);
 
         $jweBuilder
-            ->withPayload(json_encode($this->getKeyToEncrypt()))
+            ->create()->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'kid' => '123456789',
                 'enc' => 'A256CBC-HS512',
@@ -317,7 +317,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], [], ['DEF']);
 
         $jweBuilder
-            ->withPayload(json_encode($this->getKeyToEncrypt()))
+            ->create()->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'kid' => '123456789',
                 'alg' => 'RSA-OAEP-256',
@@ -336,7 +336,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweBuilder = $this->getJWEBuilderFactory()->create(['A256CBC-HS512'], ['A256CBC-HS512'], ['DEF']);
 
         $jweBuilder
-            ->withPayload(json_encode($this->getKeyToEncrypt()))
+            ->create()->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'kid' => '123456789',
                 'enc' => 'A256CBC-HS512',
@@ -356,7 +356,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['RSA-OAEP-256'], ['DEF']);
 
         $jweBuilder
-            ->withPayload(json_encode($this->getKeyToEncrypt()))
+            ->create()->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'kid' => '123456789',
                 'enc' => 'RSA-OAEP-256',
@@ -373,7 +373,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create(['dir'], ['A192CBC-HS384'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload(json_encode($this->getKeyToEncrypt()))
+            ->create()->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'kid' => 'DIR_1',
                 'enc' => 'A192CBC-HS384',
@@ -404,7 +404,7 @@ final class EncrypterTest extends AbstractEncryptionTest
 
         $payload = json_encode(['user_id' => '1234', 'exp' => time() + 3600]);
         $jwe = $jweBuilder
-            ->withPayload($payload)
+            ->create()->withPayload($payload)
             ->withSharedProtectedHeaders([
                 'kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d',
                 'enc' => 'A192CBC-HS384',
@@ -434,7 +434,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES+A256KW'], ['A256CBC-HS512'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->withSharedProtectedHeaders([
                 'kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d',
                 'enc' => 'A256CBC-HS512',
@@ -466,7 +466,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES+A256KW'], ['A256GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->withSharedProtectedHeaders([
                 'kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d',
                 'enc' => 'A256GCM',
@@ -499,7 +499,7 @@ final class EncrypterTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256', 'ECDH-ES+A256KW'], ['A256CBC-HS512'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
             ])

@@ -64,7 +64,7 @@ final class NoneSignatureTest extends AbstractSignatureTest
 
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['none']);
         $jws = $jwsBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->addSignature($jwk, ['alg' => 'none'])
             ->build();
 

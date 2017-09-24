@@ -58,7 +58,7 @@ final class RSA15SignatureTest extends AbstractSignatureTest
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256']);
         $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
-            ->withPayload($payload)
+            ->create()->withPayload($payload)
             ->addSignature($privateKey, $headers)
             ->build();
 

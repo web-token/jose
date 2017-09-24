@@ -21,6 +21,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * Class JWSLoader.
+ */
 final class JWSLoader implements SourceInterface
 {
     /**
@@ -43,6 +46,7 @@ final class JWSLoader implements SourceInterface
             ->setArguments([
                 $config['signature_algorithms'],
                 $config['header_checkers'],
+                $config['serializers'],
             ])
             ->setPublic($config['is_public']);
 
@@ -72,6 +76,11 @@ final class JWSLoader implements SourceInterface
                             ->arrayNode('header_checkers')
                                 ->useAttributeAsKey('name')
                                 ->isRequired()
+                                ->prototype('scalar')->end()
+                            ->end()
+                            ->arrayNode('serializers')
+                                ->useAttributeAsKey('name')
+                                ->treatNullLike(['jws_compact'])
                                 ->prototype('scalar')->end()
                             ->end()
                         ->end()

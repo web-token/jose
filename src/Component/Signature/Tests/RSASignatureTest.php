@@ -43,7 +43,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256']);
         $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->addSignature(
                 $key,
                 [
@@ -83,7 +83,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS256']);
         $jwsLoader = $this->getJWSLoaderFactory()->create(['RS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
-            ->withPayload('Live long and Prosper.', true)
+            ->create()->withPayload('Live long and Prosper.', true)
             ->addSignature(
                 $key,
                 [
@@ -123,7 +123,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS384']);
         $jwsLoader = $this->getJWSLoaderFactory()->create(['RS384'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->addSignature(
                 $key,
                 [
@@ -163,7 +163,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['RS512']);
         $jwsLoader = $this->getJWSLoaderFactory()->create(['RS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->addSignature(
                 $key,
                 [
@@ -205,7 +205,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['PS256']);
         $jwsLoader = $this->getJWSLoaderFactory()->create(['PS256'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->addSignature(
                 $key,
                 [
@@ -244,7 +244,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['PS384']);
         $jwsLoader = $this->getJWSLoaderFactory()->create(['PS384'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->addSignature(
                 $key,
                 [
@@ -283,7 +283,7 @@ final class RSASignatureTest extends AbstractSignatureTest
         $jwsBuilder = $this->getJWSBuilderFactory()->create(['PS512']);
         $jwsLoader = $this->getJWSLoaderFactory()->create(['PS512'], [], ['jws_compact', 'jws_json_flattened', 'jws_json_general']);
         $jws = $jwsBuilder
-            ->withPayload('Live long and Prosper.')
+            ->create()->withPayload('Live long and Prosper.')
             ->addSignature(
                 $key,
                 [

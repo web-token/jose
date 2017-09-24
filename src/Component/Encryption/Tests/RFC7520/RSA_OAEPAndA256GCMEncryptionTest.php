@@ -127,7 +127,7 @@ final class RSA_OAEPAndA256GCMEncryptionTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP'], ['A256GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload($expected_payload)
+            ->create()->withPayload($expected_payload)
             ->withSharedProtectedHeaders($protected_headers)
             ->addRecipient($private_key)
             ->build();

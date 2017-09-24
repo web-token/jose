@@ -151,7 +151,7 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends AbstractEnc
         $jweLoader = $this->getJWELoaderFactory()->create(['PBES2-HS512+A256KW'], ['A128CBC-HS256'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload($expected_payload)
+            ->create()->withPayload($expected_payload)
             ->withSharedProtectedHeaders($protected_headers)
             ->addRecipient($private_key)
             ->build();

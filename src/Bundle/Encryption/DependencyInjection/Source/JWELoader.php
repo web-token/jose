@@ -21,6 +21,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * Class JWELoader.
+ */
 final class JWELoader implements SourceInterface
 {
     /**
@@ -45,6 +48,7 @@ final class JWELoader implements SourceInterface
                 $config['content_encryption_algorithms'],
                 $config['compression_methods'],
                 $config['header_checkers'],
+                $config['serializers'],
             ])
             ->setPublic($config['is_public']);
 
@@ -88,6 +92,12 @@ final class JWELoader implements SourceInterface
                                 ->info('A list of headers to check.')
                                 ->useAttributeAsKey('name')
                                 ->isRequired()
+                                ->prototype('scalar')->end()
+                            ->end()
+                            ->arrayNode('serializers')
+                                ->info('A list of serializers.')
+                                ->useAttributeAsKey('name')
+                                ->treatNullLike(['jwe_compact'])
                                 ->prototype('scalar')->end()
                             ->end()
                         ->end()

@@ -40,7 +40,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create([$encryption_algorithm], ['A256GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwt = $jweBuilder
-            ->withPayload($claims)
+            ->create()->withPayload($claims)
             ->withSharedProtectedHeaders(['alg' => $encryption_algorithm, 'enc' => 'A256GCM'])
             ->addRecipient($key)
             ->build();
@@ -67,7 +67,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
         $jweLoader = $this->getJWELoaderFactory()->create([$encryption_algorithm], ['A256GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwt = $jweBuilder
-            ->withPayload($claims)
+            ->create()->withPayload($claims)
             ->withSharedProtectedHeaders(['alg' => $encryption_algorithm, 'enc' => 'A256GCM'])
             ->addRecipient($key)
             ->build();

@@ -21,6 +21,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * Class JWEBuilder.
+ */
 final class JWEBuilder implements SourceInterface
 {
     /**

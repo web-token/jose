@@ -105,7 +105,7 @@ final class A128KWAndA128GCMEncryptionWithAdditionalAuthenticatedDataTest extend
         $jweLoader = $this->getJWELoaderFactory()->create(['A128KW'], ['A128GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
-            ->withPayload($expected_payload)
+            ->create()->withPayload($expected_payload)
             ->withSharedProtectedHeaders($protected_headers)
             ->addRecipient($private_key)
             ->build();

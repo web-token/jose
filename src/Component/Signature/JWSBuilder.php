@@ -75,6 +75,21 @@ final class JWSBuilder
     }
 
     /**
+     * Reset the current data.
+     *
+     * @return JWSBuilder
+     */
+    public function create(): JWSBuilder
+    {
+        $this->payload = null;
+        $this->isPayloadDetached = null;
+        $this->signatures = [];
+        $this->isPayloadEncoded = null;
+
+        return $this;
+    }
+
+    /**
      * @param mixed $payload
      * @param bool  $isPayloadDetached
      *
