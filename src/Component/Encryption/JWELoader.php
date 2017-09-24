@@ -28,6 +28,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyAgreementWrappingInterf
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyEncryptionInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\KeyWrappingInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
+use Jose\Component\Encryption\Serializer\JWESerializerManager;
 
 /**
  * Class JWELoader.
@@ -55,19 +56,26 @@ final class JWELoader
     private $compressionMethodManager;
 
     /**
+     * @var JWESerializerManager
+     */
+    private $serializerManager;
+
+    /**
      * JWELoader constructor.
      *
      * @param AlgorithmManager         $keyEncryptionAlgorithmManager
      * @param AlgorithmManager         $contentEncryptionAlgorithmManager
      * @param CompressionMethodManager $compressionMethodManager
      * @param HeaderCheckerManager     $headerCheckerManager
+     * @param JWESerializerManager     $serializerManager
      */
-    public function __construct(AlgorithmManager $keyEncryptionAlgorithmManager, AlgorithmManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionMethodManager, HeaderCheckerManager $headerCheckerManager)
+    public function __construct(AlgorithmManager $keyEncryptionAlgorithmManager, AlgorithmManager $contentEncryptionAlgorithmManager, CompressionMethodManager $compressionMethodManager, HeaderCheckerManager $headerCheckerManager, JWESerializerManager $serializerManager)
     {
         $this->keyEncryptionAlgorithmManager = $keyEncryptionAlgorithmManager;
         $this->contentEncryptionAlgorithmManager = $contentEncryptionAlgorithmManager;
         $this->compressionMethodManager = $compressionMethodManager;
         $this->headerCheckerManager = $headerCheckerManager;
+        $this->serializerManager = $serializerManager;
     }
 
     /**
@@ -77,7 +85,7 @@ final class JWELoader
      */
     public function load(string $input): JWE
     {
-        return JWEParser::parse($input);
+        return $this->serializerManager->unserialize($input);
     }
 
     /**

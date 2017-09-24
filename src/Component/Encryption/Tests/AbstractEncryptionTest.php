@@ -127,7 +127,8 @@ abstract class AbstractEncryptionTest extends TestCase
             $this->jweLoaderFactory = new JWELoaderFactory(
                 $this->getAlgorithmManagerFactory(),
                 $this->getCompressionMethodManagerFactory(),
-                $this->getHeaderCheckerManagerFactory()
+                $this->getHeaderCheckerManagerFactory(),
+                $this->getJWESerializerManagerFactory()
             );
         }
 

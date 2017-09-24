@@ -37,7 +37,7 @@ final class ECDHESWithX25519EncryptionTest extends AbstractEncryptionTest
         ];
 
         $jweBuilder = $this->getJWEBuilderFactory()->create(['ECDH-ES+A128KW'], ['A128GCM'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES+A128KW'], ['A128GCM'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES+A128KW'], ['A128GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwt = $jweBuilder
             ->withPayload($input)

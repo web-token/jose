@@ -13,8 +13,22 @@ declare(strict_types=1);
 
 namespace Jose\Bundle\Signature;
 
+use Jose\Bundle\Signature\DependencyInjection\Compiler\SerializerCompilerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Class SignatureBundle.
+ */
 final class SignatureBundle extends Bundle
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new SerializerCompilerPass());
+    }
 }

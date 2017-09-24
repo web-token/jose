@@ -67,20 +67,26 @@ final class CompactSerializer extends AbstractSerializer
             throw new \InvalidArgumentException('Unsupported input');
         }
 
-        $encodedProtectedHeaders = $parts[0];
-        $protectedHeaders = json_decode(Base64Url::decode($parts[0]), true);
-        if (empty($parts[1])) {
-            $payload = null;
-            $encodedPayload = null;
-        } else {
-            $encodedPayload = $parts[1];
-            $payload = $this->isPayloadEncoded($protectedHeaders) ? Base64Url::decode($encodedPayload) : $encodedPayload;
+        try {
+            $encodedProtectedHeaders = $parts[0];
+            $protectedHeaders = json_decode(Base64Url::decode($parts[0]), true);
+            if (empty($parts[1])) {
+                $payload = null;
+                $encodedPayload = null;
+            } else {
+                $encodedPayload = $parts[1];
+                $payload = $this->isPayloadEncoded($protectedHeaders) ? Base64Url::decode($encodedPayload) : $encodedPayload;
+            }
+            $signature = Base64Url::decode($parts[2]);
+
+            $jws = JWS::create($payload, $encodedPayload, empty($parts[1]));
+            $jws = $jws->addSignature($signature, $protectedHeaders, $encodedProtectedHeaders);
+
+            return $jws;
+        } catch (\Exception $e) {
+            throw new \InvalidArgumentException('Unsupported input');
+        } catch (\Error $e) {
+            throw new \InvalidArgumentException('Unsupported input');
         }
-        $signature = Base64Url::decode($parts[2]);
-
-        $jws = JWS::create($payload, $encodedPayload, empty($parts[1]));
-        $jws = $jws->addSignature($signature, $protectedHeaders, $encodedProtectedHeaders);
-
-        return $jws;
     }
 }

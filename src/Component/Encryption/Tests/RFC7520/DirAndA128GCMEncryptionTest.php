@@ -52,7 +52,7 @@ class DirAndA128GCMEncryptionTest extends AbstractEncryptionTest
         $expected_ciphertext = 'JW_i_f52hww_ELQPGaYyeAB6HYGcR559l9TYnSovc23XJoBcW29rHP8yZOZG7YhLpT1bjFuvZPjQS-m0IFtVcXkZXdH_lr_FrdYt9HRUYkshtrMmIUAyGmUnd9zMDB2n0cRDIHAzFVeJUDxkUwVAE7_YGRPdcqMyiBoCO-FBdE-Nceb4h3-FtBP-c_BIwCPTjb9o0SbdcdREEMJMyZBH8ySWMVi1gPD9yxi-aQpGbSv_F9N4IZAxscj5g-NJsUPbjk29-s7LJAGb15wEBtXphVCgyy53CoIKLHHeJHXex45Uz9aKZSRSInZI-wjsY0yu3cT4_aQ3i1o-tiE-F8Ios61EKgyIQ4CWao8PFMj8TTnp';
         $expected_tag = 'vbb32Xvllea2OtmHAdccRQ';
 
-        $jweLoader = $this->getJWELoaderFactory()->create(['dir'], ['A128GCM'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['dir'], ['A128GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $loaded_compact_json = $jweLoader->load($expected_compact_json);
         $loaded_compact_json = $jweLoader->decryptUsingKey($loaded_compact_json, $private_key);
@@ -96,7 +96,7 @@ class DirAndA128GCMEncryptionTest extends AbstractEncryptionTest
         ];
 
         $jweBuilder = $this->getJWEBuilderFactory()->create(['dir'], ['A128GCM'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['dir'], ['A128GCM'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['dir'], ['A128GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
             ->withPayload($expected_payload)

@@ -37,7 +37,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
         $claims = ['foo' => 'bar'];
 
         $jweBuilder = $this->getJWEBuilderFactory()->create([$encryption_algorithm], ['A256GCM'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create([$encryption_algorithm], ['A256GCM'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create([$encryption_algorithm], ['A256GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwt = $jweBuilder
             ->withPayload($claims)
@@ -64,7 +64,7 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
         $claims = ['foo' => 'bar'];
 
         $jweBuilder = $this->getJWEBuilderFactory()->create([$encryption_algorithm], ['A256GCM'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create([$encryption_algorithm], ['A256GCM'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create([$encryption_algorithm], ['A256GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwt = $jweBuilder
             ->withPayload($claims)

@@ -29,7 +29,7 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testEncryptWithJWTInput()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
             ->withPayload('FOO')
@@ -81,7 +81,7 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testCreateCompactJWEUsingFactory()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
             ->withPayload('FOO')
@@ -111,7 +111,7 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testCreateFlattenedJWEUsingFactory()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
             ->withPayload('FOO')
@@ -153,7 +153,7 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testEncryptAndLoadFlattenedWithAAD()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
             ->withPayload(json_encode($this->getKeyToEncrypt()))
@@ -261,7 +261,7 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testEncryptAndLoadFlattenedWithDeflateCompression()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A128CBC-HS256'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A128CBC-HS256'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256'], ['A128CBC-HS256'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
             ->withPayload(json_encode($this->getKeySetToEncrypt()))
@@ -370,7 +370,7 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testEncryptAndLoadCompactWithDirectKeyEncryption()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['dir'], ['A192CBC-HS384'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['dir'], ['A192CBC-HS384'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['dir'], ['A192CBC-HS384'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
             ->withPayload(json_encode($this->getKeyToEncrypt()))
@@ -400,7 +400,7 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testEncryptAndLoadCompactKeyAgreement()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['ECDH-ES'], ['A192CBC-HS384'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES'], ['A192CBC-HS384'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES'], ['A192CBC-HS384'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $payload = json_encode(['user_id' => '1234', 'exp' => time() + 3600]);
         $jwe = $jweBuilder
@@ -431,7 +431,7 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testEncryptAndLoadCompactKeyAgreementWithWrappingCompact()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['ECDH-ES+A256KW'], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES+A256KW'], ['A256CBC-HS512'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES+A256KW'], ['A256CBC-HS512'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
             ->withPayload('Live long and Prosper.')
@@ -463,7 +463,7 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testEncryptAndLoadWithGCMAndAAD()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['ECDH-ES+A256KW'], ['A256GCM'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES+A256KW'], ['A256GCM'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['ECDH-ES+A256KW'], ['A256GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
             ->withPayload('Live long and Prosper.')
@@ -496,7 +496,7 @@ final class EncrypterTest extends AbstractEncryptionTest
     public function testEncryptAndLoadCompactKeyAgreementWithWrapping()
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256', 'ECDH-ES+A256KW'], ['A256CBC-HS512'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256', 'ECDH-ES+A256KW'], ['A256CBC-HS512'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP-256', 'ECDH-ES+A256KW'], ['A256CBC-HS512'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
             ->withPayload('Live long and Prosper.')

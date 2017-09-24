@@ -20,7 +20,7 @@ use Jose\Component\Encryption\Recipient;
 /**
  * Class JSONGeneralSerializer.
  */
-final class JSONGeneralSerializer extends AbstractSerializer
+final class JSONGeneralSerializer implements JWESerializerInterface
 {
     public const NAME = 'jwe_json_general';
 

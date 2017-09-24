@@ -61,7 +61,7 @@ final class RSA_OAEPAndA256GCMEncryptionTest extends AbstractEncryptionTest
         $expected_ciphertext = 'o4k2cnGN8rSSw3IDo1YuySkqeS_t2m1GXklSgqBdpACm6UJuJowOHC5ytjqYgRL-I-soPlwqMUf4UgRWWeaOGNw6vGW-xyM01lTYxrXfVzIIaRdhYtEMRBvBWbEwP7ua1DRfvaOjgZv6Ifa3brcAM64d8p5lhhNcizPersuhw5f-pGYzseva-TUaL8iWnctc-sSwy7SQmRkfhDjwbz0fz6kFovEgj64X1I5s7E6GLp5fnbYGLa1QUiML7Cc2GxgvI7zqWo0YIEc7aCflLG1-8BboVWFdZKLK9vNoycrYHumwzKluLWEbSVmaPpOslY2n525DxDfWaVFUfKQxMF56vn4B9QMpWAbnypNimbM8zVOw';
         $expected_tag = 'UCGiqJxhBI3IFVdPalHHvA';
 
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP'], ['A256GCM'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP'], ['A256GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $loaded_compact_json = $jweLoader->load($expected_compact_json);
         $loaded_compact_json = $jweLoader->decryptUsingKey($loaded_compact_json, $private_key);
@@ -124,7 +124,7 @@ final class RSA_OAEPAndA256GCMEncryptionTest extends AbstractEncryptionTest
         ];
 
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP'], ['A256GCM'], ['DEF']);
-        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP'], ['A256GCM'], ['DEF'], []);
+        $jweLoader = $this->getJWELoaderFactory()->create(['RSA-OAEP'], ['A256GCM'], ['DEF'], [], ['jwe_compact', 'jwe_json_flattened', 'jwe_json_general']);
 
         $jwe = $jweBuilder
             ->withPayload($expected_payload)

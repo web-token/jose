@@ -20,7 +20,7 @@ use Jose\Component\Encryption\Recipient;
 /**
  * Class CompactSerializer.
  */
-final class CompactSerializer extends AbstractSerializer
+final class CompactSerializer implements JWESerializerInterface
 {
     public const NAME = 'jwe_compact';
 
@@ -66,22 +66,28 @@ final class CompactSerializer extends AbstractSerializer
             throw new \InvalidArgumentException('Unsupported input');
         }
 
-        $encodedSharedProtectedHeader = $parts[0];
-        $sharedProtectedHeader = json_decode(Base64Url::decode($encodedSharedProtectedHeader));
-        $encryptedKey = empty($parts[1]) ? null : Base64Url::decode($parts[1]);
-        $iv = Base64Url::decode($parts[2]);
-        $ciphertext = Base64Url::decode($parts[3]);
-        $tag = Base64Url::decode($parts[4]);
+        try {
+            $encodedSharedProtectedHeader = $parts[0];
+            $sharedProtectedHeader = json_decode(Base64Url::decode($encodedSharedProtectedHeader), true);
+            $encryptedKey = empty($parts[1]) ? null : Base64Url::decode($parts[1]);
+            $iv = Base64Url::decode($parts[2]);
+            $ciphertext = Base64Url::decode($parts[3]);
+            $tag = Base64Url::decode($parts[4]);
 
-        return JWE::create(
-            $ciphertext,
-            $iv,
-            $tag,
-            null,
-            [],
-            $sharedProtectedHeader,
-            $encodedSharedProtectedHeader,
-            [Recipient::create([], $encryptedKey)]);
+            return JWE::create(
+                $ciphertext,
+                $iv,
+                $tag,
+                null,
+                [],
+                $sharedProtectedHeader,
+                $encodedSharedProtectedHeader,
+                [Recipient::create([], $encryptedKey)]);
+        } catch (\Exception $e) {
+            throw new \InvalidArgumentException('Unsupported input');
+        } catch (\Error $e) {
+            throw new \InvalidArgumentException('Unsupported input');
+        }
     }
 
     /**

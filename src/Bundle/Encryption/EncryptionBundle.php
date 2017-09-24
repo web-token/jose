@@ -14,9 +14,13 @@ declare(strict_types=1);
 namespace Jose\Bundle\Encryption;
 
 use Jose\Bundle\Encryption\DependencyInjection\Compiler\CompressionMethodCompilerPass;
+use Jose\Bundle\Encryption\DependencyInjection\Compiler\SerializerCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Class EncryptionBundle.
+ */
 final class EncryptionBundle extends Bundle
 {
     /**
@@ -27,5 +31,6 @@ final class EncryptionBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new CompressionMethodCompilerPass());
+        $container->addCompilerPass(new SerializerCompilerPass());
     }
 }
