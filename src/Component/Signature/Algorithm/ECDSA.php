@@ -58,11 +58,12 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     public function verify(JWK $key, string $input, string $signature): bool
     {
         $this->checkKey($key);
+
         try {
             $der = ECSignature::toDER($signature, $this->getSignaturePartLength());
             $pem = ECKey::convertPublicKeyToPEM($key);
-            return 1 === openssl_verify($input, $der, $pem, $this->getHashAlgorithm());
 
+            return 1 === openssl_verify($input, $der, $pem, $this->getHashAlgorithm());
         } catch (\Exception $e) {
             return false;
         }
