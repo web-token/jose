@@ -21,7 +21,7 @@ use Jose\Component\Encryption\JWE;
 interface JWESerializerInterface
 {
     /**
-     * The name of the serialization
+     * The name of the serialization.
      *
      * @return string
      */
