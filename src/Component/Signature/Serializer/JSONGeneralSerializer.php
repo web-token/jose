@@ -113,6 +113,7 @@ final class JSONGeneralSerializer extends AbstractSerializer
                 $signature['header']
             );
         }
+
         return $jws;
     }
 
