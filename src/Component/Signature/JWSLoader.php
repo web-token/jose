@@ -19,6 +19,7 @@ use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Core\Util\KeyChecker;
+use Jose\Component\Signature\Algorithm\SignatureAlgorithmInterface;
 use Jose\Component\Signature\Serializer\JWSSerializerManager;
 
 /**

@@ -18,6 +18,7 @@ use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\KeyChecker;
+use Jose\Component\Signature\Algorithm\SignatureAlgorithmInterface;
 
 /**
  * Class JWSBuilder.

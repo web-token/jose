@@ -11,7 +11,7 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Signature;
+namespace Jose\Component\Signature\Algorithm;
 
 use Jose\Component\Core\AlgorithmInterface;
 use Jose\Component\Core\JWK;

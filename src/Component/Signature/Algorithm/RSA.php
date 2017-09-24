@@ -15,7 +15,6 @@ namespace Jose\Component\Signature\Algorithm;
 
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\Util\RSAKey;
-use Jose\Component\Signature\SignatureAlgorithmInterface;
 use Jose\Component\Signature\Util\RSA as JoseRSA;
 
 /**

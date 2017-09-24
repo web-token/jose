@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Algorithm;
 
 use Jose\Component\Core\JWK;
-use Jose\Component\Signature\SignatureAlgorithmInterface;
 
 /**
  * This class is an abstract class that implements the none algorithm (plaintext).

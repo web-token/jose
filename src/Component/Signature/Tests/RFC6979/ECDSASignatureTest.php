@@ -19,7 +19,7 @@ use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\Algorithm\ES256;
 use Jose\Component\Signature\Algorithm\ES384;
 use Jose\Component\Signature\Algorithm\ES512;
-use Jose\Component\Signature\SignatureAlgorithmInterface;
+use Jose\Component\Signature\Algorithm\SignatureAlgorithmInterface;
 use Jose\Component\Signature\Tests\AbstractSignatureTest;
 
 /**
