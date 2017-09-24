@@ -151,11 +151,20 @@ composer require spomky-labs/jose
 * [The bundles](doc/bundles.md)
 * [The console commands](doc/console.md)
 
+Examples:
+
+* Using the components:
+    * [Create and load a signed token](doc/examples/components/jws.md)
+    * [Create and load an encrypted token](doc/examples/components/jwe.md)
+* Using the bundles:
+    * [Create and load a signed token](doc/examples/bundles/jws.md)
+    * [Create and load an encrypted token](doc/examples/bundles/jwe.md)
+
 # Performances
 
 Please read the [performance page](doc/benchmarks/index.md) to know how to test the algorithms of the framework.
 
-You can also see the [last benchmarks](doc/benchmarks/results.md) made in our development environment.
+You can also see the [last benchmarks](doc/benchmarks/results.md) made with our development environment.
 
 **The use of the Algorithm `ECDH-ES` with curves `P-256`, `P-384` or `P-521` is not recommended**.
 

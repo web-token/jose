@@ -78,9 +78,9 @@ final class JWSLoader
      * @param JWK         $jwk
      * @param null|string $detachedPayload
      *
-     * @return null|int If the JWS has been verified, an integer that represents the ID of the signature is set
+     * @return int If the JWS has been verified, an integer that represents the ID of the signature is set
      */
-    public function verifyWithKey(JWS $jws, JWK $jwk, ?string $detachedPayload = null): ?int
+    public function verifyWithKey(JWS $jws, JWK $jwk, ?string $detachedPayload = null): int
     {
         $jwkset = JWKSet::createFromKeys([$jwk]);
 
@@ -95,9 +95,9 @@ final class JWSLoader
      * @param JWKSet      $jwkset          The signature will be verified using keys in the key set
      * @param null|string $detachedPayload If not null, the value must be the detached payload encoded in Base64 URL safe. If the input contains a payload, throws an exception.
      *
-     * @return null|int If the JWS has been verified, an integer that represents the ID of the signature is set
+     * @return int If the JWS has been verified, an integer that represents the ID of the signature is set
      */
-    public function verifyWithKeySet(JWS $jws, JWKSet $jwkset, ?string $detachedPayload = null): ?int
+    public function verifyWithKeySet(JWS $jws, JWKSet $jwkset, ?string $detachedPayload = null): int
     {
         $signatureIndex = $this->verifySignatures($jws, $jwkset, $detachedPayload);
         if (null === $signatureIndex) {

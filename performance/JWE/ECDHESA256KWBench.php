@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Performance\JWE;
 
 /**
- * @Revs(1024)
+ * @Revs(256)
  * @Groups({"JWE", "ECDHES", "ECDHESKW", "ECDHESA256KW"})
  */
 final class ECDHESA256KWBench extends EncryptionBench
