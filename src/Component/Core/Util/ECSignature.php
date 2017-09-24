@@ -34,11 +34,11 @@ final class ECSignature
         $S = mb_substr($signature, $partLength, null, '8bit');
 
         $R = self::preparePositiveInteger($R);
-        $Rl = mb_strlen($R, '8bit')/2;
+        $Rl = mb_strlen($R, '8bit') / 2;
         $S = self::preparePositiveInteger($S);
-        $Sl = mb_strlen($S, '8bit')/2;
+        $Sl = mb_strlen($S, '8bit') / 2;
         $der = pack('H*',
-            '30'. ($Rl+$Sl+4 > 128 ? '81' : '').dechex($Rl+$Sl+4)
+            '30'.($Rl + $Sl + 4 > 128 ? '81' : '').dechex($Rl + $Sl + 4)
             .'02'.dechex($Rl).$R
             .'02'.dechex($Sl).$S
         );
@@ -68,15 +68,15 @@ final class ECSignature
         }
 
         $Rl = hexdec(mb_substr($hex, 2, 2, '8bit'));
-        $R = self::retrievePositiveInteger(mb_substr($hex, 4, $Rl*2, '8bit'));
+        $R = self::retrievePositiveInteger(mb_substr($hex, 4, $Rl * 2, '8bit'));
         $R = str_pad($R, $partLength, '0', STR_PAD_LEFT);
 
-        $hex = mb_substr($hex, 4+$Rl*2, null, '8bit');
+        $hex = mb_substr($hex, 4 + $Rl * 2, null, '8bit');
         if ('02' !== mb_substr($hex, 0, 2, '8bit')) { // INTEGER
             throw new \RuntimeException();
         }
         $Sl = hexdec(mb_substr($hex, 2, 2, '8bit'));
-        $S = self::retrievePositiveInteger(mb_substr($hex, 4, $Sl*2, '8bit'));
+        $S = self::retrievePositiveInteger(mb_substr($hex, 4, $Sl * 2, '8bit'));
         $S = str_pad($S, $partLength, '0', STR_PAD_LEFT);
 
         return pack('H*', $R.$S);

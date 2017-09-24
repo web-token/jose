@@ -34,6 +34,7 @@ final class ECKey
             return self::convertPublicKeyToPEM($jwk);
         }
     }
+
     /**
      * @param JWK $jwk
      *
@@ -44,18 +45,21 @@ final class ECKey
         switch ($jwk->get('crv')) {
             case 'P-256':
                 $der = self::p256PublicKey();
+
                 break;
             case 'P-384':
                 $der = self::p384PublicKey();
+
                 break;
             case 'P-521':
                 $der = self::p521PublicKey();
+
                 break;
             default:
                 throw new \InvalidArgumentException('Unsupported curve.');
         }
         $der .= self::getKey($jwk);
-        $pem  = '-----BEGIN PUBLIC KEY-----'.PHP_EOL;
+        $pem = '-----BEGIN PUBLIC KEY-----'.PHP_EOL;
         $pem .= chunk_split(base64_encode($der), 64, PHP_EOL);
         $pem .= '-----END PUBLIC KEY-----'.PHP_EOL;
 
@@ -72,18 +76,21 @@ final class ECKey
         switch ($jwk->get('crv')) {
             case 'P-256':
                 $der = self::p256PrivateKey($jwk);
+
                 break;
             case 'P-384':
                 $der = self::p384PrivateKey($jwk);
+
                 break;
             case 'P-521':
                 $der = self::p521PrivateKey($jwk);
+
                 break;
             default:
                 throw new \InvalidArgumentException('Unsupported curve.');
         }
         $der .= self::getKey($jwk);
-        $pem  = '-----BEGIN EC PRIVATE KEY-----'.PHP_EOL;
+        $pem = '-----BEGIN EC PRIVATE KEY-----'.PHP_EOL;
         $pem .= chunk_split(base64_encode($der), 64, PHP_EOL);
         $pem .= '-----END EC PRIVATE KEY-----'.PHP_EOL;
 
@@ -150,8 +157,9 @@ final class ECKey
     {
         $d = unpack('H*', Base64Url::decode($jwk->get('d')))[1];
         $dl = mb_strlen($d, '8bit') / 2;
+
         return pack('H*',
-            '30'.dechex(87+$dl) // SEQUENCE, length 87+length($d)
+            '30'.dechex(87 + $dl) // SEQUENCE, length 87+length($d)
                 .'020101' // INTEGER, 1
                 .'04'.dechex($dl)   // OCTET STRING, length($d)
                     .$d
@@ -173,8 +181,9 @@ final class ECKey
     {
         $d = unpack('H*', Base64Url::decode($jwk->get('d')))[1];
         $dl = mb_strlen($d, '8bit') / 2;
+
         return pack('H*',
-            '3081'.dechex(116+$dl) // SEQUENCE, length 116 + length($d)
+            '3081'.dechex(116 + $dl) // SEQUENCE, length 116 + length($d)
                 .'020101' // INTEGER, 1
                 .'04'.dechex($dl)   // OCTET STRING, length($d)
                     .$d
@@ -196,8 +205,9 @@ final class ECKey
     {
         $d = unpack('H*', Base64Url::decode($jwk->get('d')))[1];
         $dl = mb_strlen($d, '8bit') / 2;
+
         return pack('H*',
-            '3081'.dechex(154+$dl) // SEQUENCE, length 154+length(d)
+            '3081'.dechex(154 + $dl) // SEQUENCE, length 154+length(d)
                 .'020101' // INTEGER, 1
                 .'04'.dechex($dl)   // OCTET STRING, length(d)
                     .$d
