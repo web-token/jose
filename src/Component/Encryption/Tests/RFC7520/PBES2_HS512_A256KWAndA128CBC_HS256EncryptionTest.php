@@ -156,10 +156,10 @@ final class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends AbstractEnc
             ->addRecipient($private_key)
             ->build();
 
-        $loaded_flattened_json = $jweLoader->load($jwe->toFlattenedJSON(0));
+        $loaded_flattened_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_json_flattened', $jwe, 0));
         $loaded_flattened_json = $jweLoader->decryptUsingKey($loaded_flattened_json, $private_key);
 
-        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_json_general', $jwe));
         $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
 
         self::assertTrue(array_key_exists('p2s', $loaded_flattened_json->getSharedProtectedHeaders()));

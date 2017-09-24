@@ -42,7 +42,7 @@ final class EncrypterTest extends AbstractEncryptionTest
             ->addRecipient($this->getRSARecipientKey())
             ->build();
 
-        $jwe = $jwe->toFlattenedJSON(0);
+        $jwe = $this->getJWESerializerManager()->serialize('jwe_json_flattened', $jwe, 0);
 
         $loaded = $jweLoader->load($jwe);
 
@@ -91,8 +91,8 @@ final class EncrypterTest extends AbstractEncryptionTest
                 'zip' => 'DEF',
             ])
             ->addRecipient($this->getRSARecipientKey())
-            ->build()
-            ->toCompactJSON(0);
+            ->build();
+        $jwe = $this->getJWESerializerManager()->serialize('jwe_compact', $jwe, 0);
 
         $loaded = $jweLoader->load($jwe);
 
@@ -130,8 +130,8 @@ final class EncrypterTest extends AbstractEncryptionTest
                 ]
             )
             ->withAAD('A,B,C,D')
-            ->build()
-            ->toFlattenedJSON(0);
+            ->build();
+        $jwe = $this->getJWESerializerManager()->serialize('jwe_json_flattened', $jwe, 0);
 
         $loaded = $jweLoader->load($jwe);
 
@@ -164,8 +164,8 @@ final class EncrypterTest extends AbstractEncryptionTest
             ])
             ->addRecipient($this->getRSARecipientKey())
             ->withAAD('foo,bar,baz')
-            ->build()
-            ->toFlattenedJSON(0);
+            ->build();
+        $jwe = $this->getJWESerializerManager()->serialize('jwe_json_flattened', $jwe, 0);
 
         $loaded = $jweLoader->load($jwe);
 
@@ -189,7 +189,7 @@ final class EncrypterTest extends AbstractEncryptionTest
     {
         $jweBuilder = $this->getJWEBuilderFactory()->create(['RSA-OAEP-256'], ['A256CBC-HS512'], ['DEF']);
 
-        $jweBuilder
+        $jwe = $jweBuilder
             ->withPayload(json_encode($this->getKeyToEncrypt()))
             ->withSharedProtectedHeaders([
                 'enc' => 'A256CBC-HS512',
@@ -198,8 +198,8 @@ final class EncrypterTest extends AbstractEncryptionTest
             ])
             ->addRecipient($this->getRSARecipientKey())
             ->withAAD('foo,bar,baz')
-            ->build()
-            ->toFlattenedJSON(0);
+            ->build();
+        $this->getJWESerializerManager()->serialize('jwe_json_flattened', $jwe, 0);
     }
 
     /**
@@ -272,8 +272,8 @@ final class EncrypterTest extends AbstractEncryptionTest
                 'zip' => 'DEF',
             ])
             ->addRecipient($this->getRSARecipientKey())
-            ->build()
-            ->toCompactJSON(0);
+            ->build();
+        $jwe = $this->getJWESerializerManager()->serialize('jwe_compact', $jwe, 0);
 
         $loaded = $jweLoader->load($jwe);
 
@@ -380,8 +380,8 @@ final class EncrypterTest extends AbstractEncryptionTest
                 'alg' => 'dir',
             ])
             ->addRecipient($this->getDirectKey())
-            ->build()
-            ->toFlattenedJSON(0);
+            ->build();
+        $jwe = $this->getJWESerializerManager()->serialize('jwe_json_flattened', $jwe, 0);
 
         $loaded = $jweLoader->load($jwe);
 
@@ -411,8 +411,8 @@ final class EncrypterTest extends AbstractEncryptionTest
                 'alg' => 'ECDH-ES',
             ])
             ->addRecipient($this->getECDHRecipientPublicKey())
-            ->build()
-            ->toFlattenedJSON(0);
+            ->build();
+        $jwe = $this->getJWESerializerManager()->serialize('jwe_json_flattened', $jwe, 0);
 
         $loaded = $jweLoader->load($jwe);
 
@@ -441,8 +441,8 @@ final class EncrypterTest extends AbstractEncryptionTest
                 'alg' => 'ECDH-ES+A256KW',
             ])
             ->addRecipient($this->getECDHRecipientPublicKey())
-            ->build()
-            ->toFlattenedJSON(0);
+            ->build();
+        $jwe = $this->getJWESerializerManager()->serialize('jwe_json_flattened', $jwe, 0);
 
         $loaded = $jweLoader->load($jwe);
 
@@ -474,8 +474,8 @@ final class EncrypterTest extends AbstractEncryptionTest
             ])
             ->withAAD('foo,bar,baz')
             ->addRecipient($this->getECDHRecipientPublicKey())
-            ->build()
-            ->toFlattenedJSON(0);
+            ->build();
+        $jwe = $this->getJWESerializerManager()->serialize('jwe_json_flattened', $jwe, 0);
 
         $loaded = $jweLoader->load($jwe);
 
@@ -506,8 +506,8 @@ final class EncrypterTest extends AbstractEncryptionTest
             ->withAAD('foo,bar,baz')
             ->addRecipient($this->getECDHRecipientPublicKey(), ['kid' => 'e9bc097a-ce51-4036-9562-d2ade882db0d', 'alg' => 'ECDH-ES+A256KW'])
             ->addRecipient($this->getRSARecipientKey(), ['kid' => '123456789', 'alg' => 'RSA-OAEP-256'])
-            ->build()
-            ->toJSON();
+            ->build();
+        $jwe = $this->getJWESerializerManager()->serialize('jwe_json_general', $jwe);
 
         $loaded = $jweLoader->load($jwe);
 

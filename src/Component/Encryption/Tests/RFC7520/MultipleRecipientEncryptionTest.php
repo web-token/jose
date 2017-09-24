@@ -211,13 +211,13 @@ final class MultipleRecipientEncryptionTest extends AbstractEncryptionTest
             ->addRecipient($recipient_3_private_key, $recipient_3_headers)
             ->build();
 
-        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_json_general', $jwe));
         $jweLoader->decryptUsingKey($loaded_json, $recipient_1_private_key);
 
-        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_json_general', $jwe));
         $jweLoader->decryptUsingKey($loaded_json, $recipient_2_private_key);
 
-        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_json_general', $jwe));
         $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $recipient_3_private_key);
 
         self::assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());

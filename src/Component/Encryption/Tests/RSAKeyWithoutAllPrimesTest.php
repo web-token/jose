@@ -43,8 +43,8 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
             ->withPayload($claims)
             ->withSharedProtectedHeaders(['alg' => $encryption_algorithm, 'enc' => 'A256GCM'])
             ->addRecipient($key)
-            ->build()
-            ->toCompactJSON(0);
+            ->build();
+        $jwt = $this->getJWESerializerManager()->serialize('jwe_compact', $jwt, 0);
 
         $loaded = $jweLoader->load($jwt);
         self::assertInstanceOf(JWE::class, $loaded);
@@ -70,8 +70,8 @@ final class RSAKeyWithoutAllPrimesTest extends AbstractEncryptionTest
             ->withPayload($claims)
             ->withSharedProtectedHeaders(['alg' => $encryption_algorithm, 'enc' => 'A256GCM'])
             ->addRecipient($key)
-            ->build()
-            ->toCompactJSON(0);
+            ->build();
+        $jwt = $this->getJWESerializerManager()->serialize('jwe_compact', $jwt, 0);
 
         $loaded = $jweLoader->load($jwt);
         self::assertInstanceOf(JWE::class, $loaded);

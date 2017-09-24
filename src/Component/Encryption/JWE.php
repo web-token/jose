@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Jose\Component\Encryption;
 
-use Base64Url\Base64Url;
 use Jose\Component\Core\JWTInterface;
 
 /**
@@ -32,9 +31,9 @@ final class JWE implements JWTInterface
     private $ciphertext = null;
 
     /**
-     * @var string|null
+     * @var string
      */
-    private $iv = null;
+    private $iv;
 
     /**
      * @var string|null
@@ -42,9 +41,9 @@ final class JWE implements JWTInterface
     private $aad = null;
 
     /**
-     * @var string|null
+     * @var string
      */
-    private $tag = null;
+    private $tag;
 
     /**
      * @var array
@@ -70,15 +69,15 @@ final class JWE implements JWTInterface
      * JWE constructor.
      *
      * @param string      $ciphertext
-     * @param null|string $iv
+     * @param string      $iv
+     * @param string      $tag
      * @param null|string $aad
-     * @param null|string $tag
      * @param array       $sharedHeaders
      * @param array       $sharedProtectedHeaders
      * @param null|string $encodedSharedProtectedHeaders
      * @param array       $recipients
      */
-    private function __construct(string $ciphertext, ?string $iv = null, ?string $aad = null, ?string $tag = null, array $sharedHeaders = [], array $sharedProtectedHeaders = [], ?string $encodedSharedProtectedHeaders = null, array $recipients = [])
+    private function __construct(string $ciphertext, string $iv, string $tag, ?string $aad = null, array $sharedHeaders = [], array $sharedProtectedHeaders = [], ?string $encodedSharedProtectedHeaders = null, array $recipients = [])
     {
         $this->ciphertext = $ciphertext;
         $this->iv = $iv;
@@ -92,9 +91,9 @@ final class JWE implements JWTInterface
 
     /**
      * @param string      $ciphertext
-     * @param null|string $iv
+     * @param string      $iv
+     * @param string      $tag
      * @param null|string $aad
-     * @param null|string $tag
      * @param array       $sharedHeaders
      * @param array       $sharedProtectedHeaders
      * @param null|string $encodedSharedProtectedHeaders
@@ -102,9 +101,9 @@ final class JWE implements JWTInterface
      *
      * @return JWE
      */
-    public static function create(string $ciphertext, ?string $iv = null, ?string $aad = null, ?string $tag = null, array $sharedHeaders = [], array $sharedProtectedHeaders = [], ?string $encodedSharedProtectedHeaders = null, array $recipients = []): JWE
+    public static function create(string $ciphertext, string $iv, string $tag, ?string $aad = null, array $sharedHeaders = [], array $sharedProtectedHeaders = [], ?string $encodedSharedProtectedHeaders = null, array $recipients = []): JWE
     {
-        return new self($ciphertext, $iv, $aad, $tag, $sharedHeaders, $sharedProtectedHeaders, $encodedSharedProtectedHeaders, $recipients);
+        return new self($ciphertext, $iv, $tag, $aad, $sharedHeaders, $sharedProtectedHeaders, $encodedSharedProtectedHeaders, $recipients);
     }
 
     /**
@@ -272,122 +271,5 @@ final class JWE implements JWTInterface
     public function hasSharedHeader(string $key): bool
     {
         return array_key_exists($key, $this->sharedHeaders);
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return string
-     */
-    public function toCompactJSON(int $id): string
-    {
-        $recipient = $this->getRecipient($id);
-
-        $this->checkHasNoAAD();
-        $this->checkHasSharedProtectedHeaders();
-        $this->checkRecipientHasNoHeaders($id);
-
-        return sprintf(
-            '%s.%s.%s.%s.%s',
-            $this->getEncodedSharedProtectedHeaders(),
-            Base64Url::encode(null === $recipient->getEncryptedKey() ? '' : $recipient->getEncryptedKey()),
-            Base64Url::encode(null === $this->getIV() ? '' : $this->getIV()),
-            Base64Url::encode($this->getCiphertext()),
-            Base64Url::encode(null === $this->getTag() ? '' : $this->getTag())
-        );
-    }
-
-    private function checkHasNoAAD()
-    {
-        if (!empty($this->getAAD())) {
-            throw new \LogicException('This JWE has AAD and cannot be converted into Compact JSON.');
-        }
-    }
-
-    /**
-     * @param int $id
-     */
-    private function checkRecipientHasNoHeaders(int $id)
-    {
-        if (!empty($this->getSharedHeaders()) || !empty($this->getRecipient($id)->getHeaders())) {
-            throw new \LogicException('This JWE has shared headers or recipient headers and cannot be converted into Compact JSON.');
-        }
-    }
-
-    private function checkHasSharedProtectedHeaders()
-    {
-        if (empty($this->getSharedProtectedHeaders())) {
-            throw new \LogicException('This JWE does not have shared protected headers and cannot be converted into Compact JSON.');
-        }
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return string
-     */
-    public function toFlattenedJSON(int $id): string
-    {
-        $recipient = $this->getRecipient($id);
-
-        $json = $this->getJSONBase();
-
-        if (!empty($recipient->getHeaders())) {
-            $json['header'] = $recipient->getHeaders();
-        }
-        if (!empty($recipient->getEncryptedKey())) {
-            $json['encrypted_key'] = Base64Url::encode($recipient->getEncryptedKey());
-        }
-
-        return json_encode($json);
-    }
-
-    /**
-     * @return string
-     */
-    public function toJSON(): string
-    {
-        $json = $this->getJSONBase();
-        $json['recipients'] = [];
-
-        foreach ($this->getRecipients() as $recipient) {
-            $temp = [];
-            if (!empty($recipient->getHeaders())) {
-                $temp['header'] = $recipient->getHeaders();
-            }
-            if (!empty($recipient->getEncryptedKey())) {
-                $temp['encrypted_key'] = Base64Url::encode($recipient->getEncryptedKey());
-            }
-            $json['recipients'][] = $temp;
-        }
-
-        return json_encode($json);
-    }
-
-    /**
-     * @return array
-     */
-    private function getJSONBase(): array
-    {
-        $json = [
-            'ciphertext' => Base64Url::encode($this->getCiphertext()),
-        ];
-        if (null !== $this->getIV()) {
-            $json['iv'] = Base64Url::encode($this->getIV());
-        }
-        if (null !== $this->getTag()) {
-            $json['tag'] = Base64Url::encode($this->getTag());
-        }
-        if (null !== $this->getAAD()) {
-            $json['aad'] = Base64Url::encode($this->getAAD());
-        }
-        if (!empty($this->getSharedProtectedHeaders())) {
-            $json['protected'] = $this->getEncodedSharedProtectedHeaders();
-        }
-        if (!empty($this->getSharedHeaders())) {
-            $json['unprotected'] = $this->getSharedHeaders();
-        }
-
-        return $json;
     }
 }

@@ -22,8 +22,12 @@ use Jose\Component\Encryption\Compression;
 use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
 use Jose\Component\Encryption\JWEBuilderFactory;
 use Jose\Component\Encryption\JWELoaderFactory;
+use Jose\Component\Encryption\Serializer;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class AbstractEncryptionTest.
+ */
 abstract class AbstractEncryptionTest extends TestCase
 {
     /**
@@ -145,5 +149,46 @@ abstract class AbstractEncryptionTest extends TestCase
         }
 
         return $this->headerCheckerManagerFactory;
+    }
+
+    /**
+     * @var null|Serializer\JWESerializerManagerFactory
+     */
+    private $jwsSerializerManagerFactory = null;
+
+    /**
+     * @return Serializer\JWESerializerManagerFactory
+     */
+    protected function getJWESerializerManagerFactory(): Serializer\JWESerializerManagerFactory
+    {
+        if (null === $this->jwsSerializerManagerFactory) {
+            $this->jwsSerializerManagerFactory = new Serializer\JWESerializerManagerFactory();
+            $this->jwsSerializerManagerFactory->add(new Serializer\CompactSerializer());
+            $this->jwsSerializerManagerFactory->add(new Serializer\JSONFlattenedSerializer());
+            $this->jwsSerializerManagerFactory->add(new Serializer\JSONGeneralSerializer());
+        }
+
+        return $this->jwsSerializerManagerFactory;
+    }
+
+    /**
+     * @var null|Serializer\JWESerializerManager
+     */
+    private $jwsSerializerManager = null;
+
+    /**
+     * @return Serializer\JWESerializerManager
+     */
+    protected function getJWESerializerManager(): Serializer\JWESerializerManager
+    {
+        if (null === $this->jwsSerializerManager) {
+            $this->jwsSerializerManager = Serializer\JWESerializerManager::create([
+                new Serializer\CompactSerializer(),
+                new Serializer\JSONFlattenedSerializer(),
+                new Serializer\JSONGeneralSerializer(),
+            ]);
+        }
+
+        return $this->jwsSerializerManager;
     }
 }

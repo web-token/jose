@@ -104,10 +104,10 @@ class DirAndA128GCMEncryptionTest extends AbstractEncryptionTest
             ->addRecipient($private_key)
             ->build();
 
-        $loaded_compact_json = $jweLoader->load($jwe->toCompactJSON(0));
+        $loaded_compact_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_compact', $jwe, 0));
         $loaded_compact_json = $jweLoader->decryptUsingKey($loaded_compact_json, $private_key);
 
-        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_json_general', $jwe));
         $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
 
         self::assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());

@@ -128,9 +128,9 @@ final class JWEParser
     private static function loadSerializedJsonJWE(array $data): JWE
     {
         $ciphertext = Base64Url::decode($data['ciphertext']);
-        $iv = array_key_exists('iv', $data) ? Base64Url::decode($data['iv']) : null;
+        $iv = Base64Url::decode($data['iv']);
+        $tag = Base64Url::decode($data['tag']);
         $aad = array_key_exists('aad', $data) ? Base64Url::decode($data['aad']) : null;
-        $tag = array_key_exists('tag', $data) ? Base64Url::decode($data['tag']) : null;
         $encodedSharedProtectedHeader = array_key_exists('protected', $data) ? $data['protected'] : null;
         $sharedProtectedHeader = $encodedSharedProtectedHeader ? json_decode(Base64Url::decode($encodedSharedProtectedHeader), true) : [];
         $sharedHeader = array_key_exists('unprotected', $data) ? $data['unprotected'] : [];
@@ -141,6 +141,6 @@ final class JWEParser
             $recipients[] = Recipient::create($header, $encryptedKey);
         }
 
-        return JWE::create($ciphertext, $iv, $aad, $tag, $sharedHeader, $sharedProtectedHeader, $encodedSharedProtectedHeader, $recipients);
+        return JWE::create($ciphertext, $iv, $tag, $aad, $sharedHeader, $sharedProtectedHeader, $encodedSharedProtectedHeader, $recipients);
     }
 }

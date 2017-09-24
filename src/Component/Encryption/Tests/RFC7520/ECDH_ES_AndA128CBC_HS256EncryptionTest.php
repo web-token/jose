@@ -124,7 +124,7 @@ final class ECDH_ES_AndA128CBC_HS256EncryptionTest extends AbstractEncryptionTes
             ->addRecipient($public_key)
             ->build();
 
-        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_json_general', $jwe));
         $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
 
         self::assertTrue(array_key_exists('epk', $loaded_json->getSharedProtectedHeaders()));

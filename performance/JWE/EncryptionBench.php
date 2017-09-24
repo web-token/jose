@@ -123,8 +123,7 @@ abstract class EncryptionBench
             ->withSharedProtectedHeaders($params['shared_protected_headers'])
             ->withSharedHeaders($params['shared_headers'])
             ->addRecipient(JWK::create($params['recipient_key']), $params['recipient_headers'])
-            ->build()
-            ->toFlattenedJSON(0);
+            ->build();
     }
 
     /**

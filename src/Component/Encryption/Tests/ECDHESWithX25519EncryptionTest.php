@@ -43,8 +43,8 @@ final class ECDHESWithX25519EncryptionTest extends AbstractEncryptionTest
             ->withPayload($input)
             ->withSharedProtectedHeaders($protectedHeaders)
             ->addRecipient($receiverKey)
-            ->build()
-            ->toCompactJSON(0);
+            ->build();
+        $jwt = $this->getJWESerializerManager()->serialize('jwe_compact', $jwt, 0);
 
         $jwe = $jweLoader->load($jwt);
         $jwe = $jweLoader->decryptUsingKey($jwe, $receiverKey, $index);

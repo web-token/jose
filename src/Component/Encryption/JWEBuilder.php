@@ -267,7 +267,7 @@ final class JWEBuilder
 
         list($ciphertext, $iv, $tag) = $this->encryptJWE($cek, $encodedSharedProtectedHeaders);
 
-        return JWE::create($ciphertext, $iv, $this->aad, $tag, $this->sharedHeaders, $sharedProtectedHeaders, $encodedSharedProtectedHeaders, $recipients);
+        return JWE::create($ciphertext, $iv, $tag, $this->aad, $this->sharedHeaders, $sharedProtectedHeaders, $encodedSharedProtectedHeaders, $recipients);
     }
 
     /**

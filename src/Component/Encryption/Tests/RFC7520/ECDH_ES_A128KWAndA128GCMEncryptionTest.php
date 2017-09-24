@@ -137,10 +137,10 @@ final class ECDH_ES_A128KWAndA128GCMEncryptionTest extends AbstractEncryptionTes
             ->addRecipient($public_key)
             ->build();
 
-        $loaded_flattened_json = $jweLoader->load($jwe->toFlattenedJSON(0));
+        $loaded_flattened_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_json_flattened', $jwe, 0));
         $loaded_flattened_json = $jweLoader->decryptUsingKey($loaded_flattened_json, $private_key);
 
-        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_json_general', $jwe));
         $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
 
         self::assertTrue(array_key_exists('epk', $loaded_flattened_json->getSharedProtectedHeaders()));

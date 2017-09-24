@@ -11,24 +11,24 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace Jose\Component\Signature\Serializer;
+namespace Jose\Component\Encryption\Serializer;
 
-use Jose\Component\Signature\JWS;
+use Jose\Component\Encryption\JWE;
 
 /**
- * Class JWSSerializationManager.
+ * Class JWESerializationManager.
  */
-final class JWSSerializerManager
+final class JWESerializerManager
 {
     /**
-     * @var JWSSerializerInterface[]
+     * @var JWESerializerInterface[]
      */
     private $serializers = [];
 
     /**
-     * JWSSerializerManager constructor.
+     * JWESerializerManager constructor.
      *
-     * @param JWSSerializerInterface[] $serializers
+     * @param JWESerializerInterface[] $serializers
      */
     private function __construct(array $serializers)
     {
@@ -38,21 +38,21 @@ final class JWSSerializerManager
     }
 
     /**
-     * @param JWSSerializerInterface[] $serializers
+     * @param JWESerializerInterface[] $serializers
      *
-     * @return JWSSerializerManager
+     * @return JWESerializerManager
      */
-    public static function create(array $serializers): JWSSerializerManager
+    public static function create(array $serializers): JWESerializerManager
     {
         return new self($serializers);
     }
 
     /**
-     * @param JWSSerializerInterface $serializer
+     * @param JWESerializerInterface $serializer
      *
-     * @return JWSSerializerManager
+     * @return JWESerializerManager
      */
-    private function add(JWSSerializerInterface $serializer): JWSSerializerManager
+    private function add(JWESerializerInterface $serializer): JWESerializerManager
     {
         $this->serializers[$serializer->name()] = $serializer;
 
@@ -60,36 +60,36 @@ final class JWSSerializerManager
     }
 
     /**
-     * Converts a JWS into a string.
+     * Converts a JWE into a string.
      *
      * @param string   $name
-     * @param JWS      $jws
-     * @param int|null $signatureIndex
+     * @param JWE      $jws
+     * @param int|null $recipientIndex
      *
      * @throws \Exception
      *
      * @return string
      */
-    public function serialize(string $name, JWS $jws, ?int $signatureIndex = null): string
+    public function serialize(string $name, JWE $jws, ?int $recipientIndex = null): string
     {
         if (!array_key_exists($name, $this->serializers)) {
             throw new \InvalidArgumentException(sprintf('Unsupported serializer "%s".', $name));
         }
 
-        return ($this->serializers[$name])->serialize($jws, $signatureIndex);
+        return ($this->serializers[$name])->serialize($jws, $recipientIndex);
     }
 
     /**
-     * Loads data and return a JWS object.
+     * Loads data and return a JWE object.
      *
-     * @param string      $input A string that represents a JWS
+     * @param string      $input A string that represents a JWE
      * @param string|null $name  The name of the serializer if the input is unserialized.
      *
      * @throws \Exception
      *
-     * @return JWS
+     * @return JWE
      */
-    public function unserialize(string $input, ?string &$name = null): JWS
+    public function unserialize(string $input, ?string &$name = null): JWE
     {
         foreach ($this->serializers as $serializer) {
             try {

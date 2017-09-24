@@ -120,13 +120,13 @@ final class A128KWAndA128GCMEncryptionWithCompressionTest extends AbstractEncryp
             ->addRecipient($private_key)
             ->build();
 
-        $loaded_compact_json = $jweLoader->load($jwe->toCompactJSON(0));
+        $loaded_compact_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_compact', $jwe, 0));
         $loaded_compact_json = $jweLoader->decryptUsingKey($loaded_compact_json, $private_key);
 
-        $loaded_flattened_json = $jweLoader->load($jwe->toFlattenedJSON(0));
+        $loaded_flattened_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_json_flattened', $jwe, 0));
         $loaded_flattened_json = $jweLoader->decryptUsingKey($loaded_flattened_json, $private_key);
 
-        $loaded_json = $jweLoader->load($jwe->toJSON());
+        $loaded_json = $jweLoader->load($this->getJWESerializerManager()->serialize('jwe_json_general', $jwe));
         $loaded_json = $jweLoader->decryptUsingKey($loaded_json, $private_key);
 
         self::assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());
