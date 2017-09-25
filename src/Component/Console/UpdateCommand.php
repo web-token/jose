@@ -23,6 +23,9 @@ use Humbug\SelfUpdate\Updater;
  */
 final class UpdateCommand extends Command
 {
+    /**
+     * {@inheritdoc]
+     */
     protected function configure()
     {
         $this
@@ -31,6 +34,9 @@ final class UpdateCommand extends Command
         ;
     }
 
+    /**
+     * {@inheritdoc]
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $updater = new Updater();
@@ -44,12 +50,12 @@ final class UpdateCommand extends Command
             if ($result) {
                 $new = $updater->getNewVersion();
                 $old = $updater->getOldVersion();
-                $output->write(sprintf('Updated from SHA-1 %s to SHA-1 %s', $old, $new));
+                $output->write(sprintf('Updated from %s to %s', $old, $new));
             } else {
-                $output->write('No update needed!');
+                $output->write('Already up-to-date.');
             }
         } catch (\Exception $e) {
-            $output->write('Well, something happened! Either an oopsie or something involving hackers.');
+            $output->write('Something went wrong during the update.');
         }
     }
 }
