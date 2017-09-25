@@ -33,8 +33,8 @@ final class RsaKeysetGeneratorCommand extends AbstractGeneratorCommand
         $this
             ->setName('keyset:generate:rsa')
             ->setDescription('Generate a key set with RSA keys (JWK format)')
-            ->addArgument('size', InputArgument::REQUIRED, 'Quantity of keys in the key set.')
-            ->addArgument('curve', InputArgument::REQUIRED, 'Key size.');
+            ->addArgument('quantity', InputArgument::REQUIRED, 'Quantity of keys in the key set.')
+            ->addArgument('size', InputArgument::REQUIRED, 'Key size.');
     }
 
     /**
