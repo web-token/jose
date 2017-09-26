@@ -24,7 +24,7 @@ use Humbug\SelfUpdate\Updater;
 final class RollbackCommand extends Command
 {
     /**
-     * {@inheritdoc]
+     * {@inheritdoc].
      */
     protected function configure()
     {
@@ -35,7 +35,7 @@ final class RollbackCommand extends Command
     }
 
     /**
-     * {@inheritdoc]
+     * {@inheritdoc].
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
