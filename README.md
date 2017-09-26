@@ -154,9 +154,11 @@ composer require spomky-labs/jose
 Examples:
 
 * Using the components:
+    * [Create keys and key sets](doc/examples/components/jwk.md)
     * [Create and load a signed token](doc/examples/components/jws.md)
     * [Create and load an encrypted token](doc/examples/components/jwe.md)
 * Using the bundles:
+    * [Create keys and key sets](doc/examples/bundles/jwk.md)
     * [Create and load a signed token](doc/examples/bundles/jws.md)
     * [Create and load an encrypted token](doc/examples/bundles/jwe.md)
 
