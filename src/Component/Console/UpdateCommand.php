@@ -24,7 +24,7 @@ use Humbug\SelfUpdate\Updater;
 final class UpdateCommand extends Command
 {
     /**
-     * {@inheritdoc]
+     * {@inheritdoc].
      */
     protected function configure()
     {
@@ -35,7 +35,7 @@ final class UpdateCommand extends Command
     }
 
     /**
-     * {@inheritdoc]
+     * {@inheritdoc].
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
