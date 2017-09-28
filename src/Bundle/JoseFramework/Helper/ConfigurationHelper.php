@@ -169,7 +169,7 @@ final class ConfigurationHelper
      * @param array            $serializers
      * @param bool             $is_public
      */
-    public static function addJWELoader(ContainerBuilder $container, string $name, array $keyEncryptionAlgorithm, array $contentEncryptionAlgorithms, array $compressionMethods = ['DEF'], array  $headerCheckers = [], array $serializers = ['jws_compact'], bool $is_public = true)
+    public static function addJWELoader(ContainerBuilder $container, string $name, array $keyEncryptionAlgorithm, array $contentEncryptionAlgorithms, array $compressionMethods = ['DEF'], array  $headerCheckers = [], array $serializers = ['jwe_compact'], bool $is_public = true)
     {
         $config = [
             self::BUNDLE_ALIAS => [
