@@ -279,8 +279,11 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
      */
     private function canKeyBeUsedWithAlgorithm(?AlgorithmInterface $algorithm, JWK $key)
     {
-        if (null === $algorithm || $algorithm->keyType() !== $key->get('kty')) {
+        if (null === $algorithm) {
             return 0;
+        }
+        if ($algorithm->keyType() !== $key->get('kty')) {
+            return false;
         }
         if ($key->has('alg')) {
             return $algorithm->name() === $key->get('alg') ? 2 : false;
