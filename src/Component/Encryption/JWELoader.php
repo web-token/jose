@@ -89,27 +89,27 @@ final class JWELoader
     }
 
     /**
-     * @return string[]
+     * @return AlgorithmManager
      */
-    public function getSupportedCompressionMethods(): array
+    public function getKeyEncryptionAlgorithmManager(): AlgorithmManager
     {
-        return $this->compressionMethodManager->list();
+        return $this->keyEncryptionAlgorithmManager;
     }
 
     /**
-     * @return string[]
+     * @return AlgorithmManager
      */
-    public function getSupportedKeyEncryptionAlgorithms(): array
+    public function getContentEncryptionAlgorithmManager(): AlgorithmManager
     {
-        return $this->keyEncryptionAlgorithmManager->list();
+        return $this->contentEncryptionAlgorithmManager;
     }
 
     /**
-     * @return string[]
+     * @return CompressionMethodManager
      */
-    public function getSupportedContentEncryptionAlgorithms(): array
+    public function getCompressionMethodManager(): CompressionMethodManager
     {
-        return $this->contentEncryptionAlgorithmManager->list();
+        return $this->compressionMethodManager;
     }
 
     /**

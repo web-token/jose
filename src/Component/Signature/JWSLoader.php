@@ -67,11 +67,11 @@ final class JWSLoader
     }
 
     /**
-     * @return string[]
+     * @return AlgorithmManager
      */
-    public function getSupportedSignatureAlgorithms(): array
+    public function getSignatureAlgorithmManager(): AlgorithmManager
     {
-        return $this->signatureAlgorithmManager->list();
+        return $this->signatureAlgorithmManager;
     }
 
     /**

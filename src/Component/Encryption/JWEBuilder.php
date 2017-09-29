@@ -129,27 +129,27 @@ final class JWEBuilder
     }
 
     /**
-     * @return string[]
+     * @return AlgorithmManager
      */
-    public function getSupportedKeyEncryptionAlgorithms(): array
+    public function getKeyEncryptionAlgorithmManager(): AlgorithmManager
     {
-        return $this->keyEncryptionAlgorithmManager->list();
+        return $this->keyEncryptionAlgorithmManager;
     }
 
     /**
-     * @return string[]
+     * @return AlgorithmManager
      */
-    public function getSupportedContentEncryptionAlgorithms(): array
+    public function getContentEncryptionAlgorithmManager(): AlgorithmManager
     {
-        return $this->contentEncryptionAlgorithmManager->list();
+        return $this->contentEncryptionAlgorithmManager;
     }
 
     /**
-     * @return string[]
+     * @return CompressionMethodManager
      */
-    public function getSupportedCompressionMethods(): array
+    public function getCompressionManager(): CompressionMethodManager
     {
-        return $this->compressionManager->list();
+        return $this->compressionManager;
     }
 
     /**
