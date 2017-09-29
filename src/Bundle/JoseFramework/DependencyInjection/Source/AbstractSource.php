@@ -32,9 +32,9 @@ abstract class AbstractSource
 
     /**
      * @param ContainerBuilder $container
-     * @param string $type
-     * @param string $name
-     * @param array $config
+     * @param string           $type
+     * @param string           $name
+     * @param array            $config
      */
     public function create(ContainerBuilder $container, string $type, string $name, array $config)
     {

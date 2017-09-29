@@ -31,6 +31,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
             throw new \RuntimeException('Elliptic Curve key type not supported by your environment.');
         }
     }
+
     /**
      * {@inheritdoc}
      */
@@ -38,7 +39,6 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     {
         return ['EC'];
     }
-
 
     /**
      * {@inheritdoc}
