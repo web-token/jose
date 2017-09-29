@@ -30,6 +30,14 @@ final class ECDHES implements KeyAgreementInterface
     /**
      * {@inheritdoc}
      */
+    public function keyType(): array
+    {
+        return ['EC', 'OKP'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getAgreementKey(int $encryption_key_length, string $algorithm, JWK $recipient_key, array $complete_header = [], array &$additional_header_values = []): string
     {
         if ($recipient_key->has('d')) {

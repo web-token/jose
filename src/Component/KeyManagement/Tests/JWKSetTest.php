@@ -16,6 +16,7 @@ namespace Jose\Component\KeyManagement\Tests;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\JWKFactory;
+use Jose\Component\Signature\Algorithm\RS256;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,7 +39,7 @@ final class JWKSetTest extends TestCase
     {
         $jwkset = $this->getPublicKeySet();
 
-        $jwk = $jwkset->selectKey('sig', 'RS256');
+        $jwk = $jwkset->selectKey('sig', new RS256());
         self::assertInstanceOf(JWK::class, $jwk);
         self::assertEquals([
                 'kid' => '71ee230371d19630bc17fb90ccf20ae632ad8cf8',
@@ -56,7 +57,7 @@ final class JWKSetTest extends TestCase
     {
         $jwkset = $this->getPublicKeySet();
 
-        $jwk = $jwkset->selectKey('sig', 'RS256', ['kid' => '02491f945c951adf156f370788e8ccdabf8877a8']);
+        $jwk = $jwkset->selectKey('sig', new RS256(), ['kid' => '02491f945c951adf156f370788e8ccdabf8877a8']);
         self::assertInstanceOf(JWK::class, $jwk);
         self::assertEquals([
                 'kid' => '02491f945c951adf156f370788e8ccdabf8877a8',

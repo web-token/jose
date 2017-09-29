@@ -23,6 +23,14 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
     /**
      * {@inheritdoc}
      */
+    public function keyType(): array
+    {
+        return ['oct'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function encryptContent(string $data, string $cek, string $iv, ?string $aad, string $encoded_protected_header, ?string &$tag): string
     {
         $calculated_aad = $encoded_protected_header;

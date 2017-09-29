@@ -24,6 +24,14 @@ final class EdDSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
+    public function keyType(): array
+    {
+        return ['OKP'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function sign(JWK $key, string $input): string
     {
         $this->checkKey($key);

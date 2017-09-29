@@ -25,6 +25,14 @@ abstract class RSA implements KeyEncryptionInterface
     /**
      * {@inheritdoc}
      */
+    public function keyType(): array
+    {
+        return ['RSA'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function encryptKey(JWK $key, string $cek, array $complete_headers, array &$additional_headers): string
     {
         $this->checkKey($key);

@@ -23,6 +23,14 @@ abstract class ECDHESAESKW implements KeyAgreementWrappingInterface
     /**
      * {@inheritdoc}
      */
+    public function keyType(): array
+    {
+        return ['EC', 'OKP'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function wrapAgreementKey(JWK $receiver_key, string $cek, int $encryption_key_length, array $complete_header, array &$additional_header_values): string
     {
         $ecdh_es = new ECDHES();

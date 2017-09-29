@@ -47,6 +47,14 @@ final class Dir implements DirectEncryptionInterface
     /**
      * {@inheritdoc}
      */
+    public function keyType(): array
+    {
+        return ['oct'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getKeyManagementMode(): string
     {
         return self::MODE_DIRECT;

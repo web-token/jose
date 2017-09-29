@@ -23,6 +23,14 @@ final class None implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
+    public function keyType(): array
+    {
+        return ['none'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function sign(JWK $key, string $input): string
     {
         $this->checkKey($key);

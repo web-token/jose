@@ -22,4 +22,9 @@ interface AlgorithmInterface
      * @return string Returns the name of the algorithm
      */
     public function name(): string;
+
+    /**
+     * @return array[] Returns the key types suitable for this algorithm
+     */
+    public function keyType(): array;
 }

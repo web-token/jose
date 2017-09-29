@@ -25,6 +25,14 @@ abstract class HMAC implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
+    public function keyType(): array
+    {
+        return ['oct'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function sign(JWK $key, string $input): string
     {
         $this->checkKey($key);

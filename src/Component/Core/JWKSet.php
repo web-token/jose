@@ -209,13 +209,13 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
     }
 
     /**
-     * @param string      $type         Must be 'sig' (signature) or 'enc' (encryption)
-     * @param string|null $algorithm    Specifies the algorithm to be used
-     * @param array       $restrictions More restrictions such as 'kid' or 'kty'
+     * @param string                  $type         Must be 'sig' (signature) or 'enc' (encryption)
+     * @param AlgorithmInterface|null $algorithm    Specifies the algorithm to be used
+     * @param array                   $restrictions More restrictions such as 'kid' or 'kty'
      *
      * @return JWK|null
      */
-    public function selectKey(string $type, ?string $algorithm = null, array $restrictions = []): ?JWK
+    public function selectKey(string $type, ?AlgorithmInterface $algorithm = null, array $restrictions = []): ?JWK
     {
         if (!in_array($type, ['enc', 'sig'])) {
             throw new \InvalidArgumentException('Allowed key types are "sig" or "enc".');
@@ -272,21 +272,21 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
     }
 
     /**
-     * @param null|string $algorithm
+     * @param null|AlgorithmInterface $algorithm
      * @param JWK         $key
      *
      * @return bool|int
      */
-    private function canKeyBeUsedWithAlgorithm(?string $algorithm, JWK $key)
+    private function canKeyBeUsedWithAlgorithm(?AlgorithmInterface $algorithm, JWK $key)
     {
-        if (null === $algorithm) {
+        if (null === $algorithm || $algorithm->keyType() !== $key->get('kty')) {
             return 0;
         }
         if ($key->has('alg')) {
-            return $algorithm === $key->get('alg') ? 1 : false;
+            return $algorithm->name() === $key->get('alg') ? 2 : false;
         }
 
-        return 0;
+        return 1;
     }
 
     /**

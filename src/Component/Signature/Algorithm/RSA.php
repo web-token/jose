@@ -35,6 +35,14 @@ abstract class RSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
+    public function keyType(): array
+    {
+        return ['RSA'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function verify(JWK $key, string $input, string $signature): bool
     {
         $this->checkKey($key);

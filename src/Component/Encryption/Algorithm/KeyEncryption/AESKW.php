@@ -24,6 +24,14 @@ abstract class AESKW implements KeyWrappingInterface
     /**
      * {@inheritdoc}
      */
+    public function keyType(): array
+    {
+        return ['oct'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function wrapKey(JWK $key, string $cek, array $complete_headers, array &$additional_headers): string
     {
         $this->checkKey($key);

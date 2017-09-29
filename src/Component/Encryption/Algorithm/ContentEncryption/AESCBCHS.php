@@ -23,6 +23,14 @@ abstract class AESCBCHS implements ContentEncryptionAlgorithmInterface
     /**
      * {@inheritdoc}
      */
+    public function keyType(): array
+    {
+        return ['oct'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function encryptContent(string $data, string $cek, string $iv, ?string $aad, string $encoded_protected_header, ?string &$tag): string
     {
         $keyLength = mb_strlen($cek, '8bit');
