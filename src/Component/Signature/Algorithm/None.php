@@ -23,7 +23,7 @@ final class None implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function keyType(): array
+    public function allowedKeyTypes(): array
     {
         return ['none'];
     }

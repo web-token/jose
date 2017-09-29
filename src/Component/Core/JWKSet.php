@@ -282,7 +282,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
         if (null === $algorithm) {
             return 0;
         }
-        if (!in_array($key->get('kty'), $algorithm->keyType())) {
+        if (!in_array($key->get('kty'), $algorithm->allowedKeyTypes())) {
             return false;
         }
         if ($key->has('alg')) {

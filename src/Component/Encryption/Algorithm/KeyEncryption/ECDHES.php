@@ -30,7 +30,7 @@ final class ECDHES implements KeyAgreementInterface
     /**
      * {@inheritdoc}
      */
-    public function keyType(): array
+    public function allowedKeyTypes(): array
     {
         return ['EC', 'OKP'];
     }

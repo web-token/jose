@@ -35,7 +35,7 @@ abstract class RSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function keyType(): array
+    public function allowedKeyTypes(): array
     {
         return ['RSA'];
     }

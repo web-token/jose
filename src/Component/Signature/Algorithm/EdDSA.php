@@ -24,7 +24,7 @@ final class EdDSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function keyType(): array
+    public function allowedKeyTypes(): array
     {
         return ['OKP'];
     }

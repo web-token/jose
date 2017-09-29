@@ -26,5 +26,5 @@ interface AlgorithmInterface
     /**
      * @return array[] Returns the key types suitable for this algorithm
      */
-    public function keyType(): array;
+    public function allowedKeyTypes(): array;
 }

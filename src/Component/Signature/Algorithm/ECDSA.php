@@ -34,7 +34,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function keyType(): array
+    public function allowedKeyTypes(): array
     {
         return ['EC'];
     }

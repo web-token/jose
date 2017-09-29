@@ -23,7 +23,7 @@ abstract class AESGCM implements ContentEncryptionAlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function keyType(): array
+    public function allowedKeyTypes(): array
     {
         return ['oct'];
     }

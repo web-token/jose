@@ -23,7 +23,7 @@ abstract class ECDHESAESKW implements KeyAgreementWrappingInterface
     /**
      * {@inheritdoc}
      */
-    public function keyType(): array
+    public function allowedKeyTypes(): array
     {
         return ['EC', 'OKP'];
     }

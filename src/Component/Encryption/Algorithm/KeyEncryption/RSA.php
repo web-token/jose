@@ -25,7 +25,7 @@ abstract class RSA implements KeyEncryptionInterface
     /**
      * {@inheritdoc}
      */
-    public function keyType(): array
+    public function allowedKeyTypes(): array
     {
         return ['RSA'];
     }
