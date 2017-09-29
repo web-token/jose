@@ -40,6 +40,7 @@ abstract class PBES2AESKW implements KeyWrappingInterface
         $this->salt_size = $salt_size;
         $this->nb_count = $nb_count;
     }
+
     /**
      * {@inheritdoc}
      */

@@ -273,7 +273,7 @@ final class JWKSet implements \Countable, \Iterator, \JsonSerializable
 
     /**
      * @param null|AlgorithmInterface $algorithm
-     * @param JWK         $key
+     * @param JWK                     $key
      *
      * @return bool|int
      */
