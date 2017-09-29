@@ -33,7 +33,7 @@ final class JWSSerializerManagerFactory
         $serializers = [];
         foreach ($names as $name) {
             if (!array_key_exists($name, $this->serializers)) {
-                throw new \InvalidArgumentException(sprintf('Unsupported serialier "%s".', $name));
+                throw new \InvalidArgumentException(sprintf('Unsupported serialiser "%s".', $name));
             }
             $serializers[] = $this->serializers[$name];
         }
