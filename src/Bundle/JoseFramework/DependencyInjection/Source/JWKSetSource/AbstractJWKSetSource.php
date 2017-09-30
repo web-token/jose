@@ -60,7 +60,7 @@ abstract class AbstractJWKSetSource extends AbstractSource implements JWKSetSour
                     ->defaultNull()
                 ->end()
                 ->integerNode('max_age')
-                    ->info('When share, this value indicates when the HTTP client should keep the key in cache. Default is 21600 = 6 hours.')
+                    ->info('When share, this value indicates how many seconds the HTTP client should keep the key in cache. Default is 21600 = 6 hours.')
                     ->defaultValue(21600)
                 ->end()
             ->end();
