@@ -79,13 +79,14 @@ final class JWELoader
     }
 
     /**
-     * @param string $input
+     * @param string      $input
+     * @param string|null $serializer
      *
      * @return JWE
      */
-    public function load(string $input): JWE
+    public function load(string $input, ?string &$serializer = null): JWE
     {
-        return $this->serializerManager->unserialize($input);
+        return $this->serializerManager->unserialize($input, $serializer);
     }
 
     /**

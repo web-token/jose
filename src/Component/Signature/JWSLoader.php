@@ -57,13 +57,14 @@ final class JWSLoader
     }
 
     /**
-     * @param string $input
+     * @param string      $input
+     * @param string|null $serializer
      *
      * @return JWS
      */
-    public function load(string $input): JWS
+    public function load(string $input, ?string &$serializer = null): JWS
     {
-        return $this->serializerManager->unserialize($input);
+        return $this->serializerManager->unserialize($input, $serializer);
     }
 
     /**
