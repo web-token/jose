@@ -67,7 +67,7 @@ final class JSONGeneralSerializer implements JWESerializerInterface
             $data['recipients'][] = $temp;
         }
 
-        return json_encode($data);
+        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
     /**

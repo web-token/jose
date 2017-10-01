@@ -63,7 +63,7 @@ final class JSONGeneralSerializer extends AbstractSerializer
             $data['signatures'][] = $tmp;
         }
 
-        return json_encode($data);
+        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
     /**

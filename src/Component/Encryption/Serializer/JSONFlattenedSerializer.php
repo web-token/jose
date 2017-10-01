@@ -62,7 +62,7 @@ final class JSONFlattenedSerializer implements JWESerializerInterface
             $data['encrypted_key'] = Base64Url::encode($recipient->getEncryptedKey());
         }
 
-        return json_encode($data);
+        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
     /**
