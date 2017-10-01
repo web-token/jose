@@ -32,10 +32,10 @@ final class JWKSet extends AbstractJWKSetSource
         $definition = new Definition(self::class);
         $definition->setFactory([
             new Reference(JWKFactory::class),
-            'createFromValues',
+            'createFromString',
         ]);
         $definition->setArguments([
-            json_decode($config['value'], true),
+            $config['value'],
         ]);
 
         return $definition;

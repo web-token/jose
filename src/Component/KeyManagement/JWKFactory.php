@@ -181,6 +181,21 @@ final class JWKFactory
     }
 
     /**
+     * @param string $value
+     *
+     * @return JWK|JWKSet
+     */
+    public static function createFromString(string $value)
+    {
+        $json = json_decode($value, true);
+        if(!is_array($json)) {
+            throw new \InvalidArgumentException('Invalid key or key set.');
+        }
+
+        return self::createFromValues($json);
+    }
+
+    /**
      * @param array $values
      *
      * @return JWK|JWKSet
