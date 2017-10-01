@@ -46,7 +46,7 @@ services:
             - {'name': 'jose.algorithm', 'alias': 'ECDH-ES+A128KW'}
     Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA192KW:
         tags:
-            - {'name': 'jose.algorithm', 'alias': 'ECDH-ES+192KW'}
+            - {'name': 'jose.algorithm', 'alias': 'ECDH-ES+A192KW'}
     Jose\Component\Encryption\Algorithm\KeyEncryption\ECDHESA256KW:
         tags:
             - {'name': 'jose.algorithm', 'alias': 'ECDH-ES+A256KW'}
