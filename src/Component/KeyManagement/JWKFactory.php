@@ -188,7 +188,7 @@ final class JWKFactory
     public static function createFromString(string $value)
     {
         $json = json_decode($value, true);
-        if(!is_array($json)) {
+        if (!is_array($json)) {
             throw new \InvalidArgumentException('Invalid key or key set.');
         }
 
