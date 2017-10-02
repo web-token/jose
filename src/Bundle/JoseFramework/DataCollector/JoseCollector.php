@@ -38,7 +38,7 @@ final class JoseCollector extends DataCollector
     /**
      * JoseCollector constructor.
      *
-     * @param AlgorithmManagerFactory $algorithmManagerFactory
+     * @param AlgorithmManagerFactory         $algorithmManagerFactory
      * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
      */
     public function __construct(AlgorithmManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory)
@@ -74,7 +74,6 @@ final class JoseCollector extends DataCollector
             'key_encryption' => $keyEncryptionAlgorithms,
             'content_encryption' => $contentEncryptionAlgorithms,
         ];
-
 
         $aliases = $this->compressionMethodManagerFactory->aliases();
         $cmm = $this->compressionMethodManagerFactory->create($aliases);
