@@ -15,8 +15,5 @@ services:
             -
                 name:     data_collector
                 template: '@JoseFramework/data_collector/template.html.twig'
-                # must match the value returned by the getName() method
                 id:       'jose_collector'
-                # optional priority
-                # priority: 300
         public: false
