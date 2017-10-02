@@ -40,6 +40,22 @@ final class AlgorithmManagerFactory
     }
 
     /**
+     * @return string[]
+     */
+    public function aliases(): array
+    {
+        return array_keys($this->algorithms);
+    }
+
+    /**
+     * @return AlgorithmInterface[]
+     */
+    public function all(): array
+    {
+        return $this->algorithms;
+    }
+
+    /**
      * @param string[] $aliases
      *
      * @return AlgorithmManager
@@ -56,13 +72,5 @@ final class AlgorithmManagerFactory
         }
 
         return AlgorithmManager::create($algorithms);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function aliases(): array
-    {
-        return array_keys($this->algorithms);
     }
 }

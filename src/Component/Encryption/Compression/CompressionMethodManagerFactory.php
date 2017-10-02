@@ -40,6 +40,22 @@ final class CompressionMethodManagerFactory
     }
 
     /**
+     * @return string[]
+     */
+    public function aliases(): array
+    {
+        return array_keys($this->compressionMethods);
+    }
+
+    /**
+     * @return CompressionMethodInterface[]
+     */
+    public function all(): array
+    {
+        return $this->compressionMethods;
+    }
+
+    /**
      * @param string[] $aliases
      *
      * @return CompressionMethodManager

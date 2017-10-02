@@ -42,6 +42,22 @@ final class JWESerializerManagerFactory
     }
 
     /**
+     * @return string[]
+     */
+    public function names(): array
+    {
+        return array_keys($this->serializers);
+    }
+
+    /**
+     * @return JWESerializerInterface[]
+     */
+    public function all(): array
+    {
+        return $this->serializers;
+    }
+
+    /**
      * @param JWESerializerInterface $serializer
      *
      * @return JWESerializerManagerFactory
