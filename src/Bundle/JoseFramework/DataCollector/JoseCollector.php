@@ -139,9 +139,6 @@ final class JoseCollector extends DataCollector
         return 'jose_collector';
     }
 
-    /**
-     *
-     */
     private function collectSupportedAlgorithms()
     {
         $algorithms = $this->algorithmManagerFactory->all();
@@ -168,9 +165,9 @@ final class JoseCollector extends DataCollector
 
     /**
      * @param AlgorithmInterface $algorithm
-     * @param int $signatureAlgorithms
-     * @param int $keyEncryptionAlgorithms
-     * @param int $contentEncryptionAlgorithms
+     * @param int                $signatureAlgorithms
+     * @param int                $keyEncryptionAlgorithms
+     * @param int                $contentEncryptionAlgorithms
      *
      * @return string
      */
