@@ -45,7 +45,7 @@ final class JWKSetController
     /**
      * @return Response
      */
-    public function __invoke(): Response
+    public function getAction(): Response
     {
         return new Response(
             $this->jwkset,

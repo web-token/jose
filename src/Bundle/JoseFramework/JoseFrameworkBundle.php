@@ -28,7 +28,7 @@ final class JoseFrameworkBundle extends Bundle
      */
     public function getContainerExtension()
     {
-        return new JoseFrameworkExtension('jose', __DIR__);
+        return new JoseFrameworkExtension('jose', $this->getPath());
     }
 
     /**

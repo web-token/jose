@@ -42,7 +42,7 @@ final class JWKSetLoader implements LoaderInterface
      */
     public function add(string $pattern, string $name)
     {
-        $controller_id = sprintf('jose.controller.%s', $name);
+        $controller_id = sprintf('jose.controller.%s:getAction', $name);
 
         $defaults = ['_controller' => $controller_id];
         $route = new Route($pattern, $defaults);
