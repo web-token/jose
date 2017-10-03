@@ -27,6 +27,14 @@ final class JSONGeneralSerializer implements JWESerializerInterface
     /**
      * {@inheritdoc}
      */
+    public function displayName(): string
+    {
+        return 'JWE JSON General';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function name(): string
     {
         return self::NAME;

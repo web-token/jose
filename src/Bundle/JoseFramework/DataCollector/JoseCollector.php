@@ -18,7 +18,9 @@ use Jose\Component\Core\AlgorithmManagerFactory;
 use Jose\Component\Encryption\Algorithm\ContentEncryptionAlgorithmInterface;
 use Jose\Component\Encryption\Algorithm\KeyEncryptionAlgorithmInterface;
 use Jose\Component\Encryption\Compression\CompressionMethodManagerFactory;
+use Jose\Component\Encryption\Serializer\JWESerializerManagerFactory;
 use Jose\Component\Signature\Algorithm\SignatureAlgorithmInterface;
+use Jose\Component\Signature\Serializer\JWSSerializerManagerFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -31,20 +33,35 @@ final class JoseCollector extends DataCollector
     private $algorithmManagerFactory;
 
     /**
-     * @var CompressionMethodManagerFactory
+     * @var CompressionMethodManagerFactory|null
      */
     private $compressionMethodManagerFactory;
 
     /**
+     * @var JWSSerializerManagerFactory|null
+     */
+    private $jwsSerializerManagerFactory;
+
+    /**
+     * @var JWESerializerManagerFactory|null
+     */
+    private $jweSerializerManagerFactory;
+
+    /**
      * JoseCollector constructor.
      *
-     * @param AlgorithmManagerFactory $algorithmManagerFactory
-     * @param CompressionMethodManagerFactory $compressionMethodManagerFactory
+     * @param AlgorithmManagerFactory              $algorithmManagerFactory
+     * @param CompressionMethodManagerFactory|null $compressionMethodManagerFactory
+     * @param JWSSerializerManagerFactory|null     $jwsSerializerManagerFactory
+     * @param JWESerializerManagerFactory|null     $jweSerializerManagerFactory
      */
-    public function __construct(AlgorithmManagerFactory $algorithmManagerFactory, CompressionMethodManagerFactory $compressionMethodManagerFactory)
+    public function __construct(AlgorithmManagerFactory $algorithmManagerFactory, ?CompressionMethodManagerFactory $compressionMethodManagerFactory = null, ?JWSSerializerManagerFactory $jwsSerializerManagerFactory = null, ?JWESerializerManagerFactory $jweSerializerManagerFactory = null)
     {
+        $this->data = [];
         $this->algorithmManagerFactory = $algorithmManagerFactory;
         $this->compressionMethodManagerFactory = $compressionMethodManagerFactory;
+        $this->jwsSerializerManagerFactory = $jwsSerializerManagerFactory;
+        $this->jweSerializerManagerFactory = $jweSerializerManagerFactory;
     }
 
     /**
@@ -52,33 +69,10 @@ final class JoseCollector extends DataCollector
      */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
-        $aliases = $this->algorithmManagerFactory->aliases();
-        $algorithmManager = $this->algorithmManagerFactory->create($aliases);
-        $this->data = ['algorithms' => []];
-        $signatureAlgorithms = 0;
-        $keyEncryptionAlgorithms = 0;
-        $contentEncryptionAlgorithms = 0;
-        foreach ($algorithmManager->list() as $alias) {
-            $algorithm = $algorithmManager->get($alias);
-            $type = $this->getAlgorithmType($algorithm, $signatureAlgorithms, $keyEncryptionAlgorithms, $contentEncryptionAlgorithms);
-            if (!array_key_exists($type, $this->data['algorithms'])) {
-                $this->data['algorithms'][$type] = [];
-            }
-            $this->data['algorithms'][$type][$alias] = [
-                'name' => $algorithm->name(),
-            ];
-        }
-
-        $this->data['types'] = [
-            'signature' => $signatureAlgorithms,
-            'key_encryption' => $keyEncryptionAlgorithms,
-            'content_encryption' => $contentEncryptionAlgorithms,
-        ];
-
-
-        $aliases = $this->compressionMethodManagerFactory->aliases();
-        $cmm = $this->compressionMethodManagerFactory->create($aliases);
-        dump($cmm);
+        $this->collectSupportedAlgorithms();
+        $this->collectSupportedCompressionMethods();
+        $this->collectSupportedJWSSerializations();
+        $this->collectSupportedJWESerializations();
     }
 
     /**
@@ -114,6 +108,30 @@ final class JoseCollector extends DataCollector
     }
 
     /**
+     * @return array
+     */
+    public function getCompressionMethodDetails(): array
+    {
+        return $this->data['compression_methods'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getJWSSerializationDetails(): array
+    {
+        return $this->data['jws_serialization'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getJWESerializationDetails(): array
+    {
+        return $this->data['jwe_serialization'];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getName()
@@ -121,6 +139,41 @@ final class JoseCollector extends DataCollector
         return 'jose_collector';
     }
 
+    /**
+     *
+     */
+    private function collectSupportedAlgorithms()
+    {
+        $algorithms = $this->algorithmManagerFactory->all();
+        $this->data['algorithms'] = [];
+        $signatureAlgorithms = 0;
+        $keyEncryptionAlgorithms = 0;
+        $contentEncryptionAlgorithms = 0;
+        foreach ($algorithms as $alias => $algorithm) {
+            $type = $this->getAlgorithmType($algorithm, $signatureAlgorithms, $keyEncryptionAlgorithms, $contentEncryptionAlgorithms);
+            if (!array_key_exists($type, $this->data['algorithms'])) {
+                $this->data['algorithms'][$type] = [];
+            }
+            $this->data['algorithms'][$type][$alias] = [
+                'name' => $algorithm->name(),
+            ];
+        }
+
+        $this->data['types'] = [
+            'signature' => $signatureAlgorithms,
+            'key_encryption' => $keyEncryptionAlgorithms,
+            'content_encryption' => $contentEncryptionAlgorithms,
+        ];
+    }
+
+    /**
+     * @param AlgorithmInterface $algorithm
+     * @param int $signatureAlgorithms
+     * @param int $keyEncryptionAlgorithms
+     * @param int $contentEncryptionAlgorithms
+     *
+     * @return string
+     */
     private function getAlgorithmType(AlgorithmInterface $algorithm, int &$signatureAlgorithms, int &$keyEncryptionAlgorithms, int &$contentEncryptionAlgorithms): string
     {
         switch (true) {
@@ -138,6 +191,42 @@ final class JoseCollector extends DataCollector
                 return 'Content Encryption';
             default:
                 return 'Unknown';
+        }
+    }
+
+    private function collectSupportedCompressionMethods()
+    {
+        $this->data['compression_methods'] = [];
+        if (null === $this->compressionMethodManagerFactory) {
+            return;
+        }
+        $compressionMethods = $this->compressionMethodManagerFactory->all();
+        foreach ($compressionMethods as $alias => $compressionMethod) {
+            $this->data['compression_methods'][$alias] = $compressionMethod->name();
+        }
+    }
+
+    private function collectSupportedJWSSerializations()
+    {
+        $this->data['jws_serialization'] = [];
+        if (null === $this->jwsSerializerManagerFactory) {
+            return;
+        }
+        $serializers = $this->jwsSerializerManagerFactory->all();
+        foreach ($serializers as $serializer) {
+            $this->data['jws_serialization'][$serializer->name()] = $serializer->displayName();
+        }
+    }
+
+    private function collectSupportedJWESerializations()
+    {
+        $this->data['jwe_serialization'] = [];
+        if (null === $this->jweSerializerManagerFactory) {
+            return;
+        }
+        $serializers = $this->jweSerializerManagerFactory->all();
+        foreach ($serializers as $serializer) {
+            $this->data['jwe_serialization'][$serializer->name()] = $serializer->displayName();
         }
     }
 }

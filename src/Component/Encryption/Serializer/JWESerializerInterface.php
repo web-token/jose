@@ -28,6 +28,11 @@ interface JWESerializerInterface
     public function name(): string;
 
     /**
+     * @return string
+     */
+    public function displayName(): string;
+
+    /**
      * Converts a JWE into a string.
      *
      * @param JWE      $jws

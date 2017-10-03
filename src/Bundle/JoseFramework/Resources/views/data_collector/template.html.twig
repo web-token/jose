@@ -38,19 +38,35 @@
         <h2>Supported Algorithms</h2>
         {% for type, list in collector.getAlgorithmDetails() %}
             <h3>{{ type }}</h3>
-            <table>
-                <tr>
-                    <th>Alias</th>
-                    <th>Name</th>
-                </tr>
-
-                {% for alias, alg in list %}
-                    <tr>
-                        <td>{{ alias }}</td>
-                        <td>{{ alg.name }}</td>
-                    </tr>
-                {% endfor %}
-            </table>
+            <ul>
+            {% for alias, alg in list %}
+                <li>{{ alg.name }} (alias: <i>{{ alias }})</i></li>
+            {% endfor %}
+            </ul>
         {% endfor %}
+    </div>
+    <div class="block">
+        <h2>Supported Compression Methods</h2>
+        <ul>
+            {% for alias, name in collector.getCompressionMethodDetails() %}
+                <li>{{ name }} (alias: <i>{{ alias }})</i></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="block">
+        <h2>Supported JWS Serialization Modes</h2>
+        <ul>
+            {% for alias, name in collector.getJWSSerializationDetails() %}
+            <li>{{ name }} (alias: <i>{{ alias }})</i></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="block">
+        <h2>Supported JWE Serialization Modes</h2>
+        <ul>
+            {% for alias, name in collector.getJWESerializationDetails() %}
+            <li>{{ name }} (alias: <i>{{ alias }})</i></li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock %}

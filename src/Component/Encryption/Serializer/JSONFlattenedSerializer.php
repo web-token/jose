@@ -27,6 +27,14 @@ final class JSONFlattenedSerializer implements JWESerializerInterface
     /**
      * {@inheritdoc}
      */
+    public function displayName(): string
+    {
+        return 'JWE JSON Flattened';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function name(): string
     {
         return self::NAME;

@@ -26,6 +26,14 @@ final class CompactSerializer extends AbstractSerializer
     /**
      * {@inheritdoc}
      */
+    public function displayName(): string
+    {
+        return 'JWS Compact';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function name(): string
     {
         return self::NAME;

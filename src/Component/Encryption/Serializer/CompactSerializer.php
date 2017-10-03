@@ -27,6 +27,14 @@ final class CompactSerializer implements JWESerializerInterface
     /**
      * {@inheritdoc}
      */
+    public function displayName(): string
+    {
+        return 'JWE Compact';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function name(): string
     {
         return self::NAME;

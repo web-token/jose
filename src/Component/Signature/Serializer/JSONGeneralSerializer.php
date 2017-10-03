@@ -26,6 +26,14 @@ final class JSONGeneralSerializer extends AbstractSerializer
     /**
      * {@inheritdoc}
      */
+    public function displayName(): string
+    {
+        return 'JWS JSON General';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function name(): string
     {
         return self::NAME;

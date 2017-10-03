@@ -28,6 +28,11 @@ interface JWSSerializerInterface
     public function name(): string;
 
     /**
+     * @return string
+     */
+    public function displayName(): string;
+
+    /**
      * Converts a JWS into a string.
      *
      * @param JWS      $jws

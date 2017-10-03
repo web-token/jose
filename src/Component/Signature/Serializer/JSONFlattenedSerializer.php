@@ -26,6 +26,14 @@ final class JSONFlattenedSerializer extends AbstractSerializer
     /**
      * {@inheritdoc}
      */
+    public function displayName(): string
+    {
+        return 'JWS JSON Flattened';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function name(): string
     {
         return self::NAME;
