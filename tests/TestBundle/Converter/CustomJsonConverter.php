@@ -44,8 +44,8 @@ final class CustomJsonConverter implements JsonConverterInterface
     /**
      * {@inheritdoc}
      */
-    public function decode(string $payload)
+    public function decode(string $payload, bool $associativeArray = true)
     {
-        return json_decode($payload, true, 512, $this->options);
+        return json_decode($payload, $associativeArray, 512, $this->options);
     }
 }

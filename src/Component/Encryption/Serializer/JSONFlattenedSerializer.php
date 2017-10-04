@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Encryption\Serializer;
 
 use Base64Url\Base64Url;
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Encryption\JWE;
 use Jose\Component\Encryption\Recipient;
 
@@ -23,6 +24,21 @@ use Jose\Component\Encryption\Recipient;
 final class JSONFlattenedSerializer implements JWESerializerInterface
 {
     public const NAME = 'jwe_json_flattened';
+
+    /**
+     * @var JsonConverterInterface
+     */
+    private $jsonConverter;
+
+    /**
+     * JSONFlattenedSerializer constructor.
+     *
+     * @param JsonConverterInterface $jsonConverter
+     */
+    public function __construct(JsonConverterInterface $jsonConverter)
+    {
+        $this->jsonConverter = $jsonConverter;
+    }
 
     /**
      * {@inheritdoc}
@@ -70,7 +86,7 @@ final class JSONFlattenedSerializer implements JWESerializerInterface
             $data['encrypted_key'] = Base64Url::encode($recipient->getEncryptedKey());
         }
 
-        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        return $this->jsonConverter->encode($data);
     }
 
     /**
@@ -78,7 +94,7 @@ final class JSONFlattenedSerializer implements JWESerializerInterface
      */
     public function unserialize(string $input): JWE
     {
-        $data = json_decode($input, true);
+        $data = $this->jsonConverter->decode($input);
         if (!is_array($data) || !array_key_exists('ciphertext', $data) || array_key_exists('recipients', $data)) {
             throw new \InvalidArgumentException('Unsupported input.');
         }
@@ -88,7 +104,7 @@ final class JSONFlattenedSerializer implements JWESerializerInterface
         $tag = Base64Url::decode($data['tag']);
         $aad = array_key_exists('aad', $data) ? Base64Url::decode($data['aad']) : null;
         $encodedSharedProtectedHeader = array_key_exists('protected', $data) ? $data['protected'] : null;
-        $sharedProtectedHeader = $encodedSharedProtectedHeader ? json_decode(Base64Url::decode($encodedSharedProtectedHeader), true) : [];
+        $sharedProtectedHeader = $encodedSharedProtectedHeader ? $this->jsonConverter->decode(Base64Url::decode($encodedSharedProtectedHeader)) : [];
         $sharedHeader = array_key_exists('unprotected', $data) ? $data['unprotected'] : [];
         $encryptedKey = array_key_exists('encrypted_key', $data) ? Base64Url::decode($data['encrypted_key']) : null;
         $header = array_key_exists('header', $data) ? $data['header'] : [];

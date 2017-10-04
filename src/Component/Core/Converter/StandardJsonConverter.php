@@ -52,8 +52,8 @@ final class StandardJsonConverter implements JsonConverterInterface
     /**
      * {@inheritdoc}
      */
-    public function decode(string $payload)
+    public function decode(string $payload, bool $associativeArray = true)
     {
-        return json_decode($payload, true, $this->depth, $this->options);
+        return json_decode($payload, $associativeArray, $this->depth, $this->options);
     }
 }

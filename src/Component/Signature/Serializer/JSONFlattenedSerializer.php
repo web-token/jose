@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Serializer;
 
 use Base64Url\Base64Url;
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Signature\JWS;
 
 /**
@@ -22,6 +23,21 @@ use Jose\Component\Signature\JWS;
 final class JSONFlattenedSerializer extends AbstractSerializer
 {
     public const NAME = 'jws_json_flattened';
+
+    /**
+     * @var JsonConverterInterface
+     */
+    private $jsonConverter;
+
+    /**
+     * JSONFlattenedSerializer constructor.
+     *
+     * @param JsonConverterInterface $jsonConverter
+     */
+    public function __construct(JsonConverterInterface $jsonConverter)
+    {
+        $this->jsonConverter = $jsonConverter;
+    }
 
     /**
      * {@inheritdoc}
@@ -63,7 +79,7 @@ final class JSONFlattenedSerializer extends AbstractSerializer
         }
         $data['signature'] = Base64Url::encode($signature->getSignature());
 
-        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        return $this->jsonConverter->encode($data);
     }
 
     /**
@@ -71,7 +87,7 @@ final class JSONFlattenedSerializer extends AbstractSerializer
      */
     public function unserialize(string $input): JWS
     {
-        $data = json_decode($input, true);
+        $data = $this->jsonConverter->decode($input);
         if (!is_array($data) || !array_key_exists('signature', $data)) {
             throw new \InvalidArgumentException('Unsupported input.');
         }
@@ -80,7 +96,7 @@ final class JSONFlattenedSerializer extends AbstractSerializer
 
         if (array_key_exists('protected', $data)) {
             $encodedProtectedHeaders = $data['protected'];
-            $protectedHeaders = json_decode(Base64Url::decode($data['protected']), true);
+            $protectedHeaders = $this->jsonConverter->decode(Base64Url::decode($data['protected']));
         } else {
             $encodedProtectedHeaders = null;
             $protectedHeaders = [];

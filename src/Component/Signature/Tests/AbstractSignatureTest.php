@@ -133,9 +133,9 @@ abstract class AbstractSignatureTest extends TestCase
     {
         if (null === $this->jwsSerializerManagerFactory) {
             $this->jwsSerializerManagerFactory = new Serializer\JWSSerializerManagerFactory();
-            $this->jwsSerializerManagerFactory->add(new Serializer\CompactSerializer());
-            $this->jwsSerializerManagerFactory->add(new Serializer\JSONFlattenedSerializer());
-            $this->jwsSerializerManagerFactory->add(new Serializer\JSONGeneralSerializer());
+            $this->jwsSerializerManagerFactory->add(new Serializer\CompactSerializer(new StandardJsonConverter()));
+            $this->jwsSerializerManagerFactory->add(new Serializer\JSONFlattenedSerializer(new StandardJsonConverter()));
+            $this->jwsSerializerManagerFactory->add(new Serializer\JSONGeneralSerializer(new StandardJsonConverter()));
         }
 
         return $this->jwsSerializerManagerFactory;
@@ -153,9 +153,9 @@ abstract class AbstractSignatureTest extends TestCase
     {
         if (null === $this->jwsSerializerManager) {
             $this->jwsSerializerManager = Serializer\JWSSerializerManager::create([
-                new Serializer\CompactSerializer(),
-                new Serializer\JSONFlattenedSerializer(),
-                new Serializer\JSONGeneralSerializer(),
+                new Serializer\CompactSerializer(new StandardJsonConverter()),
+                new Serializer\JSONFlattenedSerializer(new StandardJsonConverter()),
+                new Serializer\JSONGeneralSerializer(new StandardJsonConverter()),
             ]);
         }
 

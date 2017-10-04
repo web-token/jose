@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\Signature\Serializer;
 
 use Base64Url\Base64Url;
+use Jose\Component\Core\Converter\JsonConverterInterface;
 use Jose\Component\Signature\JWS;
 
 /**
@@ -22,6 +23,21 @@ use Jose\Component\Signature\JWS;
 final class JSONGeneralSerializer extends AbstractSerializer
 {
     public const NAME = 'jws_json_general';
+
+    /**
+     * @var JsonConverterInterface
+     */
+    private $jsonConverter;
+
+    /**
+     * JSONFlattenedSerializer constructor.
+     *
+     * @param JsonConverterInterface $jsonConverter
+     */
+    public function __construct(JsonConverterInterface $jsonConverter)
+    {
+        $this->jsonConverter = $jsonConverter;
+    }
 
     /**
      * {@inheritdoc}
@@ -71,7 +87,7 @@ final class JSONGeneralSerializer extends AbstractSerializer
             $data['signatures'][] = $tmp;
         }
 
-        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        return $this->jsonConverter->encode($data);
     }
 
     /**
@@ -79,7 +95,7 @@ final class JSONGeneralSerializer extends AbstractSerializer
      */
     public function unserialize(string $input): JWS
     {
-        $data = json_decode($input, true);
+        $data = $this->jsonConverter->decode($input);
         if (!is_array($data) || !array_key_exists('signatures', $data)) {
             throw new \InvalidArgumentException('Unsupported input.');
         }
@@ -92,7 +108,7 @@ final class JSONGeneralSerializer extends AbstractSerializer
                 throw new \InvalidArgumentException('Unsupported input.');
             }
             $encodedProtectedHeaders = array_key_exists('protected', $signature) ? $signature['protected'] : null;
-            $protectedHeaders = null !== $encodedProtectedHeaders ? json_decode(Base64Url::decode($encodedProtectedHeaders), true) : [];
+            $protectedHeaders = null !== $encodedProtectedHeaders ? $this->jsonConverter->decode(Base64Url::decode($encodedProtectedHeaders)) : [];
             $signatures[] = [
                 'signature' => Base64Url::decode($signature['signature']),
                 'protected' => $protectedHeaders,

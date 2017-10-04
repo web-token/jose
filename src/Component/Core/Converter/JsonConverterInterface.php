@@ -27,8 +27,9 @@ interface JsonConverterInterface
 
     /**
      * @param string $payload
+     * @param bool   $associativeArray
      *
      * @return mixed
      */
-    public function decode(string $payload);
+    public function decode(string $payload, bool $associativeArray = true);
 }
