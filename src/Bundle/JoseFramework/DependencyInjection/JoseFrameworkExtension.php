@@ -21,6 +21,8 @@ use Jose\Bundle\JoseFramework\DependencyInjection\Source\JWKSource;
 use Jose\Bundle\JoseFramework\DependencyInjection\Source\SourceInterface;
 use Jose\Bundle\Signature\DependencyInjection\Source\JWSBuilder;
 use Jose\Bundle\Signature\DependencyInjection\Source\JWSLoader;
+use Jose\Component\Core\Converter\JsonConverterInterface;
+use Jose\Component\Core\Converter\StandardJsonConverter;
 use Jose\Component\KeyManagement\JWKFactory;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
@@ -80,11 +82,15 @@ final class JoseFrameworkExtension extends Extension implements PrependExtension
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('jku_source.yml');
 
+        $container->setAlias('jose.http_client', $config['jku_factory']['client']);
+        $container->setAlias('jose.request_factory', $config['jku_factory']['request_factory']);
+        $container->setAlias(JsonConverterInterface::class, $config['json_converter']);
         if (class_exists(JWKFactory::class)) {
             $loader->load('jwk_factory.yml');
         }
-        if (true === $config['use_default_json_converter']) {
+        if (StandardJsonConverter::class === $config['json_converter']) {
             $loader->load('json_converter.yml');
         }
 

@@ -12,4 +12,15 @@ framework:
     http_method_override: true
 
 jose:
-    use_default_json_converter: false
+    json_converter: Jose\Test\TestBundle\Converter\CustomJsonConverter
+    jku_factory:
+        enabled: true
+        client: 'httplug.client.jose'
+
+httplug:
+    clients:
+        jose:
+            factory: 'httplug.factory.guzzle6'
+            config:
+                verify: false
+                timeout: 2

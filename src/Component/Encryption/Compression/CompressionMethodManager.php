@@ -41,7 +41,7 @@ final class CompressionMethodManager
     /**
      * @param CompressionMethodInterface $compressionMethod
      */
-    private function add(CompressionMethodInterface $compressionMethod)
+    protected function add(CompressionMethodInterface $compressionMethod)
     {
         $name = $compressionMethod->name();
         if ($this->has($name)) {

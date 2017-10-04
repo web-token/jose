@@ -292,7 +292,7 @@ final class JWEBuilder
     /**
      * @param array $completeHeaders
      */
-    private function checkAndSetContentEncryptionAlgorithm(array $completeHeaders): void
+    protected function checkAndSetContentEncryptionAlgorithm(array $completeHeaders): void
     {
         $contentEncryptionAlgorithm = $this->getContentEncryptionAlgorithm($completeHeaders);
         if (null === $this->contentEncryptionAlgorithm) {
@@ -432,7 +432,7 @@ final class JWEBuilder
      * @param KeyEncryptionAlgorithmInterface $keyEncryptionAlgorithm
      * @param JWK                             $recipientKey
      */
-    private function checkKey(KeyEncryptionAlgorithmInterface $keyEncryptionAlgorithm, JWK $recipientKey)
+    protected function checkKey(KeyEncryptionAlgorithmInterface $keyEncryptionAlgorithm, JWK $recipientKey)
     {
         KeyChecker::checkKeyUsage($recipientKey, 'encryption');
         if ('dir' !== $keyEncryptionAlgorithm->name()) {
@@ -485,7 +485,7 @@ final class JWEBuilder
      *
      * @return CompressionMethodInterface|null
      */
-    private function getCompressionMethod(array $completeHeaders): ?CompressionMethodInterface
+    protected function getCompressionMethod(array $completeHeaders): ?CompressionMethodInterface
     {
         if (!array_key_exists('zip', $completeHeaders)) {
             return null;
@@ -500,7 +500,7 @@ final class JWEBuilder
      *
      * @return bool
      */
-    private function areKeyManagementModesCompatible(string $current, string $new): bool
+    protected function areKeyManagementModesCompatible(string $current, string $new): bool
     {
         $agree = KeyEncryptionAlgorithmInterface::MODE_AGREEMENT;
         $dir = KeyEncryptionAlgorithmInterface::MODE_DIRECT;
@@ -540,7 +540,7 @@ final class JWEBuilder
      *
      * @return KeyEncryptionAlgorithmInterface
      */
-    private function getKeyEncryptionAlgorithm(array $completeHeaders): KeyEncryptionAlgorithmInterface
+    protected function getKeyEncryptionAlgorithm(array $completeHeaders): KeyEncryptionAlgorithmInterface
     {
         if (!array_key_exists('alg', $completeHeaders)) {
             throw new \InvalidArgumentException('Parameter "alg" is missing.');

@@ -5,5 +5,3 @@ services:
         public: true
 
     Jose\Test\TestBundle\Converter\CustomJsonConverter: ~
-    Jose\Test\TestBundle\Service\RequestFactory: ~
-    Http\Adapter\Guzzle6\Client: ~

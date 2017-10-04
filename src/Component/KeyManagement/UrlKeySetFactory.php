@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Jose\Component\KeyManagement;
 
 use Http\Client\HttpClient;
-use Http\Message\RequestFactory;
+use Http\Message\MessageFactory;
 
 /**
  * Class UrlKeySetFactory.
@@ -27,20 +27,20 @@ abstract class UrlKeySetFactory
     private $client;
 
     /**
-     * @var RequestFactory
+     * @var MessageFactory
      */
-    private $requestFactory;
+    private $messageFactory;
 
     /**
      * UrlKeySetFactory constructor.
      *
      * @param HttpClient     $client
-     * @param RequestFactory $requestFactory
+     * @param MessageFactory $messageFactory
      */
-    public function __construct(HttpClient $client, RequestFactory $requestFactory)
+    public function __construct(HttpClient $client, MessageFactory $messageFactory)
     {
         $this->client = $client;
-        $this->requestFactory = $requestFactory;
+        $this->messageFactory = $messageFactory;
     }
 
     /**
@@ -53,7 +53,7 @@ abstract class UrlKeySetFactory
      */
     protected function getContent(string $url, array $headers = []): string
     {
-        $request = $this->requestFactory->createRequest('GET', $url, $headers);
+        $request = $this->messageFactory->createRequest('GET', $url, $headers);
         $response = $this->client->sendRequest($request);
 
         if (200 !== $response->getStatusCode()) {
