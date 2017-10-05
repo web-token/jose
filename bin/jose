@@ -68,6 +68,7 @@ $application->add(new Console\RsaKeysetGeneratorCommand($jsonConverter));
 $application->add(new Console\MergeKeysetCommand($jsonConverter));
 $application->add(new Console\PublicKeysetCommand($jsonConverter));
 $application->add(new Console\RotateKeysetCommand($jsonConverter));
+$application->add(new Console\AddKeyIntoKeysetCommand($jsonConverter));
 
 $application->add(new Console\OptimizeRsaKeyCommand($jsonConverter));
 $application->add(new Console\KeyAnalyzerCommand($jwkAnalyzerManager, $jsonConverter));

@@ -44,10 +44,10 @@ final class EcKeysetGeneratorCommand extends AbstractGeneratorCommand
     {
         $quantity = (int) $input->getArgument('quantity');
         $curve = $input->getArgument('curve');
-        $args = $this->getOptions($input);
 
         $keyset = JWKSet::createFromKeys([]);
         for ($i = 0; $i < $quantity; ++$i) {
+            $args = $this->getOptions($input);
             $keyset = $keyset->with(JWKFactory::createECKey($curve, $args));
         }
         $this->prepareJsonOutput($input, $output, $keyset);

@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class RotateKeysetCommand.
  */
-final class RotateKeysetCommand extends AbstractGeneratorCommand
+final class RotateKeysetCommand extends AbstractObjectOutputCommand
 {
     /**
      * KeyAnalyzerCommand constructor.
@@ -43,7 +43,7 @@ final class RotateKeysetCommand extends AbstractGeneratorCommand
     {
         parent::configure();
         $this
-            ->setName('keyset:convert:rotate')
+            ->setName('keyset:rotate')
             ->setDescription('Rotate a key set.')
             ->setHelp('This command removes the last key in a key set a place a new one at the beginning.')
             ->addArgument('jwkset', InputArgument::REQUIRED, 'The JWKSet object')

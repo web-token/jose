@@ -14,15 +14,16 @@ declare(strict_types=1);
 namespace Jose\Component\Console;
 
 use Jose\Component\Core\Converter\JsonConverterInterface;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class PublicKeysetCommand.
+ * Class AddKeyIntoKeysetCommand.
  */
-final class PublicKeysetCommand extends AbstractObjectOutputCommand
+final class AddKeyIntoKeysetCommand extends AbstractObjectOutputCommand
 {
     /**
      * KeyAnalyzerCommand constructor.
@@ -42,10 +43,11 @@ final class PublicKeysetCommand extends AbstractObjectOutputCommand
     {
         parent::configure();
         $this
-            ->setName('keyset:convert:public')
-            ->setDescription('Convert private keys in a key set into public keys. Symmetric keys (shared keys) are not changed.')
-            ->setHelp('This command converts private keys in a key set into public keys.')
+            ->setName('keyset:add:key')
+            ->setDescription('Add a key into a key set.')
+            ->setHelp('This command adds a key at the end of a key set.')
             ->addArgument('jwkset', InputArgument::REQUIRED, 'The JWKSet object')
+            ->addArgument('jwk', InputArgument::REQUIRED, 'The new JWK object')
         ;
     }
 
@@ -55,12 +57,9 @@ final class PublicKeysetCommand extends AbstractObjectOutputCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $jwkset = $this->getKeyset($input);
-        $newJwkset = JWKSet::createFromKeys([]);
-
-        foreach ($jwkset->all() as $jwk) {
-            $newJwkset = $newJwkset->with($jwk->toPublic());
-        }
-        $this->prepareJsonOutput($input, $output, $newJwkset);
+        $jwk = $this->getKey($input);
+        $jwkset = $jwkset->with($jwk);
+        $this->prepareJsonOutput($input, $output,$jwkset);
     }
 
     /**
@@ -77,5 +76,21 @@ final class PublicKeysetCommand extends AbstractObjectOutputCommand
         }
 
         throw new \InvalidArgumentException('The argument must be a valid JWKSet.');
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return JWK
+     */
+    private function getKey(InputInterface $input): JWK
+    {
+        $jwkset = $input->getArgument('jwk');
+        $json = $this->jsonConverter->decode($jwkset);
+        if (is_array($json)) {
+            return JWK::create($json);
+        }
+
+        throw new \InvalidArgumentException('The argument must be a valid JWK.');
     }
 }

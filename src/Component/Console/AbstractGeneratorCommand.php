@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jose\Component\Console;
 
+use Base64Url\Base64Url;
 use Jose\Component\KeyManagement\JWKFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -39,6 +40,7 @@ abstract class AbstractGeneratorCommand extends AbstractObjectOutputCommand
         $this
             ->addOption('use', 'u', InputOption::VALUE_OPTIONAL, 'Usage of the key. Must be either "sig" or "enc".')
             ->addOption('alg', 'a', InputOption::VALUE_OPTIONAL, 'Algorithm for the key.')
+            ->addOption('random_id', null, InputOption::VALUE_NONE, 'If this option is set, a random key ID (kid) will be generated.')
         ;
     }
 
@@ -50,6 +52,9 @@ abstract class AbstractGeneratorCommand extends AbstractObjectOutputCommand
     protected function getOptions(InputInterface $input): array
     {
         $args = [];
+        if ($input->getOption('random_id')) {
+            $args['kid'] = $this->generateKeyID();
+        }
         foreach (['use', 'alg'] as $key) {
             $value = $input->getOption($key);
             if (null !== $value) {
@@ -58,5 +63,13 @@ abstract class AbstractGeneratorCommand extends AbstractObjectOutputCommand
         }
 
         return $args;
+    }
+
+    /**
+     * @return string
+     */
+    private function generateKeyID(): string
+    {
+        return Base64Url::encode(random_bytes(64));
     }
 }
