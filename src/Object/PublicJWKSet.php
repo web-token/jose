@@ -14,9 +14,8 @@ namespace Jose\Object;
 /**
  * Class PublicJWKSet.
  */
-final class PublicJWKSet implements JWKSetInterface
+final class PublicJWKSet extends BaseJWKSet implements JWKSetInterface
 {
-    use BaseJWKSet;
     use JWKSetPEM;
 
     /**

@@ -14,14 +14,18 @@ namespace Jose\Object;
 interface JWKSetInterface extends \Countable, \Iterator, \JsonSerializable, \ArrayAccess
 {
     /**
-     * @param $index
+     * Get key from set at index
+     * 
+     * @param int $index
      *
      * @return \Jose\Object\JWKInterface
      */
     public function getKey($index);
 
     /**
-     * @param $index
+     * Check if set has key at index 
+     * 
+     * @param int $index
      *
      * @return bool
      */
@@ -37,7 +41,7 @@ interface JWKSetInterface extends \Countable, \Iterator, \JsonSerializable, \Arr
     /**
      * Add key in the key set.
      *
-     * @param \Jose\Object\JWKInterface A key to store in the key set
+     * @param \Jose\Object\JWKInterface $key A key to store in the key set
      */
     public function addKey(JWKInterface $key);
     

@@ -16,9 +16,8 @@ use Assert\Assertion;
 /**
  * Class JWKSets.
  */
-final class JWKSets implements JWKSetsInterface
+final class JWKSets extends BaseJWKSet implements JWKSetsInterface
 {
-    use BaseJWKSet;
     use JWKSetPEM;
 
     /**

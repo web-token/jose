@@ -16,7 +16,7 @@ use Assert\Assertion;
 /**
  * Class BaseJWKSet.
  */
-trait BaseJWKSet
+abstract class BaseJWKSet
 {
     /**
      * @var int

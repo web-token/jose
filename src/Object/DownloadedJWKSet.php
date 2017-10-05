@@ -17,9 +17,8 @@ use Psr\Cache\CacheItemPoolInterface;
 /**
  * Class DownloadedJWKSet.
  */
-abstract class DownloadedJWKSet implements JWKSetInterface
+abstract class DownloadedJWKSet extends BaseJWKSet implements JWKSetInterface
 {
-    use BaseJWKSet;
     use JWKSetPEM;
 
     /**
