@@ -59,7 +59,7 @@ final class AddKeyIntoKeysetCommand extends AbstractObjectOutputCommand
         $jwkset = $this->getKeyset($input);
         $jwk = $this->getKey($input);
         $jwkset = $jwkset->with($jwk);
-        $this->prepareJsonOutput($input, $output,$jwkset);
+        $this->prepareJsonOutput($input, $output, $jwkset);
     }
 
     /**
