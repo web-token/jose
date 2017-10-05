@@ -68,6 +68,14 @@ services:
         tags:
             - {name: 'console.command'}
 
+    Jose\Component\Console\PublicKeysetCommand:
+        tags:
+            - {name: 'console.command'}
+
+    Jose\Component\Console\MergeKeysetCommand:
+        tags:
+            - {name: 'console.command'}
+
     Jose\Component\Console\PemConverterCommand:
         tags:
             - {name: 'console.command'}

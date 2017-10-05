@@ -14,12 +14,13 @@ use Jose\Component\KeyManagement\JKUFactory;
 use Jose\Component\KeyManagement\KeyAnalyzer\JWKAnalyzerManager;
 use Http\Adapter\Guzzle6\Client;
 use GuzzleHttp\Psr7\Request;
-use Http\Message\RequestFactory as Psr7RequestFactory;
+use GuzzleHttp\Psr7\Response;
+use Http\Message\MessageFactory as Psr7MessageFactory;
 
 /**
- * Class RequestFactory.
+ * Class MessageFactory.
  */
-final class RequestFactory implements Psr7RequestFactory
+final class MessageFactory implements Psr7MessageFactory
 {
     /**
      * {@inheritdoc}
@@ -28,11 +29,19 @@ final class RequestFactory implements Psr7RequestFactory
     {
         return new Request($method, $uri, $headers, $body, $protocolVersion);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createResponse($statusCode = 200, $reasonPhrase = null, array $headers = [], $body = null, $protocolVersion = '1.1')
+    {
+        return new Response($statusCode, $headers, $body, $protocolVersion, $reasonPhrase);
+    }
 }
 
 $jsonConverter = new StandardJsonConverter();
 $httpClient = new Client();
-$requestFactory = new RequestFactory();
+$messageFactory = new MessageFactory();
 $jwkAnalyzerManager = new JWKAnalyzerManager();
 $jwkAnalyzerManager
     ->add(new KeyAnalyzer\AlgorithmAnalyzer())
@@ -56,12 +65,14 @@ $application->add(new Console\EcKeysetGeneratorCommand($jsonConverter));
 $application->add(new Console\OkpKeysetGeneratorCommand($jsonConverter));
 $application->add(new Console\OctKeysetGeneratorCommand($jsonConverter));
 $application->add(new Console\RsaKeysetGeneratorCommand($jsonConverter));
+$application->add(new Console\MergeKeysetCommand($jsonConverter));
+$application->add(new Console\PublicKeysetCommand($jsonConverter));
 
 $application->add(new Console\OptimizeRsaKeyCommand($jsonConverter));
 $application->add(new Console\KeyAnalyzerCommand($jwkAnalyzerManager, $jsonConverter));
 $application->add(new Console\KeysetAnalyzerCommand($jwkAnalyzerManager, $jsonConverter));
-$application->add(new Console\X5ULoaderCommand(new X5UFactory($jsonConverter, $httpClient, $requestFactory), $jsonConverter));
-$application->add(new Console\JKULoaderCommand(new JKUFactory($jsonConverter, $httpClient, $requestFactory), $jsonConverter));
+$application->add(new Console\X5ULoaderCommand(new X5UFactory($jsonConverter, $httpClient, $messageFactory), $jsonConverter));
+$application->add(new Console\JKULoaderCommand(new JKUFactory($jsonConverter, $httpClient, $messageFactory), $jsonConverter));
 
 $application->add(new Console\PemConverterCommand($jsonConverter));
 
