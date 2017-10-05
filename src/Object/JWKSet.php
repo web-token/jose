@@ -52,6 +52,14 @@ final class JWKSet implements JWKSetInterface
     /**
      * {@inheritdoc}
      */
+    public function prependKey(JWKInterface $key)
+    {
+        array_unshift($this->keys, $key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function removeKey($key)
     {
         if (isset($this->keys[$key])) {

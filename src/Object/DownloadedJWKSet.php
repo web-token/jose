@@ -81,6 +81,14 @@ abstract class DownloadedJWKSet implements JWKSetInterface
     /**
      * {@inheritdoc}
      */
+    public function prependKey(JWKInterface $key)
+    {
+        //Not available
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function removeKey($index)
     {
         //Not available

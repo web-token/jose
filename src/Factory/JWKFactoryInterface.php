@@ -40,13 +40,14 @@ interface JWKFactoryInterface
     public static function createStorableKeySet($filename, array $parameters, $nb_keys);
 
     /**
-     * @param string $filename
-     * @param array  $parameters
-     * @param int    $nb_keys
+     * @param string   $filename
+     * @param array    $parameters
+     * @param int      $nb_keys
+     * @param int|null $interval
      *
      * @return \Jose\Object\JWKSetInterface
      */
-    public static function createRotatableKeySet($filename, array $parameters, $nb_keys);
+    public static function createRotatableKeySet($filename, array $parameters, $nb_keys, $interval = null);
 
     /**
      * @param string $filename

@@ -62,6 +62,14 @@ final class PublicJWKSet implements JWKSetInterface
     /**
      * {@inheritdoc}
      */
+    public function prependKey(JWKInterface $key)
+    {
+        $this->jwkset->prependKey($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function removeKey($index)
     {
         //Not available

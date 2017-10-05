@@ -137,9 +137,13 @@ trait Storable
      */
     public function getLastModificationTime()
     {
+        clearstatcache(null, $this->getFilename());
+
         if (file_exists($this->getFilename())) {
             return filemtime($this->getFilename());
         }
+
+        return null;
     }
 
     /**

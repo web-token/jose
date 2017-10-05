@@ -40,6 +40,13 @@ interface JWKSetInterface extends \Countable, \Iterator, \JsonSerializable, \Arr
      * @param \Jose\Object\JWKInterface A key to store in the key set
      */
     public function addKey(JWKInterface $key);
+    
+    /**
+     * Prepend key to the set
+     * 
+     * @param \Jose\Object\JWKInterface $key A key to store in the key set
+     */
+    public function prependKey(JWKInterface $key);
 
     /**
      * Remove key from the key set.
