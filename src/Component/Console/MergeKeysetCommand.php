@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class MergeKeysetCommand
+ * Class MergeKeysetCommand.
  */
 final class MergeKeysetCommand extends AbstractGeneratorCommand
 {
@@ -44,7 +44,7 @@ final class MergeKeysetCommand extends AbstractGeneratorCommand
         $this
             ->setName('keyset:convert:merge')
             ->setDescription('Merge several key sets into one.')
-            ->setHelp('This command merge several key sets into one. It is very useful when you generate e.g. RSA, EC and OKP keys and you want only one key set to rule them all.')
+            ->setHelp('This command merges several key sets into one. It is very useful when you generate e.g. RSA, EC and OKP keys and you want only one key set to rule them all.')
             ->addArgument('jwksets', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'The JWKSet objects')
         ;
     }
