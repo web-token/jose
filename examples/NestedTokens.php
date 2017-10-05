@@ -72,4 +72,3 @@ $jwe = JWEFactory::createJWEToCompactJSON(
         'zip' => 'DEF',
     ]
 );
-var_dump($jwe);

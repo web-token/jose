@@ -152,7 +152,7 @@ class StorableJWKSet implements StorableInterface, JWKSetInterface
     {
         // Not available
     }
-    
+
     /**
      * {@inheritdoc}
      */

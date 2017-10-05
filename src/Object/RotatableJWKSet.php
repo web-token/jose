@@ -17,15 +17,19 @@ namespace Jose\Object;
 final class RotatableJWKSet extends StorableJWKSet implements RotatableInterface
 {
     /**
-     * Interval at which keys should be rotated
+     * Interval at which keys should be rotated.
+     *
      * @var int|null
      */
     private $interval;
 
     /**
-     * {@inheritdoc}
+     * RotatableJWKSet constructor.
      *
-     * @param int|null $interval Interval at which to rotate keys
+     * @param string   $filename
+     * @param array    $parameters
+     * @param int      $nb_keys
+     * @param int|null $interval
      */
     public function __construct($filename, array $parameters, $nb_keys, $interval = null)
     {
@@ -41,6 +45,7 @@ final class RotatableJWKSet extends StorableJWKSet implements RotatableInterface
     {
         // Check if we need to rotate keys upon every interaction with the underlying JWK set
         $this->rotateIfNeeded();
+
         return parent::getJWKSet();
     }
 
@@ -62,7 +67,7 @@ final class RotatableJWKSet extends StorableJWKSet implements RotatableInterface
     }
 
     /**
-     * Rotate key set if last modification time is due
+     * Rotate key set if last modification time is due.
      */
     private function rotateIfNeeded()
     {

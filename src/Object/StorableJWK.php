@@ -27,7 +27,7 @@ class StorableJWK implements StorableInterface, JWKInterface
     protected $parameters;
 
     /**
-     * RotatableJWK constructor.
+     * StorableJWK constructor.
      *
      * @param string $filename
      * @param array  $parameters
