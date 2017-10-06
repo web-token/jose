@@ -6,8 +6,6 @@ matrix:
     allow_failures:
         - php: nightly
         - php: hhvm
-        - php: hhvm
-          env: deps=low
     fast_finish: true
     include:
         - php: 5.6
