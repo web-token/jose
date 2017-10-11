@@ -19,7 +19,7 @@ use Jose\Object\JWKSet;
  * @group Unit
  * @group JWK
  */
-class JWKTest extends \PHPUnit_Framework_TestCase
+class JWKTest extends \Jose\Test\BaseTestCase
 {
     public function testKey()
     {
@@ -34,19 +34,19 @@ class JWKTest extends \PHPUnit_Framework_TestCase
             'bar' => 'plic',
         ]);
 
-        $this->assertEquals('EC', $jwk->get('kty'));
-        $this->assertEquals('ES256', $jwk->get('alg'));
-        $this->assertEquals('sign', $jwk->get('use'));
-        $this->assertFalse($jwk->has('kid'));
-        $this->assertEquals(['sign'], $jwk->get('key_ops'));
-        $this->assertEquals('P-256', $jwk->get('crv'));
-        $this->assertFalse($jwk->has('x5u'));
-        $this->assertFalse($jwk->has('x5c'));
-        $this->assertFalse($jwk->has('x5t'));
-        $this->assertFalse($jwk->has('x5t#256'));
-        $this->assertEquals('f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU', $jwk->get('x'));
-        $this->assertEquals('x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0', $jwk->get('y'));
-        $this->assertEquals('{"kty":"EC","crv":"P-256","x":"f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU","y":"x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0","use":"sign","key_ops":["sign"],"alg":"ES256","bar":"plic"}', json_encode($jwk));
+        self::assertEquals('EC', $jwk->get('kty'));
+        self::assertEquals('ES256', $jwk->get('alg'));
+        self::assertEquals('sign', $jwk->get('use'));
+        self::assertFalse($jwk->has('kid'));
+        self::assertEquals(['sign'], $jwk->get('key_ops'));
+        self::assertEquals('P-256', $jwk->get('crv'));
+        self::assertFalse($jwk->has('x5u'));
+        self::assertFalse($jwk->has('x5c'));
+        self::assertFalse($jwk->has('x5t'));
+        self::assertFalse($jwk->has('x5t#256'));
+        self::assertEquals('f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU', $jwk->get('x'));
+        self::assertEquals('x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0', $jwk->get('y'));
+        self::assertEquals('{"kty":"EC","crv":"P-256","x":"f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU","y":"x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0","use":"sign","key_ops":["sign"],"alg":"ES256","bar":"plic"}', json_encode($jwk));
     }
 
     /**
@@ -107,30 +107,30 @@ class JWKTest extends \PHPUnit_Framework_TestCase
         $jwkset->addKey($jwk1);
         $jwkset[] = $jwk2;
 
-        $this->assertEquals('{"keys":[{"kty":"EC","crv":"P-256","x":"f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU","y":"x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0","use":"sign","key_ops":["sign"],"alg":"ES256","kid":"0123456789"},{"kty":"EC","crv":"P-256","x":"f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU","y":"x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0","d":"jpsQnnGQmL-YBIffH1136cspYG6-0iY7X1fCE9-E9LI","use":"sign","key_ops":["verify"],"alg":"ES256","kid":"9876543210"}]}', json_encode($jwkset));
-        $this->assertEquals(2, count($jwkset));
-        $this->assertEquals(2, $jwkset->count());
-        $this->assertTrue($jwkset->hasKey(0));
-        $this->assertTrue($jwkset->hasKey(1));
-        $this->assertFalse($jwkset->hasKey(2));
+        self::assertEquals('{"keys":[{"kty":"EC","crv":"P-256","x":"f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU","y":"x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0","use":"sign","key_ops":["sign"],"alg":"ES256","kid":"0123456789"},{"kty":"EC","crv":"P-256","x":"f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU","y":"x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0","d":"jpsQnnGQmL-YBIffH1136cspYG6-0iY7X1fCE9-E9LI","use":"sign","key_ops":["verify"],"alg":"ES256","kid":"9876543210"}]}', json_encode($jwkset));
+        self::assertEquals(2, count($jwkset));
+        self::assertEquals(2, $jwkset->count());
+        self::assertTrue($jwkset->hasKey(0));
+        self::assertTrue($jwkset->hasKey(1));
+        self::assertFalse($jwkset->hasKey(2));
 
         foreach ($jwkset as $key) {
-            $this->assertEquals('EC', $key->get('kty'));
+            self::assertEquals('EC', $key->get('kty'));
         }
-        $this->assertEquals(2, $jwkset->key());
+        self::assertEquals(2, $jwkset->key());
 
-        $this->assertEquals('9876543210', $jwkset->getKey(1)->get('kid'));
+        self::assertEquals('9876543210', $jwkset->getKey(1)->get('kid'));
         $jwkset->removeKey(1);
         $jwkset->removeKey(1);
 
-        $this->assertEquals(1, count($jwkset));
-        $this->assertEquals(1, $jwkset->count());
-        $this->assertInstanceOf(JWKInterface::class, $jwkset->getKey(0));
-        $this->assertInstanceOf(JWKInterface::class, $jwkset[0]);
+        self::assertEquals(1, count($jwkset));
+        self::assertEquals(1, $jwkset->count());
+        self::assertInstanceOf(JWKInterface::class, $jwkset->getKey(0));
+        self::assertInstanceOf(JWKInterface::class, $jwkset[0]);
 
         unset($jwkset[0]);
-        $this->assertEquals(0, count($jwkset));
-        $this->assertEquals(0, $jwkset->count());
+        self::assertEquals(0, count($jwkset));
+        self::assertEquals(0, $jwkset->count());
     }
 
     /**
@@ -185,7 +185,7 @@ class JWKTest extends \PHPUnit_Framework_TestCase
 
         $public = $private->toPublic();
 
-        $this->assertEquals(json_encode([
+        self::assertEquals(json_encode([
             'kty' => 'EC',
             'crv' => 'P-256',
             'x' => 'f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU',
@@ -206,11 +206,11 @@ class JWKTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertEquals(
+        self::assertEquals(
             '178f7e93a74ed73d88c29042220b9ae6e4b371cd',
             strtolower(bin2hex(\Base64Url\Base64Url::decode($key->get('x5t'))))
         );
-        $this->assertEquals([
+        self::assertEquals([
                 'kty' => 'RSA',
                 'n' => 'nCoEd1zYUJE6BqOC4NhQSLyJP_EZcBqIRn7gj8Xxic4h7lr-YQ23MkSJoHQLU09VpM6CYpXu61lfxuEFgBLEXpQ_vFtIOPRT9yTm-5HpFcTP9FMN9Er8n1Tefb6ga2-HwNBQHygwA0DaCHNRbH__OjynNwaOvUsRBOt9JN7m-fwxcfuU1WDzLkqvQtLL6sRqGrLMU90VS4sfyBlhH82dqD5jK4Q1aWWEyBnFRiL4U5W-44BKEMYq7LqXIBHHOZkQBKDwYXqVJYxOUnXitu0IyhT8ziJqs07PRgOXlwN-wLHee69FM8-6PnG33vQlJcINNYmdnfsOEXmJHjfFr45yaQ',
                 'e' => 'AQAB',

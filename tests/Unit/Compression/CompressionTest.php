@@ -20,7 +20,7 @@ use Jose\Compression\ZLib;
  *
  * @group Unit
  */
-class CompressionTest extends \PHPUnit_Framework_TestCase
+class CompressionTest extends \Jose\Test\BaseTestCase
 {
     public function testGetValidCompressionAlgorithm()
     {
@@ -30,7 +30,7 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
         $manager->addCompressionAlgorithm(new ZLib());
 
         $compression = $manager->getCompressionAlgorithm('DEF');
-        $this->assertInstanceOf(CompressionInterface::class, $compression);
+        self::assertInstanceOf(CompressionInterface::class, $compression);
     }
 
     public function testGetInvalidCompressionAlgorithm()
@@ -41,7 +41,7 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
         $manager->addCompressionAlgorithm(new ZLib());
 
         $compression = $manager->getCompressionAlgorithm('FOO');
-        $this->assertNull($compression);
+        self::assertNull($compression);
     }
 
     public function testDeflate()
@@ -51,8 +51,8 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
         $data = 'Live long and Prosper.';
         $compressed = $compression->compress($data);
         $uncompressed = $compression->uncompress($compressed);
-        $this->assertNotNull($compressed);
-        $this->assertSame($data, $uncompressed);
+        self::assertNotNull($compressed);
+        self::assertSame($data, $uncompressed);
     }
 
     public function testGZip()
@@ -62,8 +62,8 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
         $data = 'Live long and Prosper.';
         $compressed = $compression->compress($data);
         $uncompressed = $compression->uncompress($compressed);
-        $this->assertNotNull($compressed);
-        $this->assertSame($data, $uncompressed);
+        self::assertNotNull($compressed);
+        self::assertSame($data, $uncompressed);
     }
 
     public function testZLib()
@@ -73,8 +73,8 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
         $data = 'Live long and Prosper.';
         $compressed = $compression->compress($data);
         $uncompressed = $compression->uncompress($compressed);
-        $this->assertNotNull($compressed);
-        $this->assertSame($data, $uncompressed);
+        self::assertNotNull($compressed);
+        self::assertSame($data, $uncompressed);
     }
 
     /**

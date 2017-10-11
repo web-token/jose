@@ -18,7 +18,7 @@ use Jose\Object\JWKInterface;
  * @group Unit
  * @group StorableJWKSet
  */
-class StorableJWKSetTest extends \PHPUnit_Framework_TestCase
+class StorableJWKSetTest extends \Jose\Test\BaseTestCase
 {
     public function testKey()
     {
@@ -33,50 +33,50 @@ class StorableJWKSetTest extends \PHPUnit_Framework_TestCase
             3
         );
 
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
 
-        $this->assertInstanceOf(JWKInterface::class, $jwkset[0]);
-        $this->assertInstanceOf(JWKInterface::class, $jwkset[1]);
-        $this->assertInstanceOf(JWKInterface::class, $jwkset[2]);
-        $this->assertFalse(isset($jwkset[3]));
-        $this->assertTrue($jwkset->hasKey(0));
-        $this->assertEquals($jwkset->getKey(0), $jwkset[0]);
+        self::assertInstanceOf(JWKInterface::class, $jwkset[0]);
+        self::assertInstanceOf(JWKInterface::class, $jwkset[1]);
+        self::assertInstanceOf(JWKInterface::class, $jwkset[2]);
+        self::assertFalse(isset($jwkset[3]));
+        self::assertTrue($jwkset->hasKey(0));
+        self::assertEquals($jwkset->getKey(0), $jwkset[0]);
         foreach ($jwkset->getKeys() as $key) {
-            $this->assertInstanceOf(JWKInterface::class, $key);
+            self::assertInstanceOf(JWKInterface::class, $key);
         }
         foreach ($jwkset as $key) {
-            $this->assertInstanceOf(JWKInterface::class, $key);
+            self::assertInstanceOf(JWKInterface::class, $key);
         }
 
         $actual_content = json_encode($jwkset);
 
-        $this->assertEquals($actual_content, json_encode($jwkset));
+        self::assertEquals($actual_content, json_encode($jwkset));
 
         $jwkset[] = JWKFactory::createKey(['kty' => 'EC', 'crv' => 'P-521']);
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
-        $this->assertEquals($actual_content, json_encode($jwkset));
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
+        self::assertEquals($actual_content, json_encode($jwkset));
 
         unset($jwkset[count($jwkset) - 1]);
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
-        $this->assertEquals($actual_content, json_encode($jwkset));
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
+        self::assertEquals($actual_content, json_encode($jwkset));
 
         $jwkset->addKey(JWKFactory::createKey(['kty' => 'EC', 'crv' => 'P-521']));
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
-        $this->assertEquals($actual_content, json_encode($jwkset));
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
+        self::assertEquals($actual_content, json_encode($jwkset));
 
         $jwkset->prependKey(JWKFactory::createKey(['kty' => 'EC', 'crv' => 'P-521']));
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
-        $this->assertEquals($actual_content, json_encode($jwkset));
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
+        self::assertEquals($actual_content, json_encode($jwkset));
 
         $jwkset->removeKey(count($jwkset) - 1);
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
-        $this->assertEquals($actual_content, json_encode($jwkset));
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
+        self::assertEquals($actual_content, json_encode($jwkset));
 
         $jwkset->delete();
     }

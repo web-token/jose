@@ -21,7 +21,7 @@ use Jose\Object\JWK;
  * @group PBES2HSAESKW
  * @group Unit
  */
-class PBES2_HS_AESKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
+class PBES2_HS_AESKWKeyEncryptionTest extends \Jose\Test\BaseTestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7517#appendix-C
@@ -46,7 +46,7 @@ class PBES2_HS_AESKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $wrapped_cek = Base64Url::decode('TrqXOwuNUfDV9VPTNbyGvEJ9JMjefAVn-TR1uIxR9p6hsRQh9Tk7BA');
 
-        $this->assertEquals($expected_cek, $pbes2->unwrapKey($key, $wrapped_cek, $header));
+        self::assertEquals($expected_cek, $pbes2->unwrapKey($key, $wrapped_cek, $header));
     }
 
     public function testPBES2HS256A128KW_Bis()
@@ -65,9 +65,9 @@ class PBES2_HS_AESKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $pbes2 = new PBES2HS256A128KW();
         $encrypted_cek = $pbes2->wrapKey($key, $cek, $header, $header);
-        $this->assertTrue(isset($header['p2s']));
-        $this->assertEquals(4096, $header['p2c']);
-        $this->assertEquals($cek, $pbes2->unwrapKey($key, $encrypted_cek, $header));
+        self::assertTrue(isset($header['p2s']));
+        self::assertEquals(4096, $header['p2c']);
+        self::assertEquals($cek, $pbes2->unwrapKey($key, $encrypted_cek, $header));
     }
 
     public function testPBES2HS384A192KW()
@@ -86,9 +86,9 @@ class PBES2_HS_AESKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $pbes2 = new PBES2HS384A192KW();
         $encrypted_cek = $pbes2->wrapKey($key, $cek, $header, $header);
-        $this->assertTrue(isset($header['p2s']));
-        $this->assertEquals(4096, $header['p2c']);
-        $this->assertEquals($cek, $pbes2->unwrapKey($key, $encrypted_cek, $header));
+        self::assertTrue(isset($header['p2s']));
+        self::assertEquals(4096, $header['p2c']);
+        self::assertEquals($cek, $pbes2->unwrapKey($key, $encrypted_cek, $header));
     }
 
     public function testPBES2HS512A256KW()
@@ -107,9 +107,9 @@ class PBES2_HS_AESKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $pbes2 = new PBES2HS512A256KW();
         $encrypted_cek = $pbes2->wrapKey($key, $cek, $header, $header);
-        $this->assertTrue(isset($header['p2s']));
-        $this->assertEquals(4096, $header['p2c']);
-        $this->assertEquals($cek, $pbes2->unwrapKey($key, $encrypted_cek, $header));
+        self::assertTrue(isset($header['p2s']));
+        self::assertEquals(4096, $header['p2c']);
+        self::assertEquals($cek, $pbes2->unwrapKey($key, $encrypted_cek, $header));
     }
 
     /**

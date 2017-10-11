@@ -17,7 +17,7 @@ use Jose\Factory\JWEFactory;
  * @group JWE
  * @group Unit
  */
-class JWETest extends \PHPUnit_Framework_TestCase
+class JWETest extends \Jose\Test\BaseTestCase
 {
     public function testJWE()
     {
@@ -31,7 +31,7 @@ class JWETest extends \PHPUnit_Framework_TestCase
         ];
         $jwe = JWEFactory::createJWE($claims);
 
-        $this->assertEquals(0, $jwe->countRecipients());
+        self::assertEquals(0, $jwe->countRecipients());
     }
 
     /**
@@ -61,9 +61,9 @@ class JWETest extends \PHPUnit_Framework_TestCase
         $jwe = JWEFactory::createJWE([]);
         $jwe = $jwe->withSharedProtectedHeader('foo', 'bar');
 
-        $this->assertEquals(['foo' => 'bar'], $jwe->getSharedProtectedHeaders());
-        $this->assertEquals('bar', $jwe->getSharedProtectedHeader('foo'));
-        $this->assertEquals('bar', $jwe->getSharedProtectedHeader('plic'));
+        self::assertEquals(['foo' => 'bar'], $jwe->getSharedProtectedHeaders());
+        self::assertEquals('bar', $jwe->getSharedProtectedHeader('foo'));
+        self::assertEquals('bar', $jwe->getSharedProtectedHeader('plic'));
     }
 
     /**
@@ -75,9 +75,9 @@ class JWETest extends \PHPUnit_Framework_TestCase
         $jwe = JWEFactory::createJWE([]);
         $jwe = $jwe->withSharedHeader('foo', 'bar');
 
-        $this->assertEquals(['foo' => 'bar'], $jwe->getSharedHeaders());
-        $this->assertEquals('bar', $jwe->getSharedHeader('foo'));
-        $this->assertEquals('bar', $jwe->getSharedHeader('plic'));
+        self::assertEquals(['foo' => 'bar'], $jwe->getSharedHeaders());
+        self::assertEquals('bar', $jwe->getSharedHeader('foo'));
+        self::assertEquals('bar', $jwe->getSharedHeader('plic'));
     }
 
     /**
@@ -140,9 +140,9 @@ class JWETest extends \PHPUnit_Framework_TestCase
             'plic' => 'ploc',
         ]);
 
-        $this->assertEquals(1, $jwe->countRecipients());
-        $this->assertEquals('bar', $jwe->getRecipient(0)->getHeader('foo'));
-        $this->assertEquals('ploc', $jwe->getRecipient(0)->getHeader('plic'));
+        self::assertEquals(1, $jwe->countRecipients());
+        self::assertEquals('bar', $jwe->getRecipient(0)->getHeader('foo'));
+        self::assertEquals('ploc', $jwe->getRecipient(0)->getHeader('plic'));
         $jwe->getRecipient(0)->getHeader('var');
     }
 }

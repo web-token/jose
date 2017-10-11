@@ -12,14 +12,14 @@
 use Base64Url\Base64Url;
 use Jose\Algorithm\KeyEncryption\Dir;
 use Jose\Object\JWK;
-use Jose\Test\TestCase;
+use Jose\Test\BaseTestCase;
 
 /**
  * Class DirAlgorithmTest.
  *
  * @group Unit
  */
-class DirAlgorithmTest extends TestCase
+class DirAlgorithmBaseTest extends BaseTestCase
 {
     /**
      * @expectedException \InvalidArgumentException
@@ -45,6 +45,6 @@ class DirAlgorithmTest extends TestCase
 
         $dir = new Dir();
 
-        $this->assertEquals('ABCD', $dir->getCEK($key));
+        self::assertEquals('ABCD', $dir->getCEK($key));
     }
 }

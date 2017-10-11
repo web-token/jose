@@ -10,13 +10,13 @@
  */
 
 use Jose\Factory\JWKFactory;
-use Jose\Test\TestCase;
+use Jose\Test\BaseTestCase;
 
 /**
  * @group OctKeys
  * @group Unit
  */
-class OctKeysTest extends TestCase
+class OctKeysBaseTest extends BaseTestCase
 {
     /**
      * @expectedException \InvalidArgumentException
@@ -31,7 +31,7 @@ class OctKeysTest extends TestCase
     {
         $jwk = JWKFactory::createOctKey(['size' => 64]);
 
-        $this->assertEquals('oct', $jwk->get('kty'));
-        $this->assertTrue($jwk->has('k'));
+        self::assertEquals('oct', $jwk->get('kty'));
+        self::assertTrue($jwk->has('k'));
     }
 }

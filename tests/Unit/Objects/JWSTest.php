@@ -20,7 +20,7 @@ use Jose\Object\Signature;
  * @group JWS
  * @group Unit
  */
-class JWSTest extends \PHPUnit_Framework_TestCase
+class JWSTest extends \Jose\Test\BaseTestCase
 {
     /**
      * @expectedException \InvalidArgumentException
@@ -38,16 +38,16 @@ class JWSTest extends \PHPUnit_Framework_TestCase
         ];
         $jws = JWSFactory::createJWS($claims);
 
-        $this->assertTrue($jws->hasClaims());
-        $this->assertTrue($jws->hasClaim('nbf'));
-        $this->assertTrue($jws->hasClaim('iss'));
-        $this->assertEquals('Me', $jws->getClaim('iss'));
-        $this->assertEquals($claims, $jws->getPayload());
-        $this->assertEquals($claims, $jws->getClaims());
-        $this->assertEquals(0, $jws->countSignatures());
+        self::assertTrue($jws->hasClaims());
+        self::assertTrue($jws->hasClaim('nbf'));
+        self::assertTrue($jws->hasClaim('iss'));
+        self::assertEquals('Me', $jws->getClaim('iss'));
+        self::assertEquals($claims, $jws->getPayload());
+        self::assertEquals($claims, $jws->getClaims());
+        self::assertEquals(0, $jws->countSignatures());
 
         $jws = $jws->addSignatureInformation(new JWK(['kty' => 'none']), ['crit' => ['nbf', 'iat', 'exp', 'iss']]);
-        $this->assertEquals(1, $jws->countSignatures());
+        self::assertEquals(1, $jws->countSignatures());
 
         $checker_manager = CheckerManagerFactory::createClaimCheckerManager();
         $checker_manager->checkJWS($jws, 0);
@@ -188,7 +188,7 @@ class JWSTest extends \PHPUnit_Framework_TestCase
 
         $signature->withEncodedProtectedHeaders('');
 
-        $this->assertEquals([], $signature->getProtectedHeaders());
+        self::assertEquals([], $signature->getProtectedHeaders());
     }*/
 
     /*public function testEncodedProtectedHeader()
@@ -198,6 +198,6 @@ class JWSTest extends \PHPUnit_Framework_TestCase
         $signature = $signature->withEncodedProtectedHeaders(Base64Url::encode(json_encode(['foo' => 'bar'])));
         $signature = $signature->withProtectedHeader('plic', 'ploc');
 
-        $this->assertEquals(['foo' => 'bar', 'plic' => 'ploc'], $signature->getProtectedHeaders());
+        self::assertEquals(['foo' => 'bar', 'plic' => 'ploc'], $signature->getProtectedHeaders());
     }*/
 }

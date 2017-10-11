@@ -14,7 +14,7 @@ use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Object\JWSInterface;
 use Jose\Signer;
-use Jose\Test\TestCase;
+use Jose\Test\BaseTestCase;
 
 /**
  * Class NoneSignatureTest.
@@ -22,7 +22,7 @@ use Jose\Test\TestCase;
  * @group None
  * @group Unit
  */
-class NoneSignatureTest extends TestCase
+class NoneSignatureBaseTest extends BaseTestCase
 {
     public function testNoneSignAndVerifyAlgorithm()
     {
@@ -35,8 +35,8 @@ class NoneSignatureTest extends TestCase
 
         $signature = $none->sign($key, $data);
 
-        $this->assertEquals($signature, '');
-        $this->assertTrue($none->verify($key, $data, $signature));
+        self::assertEquals($signature, '');
+        self::assertTrue($none->verify($key, $data, $signature));
     }
 
     /**
@@ -67,19 +67,19 @@ class NoneSignatureTest extends TestCase
         $signer = Signer::createSigner(['none']);
         $signer->sign($jws);
 
-        $this->assertEquals(1, $jws->countSignatures());
+        self::assertEquals(1, $jws->countSignatures());
 
         $compact = $jws->toCompactJSON(0);
-        $this->assertTrue(is_string($compact));
+        self::assertTrue(is_string($compact));
 
         $loader = new Loader();
         $result = $loader->load($compact);
 
-        $this->assertInstanceOf(JWSInterface::class, $result);
+        self::assertInstanceOf(JWSInterface::class, $result);
 
-        $this->assertEquals('Live long and Prosper.', $result->getPayload());
-        $this->assertEquals(1, $result->countSignatures());
-        $this->assertTrue($result->getSignature(0)->hasProtectedHeader('alg'));
-        $this->assertEquals('none', $result->getSignature(0)->getProtectedHeader('alg'));
+        self::assertEquals('Live long and Prosper.', $result->getPayload());
+        self::assertEquals(1, $result->countSignatures());
+        self::assertTrue($result->getSignature(0)->hasProtectedHeader('alg'));
+        self::assertEquals('none', $result->getSignature(0)->getProtectedHeader('alg'));
     }
 }

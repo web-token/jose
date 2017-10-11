@@ -17,13 +17,14 @@ use Jose\Encrypter;
 use Jose\Factory\JWEFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
+use Jose\Test\BaseTestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-5.13
  *
  * @group RFC7520
  */
-class MultipleRecipientEncryptionTest extends \PHPUnit_Framework_TestCase
+class MultipleRecipientEncryptionTest extends BaseTestCase
 {
     /**
      * Please note that we cannot the encryption and get the same result as the example (IV, TAG and other data are always different).
@@ -115,19 +116,19 @@ class MultipleRecipientEncryptionTest extends \PHPUnit_Framework_TestCase
         $loaded_json = $loader->load($expected_json);
         $decrypter->decryptUsingKey($loaded_json, $recipient_3_private_key);
 
-        $this->assertEquals($expected_ciphertext, Base64Url::encode($loaded_json->getCiphertext()));
-        $this->assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());
-        $this->assertEquals($expected_iv, Base64Url::encode($loaded_json->getIV()));
-        $this->assertEquals($expected_recipient_1_encrypted_key, Base64Url::encode($loaded_json->getRecipient(0)->getEncryptedKey()));
-        $this->assertEquals($expected_recipient_2_encrypted_key, Base64Url::encode($loaded_json->getRecipient(1)->getEncryptedKey()));
-        $this->assertEquals($expected_recipient_3_encrypted_key, Base64Url::encode($loaded_json->getRecipient(2)->getEncryptedKey()));
-        $this->assertEquals($recipient_1_headers, $loaded_json->getRecipient(0)->getHeaders());
-        $this->assertEquals($recipient_2_headers, $loaded_json->getRecipient(1)->getHeaders());
-        $this->assertEquals($recipient_3_headers, $loaded_json->getRecipient(2)->getHeaders());
-        $this->assertEquals($headers, $loaded_json->getSharedHeaders());
-        $this->assertEquals($expected_tag, Base64Url::encode($loaded_json->getTag()));
+        self::assertEquals($expected_ciphertext, Base64Url::encode($loaded_json->getCiphertext()));
+        self::assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());
+        self::assertEquals($expected_iv, Base64Url::encode($loaded_json->getIV()));
+        self::assertEquals($expected_recipient_1_encrypted_key, Base64Url::encode($loaded_json->getRecipient(0)->getEncryptedKey()));
+        self::assertEquals($expected_recipient_2_encrypted_key, Base64Url::encode($loaded_json->getRecipient(1)->getEncryptedKey()));
+        self::assertEquals($expected_recipient_3_encrypted_key, Base64Url::encode($loaded_json->getRecipient(2)->getEncryptedKey()));
+        self::assertEquals($recipient_1_headers, $loaded_json->getRecipient(0)->getHeaders());
+        self::assertEquals($recipient_2_headers, $loaded_json->getRecipient(1)->getHeaders());
+        self::assertEquals($recipient_3_headers, $loaded_json->getRecipient(2)->getHeaders());
+        self::assertEquals($headers, $loaded_json->getSharedHeaders());
+        self::assertEquals($expected_tag, Base64Url::encode($loaded_json->getTag()));
 
-        $this->assertEquals($expected_payload, $loaded_json->getPayload());
+        self::assertEquals($expected_payload, $loaded_json->getPayload());
     }
 
     /**
@@ -231,13 +232,13 @@ class MultipleRecipientEncryptionTest extends \PHPUnit_Framework_TestCase
         $loaded_json = $loader->load($jwe->toJSON());
         $decrypter->decryptUsingKey($loaded_json, $recipient_3_private_key);
 
-        $this->assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());
-        $this->assertEquals($recipient_1_headers, $loaded_json->getRecipient(0)->getHeaders());
-        $this->assertTrue(array_key_exists('epk', $loaded_json->getRecipient(1)->getHeaders()));
-        $this->assertTrue(array_key_exists('iv', $loaded_json->getRecipient(2)->getHeaders()));
-        $this->assertTrue(array_key_exists('tag', $loaded_json->getRecipient(2)->getHeaders()));
-        $this->assertEquals($headers, $loaded_json->getSharedHeaders());
+        self::assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());
+        self::assertEquals($recipient_1_headers, $loaded_json->getRecipient(0)->getHeaders());
+        self::assertTrue(array_key_exists('epk', $loaded_json->getRecipient(1)->getHeaders()));
+        self::assertTrue(array_key_exists('iv', $loaded_json->getRecipient(2)->getHeaders()));
+        self::assertTrue(array_key_exists('tag', $loaded_json->getRecipient(2)->getHeaders()));
+        self::assertEquals($headers, $loaded_json->getSharedHeaders());
 
-        $this->assertEquals($expected_payload, $loaded_json->getPayload());
+        self::assertEquals($expected_payload, $loaded_json->getPayload());
     }
 }

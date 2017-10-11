@@ -15,7 +15,7 @@
  * @group JWTCreator
  * @group Unit
  */
-class JWTCreatorTest extends \PHPUnit_Framework_TestCase
+class JWTCreatorTest extends \Jose\Test\BaseTestCase
 {
     public function testMethods()
     {
@@ -24,17 +24,17 @@ class JWTCreatorTest extends \PHPUnit_Framework_TestCase
         $jwt_creator = new \Jose\JWTCreator($signer);
         $jwt_creator->enableEncryptionSupport($encrypter);
 
-        $this->assertEquals(['DEF', 'ZLIB', 'GZ'], $jwt_creator->getSupportedCompressionMethods());
-        $this->assertEquals(['HS256'], $jwt_creator->getSupportedSignatureAlgorithms());
-        $this->assertEquals(['A256GCMKW', 'A256KW'], $jwt_creator->getSupportedKeyEncryptionAlgorithms());
-        $this->assertEquals(['A128GCM'], $jwt_creator->getSupportedContentEncryptionAlgorithms());
-        $this->assertTrue($jwt_creator->isEncryptionSupportEnabled());
+        self::assertEquals(['DEF', 'ZLIB', 'GZ'], $jwt_creator->getSupportedCompressionMethods());
+        self::assertEquals(['HS256'], $jwt_creator->getSupportedSignatureAlgorithms());
+        self::assertEquals(['A256GCMKW', 'A256KW'], $jwt_creator->getSupportedKeyEncryptionAlgorithms());
+        self::assertEquals(['A128GCM'], $jwt_creator->getSupportedContentEncryptionAlgorithms());
+        self::assertTrue($jwt_creator->isEncryptionSupportEnabled());
 
         $payload = 'Hello World!';
         $signature_key = \Jose\Factory\JWKFactory::createKey(['kty' => 'oct', 'use' => 'sig', 'size' => 512]);
         $encryption_key = \Jose\Factory\JWKFactory::createKey(['kty' => 'oct', 'use' => 'enc', 'size' => 256]);
 
         $jwt = $jwt_creator->signAndEncrypt($payload, ['alg' => 'HS256'], $signature_key, ['alg' => 'A256GCMKW', 'enc' => 'A128GCM'], $encryption_key);
-        $this->assertEquals(5, count(explode('.', $jwt)));
+        self::assertEquals(5, count(explode('.', $jwt)));
     }
 }

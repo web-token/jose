@@ -22,7 +22,7 @@ use Jose\Object\JWSInterface;
  * @group RSA2
  * @group Unit
  */
-class RSAKeyWithoutAllPrimesTest extends \PHPUnit_Framework_TestCase
+class RSAKeyWithoutAllPrimesTest extends \Jose\Test\BaseTestCase
 {
     /**
      * @param string $signature_algorithm
@@ -39,7 +39,7 @@ class RSAKeyWithoutAllPrimesTest extends \PHPUnit_Framework_TestCase
 
         $loader = new Loader();
 
-        $this->assertInstanceOf(JWSInterface::class, $loader->loadAndVerifySignatureUsingKey($jwt, $key, [$signature_algorithm]));
+        self::assertInstanceOf(JWSInterface::class, $loader->loadAndVerifySignatureUsingKey($jwt, $key, [$signature_algorithm]));
     }
 
     /**
@@ -84,7 +84,7 @@ class RSAKeyWithoutAllPrimesTest extends \PHPUnit_Framework_TestCase
 
         $loader = new Loader();
 
-        $this->assertInstanceOf(JWEInterface::class, $loader->loadAndDecryptUsingKey($jwt, $key, [$encryption_algorithm], ['A256GCM']));
+        self::assertInstanceOf(JWEInterface::class, $loader->loadAndDecryptUsingKey($jwt, $key, [$encryption_algorithm], ['A256GCM']));
     }
 
     /**
@@ -102,7 +102,7 @@ class RSAKeyWithoutAllPrimesTest extends \PHPUnit_Framework_TestCase
 
         $loader = new Loader();
 
-        $this->assertInstanceOf(JWEInterface::class, $loader->loadAndDecryptUsingKey($jwt, $key, [$encryption_algorithm], ['A256GCM']));
+        self::assertInstanceOf(JWEInterface::class, $loader->loadAndDecryptUsingKey($jwt, $key, [$encryption_algorithm], ['A256GCM']));
     }
 
     /**

@@ -19,7 +19,7 @@ use Jose\Object\JWK;
  * @group AESKW
  * @group Unit
  */
-class AESKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
+class AESKWKeyEncryptionTest extends \Jose\Test\BaseTestCase
 {
     public function testA128KW()
     {
@@ -35,8 +35,8 @@ class AESKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $wrapped_cek = $aeskw->wrapKey($key, $cek, $header, $header);
 
-        $this->assertEquals($wrapped_cek, hex2bin('11826840774D993FF9C2FA02CCA3CEA0E93B1E1CF96361F93EA6DC2F345194E7B30F964C79F9E61D'));
-        $this->assertEquals($cek, $aeskw->unwrapKey($key, $wrapped_cek, $header));
+        self::assertEquals($wrapped_cek, hex2bin('11826840774D993FF9C2FA02CCA3CEA0E93B1E1CF96361F93EA6DC2F345194E7B30F964C79F9E61D'));
+        self::assertEquals($cek, $aeskw->unwrapKey($key, $wrapped_cek, $header));
     }
 
     /**
@@ -71,8 +71,8 @@ class AESKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $wrapped_cek = $aeskw->wrapKey($key, $cek, $header, $header);
 
-        $this->assertEquals($wrapped_cek, hex2bin('08861E000AABFA4479C7191F9DC51CCA37C50F16CC14441C6EA4980CFCE0F41D9285758C6F74AC6D'));
-        $this->assertEquals($cek, $aeskw->unwrapKey($key, $wrapped_cek, $header));
+        self::assertEquals($wrapped_cek, hex2bin('08861E000AABFA4479C7191F9DC51CCA37C50F16CC14441C6EA4980CFCE0F41D9285758C6F74AC6D'));
+        self::assertEquals($cek, $aeskw->unwrapKey($key, $wrapped_cek, $header));
     }
 
     public function testA256KW()
@@ -89,8 +89,8 @@ class AESKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $wrapped_cek = $aeskw->wrapKey($key, $cek, $header, $header);
 
-        $this->assertEquals($wrapped_cek, hex2bin('28C9F404C4B810F4CBCCB35CFB87F8263F5786E2D80ED326CBC7F0E71A99F43BFB988B9B7A02DD21'));
-        $this->assertEquals($cek, $aeskw->unwrapKey($key, $wrapped_cek, $header));
+        self::assertEquals($wrapped_cek, hex2bin('28C9F404C4B810F4CBCCB35CFB87F8263F5786E2D80ED326CBC7F0E71A99F43BFB988B9B7A02DD21'));
+        self::assertEquals($cek, $aeskw->unwrapKey($key, $wrapped_cek, $header));
     }
 
     /**

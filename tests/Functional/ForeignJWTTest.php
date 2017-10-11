@@ -12,12 +12,13 @@
 use Jose\Factory\JWKFactory;
 use Jose\Loader;
 use Jose\Object\JWSInterface;
+use Jose\Test\BaseTestCase;
 
 /**
  * @group ForeignJWT
  * @group Functional
  */
-class ForeignJWTTest extends \PHPUnit_Framework_TestCase
+class ForeignJWTTest extends BaseTestCase
 {
     /*
      * The following test uses an assertion created with another library.
@@ -53,9 +54,9 @@ class ForeignJWTTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertInstanceOf(JWSInterface::class, $jwt);
-        $this->assertEquals($expected_index, $index);
-        $this->assertEquals($expected_headers, $jwt->getSignature(0)->getAllHeaders());
-        $this->assertEquals($expected_claims, $jwt->getClaims());
+        self::assertInstanceOf(JWSInterface::class, $jwt);
+        self::assertEquals($expected_index, $index);
+        self::assertEquals($expected_headers, $jwt->getSignature(0)->getAllHeaders());
+        self::assertEquals($expected_claims, $jwt->getClaims());
     }
 }

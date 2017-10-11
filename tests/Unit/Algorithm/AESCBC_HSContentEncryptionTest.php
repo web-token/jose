@@ -20,7 +20,7 @@ use Jose\Algorithm\ContentEncryption\A256CBCHS512;
  * @group AESCBC
  * @group Unit
  */
-class AESCBC_HSContentEncryptionTest extends \PHPUnit_Framework_TestCase
+class AESCBC_HSContentEncryptionTest extends \Jose\Test\BaseTestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7516#appendix-B
@@ -39,9 +39,9 @@ class AESCBC_HSContentEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $cyphertext = $algorithm->encryptContent($plaintext, $K, $iv, null, $header, $T);
 
-        $this->assertEquals($expected_cyphertext, $cyphertext);
-        $this->assertEquals($plaintext, $algorithm->decryptContent($cyphertext, $K, $iv, null, $header, $T));
-        $this->assertEquals($expected_T, $T);
+        self::assertEquals($expected_cyphertext, $cyphertext);
+        self::assertEquals($plaintext, $algorithm->decryptContent($cyphertext, $K, $iv, null, $header, $T));
+        self::assertEquals($expected_T, $T);
     }
 
     /**
@@ -93,15 +93,15 @@ class AESCBC_HSContentEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $cyphertext = $algorithm->encryptContent($plaintext, $K, $iv, $aad, $header, $T);
 
-        $this->assertEquals($expected_cyphertext, $cyphertext);
+        self::assertEquals($expected_cyphertext, $cyphertext);
 
         //We invoke protected methods to test vectors directly. This is due to the encryption signature: this test case uses a string as AAD, but the algorithm uses the protected header.
         $calc_method = self::getMethod('\Jose\Algorithm\ContentEncryption\A128CBCHS256', 'calculateAuthenticationTag');
         $check_method = self::getMethod('\Jose\Algorithm\ContentEncryption\A128CBCHS256', 'isTagValid');
 
         $T = $calc_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad]);
-        $this->assertEquals($expected_T, $T);
-        $this->assertTrue($check_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad, $T]));
+        self::assertEquals($expected_T, $T);
+        self::assertTrue($check_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad, $T]));
     }
 
     /**
@@ -121,7 +121,7 @@ class AESCBC_HSContentEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $cyphertext = $algorithm->encryptContent($plaintext, $K, $iv, $aad, $header, $T);
 
-        $this->assertEquals($expected_cyphertext, $cyphertext);
+        self::assertEquals($expected_cyphertext, $cyphertext);
 
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('The remaining tests does not work on HHVM. The error raised does not concern the library itself.');
@@ -134,8 +134,8 @@ class AESCBC_HSContentEncryptionTest extends \PHPUnit_Framework_TestCase
         $check_method = self::getMethod('\Jose\Algorithm\ContentEncryption\A128CBCHS256', 'isTagValid');
 
         $T = $calc_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad]);
-        $this->assertEquals($expected_T, $T);
-        $this->assertTrue($check_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad, $T]));
+        self::assertEquals($expected_T, $T);
+        self::assertTrue($check_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad, $T]));
     }
 
     /**
@@ -155,7 +155,7 @@ class AESCBC_HSContentEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $cyphertext = $algorithm->encryptContent($plaintext, $K, $iv, $aad, $header, $T);
 
-        $this->assertEquals($expected_cyphertext, $cyphertext);
+        self::assertEquals($expected_cyphertext, $cyphertext);
 
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('The remaining tests does not work on HHVM. The error raised does not concern the library itself.');
@@ -168,8 +168,8 @@ class AESCBC_HSContentEncryptionTest extends \PHPUnit_Framework_TestCase
         $check_method = self::getMethod('\Jose\Algorithm\ContentEncryption\A128CBCHS256', 'isTagValid');
 
         $T = $calc_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad]);
-        $this->assertEquals($expected_T, $T);
-        $this->assertTrue($check_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad, $T]));
+        self::assertEquals($expected_T, $T);
+        self::assertTrue($check_method->invokeArgs($algorithm, [$cyphertext, $K, $iv, null, $aad, $T]));
     }
 
     /**

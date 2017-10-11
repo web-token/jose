@@ -18,7 +18,7 @@ use Jose\Object\PublicJWKSet;
  * @group Unit
  * @group PublicJWKSet
  */
-class PublicJWKSetTest extends \PHPUnit_Framework_TestCase
+class PublicJWKSetTest extends \Jose\Test\BaseTestCase
 {
     public function testKey()
     {
@@ -34,9 +34,9 @@ class PublicJWKSetTest extends \PHPUnit_Framework_TestCase
 
         $public_jwkset = new PublicJWKSet($jwkset);
 
-        $this->assertEquals(3, $public_jwkset->countKeys());
+        self::assertEquals(3, $public_jwkset->countKeys());
         foreach ($public_jwkset as $key) {
-            $this->assertEquals(json_encode($key), json_encode($key->toPublic()));
+            self::assertEquals(json_encode($key), json_encode($key->toPublic()));
         }
 
         $jwkset->delete();
@@ -75,24 +75,24 @@ class PublicJWKSetTest extends \PHPUnit_Framework_TestCase
         $jwksets = new \Jose\Object\JWKSets([$jwkset1, $jwkset2, $jwkset3]);
         $public_jwkset = new PublicJWKSet($jwksets);
 
-        $this->assertEquals(7, $public_jwkset->countKeys());
+        self::assertEquals(7, $public_jwkset->countKeys());
 
         $public_jwkset->addKey(JWKFactory::createRSAKey(['size' => 384]));
-        $this->assertEquals(7, $public_jwkset->countKeys());
+        self::assertEquals(7, $public_jwkset->countKeys());
 
         $public_jwkset->removeKey(0);
-        $this->assertEquals(7, $public_jwkset->countKeys());
+        self::assertEquals(7, $public_jwkset->countKeys());
 
-        $this->assertEquals(7, count($public_jwkset->toPEM()));
+        self::assertEquals(7, count($public_jwkset->toPEM()));
 
         foreach ($public_jwkset as $key) {
-            $this->assertEquals(json_encode($key), json_encode($key->toPublic()));
+            self::assertEquals(json_encode($key), json_encode($key->toPublic()));
         }
         for ($i = 0; $i < 3; ++$i) {
-            $this->assertEquals(json_encode($public_jwkset[$i]), json_encode($jwkset1->getKey($i)->toPublic()));
+            self::assertEquals(json_encode($public_jwkset[$i]), json_encode($jwkset1->getKey($i)->toPublic()));
         }
         for ($i = 3; $i < 7; ++$i) {
-            $this->assertEquals(json_encode($public_jwkset[$i]), json_encode($jwkset3->getKey($i - 3)->toPublic()));
+            self::assertEquals(json_encode($public_jwkset[$i]), json_encode($jwkset3->getKey($i - 3)->toPublic()));
         }
 
         $jwkset1->delete();

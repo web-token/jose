@@ -22,7 +22,7 @@ use Jose\Object\JWK;
  *
  * The values of these tests come from the JWS specification
  */
-class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
+class ECDSASignatureTest extends \Jose\Test\BaseTestCase
 {
     /**
      * @expectedException \InvalidArgumentException
@@ -56,8 +56,8 @@ class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
 
         $sign = $ecdsa->sign($key, $data);
 
-        $this->assertTrue($ecdsa->verify($key, $data, $sign));
-        $this->assertTrue($ecdsa->verify($key, $data, Base64Url::decode($signature)));
+        self::assertTrue($ecdsa->verify($key, $data, $sign));
+        self::assertTrue($ecdsa->verify($key, $data, Base64Url::decode($signature)));
     }
 
     public function testES256SignVerify()
@@ -75,7 +75,7 @@ class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
         $data = 'eyJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ';
         $signature = $ecdsa->sign($key, $data);
 
-        $this->assertTrue($ecdsa->verify($key, $data, $signature));
+        self::assertTrue($ecdsa->verify($key, $data, $signature));
     }
 
     /**
@@ -106,7 +106,7 @@ class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
         $data = 'Live long and Prosper.';
         $signature = $ecdsa->sign($private_key, $data);
 
-        $this->assertTrue($ecdsa->verify($public_key, $data, $signature));
+        self::assertTrue($ecdsa->verify($public_key, $data, $signature));
     }
 
     public function testES384SignAndVerify()
@@ -118,7 +118,7 @@ class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
         $data = 'Live long and Prosper.';
         $signature = $ecdsa->sign($private_key, $data);
 
-        $this->assertTrue($ecdsa->verify($public_key, $data, $signature));
+        self::assertTrue($ecdsa->verify($public_key, $data, $signature));
     }
 
     public function testES512SignAndVerify()
@@ -130,7 +130,7 @@ class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
         $data = 'Live long and Prosper.';
         $signature = $ecdsa->sign($private_key, $data);
 
-        $this->assertTrue($ecdsa->verify($public_key, $data, $signature));
+        self::assertTrue($ecdsa->verify($public_key, $data, $signature));
     }
 
     public function testHS512Verify()
@@ -149,8 +149,8 @@ class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
 
         $sign = $ecdsa->sign($key, $data);
 
-        $this->assertTrue($ecdsa->verify($key, $data, $sign));
-        $this->assertTrue($ecdsa->verify($key, $data, Base64Url::decode($signature)));
+        self::assertTrue($ecdsa->verify($key, $data, $sign));
+        self::assertTrue($ecdsa->verify($key, $data, Base64Url::decode($signature)));
     }
 
     public function testHS512SignVerify()
@@ -168,7 +168,7 @@ class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
         $data = 'eyJhbGciOiJFUzUxMiJ9.UGF5bG9hZA';
         $signature = $ecdsa->sign($key, $data);
 
-        $this->assertTrue($ecdsa->verify($key, $data, $signature));
+        self::assertTrue($ecdsa->verify($key, $data, $signature));
     }
 
     public function testBadSignature()
@@ -185,6 +185,6 @@ class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
         $data = 'eyJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ';
         $signature = 'DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3';
 
-        $this->assertFalse($ecdsa->verify($key, $data, Base64Url::decode($signature)));
+        self::assertFalse($ecdsa->verify($key, $data, Base64Url::decode($signature)));
     }
 }

@@ -16,7 +16,7 @@ use Jose\JWTLoader;
 use Jose\Object\JWK;
 use Jose\Object\JWKSet;
 use Jose\Signer;
-use Jose\Test\TestCase;
+use Jose\Test\BaseTestCase;
 use Jose\Verifier;
 
 /**
@@ -24,7 +24,7 @@ use Jose\Verifier;
  * @group JWTCreator
  * @group Functional
  */
-class LoaderAndCreatorTest extends TestCase
+class LoaderAndCreatorBaseTest extends BaseTestCase
 {
     public function testSignAndLoadUsingJWTCreatorAndJWTLoader()
     {

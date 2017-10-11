@@ -15,6 +15,7 @@ use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Signer;
+use Jose\Test\BaseTestCase;
 use Jose\Verifier;
 
 /**
@@ -22,7 +23,7 @@ use Jose\Verifier;
  *
  * @group RFC7520
  */
-class MultipleSignaturesTest extends \PHPUnit_Framework_TestCase
+class MultipleSignaturesTest extends BaseTestCase
 {
     public function testMultipleSignatures()
     {
@@ -107,7 +108,7 @@ class MultipleSignaturesTest extends \PHPUnit_Framework_TestCase
         $signer = Signer::createSigner(['RS256', 'ES512', 'HS256']);
         $signer->sign($jws);
 
-        $this->assertEquals(3, $jws->countSignatures());
+        self::assertEquals(3, $jws->countSignatures());
 
         $verifer = Verifier::createVerifier(['RS256', 'ES512', 'HS256']);
 
@@ -123,7 +124,7 @@ class MultipleSignaturesTest extends \PHPUnit_Framework_TestCase
         $loader = new Loader();
         $loaded_json = $loader->load($expected_json);
 
-        $this->assertEquals(3, $loaded_json->countSignatures());
+        self::assertEquals(3, $loaded_json->countSignatures());
 
         $verifer->verifyWithKey($loaded_json, $rsa_private_key);
         $verifer->verifyWithKey($loaded_json, $ecdsa_private_key);

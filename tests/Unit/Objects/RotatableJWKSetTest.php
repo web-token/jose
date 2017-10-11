@@ -19,7 +19,7 @@ use Jose\Object\JWKInterface;
  * @group StorableJWKSet
  * @group RotatableJWKSet
  */
-class RotatableJWKSetTest extends \PHPUnit_Framework_TestCase
+class RotatableJWKSetTest extends \Jose\Test\BaseTestCase
 {
     public function testKey()
     {
@@ -33,56 +33,56 @@ class RotatableJWKSetTest extends \PHPUnit_Framework_TestCase
             3
         );
 
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
 
-        $this->assertInstanceOf(JWKInterface::class, $jwkset[0]);
-        $this->assertInstanceOf(JWKInterface::class, $jwkset[1]);
-        $this->assertInstanceOf(JWKInterface::class, $jwkset[2]);
-        $this->assertFalse(isset($jwkset[3]));
-        $this->assertTrue($jwkset->hasKey(0));
-        $this->assertEquals($jwkset->getKey(0), $jwkset[0]);
+        self::assertInstanceOf(JWKInterface::class, $jwkset[0]);
+        self::assertInstanceOf(JWKInterface::class, $jwkset[1]);
+        self::assertInstanceOf(JWKInterface::class, $jwkset[2]);
+        self::assertFalse(isset($jwkset[3]));
+        self::assertTrue($jwkset->hasKey(0));
+        self::assertEquals($jwkset->getKey(0), $jwkset[0]);
         foreach ($jwkset->getKeys() as $key) {
-            $this->assertInstanceOf(JWKInterface::class, $key);
+            self::assertInstanceOf(JWKInterface::class, $key);
         }
         foreach ($jwkset as $key) {
-            $this->assertInstanceOf(JWKInterface::class, $key);
+            self::assertInstanceOf(JWKInterface::class, $key);
         }
 
         $actual_content = json_encode($jwkset);
 
-        $this->assertEquals($actual_content, json_encode($jwkset));
+        self::assertEquals($actual_content, json_encode($jwkset));
 
         $jwkset->rotate();
 
-        $this->assertNotEquals($actual_content, json_encode($jwkset));
+        self::assertNotEquals($actual_content, json_encode($jwkset));
 
         $actual_content = json_encode($jwkset);
 
         $jwkset[] = JWKFactory::createKey(['kty' => 'EC', 'crv' => 'P-521']);
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
-        $this->assertEquals($actual_content, json_encode($jwkset));
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
+        self::assertEquals($actual_content, json_encode($jwkset));
 
         unset($jwkset[count($jwkset) - 1]);
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
-        $this->assertEquals($actual_content, json_encode($jwkset));
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
+        self::assertEquals($actual_content, json_encode($jwkset));
 
         $jwkset->addKey(JWKFactory::createKey(['kty' => 'EC', 'crv' => 'P-521']));
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
-        $this->assertEquals($actual_content, json_encode($jwkset));
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
+        self::assertEquals($actual_content, json_encode($jwkset));
 
         $jwkset->prependKey(JWKFactory::createKey(['kty' => 'EC', 'crv' => 'P-521']));
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
-        $this->assertEquals($actual_content, json_encode($jwkset));
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
+        self::assertEquals($actual_content, json_encode($jwkset));
 
         $jwkset->removeKey(count($jwkset) - 1);
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
-        $this->assertEquals($actual_content, json_encode($jwkset));
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
+        self::assertEquals($actual_content, json_encode($jwkset));
 
         $jwkset->delete();
     }
@@ -100,8 +100,8 @@ class RotatableJWKSetTest extends \PHPUnit_Framework_TestCase
             1 // 1 second rotation interval
         );
 
-        $this->assertEquals(3, $jwkset->count());
-        $this->assertEquals(3, $jwkset->countKeys());
+        self::assertEquals(3, $jwkset->count());
+        self::assertEquals(3, $jwkset->countKeys());
 
         $before_rotate = json_decode(json_encode($jwkset))->keys;
 
@@ -111,9 +111,9 @@ class RotatableJWKSetTest extends \PHPUnit_Framework_TestCase
         // Make sure that a manual call to getKeys triggered rotation
         $after_rotate = json_decode(json_encode($jwkset->getKeys()));
 
-        $this->assertCount(3, $after_rotate);
-        $this->assertEquals($before_rotate[0], $after_rotate[1]);
-        $this->assertEquals($before_rotate[1], $after_rotate[2]);
+        self::assertCount(3, $after_rotate);
+        self::assertEquals($before_rotate[0], $after_rotate[1]);
+        self::assertEquals($before_rotate[1], $after_rotate[2]);
 
         // Sleep to ensure next calls trigger rotation
         sleep(2);
@@ -121,12 +121,12 @@ class RotatableJWKSetTest extends \PHPUnit_Framework_TestCase
         // Make sure that json serialization also triggered rotation
         $after_second_rotate = json_decode(json_encode($jwkset))->keys;
 
-        $this->assertCount(3, $after_second_rotate);
-        $this->assertEquals($after_rotate[0], $after_second_rotate[1]);
-        $this->assertEquals($after_rotate[1], $after_second_rotate[2]);
+        self::assertCount(3, $after_second_rotate);
+        self::assertEquals($after_rotate[0], $after_second_rotate[1]);
+        self::assertEquals($after_rotate[1], $after_second_rotate[2]);
 
         // Make sure that subsequent calls to get keys within the interval period do not trigger rotation
-        $this->assertEquals($after_second_rotate, json_decode(json_encode($jwkset->getKeys())));
-        $this->assertEquals($after_second_rotate, json_decode(json_encode($jwkset))->keys);
+        self::assertEquals($after_second_rotate, json_decode(json_encode($jwkset->getKeys())));
+        self::assertEquals($after_second_rotate, json_decode(json_encode($jwkset))->keys);
     }
 }

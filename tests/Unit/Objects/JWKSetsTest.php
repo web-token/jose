@@ -18,7 +18,7 @@ use Jose\Object\JWKSets;
  * @group Unit
  * @group JWKSets
  */
-class JWKSetsTest extends \PHPUnit_Framework_TestCase
+class JWKSetsTest extends \Jose\Test\BaseTestCase
 {
     public function testKey()
     {
@@ -50,22 +50,22 @@ class JWKSetsTest extends \PHPUnit_Framework_TestCase
         $jwkset = new JWKSets([$jwkset1, $jwkset2]);
         $jwkset->addKeySet($jwkset3);
 
-        $this->assertEquals(6, $jwkset->countKeys());
+        self::assertEquals(6, $jwkset->countKeys());
 
         $jwkset->addKey(JWKFactory::createRSAKey(['size' => 384]));
-        $this->assertEquals(6, $jwkset->countKeys());
+        self::assertEquals(6, $jwkset->countKeys());
 
         $jwkset->removeKey(0);
-        $this->assertEquals(6, $jwkset->countKeys());
+        self::assertEquals(6, $jwkset->countKeys());
 
         for ($i = 0; $i < 2; ++$i) {
-            $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset1->getKey($i)));
+            self::assertEquals(json_encode($jwkset[$i]), json_encode($jwkset1->getKey($i)));
         }
         for ($i = 2; $i < 4; ++$i) {
-            $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset2->getKey($i - 2)));
+            self::assertEquals(json_encode($jwkset[$i]), json_encode($jwkset2->getKey($i - 2)));
         }
         for ($i = 4; $i < 6; ++$i) {
-            $this->assertEquals(json_encode($jwkset[$i]), json_encode($jwkset3->getKey($i - 4)));
+            self::assertEquals(json_encode($jwkset[$i]), json_encode($jwkset3->getKey($i - 4)));
         }
 
         $jwkset1->delete();

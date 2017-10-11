@@ -15,7 +15,7 @@ use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Object\JWSInterface;
-use Jose\Test\TestCase;
+use Jose\Test\BaseTestCase;
 use Jose\Verifier;
 
 /**
@@ -24,7 +24,7 @@ use Jose\Verifier;
  * @group EdDSA
  * @group Unit
  */
-class EdDSASignatureTest extends TestCase
+class EdDSASignatureBaseTest extends BaseTestCase
 {
     /**
      * @see https://tools.ietf.org/html/draft-ietf-jose-cfrg-curves-00#appendix-A.5
@@ -70,14 +70,14 @@ class EdDSASignatureTest extends TestCase
 
         $jws = JWSFactory::createJWSToCompactJSON($input, $key, $header);
 
-        $this->assertEquals('eyJhbGciOiJFZERTQSJ9.RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc.hgyY0il_MGCjP0JzlnLWG1PPOt7-09PGcvMg3AIbQR6dWbhijcNR4ki4iylGjg5BhVsPt9g7sVvpAr_MuM0KAg', $jws);
+        self::assertEquals('eyJhbGciOiJFZERTQSJ9.RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc.hgyY0il_MGCjP0JzlnLWG1PPOt7-09PGcvMg3AIbQR6dWbhijcNR4ki4iylGjg5BhVsPt9g7sVvpAr_MuM0KAg', $jws);
 
         $loader = new Loader();
         $loaded = $loader->load($jws);
         $verifier = Verifier::createVerifier(['EdDSA']);
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
-        $this->assertEquals(1, $loaded->countSignatures());
+        self::assertInstanceOf(JWSInterface::class, $loaded);
+        self::assertEquals(1, $loaded->countSignatures());
         $verifier->verifyWithKey($loaded, $key);
     }
 }

@@ -19,7 +19,7 @@ use Jose\Object\JWK;
  * @group AESGCMKW
  * @group Unit
  */
-class AESGCMKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
+class AESGCMKWKeyEncryptionTest extends \Jose\Test\BaseTestCase
 {
     public function testA128GCMKW()
     {
@@ -35,11 +35,11 @@ class AESGCMKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $wrapped_cek = $aeskw->wrapKey($key, $cek, $header, $header);
 
-        $this->assertTrue(array_key_exists('iv', $header));
-        $this->assertTrue(array_key_exists('tag', $header));
-        $this->assertNotNull($header['iv']);
-        $this->assertNotNull($header['tag']);
-        $this->assertEquals($cek, $aeskw->unwrapKey($key, $wrapped_cek, $header));
+        self::assertTrue(array_key_exists('iv', $header));
+        self::assertTrue(array_key_exists('tag', $header));
+        self::assertNotNull($header['iv']);
+        self::assertNotNull($header['tag']);
+        self::assertEquals($cek, $aeskw->unwrapKey($key, $wrapped_cek, $header));
     }
 
     /**
@@ -93,11 +93,11 @@ class AESGCMKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $wrapped_cek = $aeskw->wrapKey($key, $cek, $header, $header);
 
-        $this->assertTrue(array_key_exists('iv', $header));
-        $this->assertTrue(array_key_exists('tag', $header));
-        $this->assertNotNull($header['iv']);
-        $this->assertNotNull($header['tag']);
-        $this->assertEquals($cek, $aeskw->unwrapKey($key, $wrapped_cek, $header));
+        self::assertTrue(array_key_exists('iv', $header));
+        self::assertTrue(array_key_exists('tag', $header));
+        self::assertNotNull($header['iv']);
+        self::assertNotNull($header['tag']);
+        self::assertEquals($cek, $aeskw->unwrapKey($key, $wrapped_cek, $header));
     }
 
     public function testA256GCMKW()
@@ -114,10 +114,10 @@ class AESGCMKWKeyEncryptionTest extends \PHPUnit_Framework_TestCase
 
         $wrapped_cek = $aeskw->wrapKey($key, $cek, $header, $header);
 
-        $this->assertTrue(array_key_exists('iv', $header));
-        $this->assertTrue(array_key_exists('tag', $header));
-        $this->assertNotNull($header['iv']);
-        $this->assertNotNull($header['tag']);
-        $this->assertEquals($cek, $aeskw->unwrapKey($key, $wrapped_cek, $header));
+        self::assertTrue(array_key_exists('iv', $header));
+        self::assertTrue(array_key_exists('tag', $header));
+        self::assertNotNull($header['iv']);
+        self::assertNotNull($header['tag']);
+        self::assertEquals($cek, $aeskw->unwrapKey($key, $wrapped_cek, $header));
     }
 }

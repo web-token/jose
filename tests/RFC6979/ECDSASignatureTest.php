@@ -18,6 +18,7 @@ use Jose\Algorithm\Signature\ES512;
 use Jose\Algorithm\SignatureAlgorithmInterface;
 use Jose\Factory\JWKFactory;
 use Jose\Object\JWKInterface;
+use Jose\Test\BaseTestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc6979#appendix-A.2.5
@@ -33,7 +34,7 @@ use Jose\Object\JWKInterface;
  *
  * @group RFC6979
  */
-class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
+class ECDSASignatureTest extends BaseTestCase
 {
     /**
      * @param \Jose\Algorithm\SignatureAlgorithmInterface $algorithm
@@ -47,7 +48,7 @@ class ECDSASignatureTest extends \PHPUnit_Framework_TestCase
     {
         $is_valid = $algorithm->verify($key, $message, $signature);
 
-        $this->assertTrue($is_valid);
+        self::assertTrue($is_valid);
     }
 
     /**

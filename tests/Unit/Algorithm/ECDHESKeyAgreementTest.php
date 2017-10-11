@@ -23,7 +23,7 @@ use Jose\Object\JWK;
  * @group ECDHES
  * @group Unit
  */
-class ECDHESKeyAgreementTest extends \PHPUnit_Framework_TestCase
+class ECDHESKeyAgreementTest extends \Jose\Test\BaseTestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7518#appendix-C
@@ -46,11 +46,11 @@ class ECDHESKeyAgreementTest extends \PHPUnit_Framework_TestCase
         $additional_header_values = [];
 
         $ecdh_es->getAgreementKey(128, 'A128GCM', $receiver, $header, $additional_header_values);
-        $this->assertTrue(array_key_exists('epk', $additional_header_values));
-        $this->assertTrue(array_key_exists('kty', $additional_header_values['epk']));
-        $this->assertTrue(array_key_exists('crv', $additional_header_values['epk']));
-        $this->assertTrue(array_key_exists('x', $additional_header_values['epk']));
-        $this->assertTrue(array_key_exists('y', $additional_header_values['epk']));
+        self::assertTrue(array_key_exists('epk', $additional_header_values));
+        self::assertTrue(array_key_exists('kty', $additional_header_values['epk']));
+        self::assertTrue(array_key_exists('crv', $additional_header_values['epk']));
+        self::assertTrue(array_key_exists('x', $additional_header_values['epk']));
+        self::assertTrue(array_key_exists('y', $additional_header_values['epk']));
     }
 
     public function testGetAgreementKeyWithA128KeyWrap()
@@ -80,14 +80,14 @@ class ECDHESKeyAgreementTest extends \PHPUnit_Framework_TestCase
 
         $ecdh_es = new ECDHESA128KW();
         $encrypted_cek = $ecdh_es->wrapAgreementKey($public, $cek, 128, $header, $header);
-        $this->assertTrue(array_key_exists('epk', $header));
-        $this->assertTrue(array_key_exists('crv', $header['epk']));
-        $this->assertTrue(array_key_exists('kty', $header['epk']));
-        $this->assertTrue(array_key_exists('x', $header['epk']));
-        $this->assertTrue(array_key_exists('y', $header['epk']));
-        $this->assertEquals('P-256', $header['epk']['crv']);
-        $this->assertEquals('EC', $header['epk']['kty']);
-        $this->assertEquals($cek, $ecdh_es->unwrapAgreementKey($private, $encrypted_cek, 128, $header));
+        self::assertTrue(array_key_exists('epk', $header));
+        self::assertTrue(array_key_exists('crv', $header['epk']));
+        self::assertTrue(array_key_exists('kty', $header['epk']));
+        self::assertTrue(array_key_exists('x', $header['epk']));
+        self::assertTrue(array_key_exists('y', $header['epk']));
+        self::assertEquals('P-256', $header['epk']['crv']);
+        self::assertEquals('EC', $header['epk']['kty']);
+        self::assertEquals($cek, $ecdh_es->unwrapAgreementKey($private, $encrypted_cek, 128, $header));
     }
 
     public function testGetAgreementKeyWithA192KeyWrap()
@@ -117,14 +117,14 @@ class ECDHESKeyAgreementTest extends \PHPUnit_Framework_TestCase
 
         $ecdh_es = new ECDHESA192KW();
         $encrypted_cek = $ecdh_es->wrapAgreementKey($public, $cek, 192, $header, $header);
-        $this->assertTrue(array_key_exists('epk', $header));
-        $this->assertTrue(array_key_exists('crv', $header['epk']));
-        $this->assertTrue(array_key_exists('kty', $header['epk']));
-        $this->assertTrue(array_key_exists('x', $header['epk']));
-        $this->assertTrue(array_key_exists('y', $header['epk']));
-        $this->assertEquals('P-256', $header['epk']['crv']);
-        $this->assertEquals('EC', $header['epk']['kty']);
-        $this->assertEquals($cek, $ecdh_es->unwrapAgreementKey($private, $encrypted_cek, 192, $header));
+        self::assertTrue(array_key_exists('epk', $header));
+        self::assertTrue(array_key_exists('crv', $header['epk']));
+        self::assertTrue(array_key_exists('kty', $header['epk']));
+        self::assertTrue(array_key_exists('x', $header['epk']));
+        self::assertTrue(array_key_exists('y', $header['epk']));
+        self::assertEquals('P-256', $header['epk']['crv']);
+        self::assertEquals('EC', $header['epk']['kty']);
+        self::assertEquals($cek, $ecdh_es->unwrapAgreementKey($private, $encrypted_cek, 192, $header));
     }
 
     public function testGetAgreementKeyWithA256KeyWrap()
@@ -154,14 +154,14 @@ class ECDHESKeyAgreementTest extends \PHPUnit_Framework_TestCase
 
         $ecdh_es = new ECDHESA256KW();
         $encrypted_cek = $ecdh_es->wrapAgreementKey($public, $cek, 256, $header, $header);
-        $this->assertTrue(array_key_exists('epk', $header));
-        $this->assertTrue(array_key_exists('crv', $header['epk']));
-        $this->assertTrue(array_key_exists('kty', $header['epk']));
-        $this->assertTrue(array_key_exists('x', $header['epk']));
-        $this->assertTrue(array_key_exists('y', $header['epk']));
-        $this->assertEquals('P-256', $header['epk']['crv']);
-        $this->assertEquals('EC', $header['epk']['kty']);
-        $this->assertEquals($cek, $ecdh_es->unwrapAgreementKey($private, $encrypted_cek, 256, $header));
+        self::assertTrue(array_key_exists('epk', $header));
+        self::assertTrue(array_key_exists('crv', $header['epk']));
+        self::assertTrue(array_key_exists('kty', $header['epk']));
+        self::assertTrue(array_key_exists('x', $header['epk']));
+        self::assertTrue(array_key_exists('y', $header['epk']));
+        self::assertEquals('P-256', $header['epk']['crv']);
+        self::assertEquals('EC', $header['epk']['kty']);
+        self::assertEquals($cek, $ecdh_es->unwrapAgreementKey($private, $encrypted_cek, 256, $header));
     }
 
     /**
@@ -262,7 +262,7 @@ class ECDHESKeyAgreementTest extends \PHPUnit_Framework_TestCase
         $agreement_key_from_sender = $ecdh_es->getAgreementKey(128, 'A128GCM', $receiver_public_key, $header, $additional_header_values);
         $agreement_key_from_receiver = $ecdh_es->getAgreementKey(128, 'A128GCM', $receiver_private_key, array_merge($header, $additional_header_values));
 
-        $this->assertTrue(array_key_exists('epk', $additional_header_values));
-        $this->assertEquals($agreement_key_from_receiver, $agreement_key_from_sender);
+        self::assertTrue(array_key_exists('epk', $additional_header_values));
+        self::assertEquals($agreement_key_from_receiver, $agreement_key_from_sender);
     }
 }

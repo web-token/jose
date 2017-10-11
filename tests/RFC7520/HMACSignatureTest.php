@@ -15,6 +15,7 @@ use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Signer;
+use Jose\Test\BaseTestCase;
 use Jose\Verifier;
 
 /**
@@ -26,7 +27,7 @@ use Jose\Verifier;
  * @group HMAC
  * @group RFC7520
  */
-class HMACSignatureTest extends \PHPUnit_Framework_TestCase
+class HMACSignatureTest extends BaseTestCase
 {
     /**
      * @see https://tools.ietf.org/html/rfc7520#section-4.4
@@ -73,11 +74,11 @@ class HMACSignatureTest extends \PHPUnit_Framework_TestCase
         $expected_flattened_json = '{"payload":"SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4","protected":"eyJhbGciOiJIUzI1NiIsImtpZCI6IjAxOGMwYWU1LTRkOWItNDcxYi1iZmQ2LWVlZjMxNGJjNzAzNyJ9","signature":"s0h6KThzkfBBBkLspW1h84VsJZFTsPPqMDA7g1Md7p0"}';
         $expected_json = '{"payload":"SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4","signatures":[{"protected":"eyJhbGciOiJIUzI1NiIsImtpZCI6IjAxOGMwYWU1LTRkOWItNDcxYi1iZmQ2LWVlZjMxNGJjNzAzNyJ9","signature":"s0h6KThzkfBBBkLspW1h84VsJZFTsPPqMDA7g1Md7p0"}]}';
 
-        $this->assertEquals($expected_compact_json, $jws->toCompactJSON(0));
+        self::assertEquals($expected_compact_json, $jws->toCompactJSON(0));
 
         // We decode the json to compare the 2 arrays otherwise the test may fail as the order may be different
-        $this->assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
-        $this->assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
+        self::assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
+        self::assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
         $loader = new Loader();
         $loaded_compact_json = $loader->load($expected_compact_json);
@@ -135,12 +136,12 @@ class HMACSignatureTest extends \PHPUnit_Framework_TestCase
         $expected_flattened_json = '{"protected":"eyJhbGciOiJIUzI1NiIsImtpZCI6IjAxOGMwYWU1LTRkOWItNDcxYi1iZmQ2LWVlZjMxNGJjNzAzNyJ9","signature":"s0h6KThzkfBBBkLspW1h84VsJZFTsPPqMDA7g1Md7p0"}';
         $expected_json = '{"signatures":[{"protected":"eyJhbGciOiJIUzI1NiIsImtpZCI6IjAxOGMwYWU1LTRkOWItNDcxYi1iZmQ2LWVlZjMxNGJjNzAzNyJ9","signature":"s0h6KThzkfBBBkLspW1h84VsJZFTsPPqMDA7g1Md7p0"}]}';
 
-        $this->assertEquals($expected_compact_json, $jws->toCompactJSON(0));
+        self::assertEquals($expected_compact_json, $jws->toCompactJSON(0));
 
         // We decode the json to compare the 2 arrays otherwise the test may fail as the order may be different
-        $this->assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
+        self::assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
 
-        $this->assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
+        self::assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
         $loader = new Loader();
         $loaded_compact_json = $loader->load($expected_compact_json);
@@ -200,8 +201,8 @@ class HMACSignatureTest extends \PHPUnit_Framework_TestCase
         $expected_json = '{"payload":"SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4","signatures":[{"protected":"eyJhbGciOiJIUzI1NiJ9","header":{"kid":"018c0ae5-4d9b-471b-bfd6-eef314bc7037"},"signature":"bWUSVaxorn7bEF1djytBd0kHv70Ly5pvbomzMWSOr20"}]}';
 
         // We decode the json to compare the 2 arrays otherwise the test may fail as the order may be different
-        $this->assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
-        $this->assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
+        self::assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
+        self::assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
         $loader = new Loader();
         $loaded_flattened_json = $loader->load($expected_flattened_json);
@@ -256,8 +257,8 @@ class HMACSignatureTest extends \PHPUnit_Framework_TestCase
         $expected_json = '{"payload":"SXTigJlzIGEgZGFuZ2Vyb3VzIGJ1c2luZXNzLCBGcm9kbywgZ29pbmcgb3V0IHlvdXIgZG9vci4gWW91IHN0ZXAgb250byB0aGUgcm9hZCwgYW5kIGlmIHlvdSBkb24ndCBrZWVwIHlvdXIgZmVldCwgdGhlcmXigJlzIG5vIGtub3dpbmcgd2hlcmUgeW91IG1pZ2h0IGJlIHN3ZXB0IG9mZiB0by4","signatures":[{"header":{"alg":"HS256","kid":"018c0ae5-4d9b-471b-bfd6-eef314bc7037"},"signature":"xuLifqLGiblpv9zBpuZczWhNj1gARaLV3UxvxhJxZuk"}]}';
 
         // We decode the json to compare the 2 arrays otherwise the test may fail as the order may be different
-        $this->assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
-        $this->assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
+        self::assertEquals(json_decode($expected_flattened_json, true), json_decode($jws->toFlattenedJSON(0), true));
+        self::assertEquals(json_decode($expected_json, true), json_decode($jws->toJSON(), true));
 
         $loader = new Loader();
         $loaded_flattened_json = $loader->load($expected_flattened_json);

@@ -21,7 +21,7 @@ use Jose\Object\JWK;
  * @group Certificate
  * @group Unit
  */
-class CertificateTest extends \PHPUnit_Framework_TestCase
+class CertificateTest extends \Jose\Test\BaseTestCase
 {
     /**
      * @expectedException \InvalidArgumentException
@@ -47,7 +47,7 @@ class CertificateTest extends \PHPUnit_Framework_TestCase
     {
         $result = KeyConverter::loadKeyFromCertificateFile($file);
 
-        $this->assertEquals($expected_values, $result);
+        self::assertEquals($expected_values, $result);
     }
 
     public function dataLoadCertificate()
@@ -247,7 +247,7 @@ class CertificateTest extends \PHPUnit_Framework_TestCase
 
         $certificate = \Jose\Factory\JWKFactory::createFromX5C($key->get('x5c'), ['use' => 'sig', 'kid' => '1b94c']);
 
-        $this->assertEquals([
+        self::assertEquals([
                 'kty' => 'RSA',
                 'use' => 'sig',
                 'kid' => '1b94c',

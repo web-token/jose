@@ -15,6 +15,7 @@ use Jose\Factory\JWSFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
 use Jose\Signer;
+use Jose\Test\BaseTestCase;
 use Jose\Verifier;
 
 /**
@@ -22,7 +23,7 @@ use Jose\Verifier;
  *
  * @group RFC7520
  */
-class RSAPSSSignatureTest extends \PHPUnit_Framework_TestCase
+class RSAPSSSignatureTest extends BaseTestCase
 {
     /**
      * Please note that we cannot create the signature and get the same result as the example (RSA-PSS signatures are always different).

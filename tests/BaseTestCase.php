@@ -18,11 +18,12 @@ use Jose\Object\JWKSet;
 use Jose\Test\Stub\IssuerChecker;
 use Jose\Test\Stub\JtiChecker;
 use Jose\Test\Stub\SubjectChecker;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class TestCase.
  */
-class TestCase extends \PHPUnit_Framework_TestCase
+class BaseTestCase extends TestCase
 {
     /**
      * @var \Jose\Checker\CheckerManagerInterface|null

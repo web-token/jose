@@ -17,13 +17,14 @@ use Jose\Encrypter;
 use Jose\Factory\JWEFactory;
 use Jose\Loader;
 use Jose\Object\JWK;
+use Jose\Test\BaseTestCase;
 
 /**
  * @see https://tools.ietf.org/html/rfc7520#section-5.3
  *
  * @group RFC7520
  */
-class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends \PHPUnit_Framework_TestCase
+class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends BaseTestCase
 {
     /**
      * Please note that we cannot the encryption and get the same result as the example (IV, TAG and other data are always different).
@@ -87,27 +88,27 @@ class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends \PHPUnit_Framewor
         $loaded_json = $loader->load($expected_json);
         $decrypter->decryptUsingKey($loaded_json, $private_key);
 
-        $this->assertEquals($expected_ciphertext, Base64Url::encode($loaded_compact_json->getCiphertext()));
-        $this->assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());
-        $this->assertEquals($expected_iv, Base64Url::encode($loaded_compact_json->getIV()));
-        $this->assertEquals($expected_encrypted_key, Base64Url::encode($loaded_compact_json->getRecipient(0)->getEncryptedKey()));
-        $this->assertEquals($expected_tag, Base64Url::encode($loaded_compact_json->getTag()));
+        self::assertEquals($expected_ciphertext, Base64Url::encode($loaded_compact_json->getCiphertext()));
+        self::assertEquals($protected_headers, $loaded_compact_json->getSharedProtectedHeaders());
+        self::assertEquals($expected_iv, Base64Url::encode($loaded_compact_json->getIV()));
+        self::assertEquals($expected_encrypted_key, Base64Url::encode($loaded_compact_json->getRecipient(0)->getEncryptedKey()));
+        self::assertEquals($expected_tag, Base64Url::encode($loaded_compact_json->getTag()));
 
-        $this->assertEquals($expected_ciphertext, Base64Url::encode($loaded_flattened_json->getCiphertext()));
-        $this->assertEquals($protected_headers, $loaded_flattened_json->getSharedProtectedHeaders());
-        $this->assertEquals($expected_iv, Base64Url::encode($loaded_flattened_json->getIV()));
-        $this->assertEquals($expected_encrypted_key, Base64Url::encode($loaded_flattened_json->getRecipient(0)->getEncryptedKey()));
-        $this->assertEquals($expected_tag, Base64Url::encode($loaded_flattened_json->getTag()));
+        self::assertEquals($expected_ciphertext, Base64Url::encode($loaded_flattened_json->getCiphertext()));
+        self::assertEquals($protected_headers, $loaded_flattened_json->getSharedProtectedHeaders());
+        self::assertEquals($expected_iv, Base64Url::encode($loaded_flattened_json->getIV()));
+        self::assertEquals($expected_encrypted_key, Base64Url::encode($loaded_flattened_json->getRecipient(0)->getEncryptedKey()));
+        self::assertEquals($expected_tag, Base64Url::encode($loaded_flattened_json->getTag()));
 
-        $this->assertEquals($expected_ciphertext, Base64Url::encode($loaded_json->getCiphertext()));
-        $this->assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());
-        $this->assertEquals($expected_iv, Base64Url::encode($loaded_json->getIV()));
-        $this->assertEquals($expected_encrypted_key, Base64Url::encode($loaded_json->getRecipient(0)->getEncryptedKey()));
-        $this->assertEquals($expected_tag, Base64Url::encode($loaded_json->getTag()));
+        self::assertEquals($expected_ciphertext, Base64Url::encode($loaded_json->getCiphertext()));
+        self::assertEquals($protected_headers, $loaded_json->getSharedProtectedHeaders());
+        self::assertEquals($expected_iv, Base64Url::encode($loaded_json->getIV()));
+        self::assertEquals($expected_encrypted_key, Base64Url::encode($loaded_json->getRecipient(0)->getEncryptedKey()));
+        self::assertEquals($expected_tag, Base64Url::encode($loaded_json->getTag()));
 
-        $this->assertEquals($expected_payload, $loaded_compact_json->getPayload());
-        $this->assertEquals($expected_payload, $loaded_flattened_json->getPayload());
-        $this->assertEquals($expected_payload, $loaded_json->getPayload());
+        self::assertEquals($expected_payload, $loaded_compact_json->getPayload());
+        self::assertEquals($expected_payload, $loaded_flattened_json->getPayload());
+        self::assertEquals($expected_payload, $loaded_json->getPayload());
     }
 
     /**
@@ -169,13 +170,13 @@ class PBES2_HS512_A256KWAndA128CBC_HS256EncryptionTest extends \PHPUnit_Framewor
         $loaded_json = $loader->load($jwe->toJSON());
         $decrypter->decryptUsingKey($loaded_json, $private_key);
 
-        $this->assertTrue(array_key_exists('p2s', $loaded_flattened_json->getSharedProtectedHeaders()));
-        $this->assertTrue(array_key_exists('p2c', $loaded_flattened_json->getSharedProtectedHeaders()));
+        self::assertTrue(array_key_exists('p2s', $loaded_flattened_json->getSharedProtectedHeaders()));
+        self::assertTrue(array_key_exists('p2c', $loaded_flattened_json->getSharedProtectedHeaders()));
 
-        $this->assertTrue(array_key_exists('p2s', $loaded_json->getSharedProtectedHeaders()));
-        $this->assertTrue(array_key_exists('p2c', $loaded_json->getSharedProtectedHeaders()));
+        self::assertTrue(array_key_exists('p2s', $loaded_json->getSharedProtectedHeaders()));
+        self::assertTrue(array_key_exists('p2c', $loaded_json->getSharedProtectedHeaders()));
 
-        $this->assertEquals($expected_payload, $loaded_flattened_json->getPayload());
-        $this->assertEquals($expected_payload, $loaded_json->getPayload());
+        self::assertEquals($expected_payload, $loaded_flattened_json->getPayload());
+        self::assertEquals($expected_payload, $loaded_json->getPayload());
     }
 }

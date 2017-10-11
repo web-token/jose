@@ -15,14 +15,14 @@ use Jose\Object\JWK;
 use Jose\Object\JWKSet;
 use Jose\Object\JWSInterface;
 use Jose\Signer;
-use Jose\Test\TestCase;
+use Jose\Test\BaseTestCase;
 use Jose\Verifier;
 
 /**
  * @group Signer
  * @group Functional
  */
-class SignerTest extends TestCase
+class SignerBaseTest extends BaseTestCase
 {
     /**
      * @expectedException \InvalidArgumentException
@@ -71,15 +71,15 @@ class SignerTest extends TestCase
 
         $signer->sign($jws);
 
-        $this->assertEquals(2, $jws->countSignatures());
+        self::assertEquals(2, $jws->countSignatures());
 
         $loader = new Loader();
         $loaded = $loader->load($jws->toJSON());
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
-        $this->assertTrue(is_array($loaded->getPayload()));
-        $this->assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
-        $this->assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
+        self::assertInstanceOf(JWSInterface::class, $loaded);
+        self::assertTrue(is_array($loaded->getPayload()));
+        self::assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
+        self::assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
     }
 
     public function testSignMultipleInstructionWithCompactRepresentation()
@@ -98,9 +98,9 @@ class SignerTest extends TestCase
 
         $signer->sign($jws);
 
-        $this->assertEquals(2, $jws->countSignatures());
-        $this->assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
-        $this->assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
+        self::assertEquals(2, $jws->countSignatures());
+        self::assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws->toCompactJSON(0));
+        self::assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws->toCompactJSON(1));
     }
 
     public function testCreateCompactJWSUsingFactory()
@@ -110,10 +110,10 @@ class SignerTest extends TestCase
         $jws2 = JWSFactory::createJWSWithDetachedPayloadToCompactJSON('Live long and Prosper.', $this->getKey1(), ['alg' => 'HS512']);
         $jws3 = JWSFactory::createJWSWithDetachedPayloadToCompactJSON('Live long and Prosper.', $this->getKey2(), ['alg' => 'RS512']);
 
-        $this->assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws0);
-        $this->assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws1);
-        $this->assertEquals('eyJhbGciOiJIUzUxMiJ9..TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws2);
-        $this->assertEquals('eyJhbGciOiJSUzUxMiJ9..cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws3);
+        self::assertEquals('eyJhbGciOiJIUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws0);
+        self::assertEquals('eyJhbGciOiJSUzUxMiJ9.TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg.cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws1);
+        self::assertEquals('eyJhbGciOiJIUzUxMiJ9..TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ', $jws2);
+        self::assertEquals('eyJhbGciOiJSUzUxMiJ9..cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA', $jws3);
 
         $loader = new Loader();
         $loaded_0 = $loader->loadAndVerifySignatureUsingKey($jws0, $this->getKey1(), ['HS512']);
@@ -121,10 +121,10 @@ class SignerTest extends TestCase
         $loaded_2 = $loader->loadAndVerifySignatureUsingKeyAndDetachedPayload($jws2, $this->getKey1(), ['HS512'], 'Live long and Prosper.');
         $loaded_3 = $loader->loadAndVerifySignatureUsingKeyAndDetachedPayload($jws3, $this->getKey2(), ['RS512'], 'Live long and Prosper.');
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded_0);
-        $this->assertInstanceOf(JWSInterface::class, $loaded_1);
-        $this->assertInstanceOf(JWSInterface::class, $loaded_2);
-        $this->assertInstanceOf(JWSInterface::class, $loaded_3);
+        self::assertInstanceOf(JWSInterface::class, $loaded_0);
+        self::assertInstanceOf(JWSInterface::class, $loaded_1);
+        self::assertInstanceOf(JWSInterface::class, $loaded_2);
+        self::assertInstanceOf(JWSInterface::class, $loaded_3);
     }
 
     public function testSignMultipleInstructionWithFlattenedRepresentation()
@@ -143,9 +143,9 @@ class SignerTest extends TestCase
 
         $signer->sign($jws);
 
-        $this->assertEquals(2, $jws->countSignatures());
-        $this->assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJIUzUxMiJ9","signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws->toFlattenedJSON(0));
-        $this->assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJSUzUxMiJ9","signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws->toFlattenedJSON(1));
+        self::assertEquals(2, $jws->countSignatures());
+        self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJIUzUxMiJ9","signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws->toFlattenedJSON(0));
+        self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJSUzUxMiJ9","signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws->toFlattenedJSON(1));
     }
 
     public function testCreateFlattenedJWSUsingFactory()
@@ -155,10 +155,10 @@ class SignerTest extends TestCase
         $jws2 = JWSFactory::createJWSWithDetachedPayloadToFlattenedJSON('Live long and Prosper.', $this->getKey1(), ['alg' => 'HS512'], ['foo' => 'bar']);
         $jws3 = JWSFactory::createJWSWithDetachedPayloadToFlattenedJSON('Live long and Prosper.', $this->getKey2(), ['alg' => 'RS512'], ['plic' => 'ploc']);
 
-        $this->assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJIUzUxMiJ9","header":{"foo":"bar"},"signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws0);
-        $this->assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJSUzUxMiJ9","header":{"plic":"ploc"},"signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws1);
-        $this->assertEquals('{"protected":"eyJhbGciOiJIUzUxMiJ9","header":{"foo":"bar"},"signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws2);
-        $this->assertEquals('{"protected":"eyJhbGciOiJSUzUxMiJ9","header":{"plic":"ploc"},"signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws3);
+        self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJIUzUxMiJ9","header":{"foo":"bar"},"signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws0);
+        self::assertEquals('{"payload":"TGl2ZSBsb25nIGFuZCBQcm9zcGVyLg","protected":"eyJhbGciOiJSUzUxMiJ9","header":{"plic":"ploc"},"signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws1);
+        self::assertEquals('{"protected":"eyJhbGciOiJIUzUxMiJ9","header":{"foo":"bar"},"signature":"TjxvVLKLc1kU5XW1NjZlI6_kQHjeU2orTWBZ7p0KuRzq_9lyPWR04PAUpbYkaLJLsmIJ8Fxi8Gsrc0khPtFxfQ"}', $jws2);
+        self::assertEquals('{"protected":"eyJhbGciOiJSUzUxMiJ9","header":{"plic":"ploc"},"signature":"cR-npy2oEi275rpeTAKooLRzOhIOFMewpzE38CLx4_CtdkN4Y7EUlca9ryV6yGMH8SswUqosMnmUU8XYg7xkuNAc6mCODJVF2exfb_Mulmr9YolQrLFrFRsMk1rztXMinCMQeCe5ue3Ck4E4aJlIkjf-d0DJktoIhH6d2gZ-iJeLQ32wcBhPcEbj2gr7K_wYKlEXhKFwG59OE-hIi9IHXEKvK-2V5vzZLVC80G4aWYd3D-2eX3LF1K69NP04jGcu1D4l9UV8zTz1gOWe697iZG0JyKhSccUaHZ0TfEa8cT0tm6xTz6tpUGSDdvPQU8JCU8GTOsi9ifxTsI-GlWE3YA"}', $jws3);
 
         $loader = new Loader();
         $loaded_0 = $loader->loadAndVerifySignatureUsingKey($jws0, $this->getKey1(), ['HS512']);
@@ -166,10 +166,10 @@ class SignerTest extends TestCase
         $loaded_2 = $loader->loadAndVerifySignatureUsingKeyAndDetachedPayload($jws2, $this->getKey1(), ['HS512'], 'Live long and Prosper.');
         $loaded_3 = $loader->loadAndVerifySignatureUsingKeyAndDetachedPayload($jws3, $this->getKey2(), ['RS512'], 'Live long and Prosper.');
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded_0);
-        $this->assertInstanceOf(JWSInterface::class, $loaded_1);
-        $this->assertInstanceOf(JWSInterface::class, $loaded_2);
-        $this->assertInstanceOf(JWSInterface::class, $loaded_3);
+        self::assertInstanceOf(JWSInterface::class, $loaded_0);
+        self::assertInstanceOf(JWSInterface::class, $loaded_1);
+        self::assertInstanceOf(JWSInterface::class, $loaded_2);
+        self::assertInstanceOf(JWSInterface::class, $loaded_3);
     }
 
     /**
@@ -222,10 +222,10 @@ class SignerTest extends TestCase
         $loader = new Loader();
         $loaded = $loader->load($jws->toJSON());
 
-        $this->assertEquals(1, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
-        $this->assertTrue(is_array($loaded->getPayload()));
-        $this->assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
+        self::assertEquals(1, $loaded->countSignatures());
+        self::assertInstanceOf(JWSInterface::class, $loaded);
+        self::assertTrue(is_array($loaded->getPayload()));
+        self::assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
     }
 
     public function testSignAndLoad()
@@ -249,14 +249,14 @@ class SignerTest extends TestCase
         $loader = new Loader();
         $loaded = $loader->load($jws->toJSON());
 
-        $this->assertEquals(2, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
-        $this->assertEquals('Live long and Prosper.', $loaded->getPayload());
+        self::assertEquals(2, $loaded->countSignatures());
+        self::assertInstanceOf(JWSInterface::class, $loaded);
+        self::assertEquals('Live long and Prosper.', $loaded->getPayload());
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
         $verifier->verifyWithKeySet($loaded, $this->getPublicKeySet());
 
-        $this->assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
-        $this->assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
+        self::assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
+        self::assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
     }
 
     /**
@@ -279,9 +279,9 @@ class SignerTest extends TestCase
         $loader = new Loader();
         $loaded = $loader->load($jws->toJSON());
 
-        $this->assertEquals(1, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
-        $this->assertEquals('Live long and Prosper.', $loaded->getPayload());
+        self::assertEquals(1, $loaded->countSignatures());
+        self::assertInstanceOf(JWSInterface::class, $loaded);
+        self::assertEquals('Live long and Prosper.', $loaded->getPayload());
 
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
     }
@@ -306,9 +306,9 @@ class SignerTest extends TestCase
         $loader = new Loader();
         $loaded = $loader->load($jws->toJSON());
 
-        $this->assertEquals(1, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
-        $this->assertEquals('Live long and Prosper.', $loaded->getPayload());
+        self::assertEquals(1, $loaded->countSignatures());
+        self::assertInstanceOf(JWSInterface::class, $loaded);
+        self::assertEquals('Live long and Prosper.', $loaded->getPayload());
 
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
     }
@@ -326,9 +326,9 @@ class SignerTest extends TestCase
         $loader = new Loader();
         $loaded = $loader->load($jws);
 
-        $this->assertEquals(0, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
-        $this->assertEquals($payload, $loaded->getPayload());
+        self::assertEquals(0, $loaded->countSignatures());
+        self::assertInstanceOf(JWSInterface::class, $loaded);
+        self::assertEquals($payload, $loaded->getPayload());
 
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
     }
@@ -381,7 +381,7 @@ class SignerTest extends TestCase
         ]);
 
         $jws = JWSFactory::createJWSWithDetachedPayloadToCompactJSON($payload, $key, $protected_header);
-        $this->assertEquals('eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY', $jws);
+        self::assertEquals('eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY', $jws);
 
         $loader = new Loader();
         $loaded = $loader->loadAndVerifySignatureUsingKeyAndDetachedPayload(
@@ -392,9 +392,9 @@ class SignerTest extends TestCase
             $index
         );
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
-        $this->assertEquals(0, $index);
-        $this->assertEquals($protected_header, $loaded->getSignature(0)->getProtectedHeaders());
+        self::assertInstanceOf(JWSInterface::class, $loaded);
+        self::assertEquals(0, $index);
+        self::assertEquals($protected_header, $loaded->getSignature(0)->getProtectedHeaders());
     }
 
     /**
@@ -426,7 +426,7 @@ class SignerTest extends TestCase
 
         $expected_result = '{"signatures":[{"signature":"A5dxf2s96_n5FLueVuW1Z_vh161FwXZC4YLPff6dmDY","protected":"eyJhbGciOiJIUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19"},{"signature":"5mvfOroL-g7HyqJoozehmsaqmvTYGEq5jTI1gVvoEoQ","protected":"eyJhbGciOiJIUzI1NiJ9"}]}';
 
-        $this->assertEquals($expected_result, $jws->toJSON());
+        self::assertEquals($expected_result, $jws->toJSON());
 
         $loader = new Loader();
         $loaded1 = $loader->loadAndVerifySignatureUsingKeyAndDetachedPayload(
@@ -444,12 +444,12 @@ class SignerTest extends TestCase
             $index2
         );
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded1);
-        $this->assertInstanceOf(JWSInterface::class, $loaded2);
-        $this->assertEquals(0, $index1);
-        $this->assertEquals(0, $index2);
-        $this->assertEquals($protected_header1, $loaded1->getSignature(0)->getProtectedHeaders());
-        $this->assertEquals($protected_header2, $loaded2->getSignature(0)->getProtectedHeaders());
+        self::assertInstanceOf(JWSInterface::class, $loaded1);
+        self::assertInstanceOf(JWSInterface::class, $loaded2);
+        self::assertEquals(0, $index1);
+        self::assertEquals(0, $index2);
+        self::assertEquals($protected_header1, $loaded1->getSignature(0)->getProtectedHeaders());
+        self::assertEquals($protected_header2, $loaded2->getSignature(0)->getProtectedHeaders());
     }
 
     /**
@@ -573,7 +573,7 @@ class SignerTest extends TestCase
 
         $jws = JWSFactory::createJWSToFlattenedJSON($payload, $key, $protected_header);
 
-        $this->assertEquals($expected_result, json_decode($jws, true));
+        self::assertEquals($expected_result, json_decode($jws, true));
 
         $loader = new Loader();
         $loaded = $loader->loadAndVerifySignatureUsingKey(
@@ -583,10 +583,10 @@ class SignerTest extends TestCase
             $index
         );
 
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
-        $this->assertEquals($payload, $loaded->getPayload());
-        $this->assertEquals(0, $index);
-        $this->assertEquals($protected_header, $loaded->getSignature(0)->getProtectedHeaders());
+        self::assertInstanceOf(JWSInterface::class, $loaded);
+        self::assertEquals($payload, $loaded->getPayload());
+        self::assertEquals(0, $index);
+        self::assertEquals($protected_header, $loaded->getSignature(0)->getProtectedHeaders());
     }
 
     /**
@@ -614,7 +614,7 @@ class SignerTest extends TestCase
 
         $jws = JWSFactory::createJWSWithDetachedPayloadToFlattenedJSON($payload, $key, $protected_header);
 
-        $this->assertEquals($expected_result, json_decode($jws, true));
+        self::assertEquals($expected_result, json_decode($jws, true));
     }
 
     /**
@@ -630,9 +630,9 @@ class SignerTest extends TestCase
         $loader = new Loader();
         $loaded = $loader->load($jws);
 
-        $this->assertEquals(1, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
-        $this->assertEquals($payload, $loaded->getPayload());
+        self::assertEquals(1, $loaded->countSignatures());
+        self::assertInstanceOf(JWSInterface::class, $loaded);
+        self::assertEquals($payload, $loaded->getPayload());
 
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
     }
@@ -657,14 +657,14 @@ class SignerTest extends TestCase
 
         $loader = new Loader();
         $loaded = $loader->load($jws->toJSON());
-        $this->assertEquals(2, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
-        $this->assertEquals($this->getKeyset(), new JWKSet($loaded->getPayload()));
+        self::assertEquals(2, $loaded->countSignatures());
+        self::assertInstanceOf(JWSInterface::class, $loaded);
+        self::assertEquals($this->getKeyset(), new JWKSet($loaded->getPayload()));
         $verifier->verifyWithKeySet($loaded, $this->getSymmetricKeySet());
         $verifier->verifyWithKeySet($loaded, $this->getPublicKeySet());
 
-        $this->assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
-        $this->assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
+        self::assertEquals('HS512', $loaded->getSignature(0)->getProtectedHeader('alg'));
+        self::assertEquals('RS512', $loaded->getSignature(1)->getProtectedHeader('alg'));
     }
 
     /**
@@ -691,9 +691,9 @@ class SignerTest extends TestCase
 
         $loader = new Loader();
         $loaded = $loader->load($jws->toJSON());
-        $this->assertEquals(2, $loaded->countSignatures());
-        $this->assertInstanceOf(JWSInterface::class, $loaded);
-        $this->assertEquals($this->getKeyset(), new JWKSet($loaded->getPayload()));
+        self::assertEquals(2, $loaded->countSignatures());
+        self::assertInstanceOf(JWSInterface::class, $loaded);
+        self::assertEquals($this->getKeyset(), new JWKSet($loaded->getPayload()));
         $verifier->verifyWithKeySet($loaded, new JWKSet());
         $verifier->verifyWithKey($loaded, new JWK(['kty' => 'EC']));
     }

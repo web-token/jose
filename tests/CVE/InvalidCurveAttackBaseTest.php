@@ -11,13 +11,13 @@
 
 use Jose\Decrypter;
 use Jose\Loader;
-use Jose\Test\TestCase;
+use Jose\Test\BaseTestCase;
 
 /**
  * @group CVE
  * @group Functional
  */
-class InvalidCurveAttackTest extends TestCase
+class InvalidCurveAttackBaseTest extends BaseTestCase
 {
     /**
      * @expectedException \InvalidArgumentException

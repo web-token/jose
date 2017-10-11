@@ -17,7 +17,7 @@ use Jose\Factory\JWKFactory;
  * @group Unit
  * @group StorableJWK
  */
-class StorableJWKTest extends \PHPUnit_Framework_TestCase
+class StorableJWKTest extends \Jose\Test\BaseTestCase
 {
     public function testKey()
     {
@@ -31,22 +31,22 @@ class StorableJWKTest extends \PHPUnit_Framework_TestCase
         );
 
         $all = $jwk->getAll();
-        $this->assertEquals($all, $jwk->getAll());
-        $this->assertTrue($jwk->has('kty'));
-        $this->assertTrue($jwk->has('crv'));
-        $this->assertEquals('EC', $jwk->get('kty'));
-        $this->assertEquals('P-256', $jwk->get('crv'));
-        $this->assertTrue(is_string($jwk->thumbprint('sha256')));
-        $this->assertTrue(is_string(json_encode($jwk)));
-        $this->assertInstanceOf(\Jose\Object\JWKInterface::class, $jwk->toPublic());
+        self::assertEquals($all, $jwk->getAll());
+        self::assertTrue($jwk->has('kty'));
+        self::assertTrue($jwk->has('crv'));
+        self::assertEquals('EC', $jwk->get('kty'));
+        self::assertEquals('P-256', $jwk->get('crv'));
+        self::assertTrue(is_string($jwk->thumbprint('sha256')));
+        self::assertTrue(is_string(json_encode($jwk)));
+        self::assertInstanceOf(\Jose\Object\JWKInterface::class, $jwk->toPublic());
 
-        $this->assertEquals($all, $jwk->getAll());
+        self::assertEquals($all, $jwk->getAll());
 
         $jwk->regen();
 
-        $this->assertNotEquals($all, $jwk->getAll());
+        self::assertNotEquals($all, $jwk->getAll());
         $all = $jwk->getAll();
-        $this->assertEquals($all, $jwk->getAll());
+        self::assertEquals($all, $jwk->getAll());
 
         $jwk->delete();
     }
