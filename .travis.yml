@@ -5,19 +5,13 @@ sudo: true
 matrix:
     allow_failures:
         - php: nightly
-        - php: hhvm
     fast_finish: true
     include:
-        - php: 5.6
-          env: deps=low
-        - php: 5.6
         - php: 7.0
         - php: 7.0
           env: deps=low
         - php: 7.1
-        - php: hhvm
-        - php: hhvm
-          env: deps=low
+        - php: 7.2
         - php: nightly
 
 before_script:

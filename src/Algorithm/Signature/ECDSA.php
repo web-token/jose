@@ -13,7 +13,7 @@ namespace Jose\Algorithm\Signature;
 
 use Assert\Assertion;
 use Base64Url\Base64Url;
-use FG\ASN1\Object;
+use FG\ASN1\ASNObject;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\Sequence;
 use Jose\Algorithm\SignatureAlgorithmInterface;
@@ -56,7 +56,7 @@ abstract class ECDSA implements SignatureAlgorithmInterface
 
         Assertion::true($result, 'Signature failed');
 
-        $asn = Object::fromBinary($signature);
+        $asn = ASNObject::fromBinary($signature);
         Assertion::isInstanceOf($asn, Sequence::class, 'Invalid signature');
 
         $res = '';

@@ -14,7 +14,7 @@ namespace Jose\KeyConverter;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use FG\ASN1\ExplicitlyTaggedObject;
-use FG\ASN1\Object;
+use FG\ASN1\ASNObject;
 use FG\ASN1\Universal\BitString;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\ObjectIdentifier;
@@ -64,7 +64,7 @@ final class ECKey extends Sequence
     private function loadPEM($data)
     {
         $data = base64_decode(preg_replace('#-.*-|\r|\n#', '', $data));
-        $asnObject = Object::fromBinary($data);
+        $asnObject = ASNObject::fromBinary($data);
 
         Assertion::isInstanceOf($asnObject, Sequence::class);
         $children = $asnObject->getChildren();
@@ -89,7 +89,7 @@ final class ECKey extends Sequence
     private function loadPKCS8(array $children)
     {
         $binary = hex2bin($children[2]->getContent());
-        $asnObject = Object::fromBinary($binary);
+        $asnObject = ASNObject::fromBinary($binary);
         Assertion::isInstanceOf($asnObject, Sequence::class);
 
         return $asnObject->getChildren();
@@ -193,20 +193,20 @@ final class ECKey extends Sequence
     }
 
     /**
-     * @param \FG\ASN1\Object $children
+     * @param \FG\ASN1\ASNObject $children
      */
-    private function verifyVersion(Object $children)
+    private function verifyVersion(ASNObject $children)
     {
         Assertion::isInstanceOf($children, Integer::class, 'Unable to load the key');
         Assertion::eq(1, $children->getContent(), 'Unable to load the key');
     }
 
     /**
-     * @param \FG\ASN1\Object $children
+     * @param \FG\ASN1\ASNObject $children
      * @param string|null     $x
      * @param string|null     $y
      */
-    private function getXAndY(Object $children, &$x, &$y)
+    private function getXAndY(ASNObject $children, &$x, &$y)
     {
         Assertion::isInstanceOf($children, ExplicitlyTaggedObject::class, 'Unable to load the key');
         Assertion::isArray($children->getContent(), 'Unable to load the key');
@@ -222,11 +222,11 @@ final class ECKey extends Sequence
     }
 
     /**
-     * @param \FG\ASN1\Object $children
+     * @param \FG\ASN1\ASNObject $children
      *
      * @return string
      */
-    private function getD(Object $children)
+    private function getD(ASNObject $children)
     {
         Assertion::isInstanceOf($children, '\FG\ASN1\Universal\OctetString', 'Unable to load the key');
 
