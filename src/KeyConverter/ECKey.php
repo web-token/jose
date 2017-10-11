@@ -203,8 +203,8 @@ final class ECKey extends Sequence
 
     /**
      * @param \FG\ASN1\ASNObject $children
-     * @param string|null     $x
-     * @param string|null     $y
+     * @param string|null        $x
+     * @param string|null        $y
      */
     private function getXAndY(ASNObject $children, &$x, &$y)
     {
