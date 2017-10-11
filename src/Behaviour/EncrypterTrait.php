@@ -15,7 +15,8 @@ use Assert\Assertion;
 use Base64Url\Base64Url;
 use Jose\Algorithm;
 use Jose\Compression;
-use Jose\Object;
+use Jose\Object\JWEInterface;
+use Jose\Object\JWKInterface;
 
 trait EncrypterTrait
 {
@@ -27,13 +28,13 @@ trait EncrypterTrait
      *
      * @return bool
      */
-    abstract protected function checkKeyUsage(Object\JWKInterface $key, $usage);
+    abstract protected function checkKeyUsage(JWKInterface $key, $usage);
 
     /**
      * @param \Jose\Object\JWKInterface $key
      * @param string                    $algorithm
      */
-    abstract protected function checkKeyAlgorithm(Object\JWKInterface $key, $algorithm);
+    abstract protected function checkKeyAlgorithm(JWKInterface $key, $algorithm);
 
     /**
      * @return \Jose\Algorithm\JWAManagerInterface
@@ -50,7 +51,7 @@ trait EncrypterTrait
      * @param \Jose\Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm
      * @param \Jose\Object\JWKInterface                           $recipient_key
      */
-    private function checkKeys(Algorithm\KeyEncryptionAlgorithmInterface $key_encryption_algorithm, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, Object\JWKInterface $recipient_key)
+    private function checkKeys(Algorithm\KeyEncryptionAlgorithmInterface $key_encryption_algorithm, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, JWKInterface $recipient_key)
     {
         $this->checkKeyUsage($recipient_key, 'encryption');
         if ('dir' !== $key_encryption_algorithm->getAlgorithmName()) {
@@ -68,7 +69,7 @@ trait EncrypterTrait
      *
      * @return string
      */
-    private function determineCEK(Object\JWEInterface $jwe, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $key_management_mode, array &$additional_headers)
+    private function determineCEK(JWEInterface $jwe, Algorithm\ContentEncryptionAlgorithmInterface $content_encryption_algorithm, $key_management_mode, array &$additional_headers)
     {
         switch ($key_management_mode) {
             case Algorithm\KeyEncryption\KeyEncryptionInterface::MODE_ENCRYPT:
@@ -96,7 +97,7 @@ trait EncrypterTrait
      *
      * @return string
      */
-    private function getKeyManagementMode(Object\JWEInterface $jwe)
+    private function getKeyManagementMode(JWEInterface $jwe)
     {
         $mode = null;
         $recipients = $jwe->getRecipients();
@@ -123,7 +124,7 @@ trait EncrypterTrait
      *
      * @return \Jose\Compression\CompressionInterface|null
      */
-    private function getCompressionMethod(Object\JWEInterface $jwe)
+    private function getCompressionMethod(JWEInterface $jwe)
     {
         $method = null;
         $nb_recipients = $jwe->countRecipients();
@@ -160,7 +161,7 @@ trait EncrypterTrait
      *
      * @return \Jose\Algorithm\ContentEncryptionAlgorithmInterface
      */
-    private function getContentEncryptionAlgorithm(Object\JWEInterface $jwe)
+    private function getContentEncryptionAlgorithm(JWEInterface $jwe)
     {
         $algorithm = null;
 
