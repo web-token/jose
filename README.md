@@ -123,7 +123,7 @@ The release process [is described here](doc/Release.md).
 # Prerequisites
 
 This library needs at least:
-* ![PHP 5.6+](https://img.shields.io/badge/PHP-5.6%2B-ff69b4.svg),
+* ![PHP 7.0+](https://img.shields.io/badge/PHP-7.0%2B-ff69b4.svg),
 * OpenSSL extension.
 
 Please consider the following optional requirements:
@@ -136,7 +136,8 @@ As the time needed to perform operation is long compared to the other algorithms
 
 # Continuous Integration
 
-It has been successfully tested using `PHP 5.6`, `PHP 7.0`, `PHP 7.1` and `HHVM` with all algorithms.
+It has been successfully tested using `PHP 7.0`, `PHP 7.1` and `PHP7.2` with all algorithms.
+If you use PHP 5.6, please install the version ^6.0 of this project.
 
 Tests vectors from the [RFC 7520](http://tools.ietf.org/html/rfc7520) are fully implemented and all tests pass.
 
