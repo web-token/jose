@@ -16,6 +16,13 @@ use Jose\Object\JWTInterface;
 
 class IssuedAtChecker implements ClaimCheckerInterface
 {
+    private $tolerance;
+
+    public function __construct($tolerance = 0)
+    {
+        $this->tolerance = (int) $tolerance;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -25,7 +32,7 @@ class IssuedAtChecker implements ClaimCheckerInterface
             return [];
         }
 
-        $iat = (int) $jwt->getClaim('iat');
+        $iat = (int) $jwt->getClaim('iat') - $this->tolerance;
         Assertion::lessOrEqualThan($iat, time(), 'The JWT is issued in the future.');
 
         return ['iat'];

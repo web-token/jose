@@ -16,6 +16,13 @@ use Jose\Object\JWTInterface;
 
 class ExpirationTimeChecker implements ClaimCheckerInterface
 {
+    private $tolerance;
+
+    public function __construct($tolerance = 0)
+    {
+        $this->tolerance = (int) $tolerance;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -25,8 +32,8 @@ class ExpirationTimeChecker implements ClaimCheckerInterface
             return [];
         }
 
-        $exp = (int) $jwt->getClaim('exp');
-        Assertion::greaterThan($exp, time(), 'The JWT has expired.');
+        $exp = (int) $jwt->getClaim('exp') + $this->tolerance;
+        Assertion::greaterOrEqualThan($exp, time(), 'The JWT has expired.');
 
         return ['exp'];
     }
