@@ -174,7 +174,7 @@ final class RSAKey extends Sequence
      *
      * @return \Jose\KeyConverter\RSAKey
      */
-    public static function toPublic(RSAKey $private)
+    public static function toPublic(self $private)
     {
         $data = $private->toArray();
         $keys = ['p', 'd', 'q', 'dp', 'dq', 'qi'];

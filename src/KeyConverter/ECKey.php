@@ -273,7 +273,7 @@ final class ECKey extends Sequence
      *
      * @return \Jose\KeyConverter\ECKey
      */
-    public static function toPublic(ECKey $private)
+    public static function toPublic(self $private)
     {
         $data = $private->toArray();
         if (array_key_exists('d', $data)) {

@@ -95,7 +95,7 @@ final class BigInteger
      */
     public function toBytes()
     {
-        if (gmp_cmp($this->value, gmp_init(0)) === 0) {
+        if (0 === gmp_cmp($this->value, gmp_init(0))) {
             return '';
         }
 
@@ -113,7 +113,7 @@ final class BigInteger
      */
     public function toInteger()
     {
-        if (gmp_cmp($this->value, gmp_init(0)) === 0) {
+        if (0 === gmp_cmp($this->value, gmp_init(0))) {
             return '';
         }
 
@@ -129,7 +129,7 @@ final class BigInteger
      *
      *  @return BigInteger
      */
-    public function add(BigInteger $y)
+    public function add(self $y)
     {
         $value = gmp_add($this->value, $y->value);
 
@@ -143,7 +143,7 @@ final class BigInteger
      *
      *  @return BigInteger
      */
-    public function subtract(BigInteger $y)
+    public function subtract(self $y)
     {
         $value = gmp_sub($this->value, $y->value);
 
@@ -157,7 +157,7 @@ final class BigInteger
      *
      *  @return BigInteger
      */
-    public function multiply(BigInteger $x)
+    public function multiply(self $x)
     {
         $value = gmp_mul($this->value, $x->value);
 
@@ -171,7 +171,7 @@ final class BigInteger
      *
      *  @return BigInteger
      */
-    public function divide(BigInteger $x)
+    public function divide(self $x)
     {
         $value = gmp_div($this->value, $x->value);
 
@@ -186,7 +186,7 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public function modPow(BigInteger $e, BigInteger $n)
+    public function modPow(self $e, self $n)
     {
         $value = gmp_powm($this->value, $e->value, $n->value);
 
@@ -200,7 +200,7 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public function mod(BigInteger $d)
+    public function mod(self $d)
     {
         $value = gmp_mod($this->value, $d->value);
 
@@ -214,7 +214,7 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public function modInverse(BigInteger $n)
+    public function modInverse(self $n)
     {
         $value = gmp_invert($this->value, $n->value);
         Assertion::isInstanceOf($value, \GMP::class);
@@ -229,7 +229,7 @@ final class BigInteger
      *
      * @return int < 0 if $this is less than $y; > 0 if $this is greater than $y, and 0 if they are equal
      */
-    public function compare(BigInteger $y)
+    public function compare(self $y)
     {
         return gmp_cmp($this->value, $y->value);
     }
@@ -239,7 +239,7 @@ final class BigInteger
      *
      * @return bool
      */
-    public function equals(BigInteger $y)
+    public function equals(self $y)
     {
         return 0 === $this->compare($y);
     }
@@ -249,7 +249,7 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public static function random(BigInteger $y)
+    public static function random(self $y)
     {
         $zero = self::createFromDecimal(0);
 
@@ -261,7 +261,7 @@ final class BigInteger
      *
      * @return BigInteger
      */
-    public function gcd(BigInteger $y)
+    public function gcd(self $y)
     {
         return self::createFromGMPResource(gmp_gcd($this->value, $y->value));
     }
@@ -271,7 +271,7 @@ final class BigInteger
      *
      * @return bool
      */
-    public function lowerThan(BigInteger $y)
+    public function lowerThan(self $y)
     {
         return 0 > $this->compare($y);
     }
@@ -281,7 +281,7 @@ final class BigInteger
      *
      * @return bool
      */
-    public function lowerOrEqualThan(BigInteger $y)
+    public function lowerOrEqualThan(self $y)
     {
         return 0 >= $this->compare($y);
     }
@@ -291,7 +291,7 @@ final class BigInteger
      *
      * @return bool
      */
-    public function greaterThan(BigInteger $y)
+    public function greaterThan(self $y)
     {
         return 0 < $this->compare($y);
     }
@@ -301,7 +301,7 @@ final class BigInteger
      *
      * @return bool
      */
-    public function greaterOrEqualThan(BigInteger $y)
+    public function greaterOrEqualThan(self $y)
     {
         return 0 <= $this->compare($y);
     }
