@@ -10,7 +10,6 @@
  */
 
 namespace Jose\Test\Unit\Checker {
-
     use Jose\Checker\Clock;
     use PHPUnit\Framework\TestCase;
 
@@ -29,7 +28,6 @@ namespace Jose\Test\Unit\Checker {
 }
 
 namespace Jose\Checker {
-
     class Clock
     {
         public static $mockedTime = false;
@@ -43,5 +41,4 @@ namespace Jose\Checker {
 
         return \time();
     }
-
 }

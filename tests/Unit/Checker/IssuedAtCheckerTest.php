@@ -74,5 +74,4 @@ class IssuedAtCheckerTest extends CheckerTestCase
 
         new IssuedAtChecker(-100);
     }
-
 }

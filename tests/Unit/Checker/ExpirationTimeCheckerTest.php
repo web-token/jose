@@ -75,5 +75,4 @@ class ExpirationTimeCheckerTest extends CheckerTestCase
 
         new ExpirationTimeChecker(-100);
     }
-
 }

@@ -65,5 +65,4 @@ class NotBeforeCheckerTest extends CheckerTestCase
 
         new NotBeforeChecker(-100);
     }
-
 }
