@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014-2017 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Jose\Test\Unit\Checker;
 
 use Assert\InvalidArgumentException;
@@ -8,7 +17,7 @@ use Jose\Factory\JWSFactory;
 
 class ExpirationTimeCheckerTest extends CheckerTestCase
 {
-    /** @var  ExpirationTimeChecker */
+    /** @var ExpirationTimeChecker */
     private $checker;
 
     public function setUp()
@@ -17,7 +26,6 @@ class ExpirationTimeCheckerTest extends CheckerTestCase
 
         $this->checker = new ExpirationTimeChecker();
     }
-
 
     public function testItReturnsEmptyArrayIfNoExpiryClaim()
     {
@@ -67,4 +75,5 @@ class ExpirationTimeCheckerTest extends CheckerTestCase
 
         new ExpirationTimeChecker(-100);
     }
+
 }

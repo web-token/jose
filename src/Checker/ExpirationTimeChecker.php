@@ -16,8 +16,14 @@ use Jose\Object\JWTInterface;
 
 class ExpirationTimeChecker implements ClaimCheckerInterface
 {
+    /**
+     * @var int
+     */
     private $tolerance;
 
+    /**
+     * @param int $tolerance
+     */
     public function __construct($tolerance = 0)
     {
         Assertion::greaterOrEqualThan($tolerance, 0, 'Tolerance value must be >=0');
