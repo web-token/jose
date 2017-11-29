@@ -16,10 +16,10 @@ use Jose\Factory\JWKFactory;
 use Jose\Factory\JWSFactory;
 
 //Encryption key (public key certificate of the receiver)
-$encryptionKey = JWKFactory::createFromKeyFile( 'path/to/key.crt' );
+$encryptionKey = JWKFactory::createFromKeyFile('path/to/key.crt');
 
 //Signature key (private key of sender)
-$signatureKey = JWKFactory::createFromKeyFile( 'path/to/key.key' );
+$signatureKey = JWKFactory::createFromKeyFile('path/to/key.key');
 
 //Claims
 $claims = [
@@ -37,7 +37,7 @@ $jws = JWSFactory::createJWSToCompactJSON(
     $signatureKey,
     [
         'crit' => ['exp', 'aud'],
-        'alg'  => 'RS256',
+        'alg' => 'RS256',
     ]
 );
 
