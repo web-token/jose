@@ -20,6 +20,7 @@ class ExpirationTimeChecker implements ClaimCheckerInterface
 
     public function __construct($tolerance = 0)
     {
+        Assertion::greaterOrEqualThan($tolerance, 0, 'Tolerance value must be >=0');
         $this->tolerance = (int) $tolerance;
     }
 

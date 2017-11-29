@@ -48,4 +48,12 @@ class NotBeforeCheckerTest extends CheckerTestCase
 
         $this->assertEquals(['nbf'], $result);
     }
+
+    public function testItThrowsExceptionIfNegativeToleranceValueProvided()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Tolerance value must be >=0');
+
+        new NotBeforeChecker(-100);
+    }
 }

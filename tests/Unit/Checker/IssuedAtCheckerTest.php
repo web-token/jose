@@ -57,4 +57,13 @@ class IssuedAtCheckerTest extends CheckerTestCase
 
         $this->assertEquals(['iat'], $result);
     }
+
+    public function testItThrowsExceptionIfNegativeToleranceValueProvided()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Tolerance value must be >=0');
+
+        new IssuedAtChecker(-100);
+    }
+
 }
