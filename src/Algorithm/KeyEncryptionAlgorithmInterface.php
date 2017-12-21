@@ -14,8 +14,11 @@ namespace Jose\Algorithm;
 interface KeyEncryptionAlgorithmInterface extends JWAInterface
 {
     const MODE_DIRECT = 'dir';
+
     const MODE_ENCRYPT = 'enc';
+
     const MODE_WRAP = 'wrap';
+
     const MODE_AGREEMENT = 'agree';
 
     /**
