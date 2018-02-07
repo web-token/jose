@@ -25,11 +25,11 @@ final class X5UJWKSet extends DownloadedJWKSet
     public function getKeys()
     {
         $content = json_decode($this->getContent(), true);
-        Assertion::isArray($content, 'Invalid content.');
+        Assertion::isArray($content, 'Invalid JWK content.');
         $jwkset = new JWKSet();
         foreach ($content as $kid => $cert) {
             $jwk = KeyConverter::loadKeyFromCertificate($cert);
-            Assertion::notEmpty($jwk, 'Invalid content.');
+            Assertion::notEmpty($jwk, 'Invalid JWKSet content.');
             if (is_string($kid)) {
                 $jwk['kid'] = $kid;
             }
