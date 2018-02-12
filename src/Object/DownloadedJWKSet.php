@@ -119,7 +119,10 @@ abstract class DownloadedJWKSet extends BaseJWKSet implements JWKSetInterface
     }
 
     /**
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException    Has CURL error message and the CURL error
+     *                                      number as exception code.
+     *                                      Throws exception with error number 0
+     *                                      if the error is not related to CURL.
      *
      * @return string
      */
@@ -137,9 +140,24 @@ abstract class DownloadedJWKSet extends BaseJWKSet implements JWKSetInterface
         $ch = curl_init();
         curl_setopt_array($ch, $params);
         $content = curl_exec($ch);
-        curl_close($ch);
 
-        Assertion::false(false === $content, 'Unable to get content.');
+        try {
+            Assertion::false(false === $content, 'Failed to load JWK contents: ');
+        } catch (\Assert\AssertionFailedException $e) {
+            $curlError = curl_error($ch);
+            $curlErrorNumber = curl_errno($ch);
+            throw new \InvalidArgumentException(
+                $e->getMessage() . $curlError,
+                $curlErrorNumber
+            );
+        } catch (\Exception $e) {
+            throw new \InvalidArgumentException(
+                'Failed to load JWK contents: ' . $e->getMessage(),
+                0
+            );
+        } finally {
+            curl_close($ch);
+        }
 
         return $content;
     }
