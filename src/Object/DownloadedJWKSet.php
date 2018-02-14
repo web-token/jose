@@ -3,7 +3,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2017 Spomky-Labs
+ * Copyright (c) 2014-2018 Spomky-Labs
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -119,10 +119,10 @@ abstract class DownloadedJWKSet extends BaseJWKSet implements JWKSetInterface
     }
 
     /**
-     * @throws \InvalidArgumentException    Has CURL error message and the CURL error
-     *                                      number as exception code.
-     *                                      Throws exception with error number 0
-     *                                      if the error is not related to CURL.
+     * @throws \InvalidArgumentException Has CURL error message and the CURL error
+     *                                   number as exception code.
+     *                                   Throws exception with error number 0
+     *                                   if the error is not related to CURL.
      *
      * @return string
      */
@@ -146,13 +146,14 @@ abstract class DownloadedJWKSet extends BaseJWKSet implements JWKSetInterface
         } catch (\Assert\AssertionFailedException $e) {
             $curlError = curl_error($ch);
             $curlErrorNumber = curl_errno($ch);
+
             throw new \InvalidArgumentException(
-                $e->getMessage() . $curlError,
+                $e->getMessage().$curlError,
                 $curlErrorNumber
             );
         } catch (\Exception $e) {
             throw new \InvalidArgumentException(
-                'Failed to load JWK contents: ' . $e->getMessage(),
+                'Failed to load JWK contents: '.$e->getMessage(),
                 0
             );
         } finally {
