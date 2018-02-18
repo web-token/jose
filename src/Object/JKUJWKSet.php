@@ -24,8 +24,8 @@ final class JKUJWKSet extends DownloadedJWKSet
     public function getKeys()
     {
         $content = json_decode($this->getContent(), true);
-        Assertion::isArray($content, 'Invalid content.');
-        Assertion::keyExists($content, 'keys', 'Invalid content.');
+        Assertion::isArray($content, 'Invalid JWK content.');
+        Assertion::keyExists($content, 'keys', 'Invalid JWKSet content.');
 
         return (new JWKSet($content))->getKeys();
     }
