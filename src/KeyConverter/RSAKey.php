@@ -3,7 +3,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2017 Spomky-Labs
+ * Copyright (c) 2014-2018 Spomky-Labs
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -174,7 +174,7 @@ final class RSAKey extends Sequence
      *
      * @return \Jose\KeyConverter\RSAKey
      */
-    public static function toPublic(RSAKey $private)
+    public static function toPublic(self $private)
     {
         $data = $private->toArray();
         $keys = ['p', 'd', 'q', 'dp', 'dq', 'qi'];

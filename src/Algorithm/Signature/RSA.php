@@ -3,7 +3,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2017 Spomky-Labs
+ * Copyright (c) 2014-2018 Spomky-Labs
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -51,7 +51,7 @@ abstract class RSA implements SignatureAlgorithmInterface
 
         $pub = RSAKey::toPublic(new RSAKey($key));
 
-        if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
+        if (self::SIGNATURE_PSS === $this->getSignatureMethod()) {
             return JoseRSA::verify($pub, $input, $signature, $this->getAlgorithm());
         } else {
             return 1 === openssl_verify($input, $signature, $pub->toPEM(), $this->getAlgorithm());
@@ -68,7 +68,7 @@ abstract class RSA implements SignatureAlgorithmInterface
 
         $priv = new RSAKey($key);
 
-        if ($this->getSignatureMethod() === self::SIGNATURE_PSS) {
+        if (self::SIGNATURE_PSS === $this->getSignatureMethod()) {
             $signature = JoseRSA::sign($priv, $input, $this->getAlgorithm());
             $result = is_string($signature);
         } else {
