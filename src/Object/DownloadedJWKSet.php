@@ -42,6 +42,11 @@ abstract class DownloadedJWKSet extends BaseJWKSet implements JWKSetInterface
     private $allow_unsecured_connection;
 
     /**
+     * @var array
+     */
+    private $custom_headers = [];
+
+    /**
      * DownloadedJWKSet constructor.
      *
      * @param string                                 $url
@@ -49,8 +54,9 @@ abstract class DownloadedJWKSet extends BaseJWKSet implements JWKSetInterface
      * @param int                                    $ttl
      * @param bool                                   $allow_unsecured_connection
      * @param bool                                   $allow_http_connection
+     * @param array                                  $cache
      */
-    public function __construct($url, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_unsecured_connection = false, $allow_http_connection = false)
+    public function __construct($url, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_unsecured_connection = false, $allow_http_connection = false, array $custom_headers = [])
     {
         Assertion::boolean($allow_unsecured_connection);
         Assertion::boolean($allow_http_connection);
@@ -67,6 +73,7 @@ abstract class DownloadedJWKSet extends BaseJWKSet implements JWKSetInterface
         $this->cache = $cache;
         $this->ttl = $ttl;
         $this->allow_unsecured_connection = $allow_unsecured_connection;
+        $this->custom_headers = $custom_headers;
     }
 
     /**
@@ -139,6 +146,9 @@ abstract class DownloadedJWKSet extends BaseJWKSet implements JWKSetInterface
 
         $ch = curl_init();
         curl_setopt_array($ch, $params);
+        if (!empty($this->custom_headers)) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $this->custom_headers);
+        }
         $content = curl_exec($ch);
 
         try {

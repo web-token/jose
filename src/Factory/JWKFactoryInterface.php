@@ -154,10 +154,11 @@ interface JWKFactoryInterface
      * @param \Psr\Cache\CacheItemPoolInterface|null $cache
      * @param int|null                               $ttl
      * @param bool                                   $allow_http_connection
+     * @param array                                  $custom_headers
      *
      * @return \Jose\Object\JWKSetInterface
      */
-    public static function createFromJKU($jku, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false);
+    public static function createFromJKU($jku, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false, array $custom_headers = []);
 
     /**
      * @param string                                 $x5u
@@ -165,10 +166,11 @@ interface JWKFactoryInterface
      * @param \Psr\Cache\CacheItemPoolInterface|null $cache
      * @param int|null                               $ttl
      * @param bool                                   $allow_http_connection
+     * @param array                                  $custom_headers
      *
      * @return \Jose\Object\JWKSetInterface
      */
-    public static function createFromX5U($x5u, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false);
+    public static function createFromX5U($x5u, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false, array $custom_headers = []);
 
     /**
      * @param array $x5c

@@ -366,17 +366,17 @@ final class JWKFactory implements JWKFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public static function createFromJKU($jku, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false)
+    public static function createFromJKU($jku, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false, array $custom_headers = [])
     {
-        return new JKUJWKSet($jku, $cache, $ttl, $allow_unsecured_connection, $allow_http_connection);
+        return new JKUJWKSet($jku, $cache, $ttl, $allow_unsecured_connection, $allow_http_connection, $custom_headers);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function createFromX5U($x5u, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false)
+    public static function createFromX5U($x5u, $allow_unsecured_connection = false, CacheItemPoolInterface $cache = null, $ttl = 86400, $allow_http_connection = false, array $custom_headers = [])
     {
-        return new X5UJWKSet($x5u, $cache, $ttl, $allow_unsecured_connection, $allow_http_connection);
+        return new X5UJWKSet($x5u, $cache, $ttl, $allow_unsecured_connection, $allow_http_connection, $custom_headers);
     }
 
     /**
