@@ -37,7 +37,7 @@
         "psr/cache": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0",
+        "phpunit/phpunit": "^6.0",
         "satooshi/php-coveralls": "^2.0",
         "symfony/cache": "^2.0|^3.0|^4.0"
     },
