@@ -92,6 +92,9 @@ final class JWKFactory implements JWKFactoryInterface
      */
     public static function createRSAKey(array $values)
     {
+        $config = array();
+        $config['config'] = dirname(__FILE__) . '/../openssl.cnf';
+
         Assertion::keyExists($values, 'size', 'The key size is not set.');
         $size = $values['size'];
         unset($values['size']);
@@ -102,13 +105,16 @@ final class JWKFactory implements JWKFactoryInterface
         $key = openssl_pkey_new([
             'private_key_bits' => $size,
             'private_key_type' => OPENSSL_KEYTYPE_RSA,
-        ]);
-        openssl_pkey_export($key, $out);
+        ] + $config);
+        openssl_pkey_export($key, $out, null, $config);
         $rsa = new RSAKey($out);
         $values = array_merge(
             $values,
             $rsa->toArray()
         );
+
+        //            $privatekey = call_user_func_array(array($this, '_convertPrivateKey'), array_values($this->_parseKey($privatekey, self::PRIVATE_FORMAT_PKCS1)));
+        //            $publickey = call_user_func_array(array($this, '_convertPublicKey'), array_values($this->_parseKey($publickey, self::PUBLIC_FORMAT_PKCS1)));
 
         return new JWK($values);
     }
