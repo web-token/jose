@@ -26,6 +26,7 @@
     },
     "require": {
         "php": "^7.0",
+        "ext-gmp": "*",
         "lib-openssl": "*",
         "spomky-labs/base64url": "^1.0",
         "spomky-labs/aes-key-wrap": "^3.0|^4.0",
@@ -44,7 +45,8 @@
    "suggest":{
         "ext-crypto": "Highly recommended when you use AES GCM based algorithms.",
         "ext-ed25519": "For EdDSA with Ed25519 curves support.",
-        "ext-curve25519": "For EdDSA with X25519 curves support."
+        "ext-curve25519": "For EdDSA with X25519 curves support.",
+        "ext-curl": "Needed by the JKU/XU keyset factory."
    },
     "extra": {
         "branch-alias": {
