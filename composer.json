@@ -46,7 +46,7 @@
         "ext-crypto": "Highly recommended when you use AES GCM based algorithms.",
         "ext-ed25519": "For EdDSA with Ed25519 curves support.",
         "ext-curve25519": "For EdDSA with X25519 curves support.",
-        "ext-curl": "Needed by the JKU/XU keyset factory."
+        "ext-curl": "Needed by the JKU/X5U keyset factory."
    },
     "extra": {
         "branch-alias": {
