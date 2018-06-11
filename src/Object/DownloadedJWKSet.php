@@ -138,12 +138,12 @@ abstract class DownloadedJWKSet extends BaseJWKSet implements JWKSetInterface
         $params = [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_URL => $this->url,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 1
         ];
-        if (false === $this->allow_unsecured_connection) {
-            $params[CURLOPT_SSL_VERIFYPEER] = true;
-            $params[CURLOPT_SSL_VERIFYHOST] = 2;
+        if ($this->allow_unsecured_connection) {
+            $params[CURLOPT_SSL_VERIFYPEER] = false;
+            $params[CURLOPT_SSL_VERIFYHOST] = false;
         }
 
         $ch = curl_init();
