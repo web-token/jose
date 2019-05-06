@@ -14,7 +14,7 @@ We highly recommend you to use the new [JWT Framework project](https://github.co
 * Active support of this library is provided until **end of 2018**.
 * Security support will be provided **from 2019 and up to end of 2020**.
 
-A migration guide will be/is available in [the documentation of the new project](https://web-token.spomky-labs.com/migration/spomky-labs-jose/).
+A migration guide will be/is available in [the documentation of the new project](https://web-token.spomky-labs.com/migration/from-spomky-labs-jose).
 
 <p align="center">:warning::warning::warning:</p>
 
