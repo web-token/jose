@@ -62,7 +62,7 @@ abstract class DownloadedJWKSet extends BaseJWKSet implements JWKSetInterface
         Assertion::boolean($allow_http_connection);
         Assertion::integer($ttl);
         Assertion::min($ttl, 0);
-        Assertion::false(false === filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED), 'Invalid URL.');
+        Assertion::false(false === filter_var($url, FILTER_VALIDATE_URL), 'Invalid URL.');
         $allowed_protocols = ['https'];
         if (true === $allow_http_connection) {
             $allowed_protocols[] = 'http';
